@@ -156,8 +156,8 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     a.add(t)
 
     r = union()
-    r.add(cube(size=[w*scl,(bwid+iro)*scl,ht*scl]))
-    t = translate(v=[-65*scl, (l+114-iro)*scl, (32.5-ht)*scl])
+    r.add(cube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl]))
+    t = translate(v=[-65.01*scl, (l+114-iro)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -168,8 +168,8 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     a.add(t)
 
     r = union()
-    r.add(cube(size=[w*scl,(bwid+iro)*scl,ht*scl]))
-    t = translate(v=[-65*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    r.add(cube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl]))
+    t = translate(v=[-65.01*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -223,11 +223,15 @@ def clips(_scl, ln, wd, offs=0, flat=False):
     l = -130.0
     r = t_w-16.0
 
-    for x, y, rot in [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5),
-                    (t_w/2, -47, 0),
-                    (t_w/2, t_l+121, 2),
-                    (-158, t_l/2, 3),
-                    (t_w+12, t_l/2, 1)]:
+    lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
+
+    if not test:
+        lst += [(t_w/2, -47, 0),
+                (t_w/2, t_l+121, 2),
+                (-158, t_l/2, 3),
+                (t_w+12, t_l/2, 1)
+                    ]
+    for x, y, rot in lst:
         h = clip(_scl, wd, dp, ht, rot, offs=offs, flat=flat)
         t = translate(v=[x*_scl, y*_scl, (-27)*_scl])
         t.add(h)
@@ -330,9 +334,13 @@ def clip(_scl, w, dp, ht, rot, offs=0, flat=False):
     c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d*0.7+offs*2)*scl])
     c = translate(v=[0, -d*0.4*_scl,d*0.8*_scl]).add(c)
     u.add(c)
-    c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d+offs*2)*scl])
-    c = rotate(a=-32, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
+    if flat:
+        c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(ht+offs*2)*scl])
+        c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
+    else:
+        c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d+offs*2)*scl])
+        c = rotate(a=-32, v=[1*_scl,0,0]).add(c)
+        c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
     u.add(c)
 
     t = union()
@@ -360,7 +368,7 @@ def create_tablet(t, _scl, mirror, colour):
         tb_inset = 35 
         innerwall = 0
 
-    part = 1
+    part = 2
 
     if part == 0:
         layers = 0x7f-7
