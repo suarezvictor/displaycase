@@ -216,20 +216,20 @@ def clips(_scl, ln, wd, offs=0, flat=False):
 
     ht = 55
     wd = 35
-    dp = 14
+    dp = 22
     dh = []
-    t =-22.0
-    b = t_l+96.0
-    l = -130.0
-    r = t_w-16.0
+    t =-24.0
+    b = t_l+98.0
+    l = -132.0
+    r = t_w-14.0
 
     lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
 
-    if not test:
-        lst += [(t_w/2, -47, 0),
-                (t_w/2, t_l+121, 2),
-                (-158, t_l/2, 3),
-                (t_w+12, t_l/2, 1)
+    if test:
+        lst += [(t_w/2, -50, 0),
+                (t_w/2, t_l+124, 2),
+                (-161, t_l/2, 3),
+                (t_w+15, t_l/2, 1)
                     ]
     for x, y, rot in lst:
         h = clip(_scl, wd, dp, ht, rot, offs=offs, flat=flat)
@@ -365,10 +365,10 @@ def create_tablet(t, _scl, mirror, colour):
         tb_inset = 50 
         innerwall = 13
     else:
-        tb_inset = 35 
+        tb_inset = 50 
         innerwall = 0
 
-    part = 2
+    part = 1
 
     if part == 0:
         layers = 0x7f-7
@@ -397,7 +397,11 @@ def create_tablet(t, _scl, mirror, colour):
 
     if layers & 0x4:
         # layer on top of touchscreen
-        ts = touch_surround(_scl, 15, 35, tb_inset, taped=True,
+        if laminates:
+            ht = 15
+        else:
+            ht = 10
+        ts = touch_surround(_scl, ht, 35, tb_inset, taped=True,
                            holes=laminates)
         td = translate(v=[0,0,-15*_scl])
         td.add(ts)
@@ -416,8 +420,8 @@ def create_tablet(t, _scl, mirror, colour):
 
     if layers & 0x8:
         if part != 0 and not laminates:
-            ts = touch_surround(_scl, 15, innerwall, tb_inset)
-            td = translate(v=[0,0,-30*_scl])
+            ts = touch_surround(_scl, 20, innerwall, tb_inset)
+            td = translate(v=[0,0,-25*_scl])
             td.add(ts)
             u = intersection()
             u.add(td)
@@ -432,7 +436,7 @@ def create_tablet(t, _scl, mirror, colour):
             b.add(u)
             u = intersection()
             u.add(td)
-            u.add(cardslot(_scl, 7*_scl)) 
+            u.add(cardslot(_scl, 20*_scl)) 
             b.add(u)
         else:
             # layer on top of touchscreen
@@ -495,7 +499,7 @@ def create_tablet(t, _scl, mirror, colour):
 
     if part != 2 and not laminates:
         c = union()
-        c += clips(_scl, t_w, t_l, offs=7*_scl, flat=part==1)
+        c += clips(_scl, t_w, t_l, offs=25*_scl, flat=part==1)
     
         u = union()
         u.add(b)
@@ -511,10 +515,15 @@ if __name__ == '__main__':
     scl = 0.1
     t = union()
     c = [0.3, 0.5, 0.8, 1.0]
-    create_tablet(t, scl, 1.0, c)
+    if False: # de-blob creation
+        u = union()
+        u.add(cube(size=[150, 1.6, 0.25]))
+        u = translate(v=[0*scl,-10*scl,0]).add(u)
+        #t.add(cube(size=[150, 0.8, 0.25]))
+        t.add(u)
+    else:
+        create_tablet(t, scl, 1.0, c)
     t = translate(v=[-152.5*scl,-56*scl,0]).add(t)
-    #t = translate(v=[112.5*scl,56*scl,0]).add(t)
-    #t = rotate(a=90, v=[0,0,1]).add(t)
     t = color(c).add(t)
 
     #projection(cut=False).add(t)
