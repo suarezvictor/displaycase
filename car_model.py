@@ -25,8 +25,8 @@ def touch_arc(rad, ht, bwid, iro, scl):
 
 def cardslot(scl, wofs=0):
     r = union()
-    r.add(cube(size=[(670-wofs)*scl,80*scl,90*scl]))
-    t = translate(v=[-(60-wofs)*scl, 1110*scl, (-83)*scl])
+    r.add(cube(size=[(670-wofs)*scl,140*scl,150*scl]))
+    t = translate(v=[-(60-wofs)*scl, 1050*scl, (-83)*scl])
     t.add(r)
     return t
 
@@ -256,6 +256,18 @@ def drill_holes(_scl, ln, wd):
         dh.append(t)
     return dh
 
+def clip(_scl, w, ht, offs=0):
+    u = union()
+    u.add(cube(size=[(w+offs*2)*scl,(w+offs*2)*scl,(ht+offs*2)*scl]))
+    c = cube(size=[(w+offs*2)*scl,(w+offs*2)*scl,(w+offs*2)*scl])
+    c = rotate(a=20, v=[1*_scl,0,0]).add(c)
+    u.add(c)
+
+    t = union()
+    t.add(translate(v=[-offs*_scl, -offs*_scl, -offs*scl]).add(u))
+
+    return t
+    
 def create_tablet(t, _scl, mirror, colour):
 
     scl = [-_scl*mirror, _scl, _scl]
@@ -298,12 +310,6 @@ def create_tablet(t, _scl, mirror, colour):
         ts=touch_surround(_scl, top_ht, -0.0, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
-        if not test:
-            if not top_part and not laminates:
-                u = intersection()
-                u.add(touch_surround(_scl, top_ht, -0.0, tb_inset))
-                u.add(sdcard(_scl)) 
-                ts.add(u)
         b.add(td)
 
     if layers & 0x4:
@@ -314,18 +320,30 @@ def create_tablet(t, _scl, mirror, colour):
             td.add(ts)
             u = intersection()
             u.add(td)
+            u.add(cardslot(_scl)) 
+            b.add(u)
+            u = intersection()
+            u.add(td)
             u.add(sdcard(_scl)) 
             b.add(u)
+            u = intersection()
+            u.add(td)
+            u.add(headphone(_scl)) 
+            b.add(u)
+            
+            b.add(clip(_scl, 20, 30,00))
         else:
-            ts = touch_surround(_scl, 15, 35, tb_inset, taped=True, holes=laminates)
+            ts = touch_surround(_scl, 15, 35, tb_inset, taped=True,
+                               holes=laminates)
             td = translate(v=[0,0,-15*_scl])
             td.add(ts)
             if not test:
                 td -= panelcable(_scl) # remove panelcable
                 td -= camera(_scl) # remove headphone
-                td -= cardslot(scl) # remove cpu card
+                td -= cardslot(_scl) # remove cpu card
+                td -= headphone(_scl) # remove headphone
                 if top_part and not laminates:
-                    td -= sdcard(_scl) # remove cpu card
+                    td -= sdcard(_scl) # remove sd card
             b.add(td)
 
     if layers & 0x8:
@@ -336,6 +354,10 @@ def create_tablet(t, _scl, mirror, colour):
             u = intersection()
             u.add(td)
             u.add(sdcard(_scl)) 
+            b.add(u)
+            u = intersection()
+            u.add(td)
+            u.add(cardslot(_scl)) 
             b.add(u)
         else:
             # layer on top of touchscreen
@@ -348,7 +370,7 @@ def create_tablet(t, _scl, mirror, colour):
                 td -= pcb(_scl) # remove pcb
                 td -= camera(_scl) # remove headphone
                 td -= headphone(_scl) # remove headphone
-                td -= cardslot(scl) # remove cpu card
+                td -= cardslot(_scl) # remove cpu card
                 if top_part and not laminates:
                     td -= sdcard(_scl) # remove cpu card
             b.add(td)
