@@ -132,6 +132,8 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
 def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False):
     a = union()
 
+    #l=200
+    #w=200
     l=1018
     w=1746
 
@@ -267,57 +269,71 @@ def create_tablet(t, _scl, mirror, colour):
 
     tb_inset = 50 # 37 good val, 50 to be flush with other surrounds
 
-    layers = 0x1f
+    test = False
+    top_part = False
 
+    if top_part:
+        layers = 0x7f-3
+    else:
+        layers = 0x3
+
+    top_ht=15.0
     if layers & 0x1:
-        top_ht=15.0
+        # touchpanel capture layer
+        ts=touch_surround(_scl, top_ht, 20, tb_inset)
+        td = translate(v=[0,0,(top_ht)*_scl])
+        td.add(ts)
+        b.add(td)
+
+    if layers & 0x2:
         # layer around touchscreen
         ts=touch_surround(_scl, top_ht, -0.0, tb_inset)
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
         b.add(td)
 
-    if layers & 0x2:
+    if layers & 0x4:
         # layer on top of touchscreen
         ts = touch_surround(_scl, 15, 35, taped=True)
         td = translate(v=[0,0,-15*_scl])
         td.add(ts)
-        td -= panelcable(_scl) # remove panelcable
-        #td -= pcb(_scl) # remove pcb
-        td -= camera(_scl) # remove headphone
-        #td -= headphone(_scl) # remove headphone
-        td -= cardslot(scl) # remove cpu card
-        b.add(td)
-
-    if layers & 0x4:
-        # layer on top of touchscreen
-        ts = touch_surround(_scl, 15, 35, taped=True)
-        td = translate(v=[0,0,-30*_scl])
-        td.add(ts)
-        td -= panelcable(_scl) # remove panelcable
-        td -= pcb(_scl) # remove pcb
-        td -= camera(_scl) # remove headphone
-        td -= headphone(_scl) # remove headphone
-        td -= cardslot(scl) # remove cpu card
+        if not test:
+            td -= panelcable(_scl) # remove panelcable
+            td -= camera(_scl) # remove headphone
+            td -= cardslot(scl) # remove cpu card
         b.add(td)
 
     if layers & 0x8:
+        # layer on top of touchscreen
+        ts = touch_surround(_scl, 15, 35)
+        td = translate(v=[0,0,-30*_scl])
+        td.add(ts)
+        if not test:
+            td -= panelcable(_scl) # remove panelcable
+            td -= pcb(_scl) # remove pcb
+            td -= camera(_scl) # remove headphone
+            td -= headphone(_scl) # remove headphone
+            td -= cardslot(scl) # remove cpu card
+        b.add(td)
+
+    if layers & 0x10:
         # layer around cpu card
         ts = touch_surround(_scl, 40, 13)
         td = translate(v=[0,0,-45*_scl])
         td.add(ts)
-        td -= panelcable(_scl) # remove panelcable
-        td -= pcb(_scl) # remove pcb
-        td -= camera(_scl) # remove camera
-        td -= power(_scl) # remove power jack
-        td -= headphone(_scl) # remove headphone
-        td -= sdcard(_scl) # remove microsd
-        td -= cardslot(_scl) # remove cpu card
-        td -= usb(_scl) # remove usb slot
-        td -= powerbutton(_scl) # remove power button 
+        if not test:
+            td -= panelcable(_scl) # remove panelcable
+            td -= pcb(_scl) # remove pcb
+            td -= camera(_scl) # remove camera
+            td -= power(_scl) # remove power jack
+            td -= headphone(_scl) # remove headphone
+            td -= sdcard(_scl) # remove microsd
+            td -= cardslot(_scl) # remove cpu card
+            td -= usb(_scl) # remove usb slot
+            td -= powerbutton(_scl) # remove power button 
         b.add(td)
 
-    if layers & 0x10:
+    if layers & 0x20:
         # layer above cpu card and microsd
         ts = touch_surround(_scl, 30, 15)
         td = translate(v=[0,0,-85*_scl])
@@ -329,7 +345,7 @@ def create_tablet(t, _scl, mirror, colour):
         td -= cardslot(_scl, 0) # remove cpu card 
         b.add(td)
 
-    if layers & 0x20:
+    if layers & 0x40:
         top_ht = 15.0
         # top case
         ts = touch_surround(_scl, top_ht, 20, tb_inset)
