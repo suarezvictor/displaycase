@@ -3,6 +3,15 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
 spline_me = True
 
+test = True
+
+if not test:
+    t_l = 1018
+    t_w = 1746
+else:
+    t_l = 200
+    t_w = 200
+
 
 def touch_arc(rad, ht, bwid, iro, scl):
     rad2 = bwid+rad
@@ -39,7 +48,7 @@ def sdcard(scl):
 
 def power(scl):
     r = union()
-    r.add(cube(size=[85*scl,355*scl,100.2*scl]))
+    r.add(cube(size=[85*scl,355*scl,140.2*scl]))
     t = translate(v=[1725*scl, 90*scl, (-90.51)*scl])
     t.add(r)
     return t
@@ -100,18 +109,19 @@ def close_top(scl, ht=15):
     t.add(c)
     return t
 
+
 def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
     a = union()
 
     r = union()
     r.add(cube(size=[(bwid+iro)*scl,(l+100)*scl,ht*scl]))
-    t = translate(v=[-(143+bwid)*scl, -23*scl, (32.5-ht)*scl])
+    t = translate(v=[-(133+bwid)*scl, -23*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(w+160)*scl,(bwid+iro)*scl,ht*scl]))
-    t = translate(v=[-145*scl, (l+112-iro)*scl, (32.5-ht)*scl])
+    r.add(cube(size=[(w+150)*scl,(bwid+iro)*scl,ht*scl]))
+    t = translate(v=[-140*scl, (l+112-iro)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -122,8 +132,8 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(w+160)*scl,35*scl,ht*scl]))
-    t = translate(v=[-145*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    r.add(cube(size=[(w+140)*scl,35*scl,ht*scl]))
+    t = translate(v=[-135*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -132,10 +142,8 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
 def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     a = union()
 
-    #l=200
-    #w=200
-    l=1018
-    w=1746
+    l = t_l
+    w = t_w
 
     r = union()
     r.add(cube(size=[(bwid+iro)*scl,l*scl,ht*scl]))
@@ -198,15 +206,66 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     o = union()
     o.add(translate(v=[-8*scl, 0, 0]).add(a))
     
-
     return o
 
-def wheel_back_left(scl, mirror):
-    r = rotate([90, 0, 90])
-    r.add(cylinder(h=25*scl, r=60*scl, center=True))
-    t = translate(v=[-120*scl*mirror, -185*scl, -97*scl])
-    t.add(r)
-    return t
+def clips(_scl, ln, wd, offs=0):
+
+    ht = 45
+    wd = 18
+    dp = 12
+    dh = []
+    t =-22
+    b = t_l+98
+    l = -128
+    r = t_w-18
+
+    for x, y, rot in [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5),
+                    (t_w/2, -45, 0),
+                    (t_w/2, t_l+119, 2),
+                    (-156, t_l/2, 3),
+                    (t_w+10, t_l/2, 1)]:
+        h = clip(_scl, wd, dp, ht, rot, offs=offs)
+        t = translate(v=[x*_scl, y*_scl, (-17)*_scl])
+        t.add(h)
+        dh.append(t)
+
+    r = union()
+    for h in dh:
+        r += h
+
+    return r
+
+    top = -69
+    bottom = wd+142
+    left = 240
+    lefty = -167 
+    right = wd+132
+    righty = ln+38 
+    xt = [left, 480, right]
+    yl = [525]
+    yr = [525]
+    xb = [660, right]
+    for x in xt:
+        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
+        t = translate(v=[x*scl, top*scl, 0*scl])
+        t.add(h)
+        dh.append(t)
+    for x in xb:
+        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
+        t = translate(v=[x*scl, bottom*scl, 0*scl])
+        t.add(h)
+        dh.append(t)
+    for y in yl:
+        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
+        t = translate(v=[lefty*scl, y*scl, 0*scl])
+        t.add(h)
+        dh.append(t)
+    for y in yr:
+        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
+        t = translate(v=[righty*scl, y*scl, 0*scl])
+        t.add(h)
+        dh.append(t)
+    return dh
 
 def drill_holes(_scl, ln, wd):
 
@@ -256,17 +315,29 @@ def drill_holes(_scl, ln, wd):
         dh.append(t)
     return dh
 
-def clip(_scl, w, ht, offs=0):
+def clip(_scl, w, dp, ht, rot, offs=0):
+    d=w/2.5
     u = union()
-    u.add(cube(size=[(w+offs*2)*scl,(w+offs*2)*scl,(ht+offs*2)*scl]))
-    c = cube(size=[(w+offs*2)*scl,(w+offs*2)*scl,(w+offs*2)*scl])
-    c = rotate(a=20, v=[1*_scl,0,0]).add(c)
+    u.add(cube(size=[(w+offs*2)*scl,(dp+offs*2)*scl,(ht+offs*2)*scl]))
+    c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d+offs*2)*scl])
+    c = rotate(a=-52, v=[1*_scl,0,0]).add(c)
+    c = translate(v=[0, -d*0.4*_scl,d*0.9*_scl]).add(c)
+    u.add(c)
+    c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d*0.6+offs*2)*scl])
+    c = translate(v=[0, -d*0.4*_scl,d*0.9*_scl]).add(c)
+    u.add(c)
+    c = cube(size=[(w+offs*2)*scl,(d+offs*2)*scl,(d+offs*2)*scl])
+    c = rotate(a=-32, v=[1*_scl,0,0]).add(c)
+    c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
     u.add(c)
 
     t = union()
-    t.add(translate(v=[-offs*_scl, -offs*_scl, -offs*scl]).add(u))
+    t.add(translate(v=[-offs*_scl-w*scl/2, -offs*_scl-dp*scl/2, -offs*scl]).add(u))
 
-    return t
+    v = union()
+    v.add(rotate(a=rot*90, v=[0,0,1]).add(t))
+
+    return v
     
 def create_tablet(t, _scl, mirror, colour):
 
@@ -276,10 +347,6 @@ def create_tablet(t, _scl, mirror, colour):
     c.add(t)
     
     b = union()
-    c = color([0.2, 0.2, 0.2, 1.0])
-    c.add(b)
-    t.add(c)
-
     laminates = False
 
     if laminates:
@@ -289,13 +356,14 @@ def create_tablet(t, _scl, mirror, colour):
         tb_inset = 30 
         innerwall = 0
 
-    test = False
-    top_part = False
+    part = 0
 
-    if top_part:
-        layers = 0x3f-3
-    else:
-        layers = 0xf
+    if part == 0:
+        layers = 0x3f-7
+    elif part == 1:
+        layers = 4+8
+    elif part == 2:
+        layers = 0x3
 
     top_ht=15.0
     if layers & 0x1:
@@ -306,54 +374,44 @@ def create_tablet(t, _scl, mirror, colour):
         b.add(td)
 
     if layers & 0x2:
+
         # layer around touchscreen
         ts=touch_surround(_scl, top_ht, -0.0, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
+        if part == 2 and not laminates:
+            b.add(clips(_scl, t_w, t_l))
         b.add(td)
 
     if layers & 0x4:
         # layer on top of touchscreen
-        if not top_part and not laminates:
-            ts = touch_surround(_scl, 15, innerwall, tb_inset)
-            td = translate(v=[0,0,-15*_scl])
-            td.add(ts)
-            u = intersection()
-            u.add(td)
-            u.add(cardslot(_scl)) 
-            b.add(u)
-            u = intersection()
-            u.add(td)
-            u.add(sdcard(_scl)) 
-            b.add(u)
-            u = intersection()
-            u.add(td)
-            u.add(headphone(_scl)) 
-            b.add(u)
-            
-            b.add(clip(_scl, 20, 30,00))
-        else:
-            ts = touch_surround(_scl, 15, 35, tb_inset, taped=True,
-                               holes=laminates)
-            td = translate(v=[0,0,-15*_scl])
-            td.add(ts)
-            if not test:
-                td -= panelcable(_scl) # remove panelcable
-                td -= camera(_scl) # remove headphone
-                td -= cardslot(_scl) # remove cpu card
+        ts = touch_surround(_scl, 15, 35, tb_inset, taped=True,
+                           holes=laminates)
+        td = translate(v=[0,0,-15*_scl])
+        td.add(ts)
+        if not test:
+            td -= panelcable(_scl) # remove panelcable
+            td -= camera(_scl) # remove headphone
+            if part != 1 and not laminates:
                 td -= headphone(_scl) # remove headphone
-                if top_part and not laminates:
-                    td -= sdcard(_scl) # remove sd card
-            b.add(td)
+                td -= cardslot(_scl) # remove cpu card
+            if part == 0 and not laminates:
+                td -= sdcard(_scl) # remove sd card
+        b.add(td)
 
     if layers & 0x8:
-        if not top_part and not laminates:
+        if part != 0 and not laminates:
             ts = touch_surround(_scl, 15, innerwall, tb_inset)
             td = translate(v=[0,0,-30*_scl])
             td.add(ts)
             u = intersection()
             u.add(td)
             u.add(sdcard(_scl)) 
+            b.add(u)
+            u = intersection()
+            u.add(td)
+            u.add(power(_scl)) 
+            u -= headphone(_scl)
             b.add(u)
             u = intersection()
             u.add(td)
@@ -371,8 +429,9 @@ def create_tablet(t, _scl, mirror, colour):
                 td -= camera(_scl) # remove headphone
                 td -= headphone(_scl) # remove headphone
                 td -= cardslot(_scl) # remove cpu card
-                if top_part and not laminates:
+                if part == 0 and not laminates:
                     td -= sdcard(_scl) # remove cpu card
+                    td -= power(_scl) # remove power jack
             b.add(td)
 
     if layers & 0x10:
@@ -416,6 +475,18 @@ def create_tablet(t, _scl, mirror, colour):
         td.add(ts)
         b.add(td)
 
+    if part != 2 and not laminates:
+        c = union()
+        c += clips(_scl, t_w, t_l, offs=7*_scl)
+    
+        u = union()
+        u.add(b)
+        u -= c
+        b = u
+
+    c = color([0.2, 0.2, 0.2, 1.0])
+    c.add(b)
+    t.add(c)
 
 if __name__ == '__main__':
 
