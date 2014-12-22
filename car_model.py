@@ -3,7 +3,7 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
 spline_me = True
 
-test = True
+test = False
 
 if not test:
     t_l = 1018
@@ -214,7 +214,7 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
 
 def clips(_scl, ln, wd, offs=0, flat=False):
 
-    ht = 55
+    ht = 60
     wd = 35
     dp = 22
     dh = []
@@ -224,16 +224,35 @@ def clips(_scl, ln, wd, offs=0, flat=False):
     r = t_w-14.0
 
     lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
-
     if test:
         lst += [(t_w/2, -50, 0),
                 (t_w/2, t_l+124, 2),
                 (-161, t_l/2, 3),
                 (t_w+15, t_l/2, 1)
                     ]
+
+    if not test:
+        lst += [(t_w/2, -50, 0),
+                (t_w*0.6, t_l+124, 2),
+                (-161, t_l*0.55, 3),
+                (t_w+15, t_l*0.55, 1)
+                    ]
+
+        lst += [(t_w*0.80, -50, 0),
+                (t_w*0.85, t_l+124, 2),
+                (-161, t_l*0.2, 3),
+                
+                    ]
+        lst += [(-161, t_l*0.85, 3),
+                (t_w+15, t_l*0.85, 1)
+                    ]
+        lst += [(t_w*0.28, -50, 0),
+                (t_w*0.13, -50, 0),
+                (t_w*0.38, t_l+124, 2),
+                    ]
     for x, y, rot in lst:
         h = clip(_scl, wd, dp, ht, rot, offs=offs, flat=flat)
-        t = translate(v=[x*_scl, y*_scl, (-27)*_scl])
+        t = translate(v=[x*_scl, y*_scl, (-32)*_scl])
         t.add(h)
         dh.append(t)
 
@@ -365,10 +384,10 @@ def create_tablet(t, _scl, mirror, colour):
         tb_inset = 50 
         innerwall = 13
     else:
-        tb_inset = 50 
-        innerwall = 0
+        tb_inset = 40 
+        innerwall = -15
 
-    part = 1
+    part = 2
 
     if part == 0:
         layers = 0x7f-7
@@ -380,7 +399,7 @@ def create_tablet(t, _scl, mirror, colour):
     top_ht=15.0
     if layers & 0x1:
         # touchpanel capture layer
-        ts=touch_surround(_scl, top_ht, 20, tb_inset, holes=laminates)
+        ts=touch_surround(_scl, top_ht, 25, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht)*_scl])
         td.add(ts)
         b.add(td)
@@ -487,7 +506,7 @@ def create_tablet(t, _scl, mirror, colour):
         b.add(td)
 
     if layers & 0x40:
-        top_ht = 15.0
+        top_ht = 10.0
         # top case
         ts = touch_surround(_scl, top_ht, 40, tb_inset,
                                 holes=laminates)
