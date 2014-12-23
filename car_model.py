@@ -409,7 +409,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part == 1:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -430,16 +430,16 @@ def create_tablet(t, _scl, mirror, colour, part):
             tb_inset = 6 
             innerwall = -12
         else:
-            tb_inset = 21 
+            tb_inset = 19 
             innerwall = -12
-            p2_innerwall = innerwall+2
+            p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x7f-7
+        layers = 0x1f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
-        layers = 0x7f
+        layers = 0x0f
 
     if layers & 0x1:
         if laminates:
@@ -460,7 +460,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
         if part == 2 and not laminates:
-            b.add(clips(_scl, 25, ht=61, z=-1, dp=14.0, doffs=4))
+            b.add(clips(_scl, 25, ht=61, z=-1, dp=13.0, doffs=2))
         b.add(td)
 
     if layers & 0x4:
