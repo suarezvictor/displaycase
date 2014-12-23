@@ -409,7 +409,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part == 2:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -439,7 +439,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     elif part == 1:
         layers = 4+8
     elif part == 2:
-        layers = 0x0f
+        layers = 0x3f
 
     if layers & 0x1:
         if laminates:
@@ -447,7 +447,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         else:
             top_ht=10.0
         # touchpanel capture layer
-        ts=touch_surround(_scl, top_ht, 25, tb_inset, holes=laminates)
+        ts=touch_surround(_scl, top_ht, 34, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht)*_scl])
         td.add(ts)
         b.add(td)
