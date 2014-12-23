@@ -134,8 +134,8 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(w+140)*scl,35*scl,ht*scl]))
-    t = translate(v=[-135*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    r.add(cube(size=[(w+140)*scl,32*scl,ht*scl]))
+    t = translate(v=[-135*scl, -(bwid+37)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -409,7 +409,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part == 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -427,12 +427,12 @@ def create_tablet(t, _scl, mirror, colour, part):
             tb_inset = 6 
             innerwall = 5
         elif part == 1:
-            tb_inset = 8 
+            tb_inset = 6 
             innerwall = -12
         else:
             tb_inset = 21 
             innerwall = -12
-            p2_innerwall = innerwall+3
+            p2_innerwall = innerwall+2
 
     if part == 0:
         layers = 0x1f-7
