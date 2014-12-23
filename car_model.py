@@ -239,9 +239,8 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     
     return o
 
-def clips(_scl, wd, offs=0, doffs=0, ht=60, flat=False):
+def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, flat=False):
 
-    dp = 2
     dh = []
     t =-24.0
     b = t_l+98.0
@@ -410,7 +409,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part == 1:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -425,8 +424,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         innerwall = 13
     else:
         if part == 0:
-            tb_inset = 10 
-            innerwall = -2
+            tb_inset = 6 
+            innerwall = 0
         elif part == 1:
             tb_inset = 8 
             innerwall = -12
@@ -435,11 +434,11 @@ def create_tablet(t, _scl, mirror, colour, part):
             innerwall = -12
 
     if part == 0:
-        layers = 0x7f-7
+        layers = 0x1f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
-        layers = 0x3
+        layers = 0x2f
 
     if layers & 0x1:
         if laminates:
@@ -460,16 +459,22 @@ def create_tablet(t, _scl, mirror, colour, part):
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
         if part == 2 and not laminates:
-            b.add(clips(_scl, 25, doffs=0))
+            b.add(clips(_scl, 25, dp=3, doffs=-4))
         b.add(td)
 
     if layers & 0x4:
         # layer on top of touchscreen
-        if laminates:
+        if part == 2 or laminates:
             ht = 15
         else:
             ht = 10
-        ts = touch_surround(_scl, ht, 35, tb_inset, taped=True,
+        if part == 2 and not laminates:
+            taped = False
+            iw = innerwall+4
+        else:
+            taped = True
+            iw = 35
+        ts = touch_surround(_scl, ht, iw, tb_inset, taped=taped,
                            holes=laminates)
         td = translate(v=[0,0,-15*_scl])
         td.add(ts)
@@ -567,7 +572,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 35, offs=4, ht=10, doffs=-6, flat=True)
+        c += clips(_scl, 35, dp=0, offs=3, ht=10, doffs=-8, flat=True)
     
         u = union()
         u.add(b)
@@ -576,7 +581,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part != 2 and not laminates:
         c = union()
-        c += clips(_scl, 25, offs=25*_scl, flat=part==1)
+        c += clips(_scl, 25, dp=1, offs=3, doffs=-4, flat=part==1)
     
         u = union()
         u.add(b)
