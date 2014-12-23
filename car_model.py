@@ -37,7 +37,7 @@ def cardslot(scl, offs=0):
     else:
         l = 670
     r.add(cube(size=[(l-offs)*scl,240*scl,150*scl]))
-    t = translate(v=[-(60-offs/2)*scl, (t_l+32)*scl, (-83)*scl])
+    t = translate(v=[-(60-offs/2)*scl, (t_l+32)*scl, (-100)*scl])
     t.add(r)
     return t
 
@@ -435,11 +435,11 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+2
 
     if part == 0:
-        layers = 0x1f-7
+        layers = 0x7f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
-        layers = 0x3f
+        layers = 0x7f
 
     if layers & 0x1:
         if laminates:
@@ -573,14 +573,22 @@ def create_tablet(t, _scl, mirror, colour, part):
         b.add(td)
 
     if layers & 0x40:
+        if part == 2 and not laminates:
+            iw = p2_innerwall
+        else:
+            iw = 40
+            
         top_ht = 10.0
         # top case
-        ts = touch_surround(_scl, top_ht, 40, tb_inset,
+        ts = touch_surround(_scl, top_ht, iw, tb_inset,
                                 holes=laminates)
-        if not test:
+        if laminates and not test:
             ts += close_top(_scl, top_ht) # complete top
         td = translate(v=[0,0,-115*_scl])
         td.add(ts)
+        if part == 2 and not laminates:
+            td -= cardslot(_scl, 0) # remove cpu card 
+            
         b.add(td)
 
     if part == 0 and not laminates:
