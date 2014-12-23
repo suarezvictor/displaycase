@@ -4,8 +4,8 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 test = False
 
 if not test:
-    t_l = 1018
-    t_w = 1746
+    t_l = 1028
+    t_w = 1752
 else:
     t_l = 200
     t_w = 200
@@ -43,14 +43,14 @@ def cardslot(scl, offs=0):
 
 def sdcard(scl, offs=0):
     r = union()
-    r.add(cube(size=[(159-offs)*scl,125*scl,151.3*scl]))
+    r.add(cube(size=[(165-offs)*scl,125*scl,151.3*scl]))
     t = translate(v=[(275+offs/2)*scl, -120*scl, (-100.51)*scl])
     t.add(r)
     return t
 
 def power(scl, offs=0):
     r = union()
-    r.add(cube(size=[85*scl,(355-offs)*scl,160.2*scl]))
+    r.add(cube(size=[85*scl,(360-offs)*scl,160.2*scl]))
     t = translate(v=[1725*scl, (90+offs/2)*scl, (-100.51)*scl])
     t.add(r)
     return t
@@ -249,30 +249,30 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
 
     lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
     if test:
-        lst += [(t_w/2, -50, 0),
-                (t_w/2, t_l+124, 2),
-                (-161, t_l/2, 3),
-                (t_w+15, t_l/2, 1)
+        lst += [(t_w/2, -49, 0),
+                (t_w/2, t_l+123, 2),
+                (-160, t_l/2, 3),
+                (t_w+14, t_l/2, 1)
                     ]
 
     if not test:
-        lst += [(t_w/2, -50, 0),
-                (t_w*0.6, t_l+124, 2),
-                (-161, t_l*0.55, 3),
-                (t_w+15, t_l*0.55, 1)
+        lst += [(t_w/2, -49, 0),
+                (t_w*0.6, t_l+123, 2),
+                (-160, t_l*0.55, 3),
+                (t_w+14, t_l*0.55, 1)
                     ]
 
-        lst += [(t_w*0.80, -50, 0),
-                (t_w*0.85, t_l+124, 2),
-                (-161, t_l*0.2, 3),
+        lst += [(t_w*0.80, -49, 0),
+                (t_w*0.85, t_l+123, 2),
+                (-160, t_l*0.2, 3),
 
                     ]
-        lst += [(-161, t_l*0.85, 3),
-                (t_w+15, t_l*0.85, 1)
+        lst += [(-160, t_l*0.85, 3),
+                (t_w+14, t_l*0.85, 1)
                     ]
-        lst += [(t_w*0.30, -50, 0),
-                (t_w*0.11, -50, 0),
-                (t_w*0.40, t_l+124, 2),
+        lst += [(t_w*0.30, -49, 0),
+                (t_w*0.11, -49, 0),
+                (t_w*0.40, t_l+123, 2),
                     ]
     for x, y, rot in lst:
         if rot in [0.5,1.5,2.5,3.5]:
@@ -281,7 +281,7 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
             wd2 = 1.5*wd
         h = clip(_scl, wd2, dp, ht, rot+2, offs=offs, doffs=doffs, flat=flat)
 
-        t = translate(v=[x*_scl, y*_scl, (z-32)*_scl])
+        t = translate(v=[x*_scl, y*_scl, (z-62)*_scl])
         t.add(h)
         dh.append(t)
 
@@ -290,38 +290,6 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
         r += h
 
     return r
-
-    top = -69
-    bottom = wd+142
-    left = 240
-    lefty = -167
-    right = wd+132
-    righty = ln+38
-    xt = [left, 480, right]
-    yl = [525]
-    yr = [525]
-    xb = [660, right]
-    for x in xt:
-        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
-        t = translate(v=[x*scl, top*scl, 0*scl])
-        t.add(h)
-        dh.append(t)
-    for x in xb:
-        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
-        t = translate(v=[x*scl, bottom*scl, 0*scl])
-        t.add(h)
-        dh.append(t)
-    for y in yl:
-        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
-        t = translate(v=[lefty*scl, y*scl, 0*scl])
-        t.add(h)
-        dh.append(t)
-    for y in yr:
-        h = cylinder(h=130*scl, r=rad*scl, segments=50, center=True)
-        t = translate(v=[righty*scl, y*scl, 0*scl])
-        t.add(h)
-        dh.append(t)
-    return dh
 
 def drill_holes(_scl, ln, wd):
 
@@ -409,7 +377,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -419,7 +387,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     b = union()
     laminates = False
 
-    p2_inset = 19
+    p2_inset = 21
 
     if laminates:
         tb_inset = 50
@@ -449,7 +417,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         else:
             top_ht=10.0
         # touchpanel capture layer
-        ts=touch_surround(_scl, top_ht, 34, tb_inset, holes=laminates)
+        ts=touch_surround(_scl, top_ht, 50, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht)*_scl])
         td.add(ts)
         b.add(td)
@@ -462,7 +430,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
         if part == 2 and not laminates:
-            b.add(clips(_scl, 25, ht=61, z=-1, dp=13.0, doffs=2))
+            b.add(clips(_scl, 25, ht=61, z=-1, dp=15.0, doffs=2.5))
         b.add(td)
 
     if layers & 0x4:
@@ -638,7 +606,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 40, dp=0, offs=5, ht=10, doffs=-13, flat=True)
+        c += clips(_scl, 40, dp=0, offs=5, ht=40, doffs=-13, flat=True)
 
         u = union()
         u.add(b)
@@ -673,7 +641,7 @@ if __name__ == '__main__':
         create_tablet(t, scl, 1.0, c, part=0)
         create_tablet(t, scl, 1.0, c, part=1)
         create_tablet(t, scl, 1.0, c, part=2)
-    t = translate(v=[-152.5*scl,-56*scl,0]).add(t)
+    t = translate(v=[-155.5*scl,-61*scl,0]).add(t)
     t = color(c).add(t)
 
     #projection(cut=False).add(t)
