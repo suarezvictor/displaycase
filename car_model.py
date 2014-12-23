@@ -557,7 +557,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
             u = intersection()
             u.add(td)
-            u.add(headphone(_scl, -40))
+            u.add(headphone(_scl, -20))
             u -= pcb(_scl) # remove pcb
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
