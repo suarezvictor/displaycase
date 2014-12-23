@@ -387,7 +387,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     b = union()
     laminates = False
 
-    p2_inset = 21
+    p2_inset = 20
 
     if laminates:
         tb_inset = 50
