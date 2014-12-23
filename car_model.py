@@ -210,9 +210,8 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
     
     return o
 
-def clips(_scl, ln, wd, offs=0, doffs=0, flat=False):
+def clips(_scl, ln, wd, offs=0, doffs=0, ht=60, flat=False):
 
-    ht = 60
     wd = 25
     dp = 2
     dh = []
@@ -254,6 +253,7 @@ def clips(_scl, ln, wd, offs=0, doffs=0, flat=False):
         else:
             wd2 = 1.5*wd
         h = clip(_scl, wd2, dp, ht, rot+2, offs=offs, doffs=doffs, flat=flat)
+                 
         t = translate(v=[x*_scl, y*_scl, (-32)*_scl])
         t.add(h)
         dh.append(t)
@@ -366,8 +366,8 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
     # cut the back off the rotated rectangles
     v = union()
-    b = cube(size=[(w*1.2+offs*4)*_scl,(dp+d*2+offs*2)*_scl,(ht+offs*2)*_scl])
-    v.add(translate(v=[-w*0.1*_scl, (dp+offs*2)*scl, 0]).add(b))
+    b = cube(size=[(w*1.2+offs*4)*_scl,(dp+d*2+offs*2)*_scl,(ht*4+offs*2)*_scl])
+    v.add(translate(v=[-w*0.1*_scl, (dp+offs*2)*scl, -ht*_scl*0.5]).add(b))
     u -= v
 
     t = union()
@@ -533,6 +533,15 @@ def create_tablet(t, _scl, mirror, colour, part):
         td = translate(v=[0,0,-115*_scl])
         td.add(ts)
         b.add(td)
+
+    if part == 0 and not laminates:
+        c = union()
+        c += clips(_scl, t_w, t_l, offs=4, ht=10, doffs=-6, flat=True)
+    
+        u = union()
+        u.add(b)
+        u += c
+        b = u
 
     if part != 2 and not laminates:
         c = union()
