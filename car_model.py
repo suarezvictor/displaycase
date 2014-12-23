@@ -396,7 +396,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         if part == 0:
             tb_inset = 6
             innerwall = 5
-            p0_innerwall = 22
+            p0_innerwall = 16
         elif part == 1:
             tb_inset = 0
             innerwall = -12
@@ -531,7 +531,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         b.add(td)
 
         if part == 0 and not laminates:
-            ts = touch_surround(_scl, 40, p0_innerwall, tb_inset,
+            ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-45*_scl])
             td.add(ts)
@@ -552,11 +552,13 @@ def create_tablet(t, _scl, mirror, colour, part):
             u.add(power(_scl, -20))
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
+            u -= pcb(_scl) # remove pcb
             b.add(u)
 
             u = intersection()
             u.add(td)
             u.add(headphone(_scl, -40))
+            u -= pcb(_scl) # remove pcb
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
             b.add(u)
@@ -590,7 +592,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             u.add(sdcard(_scl, 4))
             b.add(u)
 
-            ts = touch_surround(_scl, 40, p0_innerwall, tb_inset,
+            ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
             td.add(ts)
