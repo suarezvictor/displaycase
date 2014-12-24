@@ -1,7 +1,7 @@
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
-test = True
+test = False
 
 if not test:
     t_l = 1028
@@ -114,12 +114,12 @@ def close_top(scl, ht=15):
         u.add(t)
     else:
         # save plastic during dev
-        c = cube(size=[(t_l+100)*scl,(30)*scl,ht*scl])
+        c = cube(size=[(t_w+100)*scl,(30)*scl,ht*scl])
         t = translate(v=[-125*scl, (t_w/2+20)*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
-        c = cube(size=[(30)*scl,(t_w+120)*scl,ht*scl])
-        t = translate(v=[(t_l/2-125)*scl, -25*scl, (32.5-ht)*scl])
+        c = cube(size=[(30)*scl,(t_l+120)*scl,ht*scl])
+        t = translate(v=[(t_l/2+255)*scl, -25*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
     return u
@@ -272,13 +272,19 @@ def capture1(_scl, ioff=0, oof=0):
 
 def capture(_scl, ioff=0, oof=0):
 
+    if test:
+        w1 = t_w*0.32
+        w2 = t_w*0.60
+    else:
+        w1 = t_w*0.4
+        w2 = t_w*0.50
     v = union()
-    t = translate(v=[(t_w*0.32-oof/2.0)*_scl, (-60)*_scl, (-32)*_scl])
+    t = translate(v=[(w1-oof/2.0)*_scl, (-60)*_scl, (-32)*_scl])
     t.add(capture1(_scl, ioff, oof))
     v.add(t)
     t = rotate(a=180.0, v=[0,0,1])
     t.add(capture1(_scl, ioff, oof))
-    t = translate(v=[(t_w*0.60-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
+    t = translate(v=[(w2-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
     v.add(t)
     return v
 
@@ -404,8 +410,8 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
     # cut the back off the rotated rectangles
     v = union()
-    b = cube(size=[(w*1.2+offs*4)*_scl,(dp+d*2.0+offs*2.0)*_scl,(ht*4+offs*2.0)*_scl])
-    v.add(translate(v=[-w*0.1*_scl, (dp+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
+    b = cube(size=[(w*1.4+offs*4)*_scl,(0+dp+d+offs*2.0)*_scl,(ht*2+offs*2.0)*_scl])
+    v.add(translate(v=[-w*0.2*_scl, (dp+0+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
     u -= v
 
     t = union()
@@ -420,7 +426,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -437,8 +443,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         innerwall = 13
     else:
         if part == 0:
-            tb_inset = 7
-            innerwall = 6
+            tb_inset = 6
+            innerwall = 8
             p0_innerwall = 15
             swid = -35
         elif part == 1:
@@ -672,7 +678,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         b.add(td)
 
         if not test and part == 0 and not laminates:
-            ts = touch_surround(_scl, 30, iw, p2_inset,
+            ts = touch_surround(_scl, 30, iw, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
             td.add(ts)
@@ -734,8 +740,8 @@ def create_tablet(t, _scl, mirror, colour, part):
 
         b.add(td)
 
-        if not test and part == 0 and not laminates:
-            ts = touch_surround(_scl, top_ht, iw, p2_inset,
+        if test and part == 0 and not laminates:
+            ts = touch_surround(_scl, top_ht, iw, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-115*_scl])
             td.add(ts)
@@ -766,8 +772,8 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 40, dp=0, offs=5, z=30, ht=8.5, doffs=-13, flat=True)
-        c += clips(_scl, 40, dp=0, offs=5, z=-17, ht=30, doffs=-13, flat=True)
+        c += clips(_scl, 40, dp=0, offs=3, z=30, ht=8.5, doffs=-15, flat=True)
+        c += clips(_scl, 40, dp=0, offs=3, z=-17, ht=30, doffs=-15, flat=True)
 
         u = union()
         u.add(b)
@@ -776,14 +782,11 @@ def create_tablet(t, _scl, mirror, colour, part):
         b = u
 
     if part != 2 and not laminates:
-        c = union()
-        c += clips(_scl, 25, dp=1, offs=3, z=30, doffs=-1, flat=part==1)
-        c += clips(_scl, 25, dp=1, offs=3, z=-17, doffs=-1, flat=part==1)
+        c = clips(_scl, 25, dp=1, offs=3, z=-17, ht=20, doffs=-1, flat=part==1)
+        b -= c
+        c = clips(_scl, 25, dp=1, offs=3, z=30, ht=30, doffs=-1, flat=part==1)
+        b -= c
 
-        u = union()
-        u.add(b)
-        u -= c
-        b = u
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
