@@ -239,6 +239,36 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
 
     return o
 
+def capture1(_scl, ioff=0, oof=0):
+    u = union()
+    c = cube(size=[(60+oof)*scl,(45+oof)*scl,(50+oof)*_scl])
+    u.add(c)
+    c = cube(size=[(62+oof*2)*scl, 60*scl, 30*scl])
+    c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
+    c = translate(v=[(-1-oof/2.5)*scl, (16+oof/2.5)*_scl,55*_scl]).add(c)
+    u -= c
+    c = cube(size=[(62+oof*2)*scl, 30*scl, 10*scl])
+    c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
+    c = translate(v=[-1*scl, 18*_scl,5*_scl]).add(c)
+    u -= c
+    c = cube(size=[(62+oof*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
+    c = translate(v=[-(1+oof/2.0)*scl, 7*_scl,-5*_scl]).add(c)
+    u -= c
+
+    return u
+
+def capture(_scl, ioff=0, oof=0):
+
+    v = union()
+    t = translate(v=[(t_w*0.42-oof/2.0)*_scl, (-60)*_scl, (-32)*_scl])
+    t.add(capture1(_scl, ioff, oof))
+    v.add(t)
+    t = rotate(a=180.0, v=[0,0,1])
+    t.add(capture1(_scl, ioff, oof))
+    t = translate(v=[(t_w*0.55-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
+    v.add(t)
+    return v
+
 def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
 
     dh = []
@@ -249,9 +279,9 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
 
     lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
     if test:
-        lst += [(t_w/2, -49, 0),
-                (t_w/2, t_l+123, 2),
-                (-160, t_l/2, 3),
+        lst += [(t_w*0.22, -49, 0),
+                (t_w*0.22, t_l+123, 2),
+                (-160, t_l*0.5, 3),
                 (t_w+14, t_l/2, 1)
                     ]
 
@@ -278,7 +308,7 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
         if rot in [0.5,1.5,2.5,3.5]:
             wd2 = wd
         else:
-            wd2 = 1.5*wd
+            wd2 = 1.0*wd
         h = clip(_scl, wd2, dp, ht, rot+2, offs=offs, doffs=doffs, flat=flat)
 
         t = translate(v=[x*_scl, y*_scl, (z-62)*_scl])
@@ -377,7 +407,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part == 1:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -682,8 +712,9 @@ def create_tablet(t, _scl, mirror, colour, part):
             ts += close_top(_scl, top_ht) # complete top
         td = translate(v=[0,0,-115*_scl])
         td.add(ts)
-        if not test and part == 2 and not laminates:
+        if part == 2 and not laminates:
             td -= cardslot(_scl, 0) # remove cpu card
+        if not test and part == 2 and not laminates:
             td -= power(_scl) # remove power
             td -= headphone(_scl) # remove headphone
             td -= sdcard(_scl) # remove microsd
@@ -718,15 +749,17 @@ def create_tablet(t, _scl, mirror, colour, part):
     if part == 2 and not laminates:
         b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
         b.add(clips(_scl, 25, ht=61, z=30, dp=9.0, doffs=5))
+        b.add(capture(_scl, ioff=2))
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 40, dp=0, offs=5, z=30, ht=5, doffs=-13, flat=True)
+        c += clips(_scl, 40, dp=0, offs=5, z=30, ht=9, doffs=-13, flat=True)
         c += clips(_scl, 40, dp=0, offs=5, z=-17, ht=30, doffs=-13, flat=True)
 
         u = union()
         u.add(b)
         u += c
+        u -= capture(_scl, oof=5)
         b = u
 
     if part != 2 and not laminates:
