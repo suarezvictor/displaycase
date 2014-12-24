@@ -340,23 +340,23 @@ def drill_holes(_scl, ln, wd):
     return dh
 
 def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
-    d=12
+    d=14
     u = union()
     u.add(cube(size=[(w+offs*2.0)*scl,(dp+offs*2.0)*scl,(ht+offs*2.0)*_scl]))
     c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d+offs*2.0)*_scl])
     c = rotate(a=-52.0, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[0, -d*0.4*_scl,d*0.8*_scl]).add(c)
+    c = translate(v=[0, -d*0.5*_scl,d*0.8*_scl]).add(c)
     u.add(c)
     c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d*0.7+offs*2.0)*_scl])
-    c = translate(v=[0, -d*0.4*_scl,d*0.8*_scl]).add(c)
+    c = translate(v=[0, -d*0.5*_scl,d*0.8*_scl]).add(c)
     u.add(c)
     if flat:
         c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(ht+offs*2.0)*_scl])
-        c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
+        c = translate(v=[0, -d*0.5*_scl,1.5*d*_scl]).add(c)
     else:
         c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d+offs*2.0)*_scl])
         c = rotate(a=-32.0, v=[1*_scl,0,0]).add(c)
-        c = translate(v=[0, -d*0.4*_scl,1.5*d*_scl]).add(c)
+        c = translate(v=[0, -d*0.5*_scl,1.5*d*_scl]).add(c)
     u.add(c)
 
     # cut the back off the rotated rectangles
@@ -377,7 +377,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -394,9 +394,9 @@ def create_tablet(t, _scl, mirror, colour, part):
         innerwall = 13
     else:
         if part == 0:
-            tb_inset = 6
-            innerwall = 7
-            p0_innerwall = 16
+            tb_inset = 7
+            innerwall = 6
+            p0_innerwall = 15
             swid = -35
         elif part == 1:
             tb_inset = 0
@@ -431,8 +431,6 @@ def create_tablet(t, _scl, mirror, colour, part):
         ts=touch_surround(_scl, top_ht, -0.0, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht-15)*_scl])
         td.add(ts)
-        if part == 2 and not laminates:
-            b.add(clips(_scl, 25, ht=61, z=-1, dp=15.0, doffs=2.5))
         b.add(td)
 
     if layers & 0x4:
@@ -489,7 +487,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             l = 1
             ht = 15
             ht_step = 0
-            z = -40
+            z = -30
             if part == 0 and not laminates:
                 z = -40.0-2
                 l = 5
@@ -626,7 +624,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         td -= power(_scl) # remove power jack
         td -= headphone(_scl) # remove headphone
         td -= cardslot(_scl, 0) # remove cpu card
-        if part == 2 and not laminates:
+        if not test and part == 2 and not laminates:
             td -= sdcard(_scl) # remove microsd
         b.add(td)
 
@@ -684,7 +682,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             ts += close_top(_scl, top_ht) # complete top
         td = translate(v=[0,0,-115*_scl])
         td.add(ts)
-        if part == 2 and not laminates:
+        if not test and part == 2 and not laminates:
             td -= cardslot(_scl, 0) # remove cpu card
             td -= power(_scl) # remove power
             td -= headphone(_scl) # remove headphone
@@ -717,10 +715,14 @@ def create_tablet(t, _scl, mirror, colour, part):
             u.add(headphone(_scl, 4))
             b.add(u)
 
+    if part == 2 and not laminates:
+        b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
+        b.add(clips(_scl, 25, ht=61, z=30, dp=9.0, doffs=5))
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 40, dp=0, offs=5, ht=40, doffs=-13, flat=True)
+        c += clips(_scl, 40, dp=0, offs=5, z=30, ht=5, doffs=-13, flat=True)
+        c += clips(_scl, 40, dp=0, offs=5, z=-17, ht=30, doffs=-13, flat=True)
 
         u = union()
         u.add(b)
@@ -729,7 +731,8 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part != 2 and not laminates:
         c = union()
-        c += clips(_scl, 25, dp=1, offs=3, doffs=-4, flat=part==1)
+        c += clips(_scl, 25, dp=1, offs=3, z=30, doffs=-4, flat=part==1)
+        c += clips(_scl, 25, dp=1, offs=3, z=-17, doffs=-4, flat=part==1)
 
         u = union()
         u.add(b)
