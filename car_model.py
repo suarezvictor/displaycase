@@ -50,7 +50,7 @@ def sdcard(scl, offs=0):
 
 def power(scl, offs=0):
     r = union()
-    r.add(cube(size=[85*scl,(360-offs)*scl,160.2*scl]))
+    r.add(cube(size=[85*scl,(390-offs)*scl,160.2*scl]))
     t = translate(v=[1725*scl, (90+offs/2)*scl, (-100.51)*scl])
     t.add(r)
     return t
@@ -377,7 +377,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part == 1:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -397,6 +397,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             tb_inset = 6
             innerwall = 5
             p0_innerwall = 16
+            swid = -35
         elif part == 1:
             tb_inset = 0
             innerwall = -12
@@ -406,7 +407,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x7f-7
+        layers = 0x3f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -537,19 +538,19 @@ def create_tablet(t, _scl, mirror, colour, part):
             td.add(ts)
             u = intersection()
             u.add(td)
-            u.add(cardslot(_scl, -20))
+            u.add(cardslot(_scl, swid))
             u -= cardslot(_scl, 0)
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(sdcard(_scl, -20))
+            u.add(sdcard(_scl, swid))
             u -= sdcard(_scl, 0)
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(power(_scl, -20))
+            u.add(power(_scl, swid))
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
             u -= pcb(_scl) # remove pcb
@@ -557,7 +558,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
             u = intersection()
             u.add(td)
-            u.add(headphone(_scl, -20))
+            u.add(headphone(_scl, swid))
             u -= pcb(_scl) # remove pcb
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
@@ -598,26 +599,26 @@ def create_tablet(t, _scl, mirror, colour, part):
             td.add(ts)
             u = intersection()
             u.add(td)
-            u.add(cardslot(_scl, -20))
+            u.add(cardslot(_scl, swid))
             u -= cardslot(_scl, 0)
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(sdcard(_scl, -20))
+            u.add(sdcard(_scl, swid))
             u -= sdcard(_scl, 0)
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(power(_scl, -20))
+            u.add(power(_scl, swid))
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(headphone(_scl, -40))
+            u.add(headphone(_scl, swid))
             u -= power(_scl, 0)
             u -= headphone(_scl, 0)
             b.add(u)
