@@ -1,14 +1,14 @@
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
-test = False
+test = True
 
 if not test:
     t_l = 1028
     t_w = 1752
 else:
-    t_l = 200
-    t_w = 200
+    t_l = 400
+    t_w = 400
 
 
 def touch_arc(rad, ht, bwid, iro, scl):
@@ -377,7 +377,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part == 1:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -395,7 +395,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     else:
         if part == 0:
             tb_inset = 6
-            innerwall = 5
+            innerwall = 7
             p0_innerwall = 16
             swid = -35
         elif part == 1:
@@ -407,7 +407,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x3f-7
+        layers = 0x7f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -486,28 +486,75 @@ def create_tablet(t, _scl, mirror, colour, part):
             u.add(cardslot(_scl, 2))
             b.add(u)
         else:
-            # layer on top of touchscreen
-            if part == 2 and not laminates:
-                iw = p2_innerwall
-            elif part == 0 and not laminates:
-                iw = p0_innerwall
-            else:
-                iw = innerwall
-            ts = touch_surround(_scl, 15, iw, tb_inset,
-                                holes=laminates)
+            l = 1
+            ht = 15
+            ht_step = 0
+            z = -40
+            if part == 0 and not laminates:
+                z = -40.0-2
+                l = 5
+                ht = 3.0
+                ht_step = 3.0
+                _p0_innerwall = innerwall+3
+            for i in range(l):
+                # layer on top of touchscreen
+                if part == 2 and not laminates:
+                    iw = p2_innerwall
+                elif part == 0 and not laminates:
+                    iw = _p0_innerwall
+                    _p0_innerwall = min(p0_innerwall, _p0_innerwall+3)
+                else:
+                    iw = innerwall
+                ts = touch_surround(_scl, ht, iw, tb_inset,
+                                    holes=laminates)
+                td = translate(v=[0,0,z*_scl])
+                z += ht_step
+                td.add(ts)
+                if part != 2 and not laminates:
+                    td -= cardslot(_scl) # remove cpu card
+                if not test:
+                    td -= panelcable(_scl) # remove panelcable
+                    td -= pcb(_scl) # remove pcb
+                    td -= camera(_scl) # remove headphone
+                    td -= headphone(_scl) # remove headphone
+                    if part == 0 and not laminates:
+                        td -= sdcard(_scl) # remove cpu card
+                        td -= power(_scl) # remove power jack
+                b.add(td)
+
+        if not test and part == 0 and not laminates:
+            ts = touch_surround(_scl, 15, p0_innerwall+5, tb_inset,
+                                    holes=laminates)
             td = translate(v=[0,0,-30*_scl])
             td.add(ts)
-            if part != 2 and not laminates:
-                td -= cardslot(_scl) # remove cpu card
-            if not test:
-                td -= panelcable(_scl) # remove panelcable
-                td -= pcb(_scl) # remove pcb
-                td -= camera(_scl) # remove headphone
-                td -= headphone(_scl) # remove headphone
-                if part == 0 and not laminates:
-                    td -= sdcard(_scl) # remove cpu card
-                    td -= power(_scl) # remove power jack
-            b.add(td)
+            u = intersection()
+            u.add(td)
+            u.add(cardslot(_scl, swid))
+            u -= cardslot(_scl, 0)
+            b.add(u)
+
+            u = intersection()
+            u.add(td)
+            u.add(sdcard(_scl, swid))
+            u -= sdcard(_scl, 0)
+            b.add(u)
+
+            u = intersection()
+            u.add(td)
+            u.add(power(_scl, swid))
+            u -= power(_scl, 0)
+            u -= headphone(_scl, 0)
+            u -= pcb(_scl) # remove pcb
+            b.add(u)
+
+            u = intersection()
+            u.add(td)
+            u.add(headphone(_scl, swid))
+            u -= pcb(_scl) # remove pcb
+            u -= power(_scl, 0)
+            u -= headphone(_scl, 0)
+            b.add(u)
+
 
     if layers & 0x10:
         if part == 2 and not laminates:
@@ -531,7 +578,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= powerbutton(_scl) # remove power button
         b.add(td)
 
-        if part == 0 and not laminates:
+        if not test and part == 0 and not laminates:
             ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-45*_scl])
@@ -583,7 +630,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= sdcard(_scl) # remove microsd
         b.add(td)
 
-        if part == 0 and not laminates:
+        if not test and part == 0 and not laminates:
             ts = touch_surround(_scl, 30, iw, p2_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
@@ -645,7 +692,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
         b.add(td)
 
-        if part == 0 and not laminates:
+        if not test and part == 0 and not laminates:
             ts = touch_surround(_scl, top_ht, iw, p2_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-115*_scl])
