@@ -819,9 +819,9 @@ if __name__ == '__main__':
 
     #projection(cut=False).add(t)
 
-    scad_render_to_file(t, "car_prog.scad")
-    f = open("car_model.scad", "w")
-    f.write("""include<car_prog.scad>;
+    scad_render_to_file(t, "tablet_prog.scad")
+    f = open("tablet_model.scad", "w")
+    f.write("""include<tablet_prog.scad>;
 %import_stl(filename = "tablet10.stl");
     """)
     f.close()
