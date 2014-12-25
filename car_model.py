@@ -50,8 +50,8 @@ def sdcard(scl, offs=0):
 
 def power(scl, offs=0):
     r = union()
-    r.add(cube(size=[85*scl,(390-offs)*scl,160.2*scl]))
-    t = translate(v=[1725*scl, (90+offs/2)*scl, (-100.51)*scl])
+    r.add(cube(size=[85*scl,(410-offs)*scl,160.2*scl]))
+    t = translate(v=[1725*scl, (70+offs/2)*scl, (-100.51)*scl])
     t.add(r)
     return t
 
@@ -100,8 +100,8 @@ def camera(scl):
 
 def headphone(scl, offs=0):
     r = union()
-    r.add(cube(size=[140*scl,(85-offs)*scl,165.2*scl]))
-    t = translate(v=[1665*scl, (33+offs/2)*scl, (-103.51)*scl])
+    r.add(cube(size=[140*scl,(115-offs)*scl,165.2*scl]))
+    t = translate(v=[1665*scl, (34+offs/2)*scl, (-103.51)*scl])
     t.add(r)
     return t
 
@@ -282,10 +282,17 @@ def capture(_scl, ioff=0, oof=0):
     t = translate(v=[(w1-oof/2.0)*_scl, (-60)*_scl, (-32)*_scl])
     t.add(capture1(_scl, ioff, oof))
     v.add(t)
+
     t = rotate(a=180.0, v=[0,0,1])
     t.add(capture1(_scl, ioff, oof))
     t = translate(v=[(w2-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
     v.add(t)
+
+    t = rotate(a=90.0, v=[0,0,1])
+    t.add(capture1(_scl, ioff, oof))
+    t = translate(v=[(t_w+25)*_scl, (t_l/2+125-oof/2.0)*_scl, (-32)*_scl]).add(t)
+    v.add(t)
+
     return v
 
 def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
@@ -501,7 +508,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         if not test:
             td -= panelcable(_scl) # remove panelcable
         if not test:
-            td -= camera(_scl) # remove headphone
+            td -= camera(_scl) # remove camera
             if part != 1 and not laminates:
                 td -= headphone(_scl) # remove headphone
                 if not test:
