@@ -1,7 +1,7 @@
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
-test = False
+test = True
 
 if not test:
     t_l = 1028
@@ -265,7 +265,7 @@ def capture1(_scl, ioff=0, oof=0):
     c = translate(v=[-1*scl, 18*_scl,5*_scl]).add(c)
     u -= c
     c = cube(size=[(62+oof*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
-    c = translate(v=[-(1+oof/2.0)*scl, 7*_scl,-5*_scl]).add(c)
+    c = translate(v=[-(1)*scl, 7*_scl,-5*_scl]).add(c)
     u -= c
 
     return u
@@ -396,11 +396,11 @@ def drill_holes(_scl, ln, wd):
     return dh
 
 def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
-    d=14
+    d=16
     u = union()
     u.add(cube(size=[(w+offs*2.0)*scl,(dp+offs*2.0)*scl,(ht+offs*2.0)*_scl]))
     c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d+offs*2.0)*_scl])
-    c = rotate(a=-52.0, v=[1*_scl,0,0]).add(c)
+    c = rotate(a=-42.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, -d*0.5*_scl,d*0.8*_scl]).add(c)
     u.add(c)
     c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d*0.7+offs*2.0)*_scl])
@@ -411,14 +411,14 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
         c = translate(v=[0, -d*0.5*_scl,1.5*d*_scl]).add(c)
     else:
         c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d+offs*2.0)*_scl])
-        c = rotate(a=-32.0, v=[1*_scl,0,0]).add(c)
+        c = rotate(a=-62.0, v=[1*_scl,0,0]).add(c)
         c = translate(v=[0, -d*0.5*_scl,1.5*d*_scl]).add(c)
     u.add(c)
 
     # cut the back off the rotated rectangles
     v = union()
-    b = cube(size=[(w*1.4+offs*4)*_scl,(0+dp+d+offs*2.0)*_scl,(ht*2+offs*2.0)*_scl])
-    v.add(translate(v=[-w*0.2*_scl, (dp+0+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
+    b = cube(size=[(w*1.6+offs*4)*_scl,(0+dp+d+offs*2.0)*_scl,(ht*3+offs*2.0)*_scl])
+    v.add(translate(v=[-w*0.5*_scl, (dp+0+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
     u -= v
 
     t = union()
@@ -433,7 +433,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part == 1:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -451,8 +451,8 @@ def create_tablet(t, _scl, mirror, colour, part):
     else:
         if part == 0:
             tb_inset = 6
-            innerwall = 8
-            p0_innerwall = 15
+            innerwall = 5
+            p0_innerwall = 13
             swid = -35
         elif part == 1:
             tb_inset = 0
@@ -463,7 +463,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x7f-7
+        layers = 0x3f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -779,13 +779,13 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0 and not laminates:
         c = union()
-        c += clips(_scl, 40, dp=0, offs=3, z=28, ht=8.5, doffs=-15, flat=True)
-        c += clips(_scl, 40, dp=0, offs=3, z=-17, ht=30, doffs=-15, flat=True)
+        c += clips(_scl, 40, dp=0, offs=4, z=28, ht=8.5, doffs=-15, flat=True)
+        c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=30, doffs=-15, flat=True)
 
         u = union()
         u.add(b)
         u += c
-        u -= capture(_scl, oof=5)
+        u -= capture(_scl, oof=0, ioff=-4)
         b = u
 
     if part != 2 and not laminates:
