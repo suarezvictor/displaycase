@@ -254,18 +254,22 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
 
 def capture1(_scl, ioff=0, oof=0):
     u = union()
-    c = cube(size=[(60+oof-ioff)*scl,(45+oof)*scl,(50+oof)*_scl])
+    c = cube(size=[(50+oof-ioff)*scl,(45+oof)*scl,(50+oof)*_scl])
+    c = translate(v=[(-oof+ioff)/2.0*_scl, 0, 0]).add(c)
     u.add(c)
-    c = cube(size=[(62+oof*2)*scl, 60*scl, 30*scl])
+    c = cube(size=[(52+oof*2)*scl, 60*scl, 30*scl])
+    c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[(-1-oof/2.5)*scl, (16+oof/2.5)*_scl,55*_scl]).add(c)
+    c = translate(v=[0, (16+oof/2.5)*_scl,55*_scl]).add(c)
     u -= c
-    c = cube(size=[(62+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    c = cube(size=[(52+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[-1*scl, 18*_scl,5*_scl]).add(c)
+    c = translate(v=[0, 18*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(62+(oof-ioff)*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
-    c = translate(v=[-(1)*scl, 7*_scl,-5*_scl]).add(c)
+    c = cube(size=[(52+(oof-ioff)*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
+    c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
+    c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
 
     return u
@@ -273,13 +277,13 @@ def capture1(_scl, ioff=0, oof=0):
 def capture(_scl, ioff=0, oof=0):
 
     if test:
-        w1 = t_w*0.32
-        w2 = t_w*0.60
+        w1 = t_w*0.35
+        w2 = t_w*0.64
     else:
         w1 = t_w*0.4
         w2 = t_w*0.50
     v = union()
-    t = translate(v=[(w1-(oof-ioff)/2.0)*_scl, (-60)*_scl, (-32)*_scl])
+    t = translate(v=[(w1)*_scl, (-60)*_scl, (-32)*_scl])
     t.add(capture1(_scl, ioff, oof))
     v.add(t)
 
@@ -403,7 +407,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     c = rotate(a=-42.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, -d*0.5*_scl,d*0.8*_scl]).add(c)
     u.add(c)
-    c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d*0.45+offs*2.0)*_scl])
+    c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d*0.7+offs)*_scl])
     c = translate(v=[0, -d*0.5*_scl,d*0.8*_scl]).add(c)
     u.add(c)
     if flat:
@@ -463,7 +467,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x7f-7
+        layers = 0x3f-7
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -780,7 +784,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     if part == 0 and not laminates:
         c = union()
         c += clips(_scl, 40, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
-        c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=30, doffs=-17, flat=True)
+        c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
         u.add(b)
