@@ -1,7 +1,7 @@
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
-test = True
+test = False
 
 if not test:
     t_l = 1028
@@ -254,20 +254,20 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
 
 def capture1(_scl, ioff=0, oof=0):
     u = union()
-    c = cube(size=[(50+oof-ioff)*scl,(45+oof)*scl,(50+oof)*_scl])
+    c = cube(size=[(40+oof-ioff)*scl,(45+oof)*scl,(50+oof)*_scl])
     c = translate(v=[(-oof+ioff)/2.0*_scl, 0, 0]).add(c)
     u.add(c)
-    c = cube(size=[(52+oof*2)*scl, 60*scl, 30*scl])
+    c = cube(size=[(42+oof*2)*scl, 60*scl, 30*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, (16+oof/2.5)*_scl,55*_scl]).add(c)
     u -= c
-    c = cube(size=[(52+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, 30*scl, 10*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 18*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(52+(oof-ioff)*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
@@ -277,25 +277,35 @@ def capture1(_scl, ioff=0, oof=0):
 def capture(_scl, ioff=0, oof=0):
 
     if test:
-        w1 = t_w*0.35
-        w2 = t_w*0.64
+        w1 = [t_w*0.35]
+        w2 = [t_w*0.64]
     else:
-        w1 = t_w*0.4
-        w2 = t_w*0.50
+        w1 = [t_w*0.118, t_w*.266, t_w*0.54, t_w*0.92]
+        w2 = [t_w*0.387, t_w*0.65]
     v = union()
-    t = translate(v=[(w1)*_scl, (-60)*_scl, (-32)*_scl])
-    t.add(capture1(_scl, ioff, oof))
-    v.add(t)
 
-    t = rotate(a=180.0, v=[0,0,1])
-    t.add(capture1(_scl, ioff, oof))
-    t = translate(v=[(w2-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
-    v.add(t)
+    for w in w1:
+        t = translate(v=[w*_scl, (-60)*_scl, (-32)*_scl])
+        t.add(capture1(_scl, ioff, oof))
+        v.add(t)
 
-    t = rotate(a=90.0, v=[0,0,1])
-    t.add(capture1(_scl, ioff, oof))
-    t = translate(v=[(t_w+25)*_scl, (t_l/2+125-oof/2.0)*_scl, (-32)*_scl]).add(t)
-    v.add(t)
+    for w in w2:
+        t = rotate(a=180.0, v=[0,0,1])
+        t.add(capture1(_scl, ioff, oof))
+        t = translate(v=[(w-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
+        v.add(t)
+
+    for h in [t_l/2+140, t_l-20]:
+        t = rotate(a=90.0, v=[0,0,1])
+        t.add(capture1(_scl, ioff, oof))
+        t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
+        v.add(t)
+
+    for h in [t_l/2+10, t_l+36]:
+        t = rotate(a=-90.0, v=[0,0,1])
+        t.add(capture1(_scl, ioff, oof))
+        t = translate(v=[(-171)*_scl, h*_scl, (-32)*_scl]).add(t)
+        v.add(t)
 
     return v
 
@@ -316,23 +326,31 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
                     ]
 
     if not test:
-        lst += [(t_w/2, -49, 0),
-                (t_w*0.6, t_l+123, 2),
-                (-160, t_l*0.55, 3),
-                (t_w+14, t_l*0.55, 1)
-                    ]
+        lst += [(t_w*0.88, -49, 0),
+                    (t_w*0.69, t_l+123, 2),
+                    (t_w*0.59, t_l+123, 2),
+                    
+                    
+                        ]
 
-        lst += [(t_w*0.80, -49, 0),
-                (t_w*0.85, t_l+123, 2),
-                (-160, t_l*0.2, 3),
+        if False:
+            lst += [(t_w*0.80, -49, 0),
+                    (t_w*0.85, t_l+123, 2),
+                    (-160, t_l*0.2, 3),
 
+                        ]
+        lst += [(-160, t_l*0.92, 3),
+                (-160, t_l*0.57, 3),
+                (-160, t_l*0.41, 3),
+                (t_w+14, t_l*0.92, 1),
+                (t_w+14, t_l*0.59, 1),
+                (t_w+14, t_l*0.72, 1),
                     ]
-        lst += [(-160, t_l*0.85, 3),
-                (t_w+14, t_l*0.85, 1)
-                    ]
-        lst += [(t_w*0.30, -49, 0),
-                (t_w*0.11, -49, 0),
-                (t_w*0.40, t_l+123, 2),
+        lst += [(t_w*0.32, -49, 0),
+                (t_w*0.09, -49, 0),
+                (t_w*0.50, -49, 0),
+                (t_w*0.60, -49, 0),
+                (t_w*0.42, t_l+123, 2),
                     ]
     for x, y, rot in lst:
         if rot in [0.5,1.5,2.5,3.5]:
@@ -400,7 +418,7 @@ def drill_holes(_scl, ln, wd):
     return dh
 
 def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
-    d=16
+    d=18
     u = union()
     u.add(cube(size=[(w+offs*2.0)*scl,(dp+offs*2.0)*scl,(ht+offs*2.0)*_scl]))
     c = cube(size=[(w+offs*2.0)*scl,(d+offs*2.0)*scl,(d+offs*2.0)*_scl])
@@ -777,14 +795,14 @@ def create_tablet(t, _scl, mirror, colour, part):
             b.add(u)
 
     if part == 2 and not laminates:
-        b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
+        #b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
         b.add(clips(_scl, 25, ht=61, z=28, dp=9.0, doffs=5))
         b.add(capture(_scl, ioff=0))
 
     if part == 0 and not laminates:
         c = union()
         c += clips(_scl, 40, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
-        c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
+        #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
         u.add(b)
@@ -793,8 +811,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         b = u
 
     if part != 2 and not laminates:
-        c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
-        b -= c
+        #c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
+        #b -= c
         c = clips(_scl, 25, dp=1, offs=2, z=30, ht=30, doffs=-1, flat=part==1)
         b -= c
 
