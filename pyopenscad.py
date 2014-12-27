@@ -66,13 +66,16 @@ openscad_builtins = [
 # Some functions need custom code in them; put that code here
 builtin_literals = {
     'cylinder': '''class cylinder( openscad_object):
-        def __init__( self, r, h, center=None, segments=None):
-            if segments:
-                openscad_object.__init__(self, 'cylinder',
-                    {'r': r, 'h': h, 'center': center, '$fn': segments})
+        def __init__( self, r, h, r1=None, center=None, segments=None):
+            kwargs = { 'h': h, 'center': center, }
+            if r1 is not None:
+                kwargs['r'] = r
+                kwargs['r1'] = r1
             else:
-                openscad_object.__init__(self, 'circle', {'r': r,
-                                        'h': h, 'center': center, })
+                kwargs['r'] = r
+            if segments:
+                kwargs['$fn'] = segments
+            openscad_object.__init__(self, 'cylinder', kwargs)
     
 ''',
     'circle': '''class circle( openscad_object):

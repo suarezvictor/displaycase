@@ -11,17 +11,69 @@ else:
     t_w = 200
 
 
-def touch_arc(rad, ht, bwid, iro, scl):
+def shearedcube(size, center=False, shear=None):
+    v = size
+    points = [
+    [ 0.5,  0.5,  0.5],
+    [ 0.5,  0.5, -0.5],
+    [ 0.5, -0.5,  0.5],
+    [ 0.5, -0.5, -0.5],
+    [-0.5,  0.5,  0.5],
+    [-0.5,  0.5, -0.5],
+    [-0.5, -0.5,  0.5],
+    [-0.5, -0.5, -0.5]];
+    faces = [
+    [ 4 , 5, 1, 0],
+    [ 2 , 6, 4, 0],
+    [ 1 , 3, 2, 0],
+    [ 6 , 2, 3, 7],
+    [ 5 , 4, 6, 7],
+    [ 3 , 1, 5, 7]];
+
+    #points = [[-v[0]/2, -v[1]/2, -v[2]/2],
+    #          [v[0]/2, -v[1]/2, -v[2]/2],
+    #          [v[0]/2, v[1]/2, -v[2]/2],
+    #          [-v[0]/2, v[1]/2, -v[2]/2],
+    #          [-v[0]/2, -v[1]/2, v[2]/2],
+    #          [v[0]/2, -v[1]/2, v[2]/2],
+    #          [v[0]/2, v[1]/2, v[2]/2],
+    #          [-v[0]/2, v[1]/2, v[2]/2]]
+    #faces = [[0,1,2], [2,3,0], # back
+    #         [6,5,4], [7,6,4], # front
+    #         [0,1,4], [4,1,5], # top
+    #         [3,2,7], [6,2,7], # bottom
+    #         [0,3,4], [3,4,7], # left
+    #         [1,2,5], [5,6,2] # right
+    #        ]
+    for i in range(len(points)):
+        for j in range(len(v)):
+            if not center:
+                points[i][j] += 0.5
+            points[i][j] *= v[j]
+    if shear:
+        for i in range(len(points)/2):
+            for j in range(len(v)):
+                points[i*2][j] += shear[j]
+    return polyhedron(points, faces)
+
+def touch_arc(rad, ht, bwid, iro, scl, roffs=0):
     rad2 = bwid+rad
     rad -= iro
+    rad_r = rad 
+    rad2_r = rad2 
+    rad2 += roffs
+    rad += roffs
+    
     r = union()
-    c = cylinder( r=rad2*scl, h=ht*scl, segments=50, center=True)
-    c -= cylinder( r=rad*scl, h=(ht+1)*scl, segments=50, center=True)
-    cb = cube(size=[rad2*scl,2*rad2*scl,2*(ht)*scl])
+    c = cylinder( r=rad2*scl, r1=rad2_r*scl, h=ht*scl,
+                  segments=50, center=True)
+    c -= cylinder( r=rad*scl, r1=rad_r*scl, h=(ht+1)*scl,
+                   segments=50, center=True)
+    cb = cube(size=[rad2*scl*2.2,2.2*rad2*scl,2*(ht)*scl])
     ct = translate(v=[0*scl,-rad2*scl,-ht*scl])
     ct.add(cb)
     c -= ct
-    cb = cube(size=[2.2*rad2*scl,rad2*scl,2*(ht)*scl])
+    cb = cube(size=[2.2*rad2*scl,rad2*2*scl,2*(ht)*scl])
     ct = translate(v=[-rad2*scl*1.1,-0*scl,-ht*scl])
     ct.add(cb)
     c -= ct
@@ -141,7 +193,7 @@ def close_top(scl, ht=15):
         t.add(c)
         u.add(t)
         c = cube(size=[(30)*scl,(t_l+120)*scl,ht*scl])
-        t = translate(v=[(t_l/2+270)*scl, -25*scl, (32.5-ht)*scl])
+        t = translate(v=[(t_l/2+87)*scl, -25*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
     return u
@@ -205,58 +257,63 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
 
     return v
 
-def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
+def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
+                        shear=0):
     a = union()
 
     l = t_l
     w = t_w
 
     r = union()
-    r.add(cube(size=[(bwid+iro)*scl,l*scl,ht*scl]))
+    r.add(shearedcube(size=[(bwid+iro)*scl,l*scl,ht*scl],
+                shear=[-shear*scl, 0, 0]))
     t = translate(v=[-(143+bwid)*scl, 37*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl]))
+    r.add(shearedcube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl],
+                shear=[0, shear*scl, 0]))
     t = translate(v=[-65.01*scl, (l+114-iro)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(bwid+iro)*scl,l*scl,ht*scl]))
+    r.add(shearedcube(size=[(bwid+iro)*scl,l*scl,ht*scl],
+                shear=[shear*scl, 0, 0]))
     t = translate(v=[(w+13-iro)*scl, 37*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(cube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl]))
+    r.add(shearedcube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl],
+                    shear=[0, -shear*scl, 0]))
     t = translate(v=[-65.01*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     rad = 78
-    r = touch_arc(rad, ht, bwid, iro, scl)
+    r = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
     t = translate(v=[-65*scl, 38*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, -90])
-    rc = touch_arc(rad, ht, bwid, iro, scl)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
     r.add(rc)
     t = translate(v=[-65*scl, (l+36)*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, -180])
-    rc = touch_arc(rad, ht, bwid, iro, scl)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
     r.add(rc)
     t = translate(v=[(w-65)*scl, (l+36)*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, 90])
-    rc = touch_arc(rad, ht, bwid, iro, scl)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
     r.add(rc)
     t = translate(v=[(w-65)*scl, 38*scl, 25*scl])
     t.add(r)
@@ -480,7 +537,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -511,6 +568,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0:
         layers = 0x7f-3
+        layers = 0x4
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -522,7 +580,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         else:
             top_ht=10.0
         # touchpanel capture layer
-        ts=touch_surround(_scl, top_ht, 50, tb_inset, holes=laminates)
+        ts=touch_surround(_scl, top_ht+1, 50, tb_inset, holes=laminates)
         td = translate(v=[0,0,(top_ht)*_scl])
         td.add(ts)
         b.add(td)
@@ -538,6 +596,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if layers & 0x4:
         # layer on top of touchscreen
+        shear = None
         if part != 1 or laminates:
             ht = 15
         else:
@@ -546,13 +605,14 @@ def create_tablet(t, _scl, mirror, colour, part):
             taped = False
             iw = p2_innerwall
         elif part == 0 and not laminates:
+            shear = -7
             taped = False
             iw = 21
         else:
             taped = True
             iw = 35
         ts = touch_surround(_scl, ht, iw, tb_inset, taped=taped,
-                           holes=laminates)
+                           holes=laminates, shear=shear)
         td = translate(v=[0,0,-15*_scl])
         td.add(ts)
         if not test:
@@ -828,7 +888,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         b += topsupport(_scl, 0) #add top support
 
         c = union()
-        c += clips(_scl, 30, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
+        c += clips(_scl, 35, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
         #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
@@ -842,7 +902,6 @@ def create_tablet(t, _scl, mirror, colour, part):
         #b -= c
         c = clips(_scl, 20, dp=1, offs=2, z=30, ht=30, doffs=-1, flat=part==1)
         b -= c
-
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
