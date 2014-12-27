@@ -267,7 +267,7 @@ def capture1(_scl, ioff=0, oof=0):
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 18*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, (20+ioff)*scl, (25+ioff)*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, (20)*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
@@ -454,7 +454,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part == 1:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
