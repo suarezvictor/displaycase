@@ -57,8 +57,8 @@ def sdcard(scl, offs=0):
 
 def power(scl, offs=0):
     r = union()
-    r.add(cube(size=[85*scl,(410-offs)*scl,160.2*scl]))
-    t = translate(v=[1725*scl, (70+offs/2)*scl, (-100.51)*scl])
+    r.add(cube(size=[85*scl,(310-offs)*scl,160.2*scl]))
+    t = translate(v=[1725*scl, (170+offs/2)*scl, (-100.51)*scl])
     t.add(r)
     return t
 
@@ -71,8 +71,8 @@ def powerbutton(scl):
 
 def usb(scl):
     r = union()
-    r.add(cube(size=[75*scl,145*scl,100.2*scl]))
-    t = translate(v=[1725*scl, 157*scl, (-90.51)*scl])
+    r.add(cube(size=[75*scl,133*scl,100.2*scl]))
+    t = translate(v=[1725*scl, 170*scl, (-90.51)*scl])
     t.add(r)
     return t
 
@@ -102,6 +102,21 @@ def camera(scl):
     r = union()
     r.add(cube(size=[80*scl,80*scl,120*scl]))
     t = translate(v=[-105*scl, 28*scl, (-90.51)*scl])
+    t.add(r)
+    return t
+
+def headphonehole(scl, offs=0):
+    r = union()
+    # actual hole
+    r.add(cylinder(r=(30-offs)*scl,h=165.2*scl, segments=50, center=True))
+    
+    # 3d printing support bit for roof
+    c = cube(size=[90*scl,(8-offs)*scl,155.2*scl])
+    c = translate(v=[-30*scl, -4*scl, 46*scl]).add(c)
+    r -= c
+
+    r = rotate([0, 90, 0]).add(r)
+    t = translate(v=[1694.5*scl, (103+offs/2)*scl, (-36)*scl])
     t.add(r)
     return t
 
@@ -465,7 +480,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part == 1:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -545,7 +560,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         if not test:
             td -= camera(_scl) # remove camera
             if part != 1 and not laminates:
-                td -= headphone(_scl) # remove headphone
+                #td -= headphone(_scl) # remove headphone
                 if not test:
                     if part != 2 or laminates:
                         td -= cardslot(_scl) # remove cpu card
@@ -605,7 +620,7 @@ def create_tablet(t, _scl, mirror, colour, part):
                     td -= panelcable(_scl) # remove panelcable
                     td -= pcb(_scl) # remove pcb
                     td -= camera(_scl) # remove headphone
-                    td -= headphone(_scl) # remove headphone
+                    #td -= headphone(_scl) # remove headphone
                     if part == 0 and not laminates:
                         td -= sdcard(_scl) # remove cpu card
                         td -= power(_scl) # remove power jack
@@ -661,7 +676,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= pcb(_scl) # remove pcb
             td -= camera(_scl) # remove camera
             td -= power(_scl) # remove power jack
-            td -= headphone(_scl) # remove headphone
+            #td -= headphone(_scl) # remove headphone
             td -= sdcard(_scl) # remove microsd
             td -= usb(_scl) # remove usb slot
             td -= powerbutton(_scl) # remove power button
@@ -710,10 +725,10 @@ def create_tablet(t, _scl, mirror, colour, part):
                                 holes=laminates)
         td = translate(v=[0,0,-85*_scl])
         td.add(ts)
-        td -= camera(_scl) # remove headphone
+        td -= camera(_scl) # remove camera
         td -= usb(_scl) # remove usb slot
         td -= power(_scl) # remove power jack
-        td -= headphone(_scl) # remove headphone
+        #td -= headphone(_scl) # remove headphone
         td -= cardslot(_scl, 0) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= sdcard(_scl) # remove microsd
@@ -777,7 +792,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= cardslot(_scl, 0) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= power(_scl) # remove power
-            td -= headphone(_scl) # remove headphone
+            #td -= headphone(_scl) # remove headphone
             td -= sdcard(_scl) # remove microsd
 
         b.add(td)
@@ -811,6 +826,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         #b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
         b.add(clips(_scl, 20, ht=61, z=28, dp=9.0, doffs=5))
         b.add(capture(_scl, ioff=0))
+        b -= headphonehole(_scl)
 
     if part == 0 and not laminates:
 
