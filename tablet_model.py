@@ -30,6 +30,13 @@ def touch_arc(rad, ht, bwid, iro, scl):
     t.add(r)
     return t
 
+def topsupport(scl, offs=0):
+    r = union()
+    r.add(cube(size=[(15)*scl,(t_l+160)*scl,40*scl]))
+    t = translate(v=[(611)*scl, (-40)*scl, (-90)*scl])
+    t.add(r)
+    return t
+
 def cardslot(scl, offs=0):
     r = union()
     if test:
@@ -119,7 +126,7 @@ def close_top(scl, ht=15):
         t.add(c)
         u.add(t)
         c = cube(size=[(30)*scl,(t_l+120)*scl,ht*scl])
-        t = translate(v=[(t_l/2+255)*scl, -25*scl, (32.5-ht)*scl])
+        t = translate(v=[(t_l/2+270)*scl, -25*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
     return u
@@ -252,58 +259,62 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False):
 
     return o
 
-def capture1(_scl, ioff=0, oof=0):
+def capture1(_scl, ioff=0, oof=0, cutout=False):
     u = union()
-    c = cube(size=[(40+oof-ioff)*scl,(45+oof)*scl,(50+oof)*_scl])
+    dp = 45+oof
+    if cutout:
+        dp += 20
+    c = cube(size=[(30+oof-ioff)*scl,dp*scl,(50+oof)*_scl])
     c = translate(v=[(-oof+ioff)/2.0*_scl, 0, 0]).add(c)
     u.add(c)
-    c = cube(size=[(42+oof*2)*scl, 60*scl, 30*scl])
-    c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
-    c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[0, (16+oof/2.5)*_scl,55*_scl]).add(c)
-    u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    if not cutout:
+        c = cube(size=[(32+oof*2)*scl, 60*scl, 30*scl])
+        c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
+        c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
+        c = translate(v=[0, (16+oof/2.5)*_scl,55*_scl]).add(c)
+        u -= c
+    c = cube(size=[(32+(oof-ioff)*2)*scl, 30*scl, 10*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 18*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, (20)*scl, (25+ioff)*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, (23+ioff)*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
 
     return u
 
-def capture(_scl, ioff=0, oof=0):
+def capture(_scl, ioff=0, oof=0, cutout=False):
 
     if test:
         w1 = [t_w*0.35]
         w2 = [t_w*0.64]
     else:
-        w1 = [t_w*0.07, t_w*.32, t_w*0.54, t_w*0.92]
-        w2 = [t_w*0.44, t_w*0.65, t_w*0.94]
+        w1 = [t_w*0.095, t_w*.32, t_w*0.54, t_w*0.92]
+        w2 = [t_w*0.42, t_w*0.65, t_w*0.94]
     v = union()
 
     for w in w1:
         t = translate(v=[w*_scl, (-60)*_scl, (-32)*_scl])
-        t.add(capture1(_scl, ioff, oof))
+        t.add(capture1(_scl, ioff, oof, cutout=cutout))
         v.add(t)
 
     for w in w2:
         t = rotate(a=180.0, v=[0,0,1])
-        t.add(capture1(_scl, ioff, oof))
+        t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(w-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
     for h in [t_l/2+140, t_l-20]:
         t = rotate(a=90.0, v=[0,0,1])
-        t.add(capture1(_scl, ioff, oof))
+        t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
     for h in [t_l/2+10, t_l+36, 85]:
         t = rotate(a=-90.0, v=[0,0,1])
-        t.add(capture1(_scl, ioff, oof))
+        t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(-171)*_scl, h*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
@@ -344,12 +355,12 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
                     ]
         lst += [(t_w*0.38, -49, 0),
                 (t_w*0.28, -49, 0),
-                (t_w*0.03, -49, 0),
-                (t_w*0.13, -49, 0),
+                #(t_w*0.07, -49, 0), # PCB in the way
+                (t_w*0.135, -49, 0),
                 (t_w*0.50, -49, 0),
                 (t_w*0.60, -49, 0),
-                (t_w*0.48, t_l+123, 2),
-                (t_w*0.38, t_l+123, 2),
+                (t_w*0.45, t_l+123, 2),
+                (t_w*0.37, t_l+123, 2),
                     ]
     for x, y, rot in lst:
         if rot in [0.5,1.5,2.5,3.5]:
@@ -473,7 +484,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         if part == 0:
             tb_inset = 6
             innerwall = 6
-            p0_innerwall = 13
+            p0_innerwall = 20
             swid = -35
         elif part == 1:
             tb_inset = 0
@@ -484,7 +495,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x3f-7
+        layers = 0x3f-3
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -512,13 +523,16 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if layers & 0x4:
         # layer on top of touchscreen
-        if part == 2 or laminates:
+        if part != 1 or laminates:
             ht = 15
         else:
             ht = 10
         if part == 2 and not laminates:
             taped = False
             iw = p2_innerwall
+        elif part == 0 and not laminates:
+            taped = False
+            iw = 21
         else:
             taped = True
             iw = 35
@@ -570,14 +584,14 @@ def create_tablet(t, _scl, mirror, colour, part):
                 l = 5
                 ht = 3.0
                 ht_step = 3.0
-                _p0_innerwall = innerwall+3
+                _p0_innerwall = innerwall+2.5
             for i in range(l):
                 # layer on top of touchscreen
                 if part == 2 and not laminates:
                     iw = p2_innerwall
                 elif part == 0 and not laminates:
                     iw = _p0_innerwall
-                    _p0_innerwall = min(p0_innerwall, _p0_innerwall+3)
+                    _p0_innerwall = min(p0_innerwall, _p0_innerwall+2.5)
                 else:
                     iw = innerwall
                 ts = touch_surround(_scl, ht, iw, tb_inset,
@@ -795,24 +809,27 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 2 and not laminates:
         #b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
-        b.add(clips(_scl, 25, ht=61, z=28, dp=9.0, doffs=5))
+        b.add(clips(_scl, 20, ht=61, z=28, dp=9.0, doffs=5))
         b.add(capture(_scl, ioff=0))
 
     if part == 0 and not laminates:
+
+        b += topsupport(_scl, 0) #add top support
+
         c = union()
-        c += clips(_scl, 40, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
+        c += clips(_scl, 30, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
         #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
         u.add(b)
         u += c
-        u -= capture(_scl, oof=6, ioff=-4)
+        u -= capture(_scl, oof=6, ioff=-4, cutout=True)
         b = u
 
     if part != 2 and not laminates:
         #c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
         #b -= c
-        c = clips(_scl, 25, dp=1, offs=2, z=30, ht=30, doffs=-1, flat=part==1)
+        c = clips(_scl, 20, dp=1, offs=2, z=30, ht=30, doffs=-1, flat=part==1)
         b -= c
 
 
