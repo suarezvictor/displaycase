@@ -280,8 +280,8 @@ def capture(_scl, ioff=0, oof=0):
         w1 = [t_w*0.35]
         w2 = [t_w*0.64]
     else:
-        w1 = [t_w*0.118, t_w*.266, t_w*0.54, t_w*0.92]
-        w2 = [t_w*0.387, t_w*0.65]
+        w1 = [t_w*0.07, t_w*.32, t_w*0.54, t_w*0.92]
+        w2 = [t_w*0.44, t_w*0.65, t_w*0.94]
     v = union()
 
     for w in w1:
@@ -301,7 +301,7 @@ def capture(_scl, ioff=0, oof=0):
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
-    for h in [t_l/2+10, t_l+36]:
+    for h in [t_l/2+10, t_l+36, 85]:
         t = rotate(a=-90.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof))
         t = translate(v=[(-171)*_scl, h*_scl, (-32)*_scl]).add(t)
@@ -329,28 +329,27 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
         lst += [(t_w*0.88, -49, 0),
                     (t_w*0.69, t_l+123, 2),
                     (t_w*0.59, t_l+123, 2),
+                    (t_w*0.88, t_l+123, 2),
                     
                     
                         ]
 
-        if False:
-            lst += [(t_w*0.80, -49, 0),
-                    (t_w*0.85, t_l+123, 2),
-                    (-160, t_l*0.2, 3),
-
-                        ]
-        lst += [(-160, t_l*0.92, 3),
+        lst += [(-160, t_l*0.94, 3),
                 (-160, t_l*0.57, 3),
                 (-160, t_l*0.41, 3),
+                (-160, t_l*0.16, 3),
                 (t_w+14, t_l*0.92, 1),
                 (t_w+14, t_l*0.59, 1),
                 (t_w+14, t_l*0.72, 1),
                     ]
-        lst += [(t_w*0.32, -49, 0),
-                (t_w*0.09, -49, 0),
+        lst += [(t_w*0.38, -49, 0),
+                (t_w*0.28, -49, 0),
+                (t_w*0.03, -49, 0),
+                (t_w*0.13, -49, 0),
                 (t_w*0.50, -49, 0),
                 (t_w*0.60, -49, 0),
-                (t_w*0.42, t_l+123, 2),
+                (t_w*0.48, t_l+123, 2),
+                (t_w*0.38, t_l+123, 2),
                     ]
     for x, y, rot in lst:
         if rot in [0.5,1.5,2.5,3.5]:
@@ -455,7 +454,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part == 1:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -473,7 +472,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     else:
         if part == 0:
             tb_inset = 6
-            innerwall = 5
+            innerwall = 6
             p0_innerwall = 13
             swid = -35
         elif part == 1:
