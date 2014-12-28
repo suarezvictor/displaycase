@@ -579,7 +579,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, dcut=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -847,6 +847,10 @@ def create_tablet(t, _scl, mirror, colour, part):
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
             td.add(ts)
+            u = intersection()
+            u.add(td)
+            u.add(sdcard(_scl, 8))
+            b.add(u)
 
             ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
@@ -909,12 +913,17 @@ def create_tablet(t, _scl, mirror, colour, part):
 
             u = intersection()
             u.add(td)
-            u.add(cardslot(_scl, 6))
+            u.add(cardslot(_scl, 8))
             b.add(u)
 
             u = intersection()
             u.add(td)
-            u.add(usb(_scl, 6))
+            u.add(sdcard(_scl, 8))
+            b.add(u)
+
+            u = intersection()
+            u.add(td)
+            u.add(usb(_scl, 8))
             b.add(u)
 
     if part == 2 and not laminates:
