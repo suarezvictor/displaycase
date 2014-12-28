@@ -378,7 +378,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         w1 = [t_w*0.35]
         w2 = [t_w*0.64]
     else:
-        w1 = [t_w*0.090, t_w*.32, t_w*0.54, t_w*0.92]
+        w1 = [t_w*0.080, t_w*.32, t_w*0.54, t_w*0.92]
         w2 = [t_w*0.425, t_w*0.65, t_w*0.94]
     v = union()
 
@@ -443,7 +443,7 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
         lst += [(t_w*0.38, -49, 0),
                 (t_w*0.28, -49, 0),
                 #(t_w*0.07, -49, 0), # PCB in the way
-                (t_w*0.135, -49, 0),
+                (t_w*0.130, -49, 0),
                 (t_w*0.50, -49, 0),
                 (t_w*0.60, -49, 0),
                 (t_w*0.45, t_l+123, 2),
@@ -634,11 +634,11 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= panelcable(_scl) # remove panelcable
         if not test:
             td -= camera(_scl) # remove camera
-            if part != 1 and not laminates:
+            #if part != 1 and not laminates:
                 #td -= headphone(_scl) # remove headphone
-                if not test:
-                    if part != 2 or laminates:
-                        td -= cardslot(_scl) # remove cpu card
+                #if not test:
+                    #if part != 2 or laminates:
+                #        td -= cardslot(_scl) # remove cpu card
             if not test:
                 if part == 0 and not laminates:
                     #td -= sdcard(_scl) # remove sd card
@@ -688,8 +688,8 @@ def create_tablet(t, _scl, mirror, colour, part):
                                 innershear=innershear)
             td = translate(v=[0,0,z*_scl])
             td.add(ts)
-            if part != 2 and not laminates:
-                td -= cardslot(_scl) # remove cpu card
+            #if part != 2 and not laminates:
+            #    td -= cardslot(_scl) # remove cpu card
             if not test:
                 td -= panelcable(_scl) # remove panelcable
                 td -= pcb(_scl) # remove pcb
@@ -903,7 +903,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         b += topsupport(_scl, 0) #add top support
 
         c = union()
-        c += clips(_scl, 35, dp=0, offs=4, z=25, ht=8.5, doffs=-17, flat=True)
+        c += clips(_scl, 50, dp=3, offs=4, z=25, ht=8.5, doffs=-15, flat=True)
         #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
@@ -915,7 +915,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     if part != 2 and not laminates:
         #c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
         #b -= c
-        c = clips(_scl, 20, dp=1, offs=2, z=27, ht=30, doffs=-1, flat=part==1)
+        c = clips(_scl, 30, dp=1, offs=2, z=27, ht=30, doffs=-1, flat=part==1)
         b -= c
 
     c = color([0.2, 0.2, 0.2, 1.0])
