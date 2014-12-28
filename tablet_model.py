@@ -11,7 +11,7 @@ else:
     t_w = 200
 
 
-def shearedcube(size, center=False, shear=None):
+def shearedcube(size, center=False, shear=None, innershear=None):
     v = size
     points = [
     [ 0.5,  0.5,  0.5],
@@ -51,17 +51,20 @@ def shearedcube(size, center=False, shear=None):
                 points[i][j] += 0.5
             points[i][j] *= v[j]
     if shear:
-        for i in range(len(points)/2):
+        if innershear is None:
+            innershear = shear
+        for i in range(len(points)/4):
             for j in range(len(v)):
                 points[i*2][j] += shear[j]
+                points[i*2+4][j] += innershear[j]
     return polyhedron(points, faces)
 
-def touch_arc(rad, ht, bwid, iro, scl, roffs=0):
+def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0):
     rad2 = bwid+rad
     rad -= iro
     rad_r = rad 
     rad2_r = rad2 
-    rad2 += roffs
+    rad2 += roffsinner
     rad += roffs
     
     r = union()
@@ -258,7 +261,11 @@ def touch_taped(scl, l, w, ht=15, iro=70, bwid=1):
     return v
 
 def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
-                        shear=0):
+                        shear=0, innershear=None):
+
+    if innershear is None:
+        innershear = shear
+
     a = union()
 
     l = t_l
@@ -266,54 +273,62 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
 
     r = union()
     r.add(shearedcube(size=[(bwid+iro)*scl,l*scl,ht*scl],
-                shear=[-shear*scl, 0, 0]))
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0]))
     t = translate(v=[-(143+bwid)*scl, 37*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(shearedcube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl],
-                shear=[0, shear*scl, 0]))
-    t = translate(v=[-65.01*scl, (l+114-iro)*scl, (32.5-ht)*scl])
+    c = shearedcube(size=[(bwid+iro)*scl,(w+0.02)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 0, -90]).add(c)
+    r.add(c)
+    t = translate(v=[-65.01*scl, (l+120)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
     r.add(shearedcube(size=[(bwid+iro)*scl,l*scl,ht*scl],
-                shear=[shear*scl, 0, 0]))
+                innershear=[shear*scl, 0, 0],
+                shear=[innershear*scl, 0, 0]))
     t = translate(v=[(w+13-iro)*scl, 37*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    r.add(shearedcube(size=[(w+0.02)*scl,(bwid+iro)*scl,ht*scl],
-                    shear=[0, -shear*scl, 0]))
-    t = translate(v=[-65.01*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    c = shearedcube(size=[(bwid+iro)*scl,(w+0.02)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 0, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(w-64.99)*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
     rad = 78
-    r = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
+    r = touch_arc(rad, ht, bwid, iro, scl, roffs=shear, roffsinner=innershear)
     t = translate(v=[-65*scl, 38*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, -90])
-    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear, roffsinner=innershear)
     r.add(rc)
     t = translate(v=[-65*scl, (l+36)*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, -180])
-    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear, roffsinner=innershear)
     r.add(rc)
     t = translate(v=[(w-65)*scl, (l+36)*scl, 25*scl])
     t.add(r)
     a.add(t)
 
     r = rotate([0, 0, 90])
-    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear)
+    rc = touch_arc(rad, ht, bwid, iro, scl, roffs=shear, roffsinner=innershear)
     r.add(rc)
     t = translate(v=[(w-65)*scl, 38*scl, 25*scl])
     t.add(r)
@@ -567,8 +582,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x7f-3
-        layers = 0x4
+        layers = 0x3f-3
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -596,7 +610,8 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if layers & 0x4:
         # layer on top of touchscreen
-        shear = None
+        shear = 0
+        innrshear = 0
         if part != 1 or laminates:
             ht = 15
         else:
@@ -605,14 +620,14 @@ def create_tablet(t, _scl, mirror, colour, part):
             taped = False
             iw = p2_innerwall
         elif part == 0 and not laminates:
-            shear = -7
+            innershear = -10
             taped = False
-            iw = 21
+            iw = 18.5
         else:
             taped = True
             iw = 35
         ts = touch_surround(_scl, ht, iw, tb_inset, taped=taped,
-                           holes=laminates, shear=shear)
+                           holes=laminates, shear=shear, innershear=innershear)
         td = translate(v=[0,0,-15*_scl])
         td.add(ts)
         if not test:
@@ -627,6 +642,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             if not test:
                 if part == 0 and not laminates:
                     td -= sdcard(_scl) # remove sd card
+                    td -= pcb(_scl) # remove sd card
         b.add(td)
 
     if layers & 0x8:
@@ -654,37 +670,35 @@ def create_tablet(t, _scl, mirror, colour, part):
             ht = 15
             ht_step = 0
             z = -30
+            innershear = 0
+            shear = 0
             if part == 0 and not laminates:
-                z = -40.0-2
-                l = 5
-                ht = 3.0
-                ht_step = 3.0
-                _p0_innerwall = innerwall+2.5
-            for i in range(l):
-                # layer on top of touchscreen
-                if part == 2 and not laminates:
-                    iw = p2_innerwall
-                elif part == 0 and not laminates:
-                    iw = _p0_innerwall
-                    _p0_innerwall = min(p0_innerwall, _p0_innerwall+2.5)
-                else:
-                    iw = innerwall
-                ts = touch_surround(_scl, ht, iw, tb_inset,
-                                    holes=laminates)
-                td = translate(v=[0,0,z*_scl])
-                z += ht_step
-                td.add(ts)
-                if part != 2 and not laminates:
-                    td -= cardslot(_scl) # remove cpu card
-                if not test:
-                    td -= panelcable(_scl) # remove panelcable
-                    td -= pcb(_scl) # remove pcb
-                    td -= camera(_scl) # remove headphone
-                    #td -= headphone(_scl) # remove headphone
-                    if part == 0 and not laminates:
-                        td -= sdcard(_scl) # remove cpu card
-                        td -= power(_scl) # remove power jack
-                b.add(td)
+                shear = -13
+                _p0_innerwall = innerwall
+            # layer on top of touchscreen
+            if part == 2 and not laminates:
+                iw = p2_innerwall
+            elif part == 0 and not laminates:
+                iw = _p0_innerwall
+                _p0_innerwall = p0_innerwall
+            else:
+                iw = innerwall
+            ts = touch_surround(_scl, ht, iw, tb_inset,
+                                holes=laminates, shear=shear,
+                                innershear=innershear)
+            td = translate(v=[0,0,z*_scl])
+            td.add(ts)
+            if part != 2 and not laminates:
+                td -= cardslot(_scl) # remove cpu card
+            if not test:
+                td -= panelcable(_scl) # remove panelcable
+                td -= pcb(_scl) # remove pcb
+                td -= camera(_scl) # remove headphone
+                #td -= headphone(_scl) # remove headphone
+                if part == 0 and not laminates:
+                    td -= sdcard(_scl) # remove cpu card
+                    td -= power(_scl) # remove power jack
+            b.add(td)
 
         if not test and part == 0 and not laminates:
             ts = touch_surround(_scl, 15, p0_innerwall+5, tb_inset,
@@ -879,7 +893,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 2 and not laminates:
         #b.add(clips(_scl, 25, ht=61, z=-17, dp=9.0, doffs=5))
-        b.add(clips(_scl, 20, ht=61, z=28, dp=9.0, doffs=5))
+        b.add(clips(_scl, 20, ht=61, z=25, dp=9.0, doffs=5))
         b.add(capture(_scl, ioff=0))
         b -= headphonehole(_scl)
 
@@ -888,7 +902,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         b += topsupport(_scl, 0) #add top support
 
         c = union()
-        c += clips(_scl, 35, dp=0, offs=4, z=28, ht=8.5, doffs=-17, flat=True)
+        c += clips(_scl, 35, dp=0, offs=4, z=25, ht=8.5, doffs=-17, flat=True)
         #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
@@ -900,7 +914,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     if part != 2 and not laminates:
         #c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
         #b -= c
-        c = clips(_scl, 20, dp=1, offs=2, z=30, ht=30, doffs=-1, flat=part==1)
+        c = clips(_scl, 20, dp=1, offs=2, z=27, ht=30, doffs=-1, flat=part==1)
         b -= c
 
     c = color([0.2, 0.2, 0.2, 1.0])
