@@ -351,16 +351,16 @@ def capture1(_scl, ioff=0, oof=0, cutout=False):
     dp = 47+oof
     if cutout:
         dp += 20
-    c = cube(size=[(30+oof-ioff)*scl,dp*scl,(54+oof)*_scl])
+    c = cube(size=[(40+oof-ioff)*scl,dp*scl,(54+oof)*_scl])
     c = translate(v=[(-oof+ioff)/2.0*_scl, 0, (-4*scl)]).add(c)
     u.add(c)
     if not cutout:
-        c = cube(size=[(32+oof*2)*scl, 60*scl, 30*scl])
+        c = cube(size=[(42+oof*2)*scl, 60*scl, 30*scl])
         c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
         c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
         c = translate(v=[0, (16+oof/2.5)*_scl,55*_scl]).add(c)
         u -= c
-    c = cube(size=[(32+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, 30*scl, 10*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 20*_scl,5*_scl]).add(c)
@@ -378,8 +378,8 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         w1 = [t_w*0.35]
         w2 = [t_w*0.64]
     else:
-        w1 = [t_w*0.095, t_w*.32, t_w*0.54, t_w*0.92]
-        w2 = [t_w*0.42, t_w*0.65, t_w*0.94]
+        w1 = [t_w*0.090, t_w*.32, t_w*0.54, t_w*0.92]
+        w2 = [t_w*0.425, t_w*0.65, t_w*0.94]
     v = union()
 
     for w in w1:
@@ -399,7 +399,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
-    for h in [t_l/2+10, t_l+36, 85]:
+    for h in [t_l/2+10, t_l+25, 95]:
         t = rotate(a=-90.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(-171)*_scl, h*_scl, (-32)*_scl]).add(t)
@@ -552,7 +552,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
