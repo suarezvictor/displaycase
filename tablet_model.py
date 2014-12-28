@@ -306,12 +306,12 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+5.0)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+3.0)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, -90]).add(c)
     r.add(c)
-    t = translate(v=[-65.5*scl, (l+114+bwid)*scl, (32.5-ht)*scl])
+    t = translate(v=[-66.5*scl, (l+114+bwid)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
