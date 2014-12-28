@@ -374,11 +374,11 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
 
 def capture1(_scl, ioff=0, oof=0, cutout=False):
     u = union()
-    dp = 47+oof
+    dp = 46+oof
     if cutout:
         dp += 20
     c = cube(size=[(40+oof-ioff)*scl,dp*scl,(54+oof)*_scl])
-    c = translate(v=[(-oof+ioff)/2.0*_scl, 0, (-4*scl)]).add(c)
+    c = translate(v=[(-oof+ioff)/2.0*_scl, 1*scl, (-4*scl)]).add(c)
     u.add(c)
     if not cutout:
         c = cube(size=[(42+oof*2)*scl, 60*scl, 30*scl])
