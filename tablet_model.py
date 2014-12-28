@@ -92,13 +92,18 @@ def topsupport(scl, offs=0):
     t.add(r)
     return t
 
-def cardslot(scl, offs=0):
+def cardslot(scl, offs=0, breaks3d=False):
     r = union()
     if test:
         l = 70
     else:
         l = 670
     r.add(cube(size=[(l-offs)*scl,240*scl,150*scl]))
+    if breaks3d:
+        # distance across is a long way to span, add in a support bridge
+        c = cube(size=[10*scl,240*scl,150*scl])
+        c = translate(v=[(l/2.0)*scl, 50*scl, 0]).add(c)
+        r -= c
     t = translate(v=[-(60-offs/2)*scl, (t_l+32)*scl, (-100)*scl])
     t.add(r)
     return t
@@ -745,7 +750,7 @@ def create_tablet(t, _scl, mirror, colour, part):
                                 holes=laminates)
         td = translate(v=[0,0,-45*_scl])
         td.add(ts)
-        td -= cardslot(_scl) # remove cpu card
+        td -= cardslot(_scl, breaks3d=True) # remove cpu card
         if not test:
             td -= panelcable(_scl) # remove panelcable
             td -= pcb(_scl) # remove pcb
@@ -804,7 +809,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         td -= usb(_scl) # remove usb slot
         td -= power(_scl) # remove power jack
         #td -= headphone(_scl) # remove headphone
-        td -= cardslot(_scl, 0) # remove cpu card
+        td -= cardslot(_scl, 0, breaks3d=True) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= sdcard(_scl) # remove microsd
         b.add(td)
@@ -814,10 +819,6 @@ def create_tablet(t, _scl, mirror, colour, part):
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
             td.add(ts)
-            u = intersection()
-            u.add(td)
-            u.add(sdcard(_scl, 6))
-            b.add(u)
 
             ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
@@ -877,10 +878,6 @@ def create_tablet(t, _scl, mirror, colour, part):
                                     holes=laminates)
             td = translate(v=[0,0,-115*_scl])
             td.add(ts)
-            u = intersection()
-            u.add(td)
-            u.add(sdcard(_scl, 6))
-            b.add(u)
 
             u = intersection()
             u.add(td)
