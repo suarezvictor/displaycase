@@ -306,12 +306,12 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+0.4)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+0.6)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, -90]).add(c)
     r.add(c)
-    t = translate(v=[-65.2*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
+    t = translate(v=[-65.3*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -324,12 +324,12 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+0.02)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+0.6)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, 90]).add(c)
     r.add(c)
-    t = translate(v=[(w-64.99)*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    t = translate(v=[(w-65.3)*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -384,14 +384,14 @@ def capture1(_scl, ioff=0, oof=0, cutout=False):
         c = cube(size=[(42+oof*2)*scl, 60*scl, 30*scl])
         c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
         c = rotate(a=-50.0, v=[1*_scl,0,0]).add(c)
-        c = translate(v=[0, (17+oof/2.5)*_scl,55*_scl]).add(c)
+        c = translate(v=[0, (17+oof/2.5)*_scl,56*_scl]).add(c)
         u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, 30*scl, 10*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, 30*scl, 9*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 20*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, (22+ioff)*scl, (25+ioff)*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, (21+ioff)*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
@@ -433,7 +433,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
 
     return v
 
-def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
+def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, dcut=0, flat=False):
 
     dh = []
     t =-20.2
@@ -480,7 +480,8 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
             wd2 = wd
         else:
             wd2 = 1.0*wd
-        h = clip(_scl, wd2, dp, ht, rot+2, offs=offs, doffs=doffs, flat=flat)
+        h = clip(_scl, wd2, dp, ht, rot+2, offs=offs, doffs=doffs,
+                                           dcut=dcut, flat=flat)
 
         t = translate(v=[x*_scl, y*_scl, (z-62)*_scl])
         t.add(h)
@@ -540,7 +541,7 @@ def drill_holes(_scl, ln, wd):
         dh.append(t)
     return dh
 
-def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
+def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, dcut=0, flat=False):
     d=18
     u = union()
     u.add(cube(size=[(w+offs*2.0)*scl,(dp+offs*2.0)*scl,(ht+offs*2.0)*_scl]))
@@ -563,7 +564,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
     # cut the back off the rotated rectangles
     v = union()
     b = cube(size=[(w*1.6+offs*4)*_scl,(0+dp+d+offs*2.0)*_scl,(ht*3+offs*2.0)*_scl])
-    v.add(translate(v=[-w*0.5*_scl, (dp+0+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
+    v.add(translate(v=[-w*0.5*_scl, (dp+dcut+offs*2.0)*scl, -ht*_scl*0.5]).add(b))
     u -= v
 
     t = union()
@@ -596,7 +597,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     else:
         if part == 0:
             tb_inset = 6
-            innerwall = 6
+            innerwall = 5
             p0_innerwall = 20
             swid = -35
         elif part == 1:
@@ -928,7 +929,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         b += topsupport(_scl, 0) #add top support
 
         c = union()
-        c += clips(_scl, 50, dp=3, offs=4, z=25, ht=8.5, doffs=-15, flat=True)
+        c += clips(_scl, 50, dp=3, offs=4, z=25, ht=8.5, doffs=-15, dcut=4,
+                                                flat=True)
         #c += clips(_scl, 40, dp=0, offs=4, z=-17, ht=38, doffs=-17, flat=True)
 
         u = union()
