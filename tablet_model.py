@@ -422,10 +422,10 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
 def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, flat=False):
 
     dh = []
-    t =-24.0
-    b = t_l+98.0
-    l = -132.0
-    r = t_w-14.0
+    t =-20.2
+    b = t_l+94.2
+    l = -131.5
+    r = t_w-14.5
 
     lst = [(l,t,3.5), (r,t,0.5), (l,b,2.5), (r,b,1.5)]
     if test:
