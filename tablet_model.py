@@ -180,9 +180,16 @@ def headphonehole(scl, offs=0):
     t.add(r)
     return t
 
+def headphonesocket(scl, offs=0):
+    r = union()
+    r.add(cube(size=[140*scl,(95-offs)*scl,165.2*scl]))
+    t = translate(v=[1665*scl, (60+offs/2)*scl, (-103.51)*scl])
+    t.add(r)
+    return t
+
 def headphone(scl, offs=0):
     r = union()
-    r.add(cube(size=[140*scl,(115-offs)*scl,165.2*scl]))
+    r.add(cube(size=[140*scl,(113-offs)*scl,165.2*scl]))
     t = translate(v=[1665*scl, (34+offs/2)*scl, (-103.51)*scl])
     t.add(r)
     return t
@@ -588,6 +595,7 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0:
         layers = 0x7f-3
+        #layers = 0x3f-3-4
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -699,7 +707,7 @@ def create_tablet(t, _scl, mirror, colour, part):
                 td -= panelcable(_scl) # remove panelcable
                 td -= pcb(_scl) # remove pcb
                 td -= camera(_scl) # remove headphone
-                #td -= headphone(_scl) # remove headphone
+                td -= headphonehole(_scl) # remove headphone
                 if part == 0 and not laminates:
                     #td -= sdcard(_scl) # remove cpu card
                     #td -= power(_scl) # remove power jack
@@ -756,7 +764,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= pcb(_scl) # remove pcb
             td -= camera(_scl) # remove camera
             td -= power(_scl) # remove power jack
-            #td -= headphone(_scl) # remove headphone
+            td -= headphonesocket(_scl) # remove headphone
             td -= sdcard(_scl) # remove microsd
             td -= usb(_scl) # remove usb slot
             td -= powerbutton(_scl) # remove power button
@@ -808,7 +816,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         td -= camera(_scl) # remove camera
         td -= usb(_scl) # remove usb slot
         td -= power(_scl) # remove power jack
-        #td -= headphone(_scl) # remove headphone
+        td -= headphonesocket(_scl) # remove headphone
+        td -= headphonehole(_scl) # remove headphone
         td -= cardslot(_scl, 0, breaks3d=True) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= sdcard(_scl) # remove microsd
@@ -945,4 +954,3 @@ if __name__ == '__main__':
 %import_stl(filename = "tablet10.stl");
     """)
     f.close()
-
