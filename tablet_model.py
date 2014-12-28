@@ -951,7 +951,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     if part != 2 and not laminates:
         #c = clips(_scl, 25, dp=1, offs=2, z=-16, ht=20, doffs=-1, flat=part==1)
         #b -= c
-        c = clips(_scl, 30, dp=1, offs=2, z=27, ht=30, doffs=-1, flat=part==1)
+        c = clips(_scl, 30, dp=1, offs=2, z=27, ht=60, doffs=-1, flat=part==1)
         b -= c
 
     c = color([0.2, 0.2, 0.2, 1.0])
