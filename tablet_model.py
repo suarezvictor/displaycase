@@ -564,7 +564,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -595,7 +595,6 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0:
         layers = 0x7f-3
-        #layers = 0x3f-3-4
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -758,13 +757,14 @@ def create_tablet(t, _scl, mirror, colour, part):
                                 holes=laminates)
         td = translate(v=[0,0,-45*_scl])
         td.add(ts)
-        td -= cardslot(_scl, breaks3d=True) # remove cpu card
+        td -= cardslot(_scl, breaks3d=part==0) # remove cpu card
         if not test:
             td -= panelcable(_scl) # remove panelcable
             td -= pcb(_scl) # remove pcb
             td -= camera(_scl) # remove camera
             td -= power(_scl) # remove power jack
-            td -= headphonesocket(_scl) # remove headphone
+            if part == 0:
+                td -= headphonesocket(_scl) # remove headphone
             td -= sdcard(_scl) # remove microsd
             td -= usb(_scl) # remove usb slot
             td -= powerbutton(_scl) # remove power button
@@ -816,9 +816,10 @@ def create_tablet(t, _scl, mirror, colour, part):
         td -= camera(_scl) # remove camera
         td -= usb(_scl) # remove usb slot
         td -= power(_scl) # remove power jack
-        td -= headphonesocket(_scl) # remove headphone
-        td -= headphonehole(_scl) # remove headphone
-        td -= cardslot(_scl, 0, breaks3d=True) # remove cpu card
+        if part == 0:
+            td -= headphonesocket(_scl) # remove headphone
+            td -= headphonehole(_scl) # remove headphone
+        td -= cardslot(_scl, 0, breaks3d=part==0) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= sdcard(_scl) # remove microsd
         b.add(td)
