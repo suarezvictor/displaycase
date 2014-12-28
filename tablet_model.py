@@ -306,12 +306,12 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+0.02)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+0.4)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, -90]).add(c)
     r.add(c)
-    t = translate(v=[-65.01*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
+    t = translate(v=[-65.2*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -578,7 +578,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
