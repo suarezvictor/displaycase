@@ -172,7 +172,7 @@ def camera(scl):
 def powerhole(scl, offs=0):
     r = union()
     # actual hole
-    r.add(cylinder(r=(25-offs)*scl,h=165.2*scl, segments=50, center=True))
+    r.add(cylinder(r=(30-offs)*scl,h=165.2*scl, segments=50, center=True))
     
     r = rotate([0, 90, 0]).add(r)
     t = translate(v=[1694.5*scl, (375+offs/2)*scl, (-42)*scl])
