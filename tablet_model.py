@@ -101,7 +101,7 @@ def cardslot(scl, offs=0, breaks3d=False):
     r.add(cube(size=[(l-offs)*scl,240*scl,150*scl]))
     if breaks3d:
         # distance across is a long way to span, add in a support bridge
-        c = cube(size=[10*scl,240*scl,150*scl])
+        c = cube(size=[15*scl,240*scl,150*scl])
         c = translate(v=[(l/2.0)*scl, 50*scl, 0]).add(c)
         r -= c
     t = translate(v=[-(60-offs/2)*scl, (t_l+32)*scl, (-100)*scl])
