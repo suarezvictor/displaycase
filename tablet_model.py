@@ -301,17 +301,17 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     r.add(shearedcube(size=[(bwid+iro)*scl,l*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0]))
-    t = translate(v=[-(143+bwid)*scl, 37*scl, (32.5-ht)*scl])
+    t = translate(v=[-(143+bwid)*scl, 37*scl, (33-ht)*scl])
     t.add(r)
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+0.6)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+5.0)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, -90]).add(c)
     r.add(c)
-    t = translate(v=[-65.3*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
+    t = translate(v=[-65.5*scl, (l+114+bwid)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -324,12 +324,12 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
     a.add(t)
 
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+0.6)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(w+3)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, 90]).add(c)
     r.add(c)
-    t = translate(v=[(w-65.3)*scl, -(bwid+40)*scl, (32.5-ht)*scl])
+    t = translate(v=[(w-62.5)*scl, -(bwid+40)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -589,7 +589,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     b = union()
     laminates = False
 
-    p2_inset = 20
+    p2_inset = 19
 
     if laminates:
         tb_inset = 50
