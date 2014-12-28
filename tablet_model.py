@@ -165,10 +165,10 @@ def headphonehole(scl, offs=0):
     # actual hole
     r.add(cylinder(r=(30-offs)*scl,h=165.2*scl, segments=50, center=True))
     
-    # 3d printing support bit for roof
-    c = cube(size=[90*scl,(8-offs)*scl,155.2*scl])
-    c = translate(v=[-30*scl, -4*scl, 46*scl]).add(c)
-    r -= c
+    # 3d printing support bit for roof - amazingly is not needed!
+    ##c = cube(size=[90*scl,(8-offs)*scl,155.2*scl])
+    ##c = translate(v=[-30*scl, -4*scl, 46*scl]).add(c)
+    ##r -= c
 
     r = rotate([0, 90, 0]).add(r)
     t = translate(v=[1694.5*scl, (103+offs/2)*scl, (-36)*scl])
@@ -285,7 +285,7 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 0, -90]).add(c)
     r.add(c)
-    t = translate(v=[-65.01*scl, (l+120)*scl, (32.5-ht)*scl])
+    t = translate(v=[-65.01*scl, (l+115+bwid)*scl, (32.5-ht)*scl])
     t.add(r)
     a.add(t)
 
@@ -348,11 +348,11 @@ def touch_surround(scl, ht=15, iro=0, bwid=50, taped=False, holes=False,
 
 def capture1(_scl, ioff=0, oof=0, cutout=False):
     u = union()
-    dp = 45+oof
+    dp = 47+oof
     if cutout:
         dp += 20
-    c = cube(size=[(30+oof-ioff)*scl,dp*scl,(50+oof)*_scl])
-    c = translate(v=[(-oof+ioff)/2.0*_scl, 0, 0]).add(c)
+    c = cube(size=[(30+oof-ioff)*scl,dp*scl,(54+oof)*_scl])
+    c = translate(v=[(-oof+ioff)/2.0*_scl, 0, (-4*scl)]).add(c)
     u.add(c)
     if not cutout:
         c = cube(size=[(32+oof*2)*scl, 60*scl, 30*scl])
@@ -363,7 +363,7 @@ def capture1(_scl, ioff=0, oof=0, cutout=False):
     c = cube(size=[(32+(oof-ioff)*2)*scl, 30*scl, 10*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
-    c = translate(v=[0, 18*_scl,5*_scl]).add(c)
+    c = translate(v=[0, 20*_scl,5*_scl]).add(c)
     u -= c
     c = cube(size=[(42+(oof-ioff)*2)*scl, (23+ioff)*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
@@ -552,7 +552,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -582,7 +582,7 @@ def create_tablet(t, _scl, mirror, colour, part):
             p2_innerwall = innerwall+4
 
     if part == 0:
-        layers = 0x3f-3
+        layers = 0x7f-3
     elif part == 1:
         layers = 4+8
     elif part == 2:
@@ -611,7 +611,7 @@ def create_tablet(t, _scl, mirror, colour, part):
     if layers & 0x4:
         # layer on top of touchscreen
         shear = 0
-        innrshear = 0
+        innershear = 0
         if part != 1 or laminates:
             ht = 15
         else:
@@ -641,7 +641,7 @@ def create_tablet(t, _scl, mirror, colour, part):
                         td -= cardslot(_scl) # remove cpu card
             if not test:
                 if part == 0 and not laminates:
-                    td -= sdcard(_scl) # remove sd card
+                    #td -= sdcard(_scl) # remove sd card
                     td -= pcb(_scl) # remove sd card
         b.add(td)
 
@@ -696,8 +696,9 @@ def create_tablet(t, _scl, mirror, colour, part):
                 td -= camera(_scl) # remove headphone
                 #td -= headphone(_scl) # remove headphone
                 if part == 0 and not laminates:
-                    td -= sdcard(_scl) # remove cpu card
-                    td -= power(_scl) # remove power jack
+                    #td -= sdcard(_scl) # remove cpu card
+                    #td -= power(_scl) # remove power jack
+                    pass
             b.add(td)
 
         if not test and part == 0 and not laminates:
@@ -908,7 +909,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         u = union()
         u.add(b)
         u += c
-        u -= capture(_scl, oof=6, ioff=-4, cutout=True)
+        u -= capture(_scl, oof=15, ioff=-4, cutout=True)
         b = u
 
     if part != 2 and not laminates:
