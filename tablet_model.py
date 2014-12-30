@@ -101,9 +101,10 @@ def cardslot(scl, offs=0, breaks3d=False):
     r.add(cube(size=[(l-offs)*scl,240*scl,150*scl]))
     if breaks3d:
         # distance across is a long way to span, add in a support bridge
-        c = cube(size=[15*scl,240*scl,150*scl])
-        c = translate(v=[(l/2.0)*scl, 50*scl, 0]).add(c)
-        r -= c
+        for i in [0.25, 0.5, 0.75]:
+            c = cube(size=[12*scl,240*scl,150*scl])
+            c = translate(v=[(l*i)*scl, 50*scl, 0]).add(c)
+            r -= c
     t = translate(v=[-(60-offs/2)*scl, (t_l+32)*scl, (-100)*scl])
     t.add(r)
     return t
@@ -175,7 +176,7 @@ def powerhole(scl, offs=0):
     r.add(cylinder(r=(30-offs)*scl,h=165.2*scl, segments=50, center=True))
     
     r = rotate([0, 90, 0]).add(r)
-    t = translate(v=[1694.5*scl, (375+offs/2)*scl, (-42)*scl])
+    t = translate(v=[1694.5*scl, (375+offs/2)*scl, (-51)*scl])
     t.add(r)
     return t
 
@@ -217,12 +218,32 @@ def close_top(scl, ht=15):
         u.add(t)
     else:
         # save plastic during dev
-        c = cube(size=[(t_w+100)*scl,(30)*scl,ht*scl])
-        t = translate(v=[-125*scl, (t_w/2+20)*scl, (32.5-ht)*scl])
+        c = cube(size=[(t_w+100)*scl,(20)*scl,ht*scl])
+        t = translate(v=[-125*scl, (t_l*0.55)*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
-        c = cube(size=[(30)*scl,(t_l+120)*scl,ht*scl])
-        t = translate(v=[(t_l/2+87)*scl, -25*scl, (32.5-ht)*scl])
+        c = cube(size=[(t_w+100)*scl,(20)*scl,ht*scl])
+        t = translate(v=[-125*scl, (t_l*0.2)*scl, (32.5-ht)*scl])
+        t.add(c)
+        u.add(t)
+        c = cube(size=[(20)*scl,(t_l+120)*scl,ht*scl])
+        t = translate(v=[(40)*scl, -25*scl, (32.5-ht)*scl])
+        t.add(c)
+        u.add(t)
+        c = cube(size=[(20)*scl,(t_l+120)*scl,ht*scl])
+        t = translate(v=[(t_w*0.90)*scl, -25*scl, (32.5-ht)*scl])
+        t.add(c)
+        u.add(t)
+        c = cube(size=[(t_w+100)*scl,(20)*scl,ht*scl])
+        t = translate(v=[-125*scl, (t_w/2+40)*scl, (32.5-ht)*scl])
+        t.add(c)
+        u.add(t)
+        c = cube(size=[(20)*scl,(t_l+120)*scl,ht*scl])
+        t = translate(v=[(t_l/2+92)*scl, -25*scl, (32.5-ht)*scl])
+        t.add(c)
+        u.add(t)
+        c = cube(size=[(20)*scl,(t_l+120)*scl,ht*scl])
+        t = translate(v=[(t_w*0.58)*scl, -25*scl, (32.5-ht)*scl])
         t.add(c)
         u.add(t)
     return u
@@ -377,6 +398,9 @@ def capture1(_scl, ioff=0, oof=0, cutout=False):
     dp = 46+oof
     if cutout:
         dp += 20
+        cd = 25+ioff
+    else:
+        cd = 21+ioff
     c = cube(size=[(40+oof-ioff)*scl,dp*scl,(54+oof)*_scl])
     c = translate(v=[(-oof+ioff)/2.0*_scl, 1*scl, (-4*scl)]).add(c)
     u.add(c)
@@ -391,7 +415,7 @@ def capture1(_scl, ioff=0, oof=0, cutout=False):
     c = rotate(a=-60.0, v=[1*_scl,0,0]).add(c)
     c = translate(v=[0, 20*_scl,5*_scl]).add(c)
     u -= c
-    c = cube(size=[(42+(oof-ioff)*2)*scl, (21+ioff)*scl, (25+ioff)*scl])
+    c = cube(size=[(42+(oof-ioff)*2)*scl, cd*scl, (25+ioff)*scl])
     c = translate(v=[(-oof+ioff-2)/2.0*_scl, 0, 0]).add(c)
     c = translate(v=[0, 7*_scl,-5*_scl]).add(c)
     u -= c
@@ -404,7 +428,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         w1 = [t_w*0.35]
         w2 = [t_w*0.64]
     else:
-        w1 = [t_w*0.089, t_w*.32, t_w*0.54, t_w*0.92]
+        w1 = [t_w*.32, t_w*0.54]
         w2 = [t_w*0.425, t_w*0.65, t_w*0.94]
     v = union()
 
@@ -416,7 +440,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
     for w in w2:
         t = rotate(a=180.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof, cutout=cutout))
-        t = translate(v=[(w-oof/2.0)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
+        t = translate(v=[(w)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
     for h in [t_l/2+140, t_l-20]:
@@ -425,7 +449,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
-    for h in [t_l/2+10, t_l+25, 95]:
+    for h in [t_l/2+10, t_l+25]:
         t = rotate(a=-90.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(-171)*_scl, h*_scl, (-32)*_scl]).add(t)
@@ -579,7 +603,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, dcut=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 0:
+    if part != 2:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -610,10 +634,12 @@ def create_tablet(t, _scl, mirror, colour, part):
 
     if part == 0:
         layers = 0x7f-3
+        #layers = 0x18
     elif part == 1:
         layers = 4+8
     elif part == 2:
         layers = 0x7f
+        #layers = 0x0
 
     if layers & 0x1:
         if laminates:
@@ -838,20 +864,9 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= powerhole(_scl) # remove power jack hole
             td -= headphonehole(_scl) # remove headphone
         td -= cardslot(_scl, 0, breaks3d=part==0) # remove cpu card
-        if not test and part == 2 and not laminates:
-            td -= sdcard(_scl) # remove microsd
         b.add(td)
 
         if not test and part == 0 and not laminates:
-            ts = touch_surround(_scl, 30, iw, p2_inset,
-                                    holes=laminates)
-            td = translate(v=[0,0,-85*_scl])
-            td.add(ts)
-            u = intersection()
-            u.add(td)
-            u.add(sdcard(_scl, 8))
-            b.add(u)
-
             ts = touch_surround(_scl, 40, p0_innerwall+5, tb_inset,
                                     holes=laminates)
             td = translate(v=[0,0,-85*_scl])
@@ -900,8 +915,6 @@ def create_tablet(t, _scl, mirror, colour, part):
             td -= cardslot(_scl, 0) # remove cpu card
         if not test and part == 2 and not laminates:
             td -= power(_scl, break3d=True) # remove power
-            #td -= headphone(_scl) # remove headphone
-            td -= sdcard(_scl) # remove microsd
 
         b.add(td)
 
@@ -914,11 +927,6 @@ def create_tablet(t, _scl, mirror, colour, part):
             u = intersection()
             u.add(td)
             u.add(cardslot(_scl, 8))
-            b.add(u)
-
-            u = intersection()
-            u.add(td)
-            u.add(sdcard(_scl, 8))
             b.add(u)
 
             u = intersection()
@@ -945,7 +953,7 @@ def create_tablet(t, _scl, mirror, colour, part):
         u = union()
         u.add(b)
         u += c
-        u -= capture(_scl, oof=15, ioff=-4, cutout=True)
+        u -= capture(_scl, oof=15, ioff=-6, cutout=True)
         b = u
 
     if part != 2 and not laminates:
