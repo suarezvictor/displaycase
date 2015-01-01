@@ -378,7 +378,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=30)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+89.9, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+90, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
@@ -388,7 +388,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=10)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+10, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+9.9, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
     a -= t
