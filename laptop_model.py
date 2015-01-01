@@ -366,7 +366,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # inner tube
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad)*scl, h=(hinge_depth)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-0.1)*scl, h=(hinge_depth)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
@@ -378,7 +378,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=30)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+90, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+89.9, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
@@ -390,23 +390,40 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, lcd_ext_rot_angle+10, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+16.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
     a -= t
     r = union()
     r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl)
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, lcd_ext_rot_angle-70, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+16.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
     a -=t
 
     boxlength = 300
+    boxheight = 200
+    boxdepth = hinge_depth+ht+20
     # base hinge box
-    c = cube([boxlength*scl, (hole_depth+20)*scl, 200*scl])
+    b = cube([boxlength*scl, (boxdepth+20)*scl, boxheight*scl])
+    h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2+20)*scl,
+               (boxheight-bwid+0.1)*scl])
+    h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
+    c = union()
+    c.add(b)
+    c -= h
     t = hinge_translate(scl).add(c)
-    t = translate(v=[-boxlength*scl, (hinge_depth-ht-ht_offset-slot_depth+16.5)*scl, 0]).add(t)
-    a += t
+    box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, 0]).add(t)
    
+    # hollow out base box at edge
+    r = union()
+    r = cylinder(r=(lcd_outer_rad+0.3)*scl, h=(hole_depth+0.1)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
+    box -= t
+
+    a += box
+
     # hollow out tube including base box
     r = union()
     r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.1)*scl, segments=50, center=True)
@@ -421,7 +438,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part == 2:
+    if part != 1:
         return
 
     c = color(colour)
@@ -471,7 +488,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [130]
 
     for i in range(rpt):
         for angle in angles:
