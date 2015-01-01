@@ -2,6 +2,11 @@ import time
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
+# set this to add in some side-supports that help stabilise the parts
+# as they are being printed.  the parts are quite narrow and tall, so
+# tend to come unstuck.
+pin_parts_3d=True
+
 test = True
 
 if not test:
@@ -17,7 +22,7 @@ else:
     lcd_wa = lcd_w-80.0
     lcd_d = 50
 
-bwid = 15 # 24
+bwid = 17 # 24
 lcd_inset_top = 15 # 20
 lcd_inset_bot = 180
 lcd_gap = 3
@@ -29,8 +34,8 @@ lcd_end_ht = 20 # 40
 
 boxheight = 150
 boxinset = 50
-hinge_depth = 240
-hole_depth = 160
+hinge_depth = 130
+hole_depth = 74
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 
 def hinge_translate(scl):
@@ -254,10 +259,10 @@ def screen_mid1(scl, ht, hole_ht):
 
     # hole for cable
     r = union()
-    r = touch_arc(lcd_hinge_inner_rad+1, hole_ht, bwid, lcd_hinge_inner_rad, scl,
-                  angle=55)
+    r = touch_arc(lcd_hinge_inner_rad+1, hinge_depth+ht, bwid, lcd_hinge_inner_rad, scl,
+                  angle=54)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+0, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle-1, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, -(hole_ht+ht/2)*scl, 0]).add(t)
     a -= t
@@ -376,7 +381,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # inner tube
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-0.1)*scl, h=(hinge_depth)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-0.3)*scl, h=(hinge_depth)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
@@ -384,7 +389,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # slot to main base (for cable)
     r = union()
-    cable_slot_depth = 200
+    cable_slot_depth = 95
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=30)
     r = rotate([180, 90, 90]).add(r)
@@ -463,6 +468,14 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
+        if pin_parts_3d:
+            h = cube([15*scl, 10*scl, (500)*scl])
+            h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([15*scl, 10*scl, (500)*scl])
+            h = translate([(boxlength+20)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+    
 
         # add some structural support (also 3D span stuff)
         sstep = 130
@@ -485,7 +498,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part == 2:
+    if part != 1:
         return
 
     c = color(colour)
