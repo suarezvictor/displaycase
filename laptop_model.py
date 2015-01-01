@@ -463,6 +463,19 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
+
+        # add some structural support (also 3D span stuff)
+        sstep = 130
+        sdep = sstep
+        while sdep <= boxlength-sstep:
+            u = intersection()
+            u.add(b)
+            h = cube([bwid*scl, 100*scl, 100*scl])
+            h = rotate([-35, 0, 0]).add(h)
+            h = translate(v=[sdep*scl, -70*scl, (boxheight-40)*scl]).add(h)
+            u.add(h)
+            c += u
+            sdep += sstep
     b = cube([(lcd_outer_rad+80)*scl, (boxdepth+20)*scl, 20*scl])
     b = translate(v=[(boxlength-lcd_outer_rad-80)*scl, 0, 0]).add(b)
     c += b
@@ -519,7 +532,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [20]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
