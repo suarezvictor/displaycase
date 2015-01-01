@@ -16,7 +16,7 @@ else:
 
 bwid = 25
 lcd_inset_top = 20
-lcd_inset_bot = 130
+lcd_inset_bot = 180
 lcd_gap = 3
 lcd_hinge_inner_rad=85
 lcd_hinge_inside_rad=75
@@ -362,34 +362,29 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     edge_inset = bwid
     a = union()
 
-    # hollow tube first
+    slot_depth = 100
+
+    # inner tube
     r = union()
     r = cylinder(r=(lcd_hinge_inside_rad)*scl, h=(hinge_depth)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
     a.add(t)
-    r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.1)*scl, segments=50, center=True)
-    r = rotate([180, 90, 90]).add(r)
-    t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
-    a -= t
 
     # slot to main base (for cable)
     r = union()
-    slot_depth = 100
-    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
+    cable_slot_depth = 200
+    r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=30)
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, lcd_ext_rot_angle+90, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-slot_depth/2+16.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
 
     # slot to lcd (for cable)
     r = union()
-    slot_depth = 100
     r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=10)
     r = rotate([180, 90, 90]).add(r)
@@ -404,6 +399,21 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
+
+    boxlength = 300
+    # base hinge box
+    c = cube([boxlength*scl, (hole_depth+20)*scl, 200*scl])
+    t = hinge_translate(scl).add(c)
+    t = translate(v=[-boxlength*scl, (hinge_depth-ht-ht_offset-slot_depth+16.5)*scl, 0]).add(t)
+    a += t
+   
+    # hollow out tube including base box
+    r = union()
+    r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.1)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
+    a -= t
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
 
@@ -461,7 +471,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [130]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
