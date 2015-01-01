@@ -2,26 +2,35 @@ import time
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
-test = False
+test = True
 
 if not test:
     lcd_l = 3598.0
     lcd_w = 2100.0
-    lcd_la = 3500.0
-    lcd_wa = 1970.1
+    lcd_la = lcd_l-98.0
+    lcd_wa = lcd_w-129.9
     lcd_d = 50
 else:
-    t_l = 200
-    t_w = 200
+    lcd_l = 1400
+    lcd_w = 600
+    lcd_la = lcd_l-50.0
+    lcd_wa = lcd_w-80.0
+    lcd_d = 50
 
 bwid = 25
 lcd_inset_top = 20
 lcd_inset_bot = 180
 lcd_gap = 3
-lcd_hinge_inner_rad=85
-lcd_hinge_inside_rad=75
+lcd_hinge_inner_rad=90
+lcd_hinge_inside_rad=80
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
+lcd_end_ht = 40
+
+boxheight = 150
+hinge_depth = 300
+hole_depth = 160
+boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 
 def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
@@ -378,7 +387,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
                   angle=30)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+90, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+95, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
@@ -400,23 +409,26 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
     a -=t
 
-    boxlength = 300
-    boxheight = 200
-    boxdepth = hinge_depth+ht+20
     # base hinge box
-    b = cube([boxlength*scl, (boxdepth+20)*scl, boxheight*scl])
-    h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2+20)*scl,
-               (boxheight-bwid+0.1)*scl])
-    h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
-    c = union()
-    c.add(b)
-    c -= h
-    t = hinge_translate(scl).add(c)
-    box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, 0]).add(t)
+    boxdepth = hinge_depth+ht+20
+    box = base_box(scl, boxdepth, hole_depth, ht, hollow=True)
    
+    # add curved inner wall
+    u = intersection()
+    r = union()
+    r = cylinder(r=(lcd_outer_rad+20)*scl, h=(hole_depth+ht*2+bwid*2+0.1)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
+    b = base_box(scl, boxdepth, hole_depth, ht, hollow=False)
+    u.add(b)
+    u.add(t)
+    
+    box += u
+
     # hollow out base box at edge
     r = union()
-    r = cylinder(r=(lcd_outer_rad+0.3)*scl, h=(hole_depth+0.1)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_outer_rad+0.3)*scl, h=(hole_depth+ht*2+0.9)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
@@ -436,9 +448,26 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     return a
     
+def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
+    # base hinge box
+    c = union()
+    b = cube([boxlength*scl, (boxdepth+20)*scl, boxheight*scl])
+    c.add(b)
+    if hollow:
+        h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2+20)*scl,
+                   (boxheight-bwid+0.2)*scl])
+        h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
+        c -= h
+    b = cube([(lcd_outer_rad+20)*scl, (boxdepth+20)*scl, 20*scl])
+    b = translate(v=[(boxlength-lcd_outer_rad-20)*scl, 0, 0]).add(b)
+    c += b
+    t = hinge_translate(scl).add(c)
+    box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, 0]).add(t)
+    return box
+
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 1:
+    if part == 2:
         return
 
     c = color(colour)
@@ -446,9 +475,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     b = union()
 
-    lcd_end_ht = 40
-    hinge_depth = 300
-    hole_depth = 160
     if part == 0:
         b.add(screen_end(scl, lcd_end_ht))
         m = screen_mid1(scl, hinge_depth, hole_depth)
@@ -488,7 +514,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [130]
+        angles = [20]
 
     for i in range(rpt):
         for angle in angles:
