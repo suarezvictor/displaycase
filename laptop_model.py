@@ -17,18 +17,19 @@ else:
     lcd_wa = lcd_w-80.0
     lcd_d = 50
 
-bwid = 25
-lcd_inset_top = 20
+bwid = 15 # 24
+lcd_inset_top = 15 # 20
 lcd_inset_bot = 180
 lcd_gap = 3
 lcd_hinge_inner_rad=90
-lcd_hinge_inside_rad=80
+lcd_hinge_inside_rad=90
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
-lcd_end_ht = 40
+lcd_end_ht = 20 # 40
 
 boxheight = 150
-hinge_depth = 300
+boxinset = 50
+hinge_depth = 240
 hole_depth = 160
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 
@@ -240,7 +241,7 @@ def screen_mid1(scl, ht, hole_ht):
     r = touch_arc(lcd_hinge_inner_rad, ht, bwid, 30, scl)
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, 10, 0]).add(r)
-    r = rotate([0, lcd_ext_rot_angle, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle-7, 0]).add(r)
     t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl, (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
     a.add(t)
 
@@ -256,7 +257,7 @@ def screen_mid1(scl, ht, hole_ht):
     r = touch_arc(lcd_hinge_inner_rad+1, hole_ht, bwid, lcd_hinge_inner_rad, scl,
                   angle=55)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+10, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+0, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, -(hole_ht+ht/2)*scl, 0]).add(t)
     a -= t
@@ -438,7 +439,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # hollow out tube including base box
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.1)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.2)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
@@ -451,15 +452,19 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
     # base hinge box
     c = union()
-    b = cube([boxlength*scl, (boxdepth+20)*scl, boxheight*scl])
+    b = cube([(boxlength)*scl, (boxdepth+20)*scl, boxheight*scl])
     c.add(b)
     if hollow:
+        h = cube([(boxlength-lcd_outer_rad-80-bwid)*scl, (boxdepth+20+0.2)*scl,
+                   (boxinset+0.1)*scl])
+        h = translate(v=[bwid*scl, -0.1*scl, -0.1*scl]).add(h)
+        c -= h
         h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2+20)*scl,
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
-    b = cube([(lcd_outer_rad+20)*scl, (boxdepth+20)*scl, 20*scl])
-    b = translate(v=[(boxlength-lcd_outer_rad-20)*scl, 0, 0]).add(b)
+    b = cube([(lcd_outer_rad+80)*scl, (boxdepth+20)*scl, 20*scl])
+    b = translate(v=[(boxlength-lcd_outer_rad-80)*scl, 0, 0]).add(b)
     c += b
     t = hinge_translate(scl).add(c)
     box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, 0]).add(t)
@@ -490,7 +495,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         p = translate(v=[155.5*scl,61*scl,0*scl]).add(p)
         b -= p
 
-        if True: # add inner parts for reference
+        if False: # add inner parts for reference
             p = lcd_panel(scl)
             p = translate(v=[155.5*scl,61*scl,0]).add(p)
             b += p
