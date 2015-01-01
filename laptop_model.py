@@ -376,14 +376,34 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
     a -= t
 
-    # bottom end curve
+    # slot to main base (for cable)
     r = union()
-    r = touch_arc(lcd_hinge_inner_rad, ht, bwid, lcd_hinge_inner_rad, scl,
-                  angle=40)
+    slot_depth = 100
+    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
+                  angle=30)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+180, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+90, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    a.add(t)
+    t = translate(v=[0, (hinge_depth-ht-slot_depth/2+16.5)*scl, 0]).add(t)
+    a -=t
+
+    # slot to lcd (for cable)
+    r = union()
+    slot_depth = 100
+    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
+                  angle=10)
+    r = rotate([180, 90, 90]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+10, 0]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+16.5)*scl, 0]).add(t)
+    a -= t
+    r = union()
+    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl)
+    r = rotate([180, 90, 90]).add(r)
+    r = rotate([0, lcd_ext_rot_angle-70, 0]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+16.5)*scl, 0]).add(t)
+    a -=t
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
 
@@ -441,7 +461,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [130]
 
     for i in range(rpt):
         for angle in angles:
