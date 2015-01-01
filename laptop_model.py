@@ -1,3 +1,4 @@
+import time
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 
@@ -18,6 +19,7 @@ lcd_inset_top = 20
 lcd_inset_bot = 130
 lcd_gap = 3
 lcd_hinge_inner_rad=85
+lcd_hinge_inside_rad=70
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 
@@ -25,6 +27,13 @@ def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
                        0,
                         (30-lcd_d+lcd_hinge_inner_rad)*scl])
+def hinge_rotate(scl, o, angle):
+    u = union()
+    t = hinge_translate(-scl).add(o)
+    t = rotate([0, -angle, 0]).add(t)
+    t = hinge_translate(scl).add(t)
+    return t
+
 hinge_x = -20
 hinge_y = -20
 
@@ -228,7 +237,7 @@ def screen_mid1(scl, ht=60):
 
     # hinge hole
     r = union()
-    r = cylinder(r=70*scl, h=(ht+0.3)*scl, segments=50, center=True)
+    r = cylinder(r=lcd_hinge_inside_rad*scl, h=(ht+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht/2+16.5)*scl, (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
     a -= t
@@ -340,27 +349,39 @@ def screen_end(scl, ht=60):
 
     return a
 
-def base_end(scl, ht):
-    r = union()
-    
-def create_laptop(t, scl, mirror, colour, part):
+def base_end(scl, ht_offset, ht, hinge_depth):
+    edge_inset = bwid
+    a = union()
 
-    if part != 0:
-        return
+    r = union()
+    r = cylinder(r=(lcd_hinge_inside_rad)*scl, h=(ht+0.1)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
+    a.add(t)
+
+    a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
+
+    return a
+    
+def create_laptop(t, scl, mirror, colour, part, angle):
+
+    #if part != 0:
+        #return
 
     c = color(colour)
     c.add(t)
 
     b = union()
 
+    lcd_end_ht = 40
+    hinge_depth = 250
     if part == 0:
-        lcd_end_ht = 40
-        ht2 = 250
         b.add(screen_end(scl, lcd_end_ht))
-        m = screen_mid1(scl, ht2)
+        m = screen_mid1(scl, hinge_depth)
         m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
         b.add(m)
-        ht2 += lcd_end_ht
+        #ht2 += lcd_end_ht
 
         p = lcd_panel(scl, offs=3)
         p = translate(v=[155.5*scl,61*scl,0]).add(p)
@@ -370,9 +391,16 @@ def create_laptop(t, scl, mirror, colour, part):
         p = translate(v=[155.5*scl,61*scl,0*scl]).add(p)
         b -= p
 
+        if True: # add inner parts for reference
+            p = lcd_panel(scl)
+            p = translate(v=[155.5*scl,61*scl,0]).add(p)
+            b += p
+
+        b = hinge_rotate(scl, b, angle)
+
     if part == 1:
         ht = 40
-        b.add(base_end(scl, ht))
+        b.add(base_end(scl, lcd_end_ht, ht, hinge_depth))
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
@@ -380,23 +408,24 @@ def create_laptop(t, scl, mirror, colour, part):
 
 if __name__ == '__main__':
 
-    scl = 0.1
-    t = union()
-    c = [0.3, 0.5, 0.8, 0.5]
-    create_laptop(t, scl, 1.0, c, part=0)
-    t = translate(v=[-155.5*scl,-61*scl,0]).add(t)
-    t = color(c).add(t)
+    for i in range(3):
+        for angle in [0, 40, 80, 120]:
+            scl = 0.1
+            t = union()
+            c = [0.3, 0.5, 0.8, 0.5]
+            create_laptop(t, scl, 1.0, c, part=0, angle=angle)
+            create_laptop(t, scl, 1.0, c, part=1, angle=angle)
+            #t = translate(v=[-155.5*scl,-61*scl,0]).add(t)
+            t = color(c).add(t)
 
-    if False:
-        card = import_stl(filename = "eoma68.stl")
-        r = rotate([90,180,0]).add(card)
-        t.add(r)
+            if False:
+                card = import_stl(filename = "eoma68.stl")
+                r = rotate([90,180,0]).add(card)
+                t.add(r)
 
-    if True: # add inner parts for reference
-        t.add(lcd_panel(scl))
-
-    scad_render_to_file(t, "laptop_prog.scad")
-    f = open("laptop_model.scad", "w")
-    f.write("""include<laptop_prog.scad>;
-    """)
-    f.close()
+            scad_render_to_file(t, "laptop_prog.scad")
+            f = open("laptop_model.scad", "w")
+            f.write("""include<laptop_prog.scad>;
+            """)
+            f.close()
+            time.sleep(2)
