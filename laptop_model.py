@@ -377,11 +377,12 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     edge_inset = bwid
     a = union()
 
+    border=4.0 # move cylinders inwards so that lid cylinders fit around them
     slot_depth = 100
 
     # inner tube
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-0.3)*scl, h=(hinge_depth)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-border)*scl, h=(hinge_depth)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
@@ -421,16 +422,16 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = union()
     cable_slot_depth = 95
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
-                  angle=68)
+                  angle=50)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+59, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+79, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
     a -=t
 
     # hollow out base box at edge
     r = union()
-    r = cylinder(r=(lcd_outer_rad+0.3)*scl, h=(hole_depth+ht*2+0.9)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_outer_rad+border)*scl, h=(hole_depth+ht*2+0.9)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
@@ -440,7 +441,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # hollow out tube including base box
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-bwid)*scl, h=(hinge_depth+0.2)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-bwid-border)*scl, h=(hinge_depth+0.2)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
@@ -488,7 +489,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             r = union()
             h = cube([bwid*scl, 110*scl, 110*scl])
             h = rotate([-30, 0, 0]).add(h)
-            h = translate(v=[sdep*scl, -79*scl, (boxheight-45)*scl]).add(h)
+            h = translate(v=[sdep*scl, -68*scl, (boxheight-45)*scl]).add(h)
             r.add(h)
             h = cube([bwid*2*scl, 60*scl, 50*scl])
             #h = rotate([-90, 0, 0]).add(h)
