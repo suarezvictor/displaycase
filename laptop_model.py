@@ -34,7 +34,7 @@ lcd_end_ht = 20 # 40
 
 screwrad = 25 / 2.0
 boxheight = 150
-boxinset = 50
+boxinset = 70
 hinge_depth = 130
 hole_depth = 80
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
@@ -162,7 +162,7 @@ def lcd_view_area(scl, offs=0):
 
 def case_bolthole(scl, end=True):
     if end:
-        return translate([55*scl, 0*scl, (15)*scl])
+        return translate([55*scl, 0*scl, (22)*scl])
     else:
         return translate([(-20+lcd_w+lcd_inset_bot)*scl, 0*scl, (35)*scl])
 
@@ -600,7 +600,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
     b = cube([(boxlength)*scl, (boxdepth+20)*scl, boxheight*scl])
     c.add(b)
     if hollow:
-        h = cube([(boxlength-lcd_outer_rad-80-bwid)*scl, (boxdepth+20+0.2)*scl,
+        h = cube([(boxlength-lcd_outer_rad-80-bwid)*scl, (boxdepth+20+0.3)*scl,
                    (boxinset+0.1)*scl])
         h = translate(v=[bwid*scl, -0.1*scl, -0.1*scl]).add(h)
         c -= h
@@ -611,7 +611,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
         # cutout in side of box for cable
         h = cube([(90)*scl, (50)*scl,
                    (75-bwid+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-110)*scl, (boxdepth-20+0.1)*scl, (boxinset-25)*scl]).add(h)
+        h = translate(v=[(boxlength-bwid-110)*scl, (boxdepth-20+0.1)*scl, (25)*scl]).add(h)
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
@@ -645,12 +645,12 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             u.add(b)
             r = union()
             h = cube([bwid*scl, 110*scl, 110*scl])
-            h = rotate([-35, 0, 0]).add(h)
-            h = translate(v=[sdep*scl, -63*scl, (boxheight-37)*scl]).add(h)
+            h = rotate([-45, 0, 0]).add(h)
+            h = translate(v=[sdep*scl, -50*scl, (boxheight-2)*scl]).add(h)
             r.add(h)
             h = cube([bwid*2*scl, 60*scl, 50*scl])
             #h = rotate([-90, 0, 0]).add(h)
-            h = translate(v=[(sdep-bwid/2)*scl, -32*scl, (boxheight-100)*scl]).add(h)
+            h = translate(v=[(sdep-bwid/2)*scl, -32*scl, (boxheight-80)*scl]).add(h)
             r.add(h)
             u.add(r)
             c += u
