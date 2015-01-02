@@ -5,7 +5,7 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -600,13 +600,21 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
     b = cube([(boxlength)*scl, (boxdepth+20)*scl, boxheight*scl])
     c.add(b)
     if hollow:
-        h = cube([(boxlength-lcd_outer_rad-80-bwid)*scl, (boxdepth+20+0.3)*scl,
+        h = cube([(boxlength-lcd_outer_rad-80-bwid*2)*scl, (boxdepth+20+0.3)*scl,
                    (boxinset+0.1)*scl])
         h = translate(v=[bwid*scl, -0.1*scl, -0.1*scl]).add(h)
         c -= h
         h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2+20)*scl,
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
+        c -= h
+        h = cube([(bwid+0.5)*scl, (boxdepth+20)*scl,
+                   (boxinset)*scl])
+        h = translate(v=[(boxlength-lcd_outer_rad-80-bwid)*scl, 0*scl, -0.0*scl]).add(h)
+        c += h
+        h = cube([(bwid+3.0)*scl, (80+6.0)*scl,
+                   (bwid*1.5)*scl])
+        h = translate(v=[(boxlength-lcd_outer_rad-80-bwid-2)*scl, 30*scl, bwid*1.2*scl]).add(h)
         c -= h
         # cutout in side of box for cable
         h = cube([(90)*scl, (50)*scl,
@@ -615,6 +623,15 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
+            h = translate([-50*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([(60)*scl, 10*scl, (25)*scl])
+            h = translate([(-50)*scl, (boxdepth+10)*scl, 00*scl]).add(h)
+            c += h
+            h = cube([(60)*scl, 10*scl, (25)*scl])
+            h = translate([(-50)*scl, (boxdepth+10)*scl, 120*scl]).add(h)
+            c += h
+            h = cube([17*scl, 10*scl, (500)*scl])
             h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
             h = cube([25*scl, 10*scl, (500)*scl])
@@ -626,11 +643,11 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             h = cube([45*scl, 10*scl, (500)*scl])
             h = translate([(boxlength+110)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20+100)*scl, 10*scl, (55)*scl])
-            h = translate([(10)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = cube([(boxlength+20+150)*scl, 10*scl, (55)*scl])
+            h = translate([(-40)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20+100)*scl, 10*scl, (55)*scl])
-            h = translate([(10)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
+            h = cube([(boxlength+20+150)*scl, 10*scl, (55)*scl])
+            h = translate([(-40)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
             c += h
             h = cube([(20+100)*scl, 10*scl, (25)*scl])
             h = translate([(boxlength+10)*scl, (boxdepth+10)*scl, -10*scl]).add(h)
