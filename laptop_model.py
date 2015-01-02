@@ -387,34 +387,6 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
     a.add(t)
 
-    # slot to main base (for cable)
-    r = union()
-    cable_slot_depth = 95
-    r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
-                  angle=30)
-    r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+95, 0]).add(r)
-    t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
-    a -=t
-
-    # slot to lcd (for cable)
-    r = union()
-    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl,
-                  angle=10)
-    r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+9.9, 0]).add(r)
-    t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
-    a -= t
-    r = union()
-    r = touch_arc(lcd_hinge_inner_rad, slot_depth, bwid, lcd_hinge_inner_rad, scl)
-    r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle-70, 0]).add(r)
-    t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-ht_offset-hole_depth-slot_depth/2+13)*scl, 0]).add(t)
-    a -=t
-
     # base hinge box
     boxdepth = hinge_depth+ht+20
     box = base_box(scl, boxdepth, hole_depth, ht, hollow=True)
@@ -429,8 +401,32 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     b = base_box(scl, boxdepth, hole_depth, ht, hollow=False)
     u.add(b)
     u.add(t)
+
+    box += u
+    
+    # add 2nd covering curved inner wall
+    u = intersection()
+    r = union()
+    r = cylinder(r=(lcd_outer_rad)*scl, h=(40+0.1)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hole_depth-15)*scl, 0]).add(t)
+    b = base_box(scl, boxdepth, hole_depth, ht, hollow=False)
+    u.add(b)
+    u.add(t)
     
     box += u
+
+    # slot to main base (for cable)
+    r = union()
+    cable_slot_depth = 95
+    r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
+                  angle=68)
+    r = rotate([180, 90, 90]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+59, 0]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
+    a -=t
 
     # hollow out base box at edge
     r = union()
@@ -469,11 +465,17 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
         if pin_parts_3d:
-            h = cube([15*scl, 10*scl, (500)*scl])
+            h = cube([25*scl, 10*scl, (500)*scl])
             h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([15*scl, 10*scl, (500)*scl])
+            h = cube([25*scl, 10*scl, (500)*scl])
             h = translate([(boxlength+20)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([(boxlength+20)*scl, 10*scl, (65)*scl])
+            h = translate([(10)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([(boxlength+20)*scl, 10*scl, (65)*scl])
+            h = translate([(10)*scl, (boxdepth+10)*scl, 235*scl]).add(h)
             c += h
     
 
@@ -545,7 +547,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [60]
 
     for i in range(rpt):
         for angle in angles:
