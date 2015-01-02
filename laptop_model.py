@@ -5,7 +5,7 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -160,6 +160,12 @@ def lcd_view_area(scl, offs=0):
 
     return a
 
+def case_bolthole(scl, end=True):
+    if end:
+        return translate([55*scl, 0*scl, (15)*scl])
+    else:
+        return translate([(-20+lcd_w+lcd_inset_bot)*scl, 0*scl, (35)*scl])
+
 def lid_bolthole(scl, end=True):
     if end:
         return translate([30*scl, 0*scl, (10)*scl])
@@ -305,6 +311,25 @@ def screen_mid1(scl, ht, hole_ht):
 
     a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
     return a
+
+def box_screwholes(scl, edge_inset):
+    u = union()
+
+    t = case_bolthole(scl)
+    r = cylinder(r=screwrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = rotate([90, 0, 0]).add(r)
+    r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
+    t.add(r)
+    u += t
+
+    t = case_bolthole(scl, False)
+    r = cylinder(r=screwrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = rotate([90, 0, 0]).add(r)
+    r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
+    t.add(r)
+    u += t
+
+    return u
 
 def lid_screwholes(scl, edge_inset):
     u = union()
@@ -534,13 +559,38 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # hollow out tube including base box
     r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-bwid-border)*scl, h=(hinge_depth+0.2)*scl, segments=50, center=True)
+    r = cylinder(r=(lcd_hinge_inside_rad-bwid-border)*scl, h=(hinge_depth+0.4)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-hinge_depth/2+16.5)*scl, 0]).add(t)
     a -= t
 
-    a = translate(v=[0, (ht-edge_inset+ht_offset+20)*scl, ]).add(a)
+    # screw support under hinge area
+    r = union()
+    c = cylinder(r=29*scl, h=(boxdepth+16.5)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = case_bolthole(scl, end=False).add(r)
+    t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
+    a += t
+
+    # screw support at other end
+    r = union()
+    c = cylinder(r=29*scl, h=(boxdepth+16.5)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    # cutout for base top "hook" with screw-hole in it
+    r -= translate([-35*scl, 10*scl, -30*scl]).add(cube([80*scl, 70*scl, 70*scl]))
+    t = case_bolthole(scl, end=True).add(r)
+    t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
+    a += t
+
+    # screw holes in box
+    t = box_screwholes(scl, edge_inset)
+    t = translate(v=[0, 0, boxheight*scl]).add(t)
+    a -= t
+
+    a = translate(v=[0, (ht-edge_inset+ht_offset+20)*scl, 0]).add(a)
 
     return a
     
@@ -558,9 +608,10 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
-        h = cube([(80)*scl, (50)*scl,
-                   (90-bwid+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-100)*scl, (boxdepth-20+0.1)*scl, (boxinset-25)*scl]).add(h)
+        # cutout in side of box for cable
+        h = cube([(90)*scl, (50)*scl,
+                   (75-bwid+0.2)*scl])
+        h = translate(v=[(boxlength-bwid-110)*scl, (boxdepth-20+0.1)*scl, (boxinset-25)*scl]).add(h)
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
@@ -594,8 +645,8 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             u.add(b)
             r = union()
             h = cube([bwid*scl, 110*scl, 110*scl])
-            h = rotate([-30, 0, 0]).add(h)
-            h = translate(v=[sdep*scl, -68*scl, (boxheight-45)*scl]).add(h)
+            h = rotate([-35, 0, 0]).add(h)
+            h = translate(v=[sdep*scl, -63*scl, (boxheight-37)*scl]).add(h)
             r.add(h)
             h = cube([bwid*2*scl, 60*scl, 50*scl])
             #h = rotate([-90, 0, 0]).add(h)
@@ -613,7 +664,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 0:
+    if part != 1:
         return
 
     c = color(colour)
