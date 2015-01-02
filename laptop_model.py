@@ -5,7 +5,7 @@ from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -465,9 +465,9 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
-        h = cube([(80)*scl, (boxdepth+20)*scl,
+        h = cube([(80)*scl, (50)*scl,
                    (90-bwid+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-100)*scl, 0.1*scl, (boxinset-25)*scl]).add(h)
+        h = translate(v=[(boxlength-bwid-100)*scl, (boxdepth-20+0.1)*scl, (boxinset-25)*scl]).add(h)
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
