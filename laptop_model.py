@@ -465,6 +465,10 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, bwid*scl, -0.1*scl]).add(h)
         c -= h
+        h = cube([(80)*scl, (boxdepth+20)*scl,
+                   (90-bwid+0.2)*scl])
+        h = translate(v=[(boxlength-bwid-100)*scl, 0.1*scl, (boxinset-25)*scl]).add(h)
+        c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
             h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
