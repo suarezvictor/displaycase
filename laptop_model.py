@@ -474,13 +474,22 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
             h = cube([25*scl, 10*scl, (500)*scl])
-            h = translate([(boxlength+20)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = translate([(boxlength-30)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20)*scl, 10*scl, (65)*scl])
+            h = cube([25*scl, 10*scl, (300)*scl])
+            h = translate([(boxlength-180)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([45*scl, 10*scl, (500)*scl])
+            h = translate([(boxlength+110)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            c += h
+            h = cube([(boxlength+20+100)*scl, 10*scl, (55)*scl])
             h = translate([(10)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20)*scl, 10*scl, (65)*scl])
-            h = translate([(10)*scl, (boxdepth+10)*scl, 235*scl]).add(h)
+            h = cube([(boxlength+20+100)*scl, 10*scl, (55)*scl])
+            h = translate([(10)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
+            c += h
+            h = cube([(20+100)*scl, 10*scl, (25)*scl])
+            h = translate([(boxlength+10)*scl, (boxdepth+10)*scl, -10*scl]).add(h)
             c += h
     
 
