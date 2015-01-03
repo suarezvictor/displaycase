@@ -443,7 +443,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         t = translate(v=[(w)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
-    for h in [t_l/2+140, t_l-20]:
+    for h in [t_l/2-10, t_l-20]:
         t = rotate(a=90.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
