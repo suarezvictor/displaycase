@@ -6,7 +6,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = False
 
@@ -571,15 +571,20 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
     a -= t
-    b = cube([29.1*2*scl, 400*scl, 70*scl])
-    b = translate([-29.1*2*scl, -10*scl, 0*scl]).add(b)
+    b = cube([29.1*scl, 400*scl, 30*scl])
+    b = translate([-29.1*1*scl, -10*scl, 0*scl]).add(b)
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
     a -= t
-    b = cube([10*scl, (boxdepth-70)*scl, (60)*scl])
-    t = case_bolthole(scl, end=1).add(b)
-    t = translate(v=[(-46)*scl, (-boxdepth/2+105)*scl, (boxheight-45)*scl]).add(t)
-    a += t
+    if test:
+        l = [(1, -46)]
+    else:
+        l = [(1, -46), (3, -46), (3, 36)]
+    for (end, offs) in l:
+        b = cube([10*scl, (boxdepth-70)*scl, (60)*scl])
+        t = case_bolthole(scl, end=end).add(b)
+        t = translate(v=[(offs)*scl, (-boxdepth/2+105)*scl, (boxheight-45)*scl]).add(t)
+        a += t
     b = cube([25*scl, (boxdepth-70)*scl, (bwid*1.2)*scl])
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(20)*scl, (-boxdepth/2+105)*scl, (boxheight)*scl]).add(t)
@@ -653,14 +658,20 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             h = cube([25*scl, 10*scl, (500)*scl])
             h = translate([-50*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(60)*scl, 10*scl, (25)*scl])
-            h = translate([(-50)*scl, (boxdepth+10)*scl, 00*scl]).add(h)
+            h = cube([(90)*scl, 10*scl, (20)*scl])
+            h = translate([(-50)*scl, (boxdepth+10)*scl, 40*scl]).add(h)
             c += h
             h = cube([(60)*scl, 10*scl, (25)*scl])
-            h = translate([(-50)*scl, (boxdepth+10)*scl, 120*scl]).add(h)
+            h = translate([(-50)*scl, (boxdepth+10)*scl, 95*scl]).add(h)
             c += h
+            if not test:
+                for m in [0.2, 0.45, 0.7]:
+                    h = cube([17*scl, 10*scl, (500)*scl])
+                    h = translate([(boxlength*m)*scl,
+                                   (boxdepth+10)*scl, -200*scl]).add(h)
+                    c += h
             h = cube([17*scl, 10*scl, (500)*scl])
-            h = translate([0, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = translate([30*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
             h = cube([25*scl, 10*scl, (500)*scl])
             h = translate([(boxlength-30)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
@@ -707,7 +718,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part == 2:
+    if part != 1:
         return
 
     c = color(colour)
@@ -766,7 +777,7 @@ if __name__ == '__main__':
             #t = translate(v=[-155.5*scl,-61*scl,0]).add(t)
             t = color(c).add(t)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([2280*scl, 1000*scl, 135*scl]).add(r)
