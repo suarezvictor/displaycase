@@ -640,6 +640,13 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
 
+    # additional cutout for cable
+    h = cube([(40)*scl, (60)*scl,
+               (55+0.2)*scl])
+    h = translate(v=[(boxlength-bwid-25)*scl,
+                        (boxdepth-95+0.2)*scl, (40)*scl]).add(h)
+    a -= h
+
     a = translate(v=[0, (ht-edge_inset+ht_offset+20)*scl, 0]).add(a)
 
     return a
@@ -670,7 +677,8 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
         # cutout in side of box for cable
         h = cube([(140)*scl, (60)*scl,
                    (55+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-120)*scl, (boxdepth-32+0.1)*scl, (20)*scl]).add(h)
+        h = translate(v=[(boxlength-bwid-120)*scl,
+                            (boxdepth-32+0.1)*scl, (20)*scl]).add(h)
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
@@ -801,7 +809,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [60]
+        angles = [110]
 
     for i in range(rpt):
         for angle in angles:
