@@ -35,8 +35,9 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 30 / 2.0
-boxheight = 160
-boxinset = 70
+boxheight = 150
+boxtopoffs = 20
+boxinset = 75
 hinge_depth = 130
 hole_depth = 80
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
@@ -163,7 +164,7 @@ def lcd_view_area(scl, offs=0):
     return a
 
 def case_bolthole(scl, end):
-    bht = boxheight+lcd_hinge_inner_rad-209.0
+    bht = boxheight+lcd_hinge_inner_rad-199.0+boxtopoffs
     print bht
     if end == 0:
         return translate([29.0*scl, 0*scl, bht*scl])
@@ -553,11 +554,11 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = union()
     cable_slot_depth = 95
     r = touch_arc(lcd_hinge_inner_rad, cable_slot_depth, bwid, lcd_hinge_inner_rad, scl,
-                  angle=50)
+                  angle=30)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle+79, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+110, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+16.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+6.5)*scl, 0]).add(t)
     a -=t
 
     # hollow out base box at edge
@@ -566,7 +567,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
-    box -= t
+    box == t
 
     a += box
 
@@ -590,9 +591,9 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
     a -= t
     if test:
-        l = [(1, -46), (2, -46)]
+        l = [(1, -46), (2, -46), (2, 36)]
     else:
-        l = [(1, -46), (2, -46), (3, -46), (3, 36)]
+        l = [(1, -46), (2, -46), (2, 36), (3, -46), (3, 36)]
     for (end, offs) in l:
         b = cube([10*scl, (boxdepth-70)*scl, (60)*scl])
         t = case_bolthole(scl, end=end).add(b)
@@ -643,7 +644,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
     # base hinge box
     c = union()
     b = cube([(boxlength)*scl, (boxdepth)*scl, boxheight*scl])
-    b = translate([0, 20*scl, 0]).add(b)
+    b = translate([0, 20*scl, 0*scl]).add(b)
     c.add(b)
     if hollow:
         h = cube([(boxlength-lcd_outer_rad-80-bwid*2)*scl, (boxdepth+0.3)*scl,
@@ -663,9 +664,9 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
         h = translate(v=[(boxlength-lcd_outer_rad-80-bwid)*scl, 20*scl, -0.0*scl]).add(h)
         c += h
         # cutout in side of box for cable
-        h = cube([(110)*scl, (50)*scl,
-                   (75-bwid+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-120)*scl, (boxdepth-20+0.1)*scl, (25)*scl]).add(h)
+        h = cube([(140)*scl, (60)*scl,
+                   (55+0.2)*scl])
+        h = translate(v=[(boxlength-bwid-120)*scl, (boxdepth-32+0.1)*scl, (20)*scl]).add(h)
         c -= h
         if pin_parts_3d:
             h = cube([25*scl, 10*scl, (500)*scl])
@@ -714,7 +715,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
                 u = intersection()
                 u.add(b)
                 r = union()
-                h = cube([bwid*scl, 110*scl, 110*scl])
+                h = cube([bwid*scl, 100*scl, 100*scl])
                 h = rotate([-45, 0, 0]).add(h)
                 h = translate(v=[sdep*scl, 100*scl, (boxheight-2)*scl]).add(h)
                 r.add(h)
@@ -725,13 +726,16 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
     b = cube([(lcd_outer_rad+80)*scl, (boxdepth)*scl, 20*scl])
     b = translate(v=[(boxlength-lcd_outer_rad-80)*scl, 20*scl, 0]).add(b)
     c += b
+    b = cube([(bwid)*scl, (boxdepth)*scl, 70*scl])
+    b = translate(v=[(boxlength-0.3)*scl, 20*scl, 40*scl]).add(b)
+    c += b
     t = hinge_translate(scl).add(c)
-    box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, 0]).add(t)
+    box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, boxtopoffs*scl]).add(t)
     return box
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 0:
+    if part == 2:
         return
 
     c = color(colour)
