@@ -1,3 +1,6 @@
+# Copyright (C) 2014, 2015 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
+# License: GPLv3+
+
 import time
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
@@ -181,6 +184,88 @@ def lid_bolthole(scl, end=True):
     else:
         return translate([(65+lcd_w+lcd_inset_top)*scl, 0*scl, (35)*scl])
 
+def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
+
+    shear = 0
+    innershear = 0
+    w = lcd_w+lcd_inset_top+lcd_inset_bot
+    edge_inset = bwid
+    iro = 0
+
+    rad = 15
+
+    a = union()
+
+    toplen = 180 if test else 250
+    toplenoffs = (w-40)
+    # top edge
+    r = union()
+    c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
+    t.add(r)
+    a.add(t)
+
+    # bottom edge
+    r = union()
+    c = shearedcube(size=[(bwid+iro)*scl,(toplen)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30+bwid+lcd_gap)*scl])
+    t.add(r)
+    a.add(t)
+
+    # add hinge-end filler over top of screwhole
+    r = union()
+    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+    t.add(r)
+    a.add(t)
+
+    # add hinge-end filler over top of screwhole
+    r = union()
+    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(bwid)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(+lcd_inset_bot+lcd_w-10)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+    t.add(r)
+    a.add(t)
+
+    # bottom edge bolt holder
+    r = union()
+    c = cylinder(r=29*scl, h=ht*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(0)*scl, (16.5-ht)*scl, (0)*scl]).add(r)
+    t = lid_bolthole(scl, end=False).add(t)
+    a.add(t)
+    r = union()
+    c = shearedcube(size=[(bwid+10+iro)*scl,(100+lcd_gap)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(55)*scl, (16.5-ht)*scl, (29)*scl]).add(r)
+    t = lid_bolthole(scl, end=False).add(t)
+    a.add(t)
+
+    # screw holes through lid
+    a -= lid_screwholes(scl, edge_inset)
+
+    a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
+    return a
+
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
 
     shear = 0
@@ -194,7 +279,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
     a = union()
 
     if endpart:
-        toplen = 120
+        toplen = 120 if test else 200
         toplenoffs = (lcd_inset_bot+toplen-131)
     else:
         toplen = w+lcd_gap*2
@@ -785,7 +870,7 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part == 1:
+    if part == 9:
         return
 
     c = color(colour)
@@ -813,19 +898,27 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
         b = screen_adjust(b, scl, angle)
 
-    if part == 3:
-        m = screen_mid1(scl, 40.0, hole_depth, nohinge=True, endpart=True)
-        m = translate(v=[0, (40+lcd_end_ht+hinge_depth)*scl,0]).add(m)
-        b.add(m)
+    numparts = 10 if test else 30
+    offs = lcd_end_ht+hinge_depth+40.0
+    midht = (lcd_l/2.0-offs-100.0) / numparts
+    print midht
 
-        b = screen_adjust(b, scl, angle)
+    for i in range(numparts):
+        if part == 3:
+            m = screen_mid1(scl, midht, hole_depth, nohinge=True, endpart=True)
+            m = translate(v=[0, offs*scl,0]).add(m)
+            m = screen_adjust(m, scl, angle)
+            b.add(m)
 
-    if part == 4:
-        m = screen_mid1(scl, 40.0, hole_depth, nohinge=True, endpart2=True)
-        m = translate(v=[0, (40+lcd_end_ht+hinge_depth)*scl,0]).add(m)
-        b.add(m)
 
-        b = screen_adjust(b, scl, angle)
+        if part == 4:
+            m = screen_mid2(scl, midht, hole_depth)
+            m = translate(v=[0, offs*scl,0]).add(m)
+            m = screen_adjust(m, scl, angle)
+            b.add(m)
+
+
+        offs += midht
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
@@ -840,14 +933,14 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [110]
 
     for i in range(rpt):
         for angle in angles:
             scl = 0.1
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(4):
+            for i in range(5):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
