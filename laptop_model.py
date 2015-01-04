@@ -6,9 +6,9 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
-test = False
+test = True
 
 
 if not test:
@@ -26,16 +26,16 @@ else:
 
 bwid = 17 # 24
 lcd_inset_top = 30 
-lcd_inset_bot = 180
+lcd_inset_bot = 160
 lcd_gap = 3
-lcd_hinge_inner_rad=90
-lcd_hinge_inside_rad=90
+lcd_hinge_inner_rad=70
+lcd_hinge_inside_rad=70
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 30 / 2.0
-boxheight = 150
+boxheight = 160
 boxinset = 70
 hinge_depth = 130
 hole_depth = 80
@@ -163,14 +163,16 @@ def lcd_view_area(scl, offs=0):
     return a
 
 def case_bolthole(scl, end):
+    bht = boxheight+lcd_hinge_inner_rad-209.0
+    print bht
     if end == 0:
-        return translate([29.0*scl, 0*scl, (41.0)*scl])
+        return translate([29.0*scl, 0*scl, bht*scl])
     elif end == 1:
-        return translate([(-20+lcd_w+11)*scl, 0*scl, (41)*scl])
+        return translate([(-20+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
-        return translate([(-20+lcd_w+lcd_inset_bot-50)*scl, 0*scl, (41)*scl])
+        return translate([(-20+lcd_w+lcd_inset_bot-20)*scl, 0*scl, bht*scl])
     elif end == 3:
-        return translate([(-20+lcd_w/2+30)*scl, 0*scl, (41)*scl])
+        return translate([(-20+lcd_w/2+30)*scl, 0*scl, bht*scl])
 
 def lid_bolthole(scl, end=True):
     if end:
@@ -252,6 +254,17 @@ def screen_mid1(scl, ht, hole_ht):
     t.add(r)
     a.add(t)
 
+    # add hinge-end filler over top of screwhole
+    r = union()
+    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+    t.add(r)
+    a.add(t)
+
     # top end curve
     inner_rad=rad
     r = union()
@@ -300,7 +313,7 @@ def screen_mid1(scl, ht, hole_ht):
     r = touch_arc(lcd_hinge_inner_rad+1, hinge_depth+ht, bwid, lcd_hinge_inner_rad, scl,
                   angle=54)
     r = rotate([180, 90, 90]).add(r)
-    r = rotate([0, lcd_ext_rot_angle-1, 0]).add(r)
+    r = rotate([0, lcd_ext_rot_angle+8, 0]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, -(hole_ht+ht/2)*scl, 0]).add(t)
     a -= t
@@ -495,7 +508,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     edge_inset = bwid
     a = union()
 
-    border=4.0 # move cylinders inwards so that lid cylinders fit around them
+    border=3.0 # move cylinders inwards so that lid cylinders fit around them
     slot_depth = 100
 
     # inner tube
@@ -577,9 +590,9 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
     a -= t
     if test:
-        l = [(1, -46)]
+        l = [(1, -46), (2, -46)]
     else:
-        l = [(1, -46), (3, -46), (3, 36)]
+        l = [(1, -46), (2, -46), (3, -46), (3, 36)]
     for (end, offs) in l:
         b = cube([10*scl, (boxdepth-70)*scl, (60)*scl])
         t = case_bolthole(scl, end=end).add(b)
@@ -697,7 +710,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
             # add some structural support 
             sstep = 140
             sdep = sstep
-            while sdep <= boxlength-sstep*(3 if test else 2):
+            while sdep <= boxlength-sstep*(2 if test else 2):
                 u = intersection()
                 u.add(b)
                 r = union()
@@ -718,7 +731,7 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 1:
+    if part != 0:
         return
 
     c = color(colour)
