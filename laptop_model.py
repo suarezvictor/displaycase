@@ -184,6 +184,33 @@ def lid_bolthole(scl, end=True):
     else:
         return translate([(65+lcd_w+lcd_inset_top)*scl, 0*scl, (35)*scl])
 
+def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
+
+    w = lcd_w+lcd_inset_top+lcd_inset_bot-200
+    iro = 0
+    shear = 0
+    innershear = 0
+    edge_inset = bwid
+    a = union()
+
+    # top edge
+    toplen = w+lcd_gap*2
+    toplenoffs = (-lcd_inset_top+w+65)
+    r = union()
+    c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
+    t.add(r)
+    a.add(t)
+
+    a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
+    a += screen_mid2(scl, ht, hole_ht)
+    a += screen_mid1(scl, ht, hole_ht, nohinge=True, endpart=True)
+    return a
+
 def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
 
     shear = 0
@@ -860,11 +887,6 @@ def screen_adjust(b, scl, angle):
     p = translate(v=[155.5*scl,61*scl,0*scl]).add(p)
     b -= p
 
-    if True: # add inner parts for reference
-        p = lcd_panel(scl)
-        p = translate(v=[155.5*scl,61*scl,0]).add(p)
-        b += p
-
     return hinge_rotate(scl, b, angle)
 
 
@@ -900,7 +922,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     numparts = 10 if test else 30
     offs = lcd_end_ht+hinge_depth+40.0
-    midht = (lcd_l/2.0-offs-100.0) / numparts
+    midht = (lcd_l/2.0-offs+bwid-50.0) / numparts
     print midht
 
     for i in range(numparts):
@@ -910,15 +932,20 @@ def create_laptop(t, scl, mirror, colour, part, angle):
             m = screen_adjust(m, scl, angle)
             b.add(m)
 
-
         if part == 4:
             m = screen_mid2(scl, midht, hole_depth)
             m = translate(v=[0, offs*scl,0]).add(m)
             m = screen_adjust(m, scl, angle)
             b.add(m)
 
-
         offs += midht
+
+    if part == 5:
+        m = screen_mid3(scl, 100, hole_depth)
+        m = translate(v=[0, (lcd_l/2+bwid-50)*scl,0]).add(m)
+        m = screen_adjust(m, scl, angle)
+        b.add(m)
+
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
@@ -940,9 +967,16 @@ if __name__ == '__main__':
             scl = 0.1
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(5):
+            for i in range(6):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
+
+            if True: # add inner parts for reference
+                p = lcd_panel(scl)
+                p = translate(v=[155.5*scl,61*scl,0]).add(p)
+                p = hinge_rotate(scl, p, angle)
+                t.add(p)
+
 
             if False:
                 card = import_stl(filename = "eoma68.stl")
