@@ -295,6 +295,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
     iro = 0
 
     rad = 15
+    rad2 = 2
     a = union()
 
     # top edge
@@ -310,7 +311,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
 
     # bottom edge
     r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(toplen)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+iro)*scl,(toplen+15-rad2)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
@@ -321,12 +322,12 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
 
     # end piece NOTE: height (lcd_d-rad) is not perfect but it's close
     r = union()
-    c = shearedcube(size=[(lcd_d-rad)*scl,(bwid+5+rad)*scl,ht*scl],
+    c = shearedcube(size=[(lcd_d-rad+rad2+1)*scl,(bwid+5+rad)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(-lcd_inset_top+65)*scl, (16.5-ht)*scl, (25)*scl])
+    t = translate(v=[(-lcd_inset_top+65)*scl, (16.5-ht)*scl, (31+rad2)*scl])
     t.add(r)
     a.add(t)
 
@@ -341,12 +342,12 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
     a.add(t)
 
     # bottom end curve
-    inner_rad=rad
+    inner_rad=rad2
     r = union()
     r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
     r = rotate([180, 90, 90]).add(r)
-    t = translate(v=[+(-lcd_inset_top+63-lcd_gap)*scl,
-                        (-ht+24)*scl, (33-rad)*scl])
+    t = translate(v=[+(-lcd_inset_top+50-lcd_gap)*scl,
+                        (-ht+24)*scl, (33-inner_rad)*scl])
     t.add(r)
     a.add(t)
 
@@ -699,14 +700,15 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # base hinge box
     boxdepth = hinge_depth+ht
-    box = base_box(scl, boxdepth, hole_depth, ht, hollow=True, inner=True)
+    box = base_box(scl, boxdepth, hole_depth, ht, extralen=120,
+                   hollow=True, inner=True)
 
     a += box
 
     # cutout for base top "hook" with screw-hole in it
     a -= box_hook_cutout(scl, hinge_depth, inner=True)
 
-    holes = [0, 1] if test else [0, 1, 3]
+    holes = [0, 2] if test else [0, 1, 3]
     # screw support at both ends
     for end in holes:
         r = union()
@@ -722,14 +724,15 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
-    t = box_screwholes(scl, edge_inset, holes=[2], h=60)
+    # this screwhole is only part-way through
+    t = box_screwholes(scl, edge_inset, holes=[1], h=60)
     t = translate(v=[0, -69.0*scl, boxheight*scl]).add(t)
     a -= t
 
     # cutout for cable
-    h = cube([(115)*scl, (60)*scl,
+    h = cube([(105)*scl, (60)*scl,
                (50)*scl])
-    h = translate(v=[(boxlength-bwid-120)*scl,
+    h = translate(v=[(boxlength-bwid-105)*scl,
                         (-70-0.2)*scl, (89)*scl]).add(h)
     a -= h
 
@@ -899,21 +902,23 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     return a
 
-def base_box(scl, boxdepth, hole_depth, ht, hollow=True, inner=False):
+def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
+                hollow=True, inner=False):
+    blen = boxlength+extralen
     # base hinge box
     c = union()
-    b = cube([(boxlength)*scl, (boxdepth)*scl, boxheight*scl])
+    b = cube([blen*scl, (boxdepth)*scl, boxheight*scl])
     b = translate([0, 20*scl, 0*scl]).add(b)
     c.add(b)
     if hollow:
         if inner:
             hoffs=bwid*2
             loffs=bwid
-            bl = boxlength-bwid*2
+            bl = blen-bwid*2
         else:
             hoffs = -0.3
             loffs=0
-            bl = boxlength-lcd_outer_rad-80-bwid*2
+            bl = blen-lcd_outer_rad-80-bwid*2
         h = cube([bl*scl, (boxdepth+0.3)*scl,
                    ((boxheight-bwid)+0.3)*scl])
         h = translate(v=[bwid*scl, hoffs*scl, -0.3*scl]).add(h)
@@ -923,14 +928,14 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True, inner=False):
                    (boxinset+0.3)*scl])
         h = translate(v=[(loffs-0.3)*scl, (bwid-0.3)*scl, -0.3*scl]).add(h)
         c -= h
-        h = cube([(boxlength-bwid*2)*scl, (boxdepth-bwid*2)*scl,
+        h = cube([(blen-bwid*2)*scl, (boxdepth-bwid*2)*scl,
                    (boxheight-bwid+0.2)*scl])
         h = translate(v=[bwid*scl, (bwid*2)*scl, -0.1*scl]).add(h)
         c -= h
         if not inner:
             h = cube([(bwid+0.5)*scl, (boxdepth)*scl,
                        (boxheight)*scl])
-            h = translate(v=[(boxlength-lcd_outer_rad-80-bwid)*scl, 20*scl,
+            h = translate(v=[(blen-lcd_outer_rad-80-bwid)*scl, 20*scl,
                               -0.0*scl]).add(h)
             c += h
         # cutout in side of box for cable
@@ -999,13 +1004,14 @@ def base_box(scl, boxdepth, hole_depth, ht, hollow=True, inner=False):
                 sdep += sstep
 
     # lid at hinge end
-    b = cube([(lcd_outer_rad+100-3)*scl, (boxdepth)*scl, 20*scl])
+    b = cube([(lcd_outer_rad+100+extralen-3)*scl, (boxdepth)*scl, 20*scl])
     b = translate(v=[(boxlength-lcd_outer_rad-100+3)*scl, 20*scl, 0]).add(b)
     c += b
-    # back piece at hinge end
-    b = cube([(bwid)*scl, (boxdepth)*scl, 70*scl])
-    b = translate(v=[(boxlength-0.3)*scl, 20*scl, 40*scl]).add(b)
-    c += b
+    if extralen == 0:
+        # back piece at hinge end
+        b = cube([(bwid)*scl, (boxdepth)*scl, 70*scl])
+        b = translate(v=[(boxlength-0.3)*scl, 20*scl, 40*scl]).add(b)
+        c += b
     t = hinge_translate(scl).add(c)
     box = translate(v=[-boxlength*scl, (+16.5-ht*2)*scl, boxtopoffs*scl]).add(t)
     return box
@@ -1024,10 +1030,11 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    #if part != 1 and part != 7 and part != 6 and part != 0:
+    #if part != 1 and part != 8 and part != -6 and part != 0.01:
     #if part != 3 and part != 4 and part != 0 and part != 2:
     #if part == -1:
-    if part > 3:
+    #if part > 3:
+    if part > 7:
         return
 
     c = color(colour)
@@ -1056,14 +1063,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(e)
 
     if part == 2:
-        m = screen_mid1(scl, 40.0+bwid, hole_depth, nohinge=True)
+        m = screen_mid1(scl, 40.0, hole_depth, nohinge=True)
         m = translate(v=[0, (lcd_end_ht+hinge_depth)*scl,0]).add(m)
         b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
     numparts = 10 if test else 30
-    offs = lcd_end_ht+hinge_depth+40.0+bwid
+    offs = lcd_end_ht+hinge_depth+40.0
     midht = (lcd_l/2.0-offs+bwid-50.0) / numparts
     print midht
 
@@ -1102,7 +1109,7 @@ if __name__ == '__main__':
         angles = [0, max_open/2, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [110]
 
     for i in range(rpt):
         for angle in angles:
