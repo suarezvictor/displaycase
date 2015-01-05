@@ -228,7 +228,7 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
     toplenoffs = (w-lcd_inset_top-10)
 
     # top and bottom edge
-    a += screen_frontedge(scl, ht, toplen, toplenoffs)
+    a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True)
 
     # add hinge-end filler over top of screwhole
     r = union()
@@ -242,9 +242,9 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
     t.add(r)
     a.add(t)
 
-    # add hinge-end filler over top of screwhole
+    # add hinge-end filler behind screwhole (back wall)
     r = union()
-    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(bwid)*scl,ht*scl],
+    c = shearedcube(size=[(lcd_d+lcd_gap*2-25)*scl,(bwid)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
@@ -288,7 +288,7 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
 
     return a
 
-def screen_frontedge(scl, ht, toplen, toplenoffs):
+def screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=False):
     shear = 0
     innershear = 0
     edge_inset = bwid
@@ -298,6 +298,10 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
     rad2 = 2
     a = union()
 
+    if curvetopback:
+        to = toplenoffs-40
+    else:
+        to = toplenoffs
     # top edge
     r = union()
     c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
@@ -305,9 +309,19 @@ def screen_frontedge(scl, ht, toplen, toplenoffs):
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
+    t = translate(v=[to*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
     t.add(r)
     a.add(t)
+    if curvetopback:
+        # add in a curve so that the lid doesn't hit the base
+        # when fully opened
+        inner_rad=18
+        r = union()
+        r = touch_arc(inner_rad, ht, bwid, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        t = translate(v=[(to+5)*scl, (24-ht)*scl, (55-lcd_d)*scl])
+        t.add(r)
+        a.add(t)
 
     # bottom edge
     r = union()
@@ -700,7 +714,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # base hinge box
     boxdepth = hinge_depth+ht
-    box = base_box(scl, boxdepth, hole_depth, ht, extralen=120,
+    box = base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                    hollow=True, inner=True)
 
     a += box
@@ -1106,10 +1120,10 @@ if __name__ == '__main__':
     max_open = 130
     if animate:
         rpt = 3
-        angles = [0, max_open/2, max_open]
+        angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [110]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
