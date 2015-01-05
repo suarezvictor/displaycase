@@ -25,7 +25,7 @@ else:
     lcd_w = 1055
     lcd_la = lcd_l-104.8+40
     lcd_wa = lcd_w-113.0+40
-    lcd_d = 45
+    lcd_d = 50
 
 bwid = 17 # 24
 lcd_inset_top = 30 
@@ -174,8 +174,8 @@ def case_bolthole(scl, end):
     elif end == 1:
         return translate([(-20+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
-        return translate([(-20+lcd_w+lcd_inset_bot-20)*scl, 0*scl,
-                            (bht-20)*scl])
+        return translate([(lcd_w+65)*scl, 0*scl,
+                            (-lcd_d-1)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2+30)*scl, 0*scl, bht*scl])
 
@@ -706,10 +706,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         if end != 0:
-            if end == 2:
-                dp = 20
-            else:
-                dp = 0
+            dp = 0
             c = cube([29*2*scl, 77*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(0)*scl, (77/2)*scl, (dp/2)*scl]).add(c)
         else:
@@ -871,18 +868,22 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a -= box_hook_cutout(scl, hinge_depth)
 
     if test:
-        l = [(0, 36), (1, -46), (2, -46), (2, 36)]
+        l = [(0, 36), (1, -46), (2, 36)]
     else:
-        l = [(0, 36), (1, -46), (2, -46), (2, 36), (3, -46), (3, 36)]
+        l = [(0, 36), (1, -46), (2, 36), (3, -46), (3, 36)]
     for (end, offs) in l:
+        doffs = boxheight-45
+        if end == 2:
+            doffs += 20
         b = cube([10*scl, (boxdepth-63.5)*scl, (60)*scl])
         t = case_bolthole(scl, end=end).add(b)
-        t = translate(v=[(offs)*scl, (-boxdepth/2+105)*scl, (boxheight-45)*scl]).add(t)
+        t = translate(v=[(offs)*scl, (-boxdepth/2+105)*scl, doffs*scl]).add(t)
         a += t
     b = cube([25*scl, (boxdepth-70)*scl, (bwid*1.2)*scl])
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(20)*scl, (-boxdepth/2+105)*scl, (boxheight)*scl]).add(t)
     a += t
+    # 1/4 cutouts at the corner edges for case rounding 
     b = cube([80*scl, 90*scl, 170*scl])
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(-90)*scl, (-hinge_depth/2-7)*scl, (0)*scl]).add(t)
@@ -891,16 +892,21 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     # screw support at both ends
     for end in range(3 if test else 4):
         if end != 0:
-            if end != 2:
-                bht = 60
+            if end == 2:
+                bht = 29.1*2
             else:
                 bht = 80
-            b = cube([(29.1*2+bwid*2)*scl, 70*scl, bht*scl])
-            b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
+            if end == 2:
+                b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
+                b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
+            else:
+                b = cube([(29.1*2+bwid*2)*scl, 70*scl, 60*scl])
+                b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
             t = case_bolthole(scl, end=end).add(b)
             t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight-bwid)*scl]).add(t)
             a += t
-            b = cube([29.1*2*scl, 70*scl, 80*scl])
+            
+            b = cube([29.1*2*scl, 70*scl, bht*scl])
             b = translate([-29.1*scl, 10*scl, -30*scl]).add(b)
             t = case_bolthole(scl, end=end).add(b)
             t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
@@ -1053,8 +1059,8 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    #if part != 1 and part != 7:
-    if part != 1:
+    if part != 1 and part != 7 and part != 6:
+    #if part > 6:
     #if part == -1:
         return
 
@@ -1141,21 +1147,20 @@ if __name__ == '__main__':
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
-            if False: # add inner parts for reference
+            if True: # add inner parts for reference
                 p = lcd_panel(scl)
                 p = translate(v=[155.5*scl,61*scl,0]).add(p)
                 p = hinge_rotate(scl, p, angle)
                 t.add(p)
                 # ethernet, amphenol RJCSE-538X-01
                 eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
-                p = translate(v=[(lcd_w+150)*scl,100*scl,10*scl]).add(eth)
+                p = translate(v=[(lcd_w+150)*scl,100*scl,40*scl]).add(eth)
                 t.add(p)
-
 
             if True:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
-                r = translate([(lcd_w+220)*scl, 750*scl, 135*scl]).add(r)
+                r = translate([(lcd_w+220)*scl, 880*scl, 155*scl]).add(r)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog.scad")
