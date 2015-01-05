@@ -226,27 +226,9 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
 
     toplen = 180 if test else 250
     toplenoffs = (w-lcd_inset_top-10)
-    # top edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
-    t.add(r)
-    a.add(t)
 
-    # bottom edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(toplen)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30+bwid+lcd_gap)*scl])
-    t.add(r)
-    a.add(t)
+    # top and bottom edge
+    a += screen_frontedge(scl, ht, toplen, toplenoffs)
 
     # add hinge-end filler over top of screwhole
     r = union()
@@ -304,24 +286,15 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
 
     return a
 
-def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
-
+def screen_frontedge(scl, ht, toplen, toplenoffs):
     shear = 0
     innershear = 0
-    w = lcd_w+lcd_inset_top+lcd_inset_bot
     edge_inset = bwid
     iro = 0
 
     rad = 15
-
     a = union()
 
-    if endpart:
-        toplen = 120 if test else 200
-        toplenoffs = (toplen-131+165)
-    else:
-        toplen = w+lcd_gap*2
-        toplenoffs = (-lcd_inset_top+w+65)
     # top edge
     r = union()
     c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
@@ -343,9 +316,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
     t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30+bwid+lcd_gap)*scl])
     t.add(r)
     a.add(t)
-
-    if not endpart:
-        a.add(lid_bottom_boltholder(scl, lcd_gap, ht, iro))
 
     # end piece NOTE: height (lcd_d-rad) is not perfect but it's close
     r = union()
@@ -376,6 +346,33 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
     t.add(r)
     a.add(t)
 
+    return a
+
+def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
+
+    shear = 0
+    innershear = 0
+    w = lcd_w+lcd_inset_top+lcd_inset_bot
+    edge_inset = bwid
+    iro = 0
+
+    rad = 15
+
+    a = union()
+
+    if endpart:
+        toplen = 120 if test else 200
+        toplenoffs = (toplen-131+165)
+    else:
+        toplen = w+lcd_gap*2
+        toplenoffs = (-lcd_inset_top+w+65)
+
+    # top and bottom edge
+    a += screen_frontedge(scl, ht, toplen, toplenoffs)
+
+    if not endpart:
+        a.add(lid_bottom_boltholder(scl, lcd_gap, ht, iro))
+
     if endpart:
         # middle filler
         r = union()
@@ -388,27 +385,30 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         t.add(r)
         a.add(t)
 
-
     if not endpart:
         # middle filler, doesn't fill up hinge part, allow cable access
         r = union()
-        c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(w-lcd_inset_bot+lcd_gap*2)*scl,ht*scl],
+        c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,
+                        (w-lcd_inset_bot+lcd_gap*2)*scl,ht*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[(-lcd_inset_top-lcd_inset_bot+w+65)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+        t = translate(v=[(-lcd_inset_top-lcd_inset_bot+w+65)*scl, 
+                        (16.5-ht)*scl, (30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
 
         # add hinge-end filler over top of screwhole
         r = union()
-        c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
+        c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,
+                        (lcd_gap*2+bwid)*scl,ht*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+        t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl, 
+                        (30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
 
@@ -418,7 +418,8 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, -30, 0]).add(r)
         r = rotate([0, lcd_ext_rot_angle, 0]).add(r)
-        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl, (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
+        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl,
+                        (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
         a.add(t)
 
         # bottom end curve, overlap with 1st
@@ -427,7 +428,8 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, 10, 0]).add(r)
         r = rotate([0, lcd_ext_rot_angle+5, 0]).add(r)
-        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl, (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
+        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl, 
+                        (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
         a.add(t)
 
     if not nohinge:
@@ -510,38 +512,9 @@ def screen_end(scl, ht=60):
 
     a = union()
 
-    # top edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+lcd_gap*2)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
-    t.add(r)
-    a.add(t)
-
-    # bottom edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(w+lcd_gap*2)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl, (30+bwid+lcd_gap)*scl])
-    t.add(r)
-    a.add(t)
-
-    # end piece NOTE: height (lcd_d-rad) is not perfect but it's close
-    r = union()
-    c = shearedcube(size=[(lcd_d-rad)*scl,(bwid+5+rad)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[(-lcd_inset_top+65)*scl, (16.5-ht)*scl, (25)*scl])
-    t.add(r)
-    a.add(t)
+    toplen = w+lcd_gap*2
+    toplenoffs = (-lcd_inset_top+w+65)
+    a += screen_frontedge(scl, ht, toplen, toplenoffs)
 
     # middle filler
     r = union()
@@ -551,24 +524,6 @@ def screen_end(scl, ht=60):
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
-    t.add(r)
-    a.add(t)
-
-    # top end curve
-    inner_rad=rad
-    r = union()
-    r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
-    r = rotate([180, -90, 90]).add(r)
-    t = translate(v=[+(-lcd_inset_top+63-lcd_gap)*scl, 9*scl, (30-lcd_d+rad)*scl])
-    t.add(r)
-    a.add(t)
-
-    # bottom end curve
-    inner_rad=rad
-    r = union()
-    r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
-    r = rotate([180, 90, 90]).add(r)
-    t = translate(v=[+(-lcd_inset_top+63-lcd_gap)*scl, (-ht+24)*scl, (33-rad)*scl])
     t.add(r)
     a.add(t)
 
