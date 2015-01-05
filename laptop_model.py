@@ -28,7 +28,7 @@ else:
     lcd_d = 50
 
 bwid = 17 # 24
-lcd_inset_top = 30 
+lcd_inset_top = 25 
 lcd_inset_bot = 160
 lcd_gap = 3
 lcd_hinge_inner_rad=70
@@ -38,9 +38,9 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 30 / 2.0
-boxheight = 150
+boxheight = 130
 boxtopoffs = 20
-boxinset = 75
+boxinset = 35
 hinge_depth = 130
 hole_depth = 80
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
@@ -167,23 +167,23 @@ def lcd_view_area(scl, offs=0):
     return a
 
 def case_bolthole(scl, end):
-    bht = boxheight+lcd_hinge_inner_rad-199.0+boxtopoffs+50.0-lcd_d
+    bht = lcd_hinge_inner_rad-49.0+boxtopoffs+50.0-lcd_d
     print bht
     if end == 0:
-        return translate([(29.0+50-lcd_d)*scl, 0*scl, bht*scl])
+        return translate([(29.0+50-lcd_d-lcd_inset_top+30)*scl, 0*scl, bht*scl])
     elif end == 1:
         return translate([(-20+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
         return translate([(lcd_w+65)*scl, 0*scl,
-                            (-lcd_d-1)*scl])
+                            (-lcd_d-1+150-boxheight)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2+30)*scl, 0*scl, bht*scl])
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([30*scl, 0*scl, (10)*scl])
+        return translate([(-lcd_inset_top+56)*scl, 0*scl, (19)*scl])
     else:
-        return translate([(65+lcd_w+lcd_inset_top)*scl, 0*scl, (35)*scl])
+        return translate([(90+lcd_w)*scl, 0*scl, (35)*scl])
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
 
@@ -225,7 +225,7 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
     a = union()
 
     toplen = 180 if test else 250
-    toplenoffs = (w-40)
+    toplenoffs = (w-lcd_inset_top-25)
     # top edge
     r = union()
     c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
@@ -255,7 +255,7 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+    t = translate(v=[(+lcd_inset_bot+lcd_w-85)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
     t.add(r)
     a.add(t)
 
@@ -266,7 +266,7 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(+lcd_inset_bot+lcd_w-10)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+    t = translate(v=[(+lcd_inset_bot+lcd_w-25)*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
     t.add(r)
     a.add(t)
 
@@ -279,12 +279,12 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
     r = union()
-    c = shearedcube(size=[(bwid+10+iro)*scl,(100+lcd_gap)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+10+iro)*scl,(85+lcd_gap)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(55)*scl, (16.5-ht)*scl, (29)*scl]).add(r)
+    t = translate(v=[(55-lcd_inset_top+15)*scl, (16.5-ht)*scl, (29)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
 
@@ -1059,9 +1059,9 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 1 and part != 7 and part != 6:
+    #if part != 1 and part != 7 and part != 6 and part != 0:
     #if part > 6:
-    #if part == -1:
+    if part == -1:
         return
 
     c = color(colour)
