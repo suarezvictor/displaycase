@@ -93,6 +93,80 @@ def shearedcube(size, center=False, shear=None, innershear=None):
                 points[i*2+4][j] += innershear[j]
     return polyhedron(points, faces)
 
+L=0x0
+R=0x1
+T=0x2
+B=0x4
+F=0x8
+B=0x10
+
+def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
+    if curverads is None:
+        curverads = {}
+    if opensides is None:
+        opensides = set()
+    if isinstance(thick, float):
+        thick = {L:thick, R:thick, T:thick, B:thick,
+                 F:thick, B:thick}
+    a = union()
+    c = cube([w*scl, d*scl, h*scl])
+    a.add(c)
+
+    rad1, rad2 = curverads.get(T|L, (0.0, 0.0))
+    if rad1 != 0.0:
+        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
+        s = translate(v=[(-1)*scl, (-1)*scl, (-1)*scl]).add(s)
+        a -= s
+        r = union()
+        r = touch_arc(rad2, d, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, 90, 0]).add(r)
+        t = translate(v=[(rad1+rad2)*scl, (0)*scl, (rad1+rad2)*scl])
+        t.add(r)
+        a += t
+
+    rad1, rad2 = curverads.get(T|R, (0.0, 0.0))
+    if rad1 != 0.0:
+        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
+        s = translate(v=[(w+1-rad1-rad2)*scl, (-1)*scl, (-1)*scl]).add(s)
+        a -= s
+        r = union()
+        r = touch_arc(rad2, d, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, 00, 0]).add(r)
+        t = translate(v=[(w-rad1-rad2)*scl, (0)*scl, (rad1+rad2)*scl])
+        t.add(r)
+        a += t
+
+    rad1, rad2 = curverads.get(B|L, (0.0, 0.0))
+    if rad1 != 0.0:
+        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
+        s = translate(v=[(-1)*scl, (-1)*scl, (h+1-rad1-rad2)*scl]).add(s)
+        a -= s
+        r = union()
+        r = touch_arc(rad2, d, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, 180, 0]).add(r)
+        t = translate(v=[(rad1+rad2)*scl, (0)*scl, (h-rad1-rad2)*scl])
+        t.add(r)
+        a += t
+
+    rad1, rad2 = curverads.get(B|R, (0.0, 0.0))
+    if rad1 != 0.0:
+        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
+        s = translate(v=[(w+1-rad1-rad2)*scl, (-1)*scl,
+                            (h+1-rad1-rad2)*scl]).add(s)
+        a -= s
+        r = union()
+        r = touch_arc(rad2, d, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, -90, 0]).add(r)
+        t = translate(v=[(w-rad1-rad2)*scl, (0)*scl, (h-rad1-rad2)*scl])
+        t.add(r)
+        a += t
+
+    return a
+
 def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
     rad2 = bwid+rad
     rad -= iro
@@ -121,7 +195,7 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
         ct = translate(v=[0*scl,0*scl,-ht*scl]).add(t)
         c -= ct
     r.add(c)
-    t = translate(v=[0,0,-ht/2*scl+7.5*scl])
+    t = translate(v=[0,0,-ht/2*scl+0*scl])
     t.add(r)
     return t
 
@@ -319,7 +393,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=False):
         r = union()
         r = touch_arc(inner_rad, ht, bwid, 0, scl)
         r = rotate([0, -90, 90]).add(r)
-        t = translate(v=[(to+5)*scl, (24-ht)*scl, (55-lcd_d)*scl])
+        t = translate(v=[(to+5)*scl, (24-ht-7.5)*scl, (55-lcd_d)*scl])
         t.add(r)
         a.add(t)
 
@@ -351,7 +425,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=False):
     r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
     r = rotate([180, -90, 90]).add(r)
     t = translate(v=[+(-lcd_inset_top+63-lcd_gap)*scl,
-                        9*scl, (30-lcd_d+rad)*scl])
+                        (9+7.5)*scl, (30-lcd_d+rad)*scl])
     t.add(r)
     a.add(t)
 
@@ -361,7 +435,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=False):
     r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
     r = rotate([180, 90, 90]).add(r)
     t = translate(v=[+(-lcd_inset_top+50-lcd_gap)*scl,
-                        (-ht+24)*scl, (33-inner_rad)*scl])
+                        (-ht+24-7.5)*scl, (33-inner_rad)*scl])
     t.add(r)
     a.add(t)
 
@@ -437,7 +511,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, -30, 0]).add(r)
         r = rotate([0, lcd_ext_rot_angle, 0]).add(r)
-        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl,
+        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24-7.5)*scl,
                         (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
         a.add(t)
 
@@ -447,7 +521,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, 10, 0]).add(r)
         r = rotate([0, lcd_ext_rot_angle+5, 0]).add(r)
-        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24)*scl,
+        t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24-7.5)*scl,
                         (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
         a.add(t)
 
@@ -470,7 +544,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, lcd_ext_rot_angle+8, 0]).add(r)
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, -(hole_ht+ht/2)*scl, 0]).add(t)
+        t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
         a -= t
 
     # hinge hole
@@ -696,26 +770,46 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     return a
 
-def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth):
+def back_box_base(scl, ht_offset, ht):
+    bdep = 285
+    bht = boxheight+bwid*2
+    blen = ht
+    a = union()
+    c = hollowbox(scl, bdep, blen, bht, 20.0,
+                    curverads={T|L:(20.0, 20.0),
+                               T|R:(15.0, 5.0),
+                               B|L:(30.0, 20.0),
+                               B|R:(25.0, 5.0)
+                               })
+    a.add(c)
+
+    a = translate(v=[(lcd_w+40)*scl, 0, (lcd_d-32)*scl]).add(a)
+    return a
+
+def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     edge_inset = bwid
     a = union()
 
     border=3.0 # move cylinders inwards so that lid cylinders fit around them
     slot_depth = 100
+    extradepth = 0
 
-    # inner tube
-    r = union()
-    r = cylinder(r=(lcd_hinge_inside_rad-border)*scl, h=(bwid)*scl,
-                 segments=50, center=True)
-    r = rotate([180, 90, 90]).add(r)
-    t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (-27-bwid/2)*scl, 0]).add(t)
-    a.add(t)
+    if mid:
+        extradepth = 140
+    else:
+        # inner tube
+        r = union()
+        r = cylinder(r=(lcd_hinge_inside_rad-border)*scl, h=(bwid)*scl,
+                     segments=50, center=True)
+        r = rotate([180, 90, 90]).add(r)
+        t = hinge_translate(scl).add(r)
+        t = translate(v=[0, (-27-bwid/2)*scl, 0]).add(t)
+        a.add(t)
 
     # base hinge box
     boxdepth = hinge_depth+ht
-    box = base_box(scl, boxdepth, hole_depth, ht, extralen=0,
-                   hollow=True, inner=True)
+    box = base_box(scl, boxdepth, hole_depth, ht, extralen=extradepth,
+                   hollow=True, inner=True, mid=True)
 
     a += box
 
@@ -738,17 +832,19 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
-    # this screwhole is only part-way through
-    t = box_screwholes(scl, edge_inset, holes=[1], h=60)
-    t = translate(v=[0, -69.0*scl, boxheight*scl]).add(t)
-    a -= t
 
-    # cutout for cable
-    h = cube([(105)*scl, (60)*scl,
-               (50)*scl])
-    h = translate(v=[(boxlength-bwid-105)*scl,
-                        (-70-0.2)*scl, (89)*scl]).add(h)
-    a -= h
+    if not mid:
+        # this screwhole is only part-way through
+        t = box_screwholes(scl, edge_inset, holes=[1], h=60)
+        t = translate(v=[0, -69.0*scl, boxheight*scl]).add(t)
+        a -= t
+
+        # cutout for cable
+        h = cube([(105)*scl, (60)*scl,
+                   (50)*scl])
+        h = translate(v=[(boxlength-bwid-105)*scl,
+                            (-70-0.2)*scl, (89)*scl]).add(h)
+        a -= h
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
 
@@ -829,7 +925,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, lcd_ext_rot_angle+110, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+6.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+6.5-7.5)*scl, 0]).add(t)
     a -=t
 
     # hollow out base box at edge
@@ -917,7 +1013,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     return a
 
 def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
-                hollow=True, inner=False):
+                hollow=True, inner=False, mid=False):
     blen = boxlength+extralen
     # base hinge box
     c = union()
@@ -1044,11 +1140,13 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    #if part != 1 and part != 8 and part != -6 and part != 0.01:
+    #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
     #if part == -1:
     #if part > 3:
-    if part > 7:
+    #if part > 6:
+    #    return
+    if part != 8:
         return
 
     c = color(colour)
@@ -1074,6 +1172,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 6:
         e = base_end2(scl, lcd_end_ht, ht, hinge_depth, hole_depth)
         e = translate(v=[0, (lcd_end_ht+ht+hinge_depth)*scl,0]).add(e)
+        b.add(e)
+
+    if part == 8:
+        e = back_box_base(scl, lcd_end_ht, 500)
+        e = translate(v=[0, (lcd_end_ht+ht+hinge_depth*2+40)*scl,0]).add(e)
         b.add(e)
 
     if part == 2:
@@ -1130,11 +1233,11 @@ if __name__ == '__main__':
             scl = 0.1
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(8):
+            for i in range(9):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
-            if True: # add inner parts for reference
+            if False: # add inner parts for reference
                 p = lcd_panel(scl)
                 p = translate(v=[155.5*scl,61*scl,0]).add(p)
                 p = hinge_rotate(scl, p, angle)
@@ -1144,10 +1247,10 @@ if __name__ == '__main__':
                 p = translate(v=[(lcd_w+190)*scl,400*scl,(5+13)*scl]).add(eth)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
-                r = translate([(lcd_w+220)*scl, 880*scl, 135*scl]).add(r)
+                r = translate([(lcd_w+350)*scl, 1200*scl, 135*scl]).add(r)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog.scad")
