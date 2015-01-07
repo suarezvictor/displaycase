@@ -2,6 +2,7 @@
 # License: GPLv3+
 
 import time
+import itertools
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
@@ -96,7 +97,7 @@ def shearedcube(size, center=False, shear=None, innershear=None):
 L=0x0
 R=0x1
 T=0x2
-B=0x4
+D=0x4
 F=0x8
 B=0x10
 
@@ -106,66 +107,207 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
     if opensides is None:
         opensides = set()
     if isinstance(thick, float):
-        thick = {L:thick, R:thick, T:thick, B:thick,
+        thick = {L:thick, R:thick, T:thick, D:thick,
                  F:thick, B:thick}
-    a = union()
+    v = union()
     c = cube([w*scl, d*scl, h*scl])
-    a.add(c)
+    v.add(c)
+
+    il = {T|L|F:[], T|R|F:[], D|L|F:[], D|R|F:[],
+          T|L|B:[], T|R|B:[], D|L|B:[], D|R|B:[]}
+    a = []
+    su = []
+    rad1, rad2 = curverads.get(D|F, (0.0, 0.0))
+    r12 = rad1+rad2
+    if rad1 != 0.0:
+        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
+        s = translate(v=[(-1)*scl, (d+1-r12)*scl, (h+1-r12)*scl]).add(s)
+        su.append(s)
+        r = union()
+        r = touch_arc(rad2, w, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, -90, 90]).add(r)
+        t = translate(v=[(w)*scl, (d-r12)*scl, (h-r12)*scl])
+        t.add(r)
+        a.append(t)
+        r1 = union()
+        r1 = touch_arc(0, w, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, -90, 90]).add(r1)
+        t1 = translate(v=[(w)*scl, (d-r12)*scl, (h-r12)*scl])
+        t1.add(r1)
+        il[D|L|F].append((su, t, t1))
+        il[D|R|F].append((su, t, t1))
+
+    rad1, rad2 = curverads.get(T|F, (0.0, 0.0))
+    r12 = rad1+rad2
+    if rad1 != 0.0:
+        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
+        s = translate(v=[(-1)*scl, (d+1-r12)*scl, (-1)*scl]).add(s)
+        su.append(s)
+        r = union()
+        r = touch_arc(rad2, w, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([0, 0, 90]).add(r)
+        t = translate(v=[(w)*scl, (d-r12)*scl, (r12)*scl])
+        t.add(r)
+        a.append(t)
+        r1 = union()
+        r1 = touch_arc(0, w, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, 0, 90]).add(r1)
+        t1 = translate(v=[(w)*scl, (d-r12)*scl, (r12)*scl])
+        t1.add(r1)
+        il[T|L|F].append((su, t, t1))
+        il[T|R|F].append((su, t, t1))
 
     rad1, rad2 = curverads.get(T|L, (0.0, 0.0))
+    r12 = rad1+rad2
     if rad1 != 0.0:
-        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
+        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
         s = translate(v=[(-1)*scl, (-1)*scl, (-1)*scl]).add(s)
-        a -= s
+        su.append(s)
         r = union()
         r = touch_arc(rad2, d, rad1, 0, scl)
         r = rotate([0, -90, 90]).add(r)
         r = rotate([0, 90, 0]).add(r)
-        t = translate(v=[(rad1+rad2)*scl, (0)*scl, (rad1+rad2)*scl])
+        t = translate(v=[(r12)*scl, (0)*scl, (r12)*scl])
         t.add(r)
-        a += t
+        r1 = union()
+        r1 = touch_arc(0, d, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, 90, 0]).add(r1)
+        t1 = translate(v=[(r12)*scl, (0)*scl, (r12)*scl])
+        t1.add(r1)
+        a.append(t)
+        il[T|L|F].append((su, t, t1))
+        il[T|L|B].append((su, t, t1))
 
     rad1, rad2 = curverads.get(T|R, (0.0, 0.0))
+    r12 = rad1+rad2
     if rad1 != 0.0:
-        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
-        s = translate(v=[(w+1-rad1-rad2)*scl, (-1)*scl, (-1)*scl]).add(s)
-        a -= s
+        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
+        s = translate(v=[(w+1-r12)*scl, (-1)*scl, (-1)*scl]).add(s)
+        su.append(s)
         r = union()
         r = touch_arc(rad2, d, rad1, 0, scl)
         r = rotate([0, -90, 90]).add(r)
         r = rotate([0, 00, 0]).add(r)
-        t = translate(v=[(w-rad1-rad2)*scl, (0)*scl, (rad1+rad2)*scl])
+        t = translate(v=[(w-r12)*scl, (0)*scl, (r12)*scl])
         t.add(r)
-        a += t
+        r1 = union()
+        r1 = touch_arc(0, d, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, 00, 0]).add(r1)
+        t1 = translate(v=[(w-r12)*scl, (0)*scl, (r12)*scl])
+        t1.add(r1)
+        a.append(t)
+        il[T|R|F].append((su, t, t1))
+        il[T|R|B].append((su, t, t1))
 
-    rad1, rad2 = curverads.get(B|L, (0.0, 0.0))
+    rad1, rad2 = curverads.get(D|L, (0.0, 0.0))
+    r12 = rad1+rad2
     if rad1 != 0.0:
-        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
-        s = translate(v=[(-1)*scl, (-1)*scl, (h+1-rad1-rad2)*scl]).add(s)
-        a -= s
+        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
+        s = translate(v=[(-1)*scl, (-1)*scl, (h+1-r12)*scl]).add(s)
+        su.append(s)
         r = union()
         r = touch_arc(rad2, d, rad1, 0, scl)
         r = rotate([0, -90, 90]).add(r)
         r = rotate([0, 180, 0]).add(r)
-        t = translate(v=[(rad1+rad2)*scl, (0)*scl, (h-rad1-rad2)*scl])
+        t = translate(v=[(r12)*scl, (0)*scl, (h-r12)*scl])
         t.add(r)
-        a += t
+        r1 = union()
+        r1 = touch_arc(0, d, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, 180, 0]).add(r1)
+        t1 = translate(v=[(r12)*scl, (0)*scl, (h-r12)*scl])
+        t1.add(r1)
+        a.append(t)
+        il[D|L|F].append((su, t, t1))
+        il[D|L|B].append((su, t, t1))
 
-    rad1, rad2 = curverads.get(B|R, (0.0, 0.0))
+    rad1, rad2 = curverads.get(D|R, (0.0, 0.0))
+    r12 = rad1+rad2
     if rad1 != 0.0:
-        s = cube([(rad1+rad2+1)*scl, (d+2)*scl, (rad1+rad2+1)*scl])
-        s = translate(v=[(w+1-rad1-rad2)*scl, (-1)*scl,
-                            (h+1-rad1-rad2)*scl]).add(s)
-        a -= s
+        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
+        s = translate(v=[(w+1-r12)*scl, (-1)*scl,
+                            (h+1-r12)*scl]).add(s)
+        su.append(s)
         r = union()
         r = touch_arc(rad2, d, rad1, 0, scl)
         r = rotate([0, -90, 90]).add(r)
         r = rotate([0, -90, 0]).add(r)
-        t = translate(v=[(w-rad1-rad2)*scl, (0)*scl, (h-rad1-rad2)*scl])
+        t = translate(v=[(w-r12)*scl, (0)*scl, (h-r12)*scl])
         t.add(r)
-        a += t
+        r1 = union()
+        r1 = touch_arc(0, d, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([0, -90, 0]).add(r1)
+        t1 = translate(v=[(w-r12)*scl, (0)*scl, (h-r12)*scl])
+        t1.add(r1)
+        a.append(t)
+        il[D|R|F].append((su, t, t1))
+        il[D|R|B].append((su, t, t1))
 
-    return a
+    rad1, rad2 = curverads.get(F|L, (0.0, 0.0))
+    r12 = rad1+rad2
+    if rad1 != 0.0:
+        s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
+        s = translate(v=[(-1)*scl, (d+1-r12)*scl,
+                            (-1)*scl]).add(s)
+        su.append(s)
+        r = union()
+        r = touch_arc(rad2, h, rad1, 0, scl)
+        r = rotate([0, -90, 90]).add(r)
+        r = rotate([-90, 0, 180]).add(r)
+        t = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
+        t.add(r)
+        r1 = union()
+        r1 = touch_arc(0, h, r12, 0, scl)
+        r1 = rotate([0, -90, 90]).add(r1)
+        r1 = rotate([-90, 0, 180]).add(r1)
+        t1 = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
+        t1.add(r1)
+        a.append(t)
+        il[T|L|F].append((su, t, t1))
+        il[D|L|F].append((su, t, t1))
+
+    # remove bits from the cube
+    for i in range(len(a)):
+        v -= su[i]
+
+    # for each curve-part remove all other bits then add the remainder,
+    # don't worry about bits that don't overlap, just remove them all
+    for i in range(len(a)):
+        cp = union()
+        cp.add(a[i])
+        for j in range(len(a)):
+            if i == j:
+                continue # don't remove the part we just added!
+            cp -= su[j]
+        v += cp
+
+    # now we work out the intersection of all corners, using the
+    # intersection list (il)
+    
+    for itl in il.values():
+        if len(itl) < 2:
+            continue
+        #cp = intersection()
+        #for i in itl:
+        #    cp.add(i[1])
+        #v += cp
+        for i in range(len(itl)):
+            cp = intersection()
+            cp.add(itl[i][2])
+            for j in range(len(itl)):
+                if i == j:
+                    continue
+                cp.add(itl[j][1])
+            v += cp
+
+    return v
 
 def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
     rad2 = bwid+rad
@@ -777,9 +919,12 @@ def back_box_base(scl, ht_offset, ht):
     a = union()
     c = hollowbox(scl, bdep, blen, bht, 20.0,
                     curverads={T|L:(20.0, 20.0),
-                               T|R:(15.0, 5.0),
-                               B|L:(30.0, 20.0),
-                               B|R:(25.0, 5.0)
+                               T|R:(25.0, 10.0),
+                               T|F:(20.0, 20.0),
+                               D|F:(30.0, 20.0),
+                               D|L:(30.0, 20.0),
+                               D|R:(25.0, 15.0),
+                               F|L:(25.0, 15.0)
                                })
     a.add(c)
 
