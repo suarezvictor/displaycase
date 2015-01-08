@@ -111,14 +111,14 @@ def cardslot(scl, offs=0, breaks3d=False):
 
 def sdcard(scl, offs=0):
     r = union()
-    r.add(cube(size=[(165-offs)*scl,125*scl,151.3*scl]))
-    t = translate(v=[(275+offs/2.0)*scl, -120*scl, (-100.51)*scl])
+    r.add(cube(size=[125*scl,(165-offs)*scl,151.3*scl]))
+    t = translate(v=[(1725+offs/2.0)*scl, (340+offs/2.0)*scl, (-100.51)*scl])
     t.add(r)
     return t
 
 def power(scl, offs=0, break3d=False):
     r = union()
-    r.add(cube(size=[85*scl,(310-offs)*scl,160.2*scl]))
+    r.add(cube(size=[85*scl,(150-offs)*scl,160.2*scl]))
     if break3d:
         c = cube(size=[85*scl,(190-offs)*scl,160.2*scl])
         c = translate(v=[0*scl, 150*scl, 0]).add(c)
@@ -130,7 +130,7 @@ def power(scl, offs=0, break3d=False):
 def powerbutton(scl):
     r = union()
     r.add(cube(size=[75*scl,52*scl,80.2*scl]))
-    t = translate(v=[1725*scl, 425*scl, (-90.51)*scl])
+    t = translate(v=[1725*scl, 727*scl, (-90.51)*scl])
     t.add(r)
     return t
 
@@ -176,7 +176,7 @@ def powerhole(scl, offs=0):
     r.add(cylinder(r=(30-offs)*scl,h=165.2*scl, segments=50, center=True))
     
     r = rotate([0, 90, 0]).add(r)
-    t = translate(v=[1694.5*scl, (375+offs/2)*scl, (-51)*scl])
+    t = translate(v=[1694.5*scl, (837+offs/2)*scl, (-51)*scl])
     t.add(r)
     return t
 
@@ -443,7 +443,7 @@ def capture(_scl, ioff=0, oof=0, cutout=False):
         t = translate(v=[(w)*_scl, (t_l+134)*_scl, (-32)*_scl]).add(t)
         v.add(t)
 
-    for h in [t_l/2-10, t_l-20]:
+    for h in [t_l*0.54, t_l-20]:
         t = rotate(a=90.0, v=[0,0,1])
         t.add(capture1(_scl, ioff, oof, cutout=cutout))
         t = translate(v=[(t_w+25)*_scl, h*_scl, (-32)*_scl]).add(t)
@@ -487,8 +487,8 @@ def clips(_scl, wd, dp=2, offs=0, doffs=0, ht=60, z=0, dcut=0, flat=False):
                 (-160, t_l*0.41, 3),
                 (-160, t_l*0.16, 3),
                 (t_w+14, t_l*0.92, 1),
-                (t_w+14, t_l*0.59, 1),
-                (t_w+14, t_l*0.72, 1),
+                (t_w+14, t_l*0.650, 1),
+                #(t_w+14, t_l*0.72, 1),
                     ]
         lst += [(t_w*0.38, -49, 0),
                 (t_w*0.28, -49, 0),
@@ -603,7 +603,7 @@ def clip(_scl, w, dp, ht, rot, offs=0, doffs=0, dcut=0, flat=False):
 
 def create_tablet(t, _scl, mirror, colour, part):
 
-    if part != 2:
+    if part != 0:
         return
     scl = [-_scl*mirror, _scl, _scl]
 
@@ -647,7 +647,8 @@ def create_tablet(t, _scl, mirror, colour, part):
         else:
             top_ht=10.0
         # touchpanel capture layer
-        ts=touch_surround(_scl, top_ht+1, 50, tb_inset, holes=laminates)
+        ts=touch_surround(_scl, top_ht+1, 50, tb_inset, holes=laminates,
+                            shear=0, innershear=-7)
         td = translate(v=[0,0,(top_ht)*_scl])
         td.add(ts)
         b.add(td)
