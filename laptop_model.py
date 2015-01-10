@@ -155,9 +155,7 @@ def hollowbox(scl, w, d, h, thick=0.0, curverads=None):
         c = translate(v=[thick.get(L, 0.0)*scl,
                          thick.get(B, 0.0)*scl, 
                          thick.get(T, 0.0)*scl]).add(c)
-        #t = translate(v=[0*scl,0*scl,-200*scl]).add(c)
         v -= c
-        #for k in [T, B, L, R, F, D]:
 
     il = {T|L|F:[], T|R|F:[], D|L|F:[], D|R|F:[],
           T|L|B:[], T|R|B:[], D|L|B:[], D|R|B:[]}
@@ -180,9 +178,9 @@ def hollowbox(scl, w, d, h, thick=0.0, curverads=None):
             s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
         else:
             s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
+        tx = -1.0 if xaxis or (spec & L) else (w+1-r12)
         ty = -1.0 if yaxis or (spec & B) else (d+1-r12)
         tz = -1.0 if zaxis or not (spec & D) else (h+1-r12)
-        tx = -1.0 if xaxis or (spec & L) else (w+1-r12)
         s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
 
         su.append(s)
@@ -870,7 +868,7 @@ def back_box_base(scl, ht_offset, ht):
                                #F|L:(25.0, 15.0),
                                #F|R:(25.0, 15.0),
                                #B|L:(25.0, 15.0),
-                               #B|R:(25.0, 15.0)
+                               B|R:(bwid, bwid),
                                })
     a.add(c)
 
