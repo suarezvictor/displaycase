@@ -101,6 +101,17 @@ D=0x4
 F=0x8
 B=0x10
 
+def box_edge_xform(scl, r, spec, w, h, d, r12):
+    r = rotate([0, -90, 90]).add(r)
+    rangy = {T|B: 90, D|B: 180, D|F: -90, T|F: 0}
+    r = rotate([0, rangy[spec], 90]).add(r)
+    tx = w
+    ty = r12 if (spec & B) else (d-r12)
+    tz = (h-r12) if (spec & D) else r12
+    t = translate(v=[tx*scl, ty*scl, tz*scl])
+    t.add(r)
+    return t
+
 def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
     """ note: in 3-corner mode, make sure that the radii of the
         edge curves are the same, esp. on the outside.
@@ -120,93 +131,29 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
           T|L|B:[], T|R|B:[], D|L|B:[], D|R|B:[]}
     a = []
     su = []
-    rad1, rad2 = curverads.get(T|B, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
+    #for spec in [T|B, D|B]:
+    for spec in [T|B, D|B, D|F, T|F]:
+        rad1, rad2 = curverads.get(spec, (0.0, 0.0))
+        r12 = rad1+rad2
+        if rad1 == 0.0:
+            continue
         s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (-1)*scl, (-1)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, w, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 90, 90]).add(r)
-        t = translate(v=[(w)*scl, (r12)*scl, (r12)*scl])
-        t.add(r)
-        a.append(t)
-        r1 = union()
-        r1 = touch_arc(0, w, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 90, 90]).add(r1)
-        t1 = translate(v=[(w)*scl, (r12)*scl, (r12)*scl])
-        t1.add(r1)
-        il[T|L|B].append((su, t, t1))
-        il[T|R|B].append((su, t, t1))
+        tx = -1.0
+        ty = -1 if (spec & B) else (d+1-r12)
+        tz = (h+1-r12) if (spec & D) else -1.0
+        s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
 
-    rad1, rad2 = curverads.get(D|B, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (-1)*scl, (h+1-r12)*scl]).add(s)
         su.append(s)
         r = union()
         r = touch_arc(rad2, w, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 180, 90]).add(r)
-        t = translate(v=[(w)*scl, (r12)*scl, (h-r12)*scl])
-        t.add(r)
+        t = box_edge_xform(scl, r, spec, w, h, d, r12)
         a.append(t)
         r1 = union()
         r1 = touch_arc(0, w, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 180, 90]).add(r1)
-        t1 = translate(v=[(w)*scl, (r12)*scl, (h-r12)*scl])
-        t1.add(r1)
-        il[D|L|B].append((su, t, t1))
-        il[D|R|B].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(D|F, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (d+1-r12)*scl, (h+1-r12)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, w, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, -90, 90]).add(r)
-        t = translate(v=[(w)*scl, (d-r12)*scl, (h-r12)*scl])
-        t.add(r)
-        a.append(t)
-        r1 = union()
-        r1 = touch_arc(0, w, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, -90, 90]).add(r1)
-        t1 = translate(v=[(w)*scl, (d-r12)*scl, (h-r12)*scl])
-        t1.add(r1)
-        il[D|L|F].append((su, t, t1))
-        il[D|R|F].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(T|F, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (d+1-r12)*scl, (-1)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, w, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 0, 90]).add(r)
-        t = translate(v=[(w)*scl, (d-r12)*scl, (r12)*scl])
-        t.add(r)
-        a.append(t)
-        r1 = union()
-        r1 = touch_arc(0, w, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 0, 90]).add(r1)
-        t1 = translate(v=[(w)*scl, (d-r12)*scl, (r12)*scl])
-        t1.add(r1)
-        il[T|L|F].append((su, t, t1))
-        il[T|R|F].append((su, t, t1))
+        t1 = box_edge_xform(scl, r1, spec, w, h, d, r12)
+        for k in il.keys():
+            if spec & k == spec:
+                il[k].append((su, t, t1))
 
     rad1, rad2 = curverads.get(T|L, (0.0, 0.0))
     r12 = rad1+rad2
@@ -1441,6 +1388,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(e)
 
     if part == 8:
+        print "back box", scl, lcd_end_ht
         e = back_box_base(scl, lcd_end_ht, 500)
         e = translate(v=[0, (lcd_end_ht+ht+hinge_depth*2+40)*scl,0]).add(e)
         b.add(e)
