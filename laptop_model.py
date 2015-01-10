@@ -366,7 +366,8 @@ def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     a += screen_mid1(scl, ht, hole_ht, nohinge=True, endpart=True)
     return a
 
-def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
+def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True,
+                removemiddle=True):
 
     shear = 0
     innershear = 0
@@ -384,6 +385,19 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True):
     # top and bottom edge
     a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True)
 
+    if removemiddle:
+        # top edge
+        r = union()
+        c = shearedcube(size=[(bwid*3+iro)*scl,
+                            (w-toplen-lcd_inset_top-lcd_inset_bot)*scl,(ht+2)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        c = rotate([0, 90, 90]).add(c)
+        r.add(c)
+        t = translate(v=[(w-lcd_inset_bot-lcd_inset_top)*scl,
+                        (16.5-ht-1)*scl, (-bwid)*scl])
+        t.add(r)
+        a -= t
     # add hinge-end filler over top of screwhole
     r = union()
     c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
@@ -456,68 +470,21 @@ def screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=False):
         to = toplenoffs-40
     else:
         to = toplenoffs
-    # top edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[to*scl, (16.5-ht)*scl, (30-lcd_d)*scl])
-    t.add(r)
-    a.add(t)
+
+    print "box", ht, to, lcd_d+40
+    curverads={
+               D|R:(bwid, 0),
+               L|T:(bwid, bwid),
+               L|D:(bwid, 0),
+               }
     if curvetopback:
-        # add in a curve so that the lid doesn't hit the base
-        # when fully opened
-        inner_rad=18
-        r = union()
-        r = touch_arc(inner_rad, ht, bwid, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        t = translate(v=[(to+5)*scl, (24-ht-7.5)*scl, (55-lcd_d)*scl])
-        t.add(r)
-        a.add(t)
-
-    # bottom edge
-    r = union()
-    c = shearedcube(size=[(bwid+iro)*scl,(toplen+15-rad2)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30+bwid+lcd_gap)*scl])
-    t.add(r)
-    a.add(t)
-
-    # end piece NOTE: height (lcd_d-rad) is not perfect but it's close
-    r = union()
-    c = shearedcube(size=[(lcd_d-rad+rad2+1)*scl,(bwid+5+rad)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[(-lcd_inset_top+65)*scl, (16.5-ht)*scl, (31+rad2)*scl])
-    t.add(r)
-    a.add(t)
-
-    # top end curve
-    inner_rad=rad
-    r = union()
-    r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
-    r = rotate([180, -90, 90]).add(r)
-    t = translate(v=[+(-lcd_inset_top+63-lcd_gap)*scl,
-                        (9+7.5)*scl, (30-lcd_d+rad)*scl])
-    t.add(r)
-    a.add(t)
-
-    # bottom end curve
-    inner_rad=rad2
-    r = union()
-    r = touch_arc(inner_rad, ht, bwid, inner_rad, scl)
-    r = rotate([180, 90, 90]).add(r)
-    t = translate(v=[+(-lcd_inset_top+50-lcd_gap)*scl,
-                        (-ht+24-7.5)*scl, (33-inner_rad)*scl])
-    t.add(r)
-    a.add(t)
+        curverads[T|R] = (bwid+lcd_gap, bwid)
+    c = hollowbox(scl, to+40, ht, lcd_d+35+lcd_gap*2,
+                    {T:bwid+lcd_gap, B: -1,
+                    L:80, R:bwid+lcd_gap, F:-1, D:bwid+lcd_gap},
+                    curverads=curverads)
+    c = translate(v=[(0)*scl, (16.5-ht)*scl, (15-lcd_d-lcd_gap)*scl]).add(c)
+    a.add(c)
 
     return a
 
@@ -536,6 +503,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
     if endpart:
         toplen = 120 if test else 200
         toplenoffs = (toplen-131+165)
+
     else:
         toplen = w+lcd_gap*2
         toplenoffs = (-lcd_inset_top+w+65)
@@ -856,7 +824,7 @@ def back_box_base(scl, ht_offset, ht):
     blen = ht
     a = union()
     c = hollowbox(scl, bdep, blen, bht,
-                    {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
+                    {T:-1, B: bwid, L:-25.0, R:bwid, F:-1, D:bwid},
                     curverads={#T|L:(20.0, 20.0),
                                #T|R:(25.0, 10.0),
                                #T|F:(20.0, 20.0),
@@ -1235,7 +1203,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part > 3:
     #if part > 6:
     #    return
-    if part != 8 and part != 6:
+    #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
+    if part != 4:
         return
 
     c = color(colour)
@@ -1265,8 +1234,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 8:
         print "back box", scl, lcd_end_ht
-        e = back_box_base(scl, lcd_end_ht, 500)
-        e = translate(v=[0, (lcd_end_ht+ht+hinge_depth*2+40)*scl,0]).add(e)
+        offs = (lcd_end_ht+ht+hinge_depth*2+40)
+        wid = lcd_l/2-offs-50
+        e = back_box_base(scl, lcd_end_ht, wid)
+        e = translate(v=[0, offs*scl,0]).add(e)
         b.add(e)
 
     if part == 2:
@@ -1316,7 +1287,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [110]
 
     for i in range(rpt):
         for angle in angles:
@@ -1334,7 +1305,7 @@ if __name__ == '__main__':
                 t.add(p)
                 # ethernet, amphenol RJCSE-538X-01
                 eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
-                p = translate(v=[(lcd_w+190)*scl,400*scl,(5+13)*scl]).add(eth)
+                p = translate(v=[(lcd_w+190)*scl,440*scl,(5+13)*scl]).add(eth)
                 t.add(p)
 
             if False:
