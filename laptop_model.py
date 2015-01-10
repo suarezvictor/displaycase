@@ -134,20 +134,30 @@ def box_edge_xform3(scl, r, spec, w, h, d, r12):
     t.add(r)
     return t
 
-def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
+def hollowbox(scl, w, d, h, thick=0.0, curverads=None):
     """ note: in 3-corner mode, make sure that the radii of the
         edge curves are the same, esp. on the outside.
     """
     if curverads is None:
         curverads = {}
-    if opensides is None:
-        opensides = set()
     if isinstance(thick, float):
         thick = {L:thick, R:thick, T:thick, D:thick,
                  F:thick, B:thick}
     v = union()
     c = cube([w*scl, d*scl, h*scl])
     v.add(c)
+
+    if thick.values() != [0.0] * 6:
+        w1 = w - thick.get(L, 0.0) - thick.get(R, 0.0)
+        d1 = d - thick.get(F, 0.0) - thick.get(B, 0.0)
+        h1 = h - thick.get(T, 0.0) - thick.get(D, 0.0)
+        c = cube([w1*scl, d1*scl, h1*scl])
+        c = translate(v=[thick.get(L, 0.0)*scl,
+                         thick.get(B, 0.0)*scl, 
+                         thick.get(T, 0.0)*scl]).add(c)
+        #t = translate(v=[0*scl,0*scl,-200*scl]).add(c)
+        v -= c
+        #for k in [T, B, L, R, F, D]:
 
     il = {T|L|F:[], T|R|F:[], D|L|F:[], D|R|F:[],
           T|L|B:[], T|R|B:[], D|L|B:[], D|R|B:[]}
@@ -847,19 +857,20 @@ def back_box_base(scl, ht_offset, ht):
     bht = boxheight+bwid*2
     blen = ht
     a = union()
-    c = hollowbox(scl, bdep, blen, bht, 20.0,
-                    curverads={T|L:(20.0, 20.0),
-                               T|R:(25.0, 10.0),
-                               T|F:(20.0, 20.0),
-                               T|B:(20.0, 20.0),
-                               D|F:(30.0, 20.0),
-                               D|B:(30.0, 20.0),
-                               D|L:(30.0, 20.0),
-                               D|R:(25.0, 15.0),
-                               F|L:(25.0, 15.0),
-                               F|R:(25.0, 15.0),
-                               B|L:(25.0, 15.0),
-                               B|R:(25.0, 15.0)
+    c = hollowbox(scl, bdep, blen, bht,
+                    {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
+                    curverads={#T|L:(20.0, 20.0),
+                               #T|R:(25.0, 10.0),
+                               #T|F:(20.0, 20.0),
+                               #T|B:(20.0, 20.0),
+                               #D|F:(30.0, 20.0),
+                               #D|B:(40.0, 0.0),
+                               #D|L:(30.0, 20.0),
+                               D|R:(bwid, bwid),
+                               #F|L:(25.0, 15.0),
+                               #F|R:(25.0, 15.0),
+                               #B|L:(25.0, 15.0),
+                               #B|R:(25.0, 15.0)
                                })
     a.add(c)
 
@@ -1226,7 +1237,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part > 3:
     #if part > 6:
     #    return
-    if part != 8:
+    if part != 8 and part != 6:
         return
 
     c = color(colour)
