@@ -94,12 +94,12 @@ def shearedcube(size, center=False, shear=None, innershear=None):
                 points[i*2+4][j] += innershear[j]
     return polyhedron(points, faces)
 
-L=0x0
-R=0x1
-T=0x2
-D=0x4
-F=0x8
-B=0x10
+L=0x1
+R=0x2
+T=0x4
+D=0x8
+F=0x10
+B=0x20
 
 def box_edge_xform(scl, r, spec, w, h, d, r12):
     r = rotate([0, -90, 90]).add(r)
@@ -107,6 +107,17 @@ def box_edge_xform(scl, r, spec, w, h, d, r12):
     r = rotate([0, rangy[spec], 90]).add(r)
     tx = w
     ty = r12 if (spec & B) else (d-r12)
+    tz = (h-r12) if (spec & D) else r12
+    t = translate(v=[tx*scl, ty*scl, tz*scl])
+    t.add(r)
+    return t
+
+def box_edge_xform2(scl, r, spec, w, h, d, r12):
+    r = rotate([0, -90, 90]).add(r)
+    rangy = {T|L: 90, D|L: 180, D|R: -90, T|R: 0}
+    r = rotate([0, rangy[spec], 0]).add(r)
+    tx = r12 if (spec & L) else (w-r12)
+    ty = 0
     tz = (h-r12) if (spec & D) else r12
     t = translate(v=[tx*scl, ty*scl, tz*scl])
     t.add(r)
@@ -131,143 +142,69 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
           T|L|B:[], T|R|B:[], D|L|B:[], D|R|B:[]}
     a = []
     su = []
-    #for spec in [T|B, D|B]:
-    for spec in [T|B, D|B, D|F, T|F]:
+    for spec in [T|B, D|B, D|F, T|F,
+                 T|L, T|R, D|L, D|R,
+                 F|L]:
         rad1, rad2 = curverads.get(spec, (0.0, 0.0))
         r12 = rad1+rad2
         if rad1 == 0.0:
             continue
-        s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-        tx = -1.0
-        ty = -1 if (spec & B) else (d+1-r12)
-        tz = (h+1-r12) if (spec & D) else -1.0
-        s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
+        print hex(spec), hex(~spec), hex(R|L), hex((~spec) & (R|L))
+        xaxis = spec in [T|B, D|B, D|F, T|F]
+        yaxis = spec in [T|L, T|R, D|L, D|R]
+        if xaxis:
+            s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
+            tx = -1.0
+            ty = -1 if (spec & B) else (d+1-r12)
+            tz = (h+1-r12) if (spec & D) else -1.0
+            s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
+        elif yaxis:
+            s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
+            tx = -1 if (spec & L) else (w+1-r12)
+            ty = -1.0
+            tz = (h+1-r12) if (spec & D) else -1.0
+            s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
+        else:
+            s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
+            if spec & F|L:
+                s = translate(v=[(-1)*scl, (d+1-r12)*scl, (-1)*scl]).add(s)
 
         su.append(s)
         r = union()
-        r = touch_arc(rad2, w, rad1, 0, scl)
-        t = box_edge_xform(scl, r, spec, w, h, d, r12)
+        if xaxis:
+            r = touch_arc(rad2, w, rad1, 0, scl)
+            t = box_edge_xform(scl, r, spec, w, h, d, r12)
+        elif yaxis:
+            r = touch_arc(rad2, d, rad1, 0, scl)
+            t = box_edge_xform2(scl, r, spec, w, h, d, r12)
+        else:
+            r = touch_arc(rad2, h, rad1, 0, scl)
+            r = rotate([0, -90, 90]).add(r)
+            if spec & F|L:
+                r = rotate([-90, 0, 180]).add(r)
+                t = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
+            t.add(r)
+
         a.append(t)
         r1 = union()
-        r1 = touch_arc(0, w, r12, 0, scl)
-        t1 = box_edge_xform(scl, r1, spec, w, h, d, r12)
+        if xaxis:
+            r1 = touch_arc(0, w, r12, 0, scl)
+            t1 = box_edge_xform(scl, r1, spec, w, h, d, r12)
+        elif yaxis:
+            r1 = touch_arc(0, d, r12, 0, scl)
+            t1 = box_edge_xform2(scl, r1, spec, w, h, d, r12)
+        else:
+            r1 = touch_arc(0, h, r12, 0, scl)
+            r1 = rotate([0, -90, 90]).add(r1)
+            if spec & F|L:
+                r1 = rotate([-90, 0, 180]).add(r1)
+                t1 = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
+            t1.add(r1)
         for k in il.keys():
             if spec & k == spec:
                 il[k].append((su, t, t1))
 
-    rad1, rad2 = curverads.get(T|L, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (-1)*scl, (-1)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, d, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 90, 0]).add(r)
-        t = translate(v=[(r12)*scl, (0)*scl, (r12)*scl])
-        t.add(r)
-        r1 = union()
-        r1 = touch_arc(0, d, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 90, 0]).add(r1)
-        t1 = translate(v=[(r12)*scl, (0)*scl, (r12)*scl])
-        t1.add(r1)
-        a.append(t)
-        il[T|L|F].append((su, t, t1))
-        il[T|L|B].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(T|R, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
-        s = translate(v=[(w+1-r12)*scl, (-1)*scl, (-1)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, d, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 00, 0]).add(r)
-        t = translate(v=[(w-r12)*scl, (0)*scl, (r12)*scl])
-        t.add(r)
-        r1 = union()
-        r1 = touch_arc(0, d, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 00, 0]).add(r1)
-        t1 = translate(v=[(w-r12)*scl, (0)*scl, (r12)*scl])
-        t1.add(r1)
-        a.append(t)
-        il[T|R|F].append((su, t, t1))
-        il[T|R|B].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(D|L, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
-        s = translate(v=[(-1)*scl, (-1)*scl, (h+1-r12)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, d, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, 180, 0]).add(r)
-        t = translate(v=[(r12)*scl, (0)*scl, (h-r12)*scl])
-        t.add(r)
-        r1 = union()
-        r1 = touch_arc(0, d, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, 180, 0]).add(r1)
-        t1 = translate(v=[(r12)*scl, (0)*scl, (h-r12)*scl])
-        t1.add(r1)
-        a.append(t)
-        il[D|L|F].append((su, t, t1))
-        il[D|L|B].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(D|R, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
-        s = translate(v=[(w+1-r12)*scl, (-1)*scl,
-                            (h+1-r12)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, d, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([0, -90, 0]).add(r)
-        t = translate(v=[(w-r12)*scl, (0)*scl, (h-r12)*scl])
-        t.add(r)
-        r1 = union()
-        r1 = touch_arc(0, d, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([0, -90, 0]).add(r1)
-        t1 = translate(v=[(w-r12)*scl, (0)*scl, (h-r12)*scl])
-        t1.add(r1)
-        a.append(t)
-        il[D|R|F].append((su, t, t1))
-        il[D|R|B].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(F|L, (0.0, 0.0))
-    r12 = rad1+rad2
-    if rad1 != 0.0:
-        s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
-        s = translate(v=[(-1)*scl, (d+1-r12)*scl,
-                            (-1)*scl]).add(s)
-        su.append(s)
-        r = union()
-        r = touch_arc(rad2, h, rad1, 0, scl)
-        r = rotate([0, -90, 90]).add(r)
-        r = rotate([-90, 0, 180]).add(r)
-        t = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
-        t.add(r)
-        r1 = union()
-        r1 = touch_arc(0, h, r12, 0, scl)
-        r1 = rotate([0, -90, 90]).add(r1)
-        r1 = rotate([-90, 0, 180]).add(r1)
-        t1 = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
-        t1.add(r1)
-        a.append(t)
-        il[T|L|F].append((su, t, t1))
-        il[D|L|F].append((su, t, t1))
-
-    rad1, rad2 = curverads.get(F|L, (0.0, 0.0))
+    rad1, rad2 = curverads.get(B|L, (0.0, 0.0))
     r12 = rad1+rad2
     if rad1 != 0.0:
         s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
