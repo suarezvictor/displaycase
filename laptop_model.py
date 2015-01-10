@@ -123,6 +123,17 @@ def box_edge_xform2(scl, r, spec, w, h, d, r12):
     t.add(r)
     return t
 
+def box_edge_xform3(scl, r, spec, w, h, d, r12):
+    r = rotate([0, -90, 90]).add(r)
+    rangz = {F|R: 90, F|L: 180, B|L: -90, B|R: 0}
+    r = rotate([-90, 0, rangz[spec]]).add(r)
+    tx = r12 if (spec & L) else (w-r12)
+    ty = (d-r12) if (spec & F) else r12
+    tz = h
+    t = translate(v=[tx*scl, ty*scl, tz*scl])
+    t.add(r)
+    return t
+
 def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
     """ note: in 3-corner mode, make sure that the radii of the
         edge curves are the same, esp. on the outside.
@@ -152,24 +163,17 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
         print hex(spec), hex(~spec), hex(R|L), hex((~spec) & (R|L))
         xaxis = spec in [T|B, D|B, D|F, T|F]
         yaxis = spec in [T|L, T|R, D|L, D|R]
+        zaxis = spec in [F|L, B|L, F|R, B|R]
         if xaxis:
             s = cube([(w+2)*scl, (r12+1)*scl, (r12+1)*scl])
-            tx = -1.0
-            ty = -1 if (spec & B) else (d+1-r12)
-            tz = (h+1-r12) if (spec & D) else -1.0
-            s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
         elif yaxis:
             s = cube([(r12+1)*scl, (d+2)*scl, (r12+1)*scl])
-            tx = -1 if (spec & L) else (w+1-r12)
-            ty = -1.0
-            tz = (h+1-r12) if (spec & D) else -1.0
-            s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
         else:
             s = cube([(r12+1)*scl, (r12+1)*scl, (h+2)*scl])
-            tx = -1 if (spec & L) else (w+1-r12)
-            ty = -1 if (spec & B) else (d+1-r12)
-            tz = -1.0
-            s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
+        ty = -1.0 if yaxis or (spec & B) else (d+1-r12)
+        tz = -1.0 if zaxis or not (spec & D) else (h+1-r12)
+        tx = -1.0 if xaxis or (spec & L) else (w+1-r12)
+        s = translate(v=[tx*scl, ty*scl, tz*scl]).add(s)
 
         su.append(s)
         r = union()
@@ -181,20 +185,7 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
             t = box_edge_xform2(scl, r, spec, w, h, d, r12)
         else:
             r = touch_arc(rad2, h, rad1, 0, scl)
-            r = rotate([0, -90, 90]).add(r)
-            if spec == F|L:
-                r = rotate([-90, 0, 180]).add(r)
-                t = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
-            if spec == B|L:
-                r = rotate([-90, 0, -90]).add(r)
-                t = translate(v=[(r12)*scl, (r12)*scl, (h)*scl])
-            if spec == F|R:
-                r = rotate([-90, 0, 90]).add(r)
-                t = translate(v=[(w-r12)*scl, (d-r12)*scl, (h)*scl])
-            if spec == B|R:
-                r = rotate([-90, 0, 0]).add(r)
-                t = translate(v=[(w-r12)*scl, (r12)*scl, (h)*scl])
-            t.add(r)
+            t = box_edge_xform3(scl, r, spec, w, h, d, r12)
 
         a.append(t)
         r1 = union()
@@ -206,20 +197,8 @@ def hollowbox(scl, w, d, h, thick, curverads=None, opensides=None):
             t1 = box_edge_xform2(scl, r1, spec, w, h, d, r12)
         else:
             r1 = touch_arc(0, h, r12, 0, scl)
-            r1 = rotate([0, -90, 90]).add(r1)
-            if spec == F|L:
-                r1 = rotate([-90, 0, 180]).add(r1)
-                t1 = translate(v=[(r12)*scl, (d-r12)*scl, (h)*scl])
-            if spec == B|L:
-                r1 = rotate([-90, 0, -90]).add(r1)
-                t1 = translate(v=[(r12)*scl, (r12)*scl, (h)*scl])
-            if spec == F|R:
-                r1 = rotate([-90, 0, 90]).add(r1)
-                t1 = translate(v=[(w-r12)*scl, (d-r12)*scl, (h)*scl])
-            if spec == B|R:
-                r1 = rotate([-90, 0, 0]).add(r1)
-                t1 = translate(v=[(w-r12)*scl, (r12)*scl, (h)*scl])
-            t1.add(r1)
+            t1 = box_edge_xform3(scl, r1, spec, w, h, d, r12)
+
         for k in il.keys():
             if spec & k == spec:
                 il[k].append((su, t, t1))
