@@ -802,24 +802,29 @@ def back_box_base(scl, ht_offset, ht):
                                })
     c = translate(v=[(-80)*scl, 0, (lcd_d-32+bwid*3)*scl]).add(c)
     a.add(c)
+    c = cube([(bwid+1)*scl, (blen+2)*scl, (boxheight+1)*scl])
+    c = translate(v=[(-80.5)*scl, -1*scl, (lcd_d-33+bwid*2)*scl]).add(c)
+    a -= c
 
     a = translate(v=[(lcd_w+35)*scl, 0, 0]).add(a)
 
-    hwid = 25.0
-    r = union()
-    c = cylinder(r=29*scl, h=(hwid)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    dp = 0
-    c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
-    c = translate(v=[(0)*scl, (hwid/2)*scl, (dp/2)*scl]).add(c)
-    r.add(c)
-    t = case_bolthole(scl, end=2).add(r)
-    t = translate(v=[(0)*scl, (3)*scl, (boxheight)*scl]).add(t)
-    a += t
+    holes = [1, 2]
+    for hole in holes:
+        hwid = 25.0
+        r = union()
+        c = cylinder(r=29*scl, h=(hwid)*scl, segments=50)
+        c = rotate([0, 90, 90]).add(c)
+        r.add(c)
+        dp = 0
+        c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
+        c = translate(v=[(0)*scl, (hwid/2)*scl, (dp/2)*scl]).add(c)
+        r.add(c)
+        t = case_bolthole(scl, end=hole).add(r)
+        t = translate(v=[(0)*scl, (3)*scl, (boxheight)*scl]).add(t)
+        a += t
 
     # screw holes in box
-    t = box_screwholes(scl, edge_inset, holes=[2])
+    t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
 
