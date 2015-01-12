@@ -328,8 +328,8 @@ def case_bolthole(scl, end):
     elif end == 1:
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
-        return translate([(lcd_w+lcd_inset_bot-55)*scl, 0*scl,
-                            bht*scl])
+        return translate([(lcd_w+lcd_inset_bot-95)*scl, 0*scl,
+                            (-lcd_d+129+boxtopoffs-boxheight)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2+30)*scl, 0*scl, bht*scl])
 
@@ -446,8 +446,7 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
     return a
 
 def screen_frontedge(scl, ht, toplen, toplenoffs, 
-                            curvefront=True, curvetopback=False,
-                            closeend=False):
+                            curvefront=True, curvetopback=False):
     shear = 0
     innershear = 0
     edge_inset = bwid
@@ -466,11 +465,6 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
     curverads={
                D|R:(bwid, 0),
                }
-    thicks = {T:bwid, B: -1, L:80, R:bwid+lcd_gap, F:-1, D:bwid}
-    if closeend:
-        thicks[B] = bwid
-        curverads[B|T] = (bwid, 0)
-        curverads[B|D] = (bwid, 0)
     if curvefront:
         curverads[L|T] = (bwid, bwid)
         curverads[L|D] = (bwid, 0)
@@ -480,15 +474,16 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
         offs = lcd_w
     if curvetopback:
         curverads[T|R] = (bwid+lcd_gap, bwid*2)
-    c = hollowbox(scl, to+35, ht, lcd_d+35+lcd_gap*2, thicks,
+    c = hollowbox(scl, to+35, ht, lcd_d+35+lcd_gap*2,
+                    {T:bwid, B: -1,
+                    L:80, R:bwid+lcd_gap, F:-1, D:bwid},
                     curverads=curverads)
     c = translate(v=[(offs)*scl, (16.5-ht)*scl, (12-lcd_d-lcd_gap)*scl]).add(c)
     a.add(c)
 
     return a
 
-def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
-                                  closeend=False):
+def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
 
     shear = 0
     innershear = 0
@@ -509,8 +504,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         toplenoffs = (-lcd_inset_top+w+65)
 
     # top and bottom edge
-    a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True,
-                                                       closeend=closeend)
+    a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True)
 
     if not endpart:
         a.add(lid_bottom_boltholder(scl, lcd_gap, ht, iro))
@@ -606,16 +600,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                         (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
     a -= t
 
-    if closeend:
-        # hinge
-        r = union()
-        r = cylinder(r=(lcd_outer_rad)*scl, h=(bwid+0.1)*scl,
-                            segments=50, center=True)
-        r = rotate([180, 90, 90]).add(r)
-        t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (-ht+bwid/2+14)*scl, 0]).add(t)
-        a += t
-
     # screw holes through lid
     a -= lid_screwholes(scl, edge_inset)
 
@@ -668,13 +652,38 @@ def screen_end(scl, ht=60):
 
     a = union()
 
+    toplen = w+lcd_gap*2
+    toplenoffs = (-lcd_inset_top+w+65)
+    a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True)
+
+    # middle filler
+    r = union()
+    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(w+lcd_gap*2)*scl,ht*scl],
+                shear=[-shear*scl, 0, 0],
+                innershear=[-innershear*scl, 0, 0])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl,
+                        (30+lcd_gap)*scl])
+    t.add(r)
+    a.add(t)
+
+    # hinge
+    r = union()
+    r = cylinder(r=(lcd_outer_rad)*scl, h=(ht+0.1)*scl,
+                        segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
+    a.add(t)
+
     if pin_parts_3d:
         c = union()
         h = cube([25*scl, 10*scl, (500)*scl])
         h = translate([-50*scl, (16.5-ht)*scl, -200*scl]).add(h)
         c += h
         h = cube([25*scl, 10*scl, (500)*scl])
-        h = translate([50*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = translate([40*scl, (16.5-ht)*scl, -200*scl]).add(h)
         c += h
         h = cube([25*scl, 10*scl, (500)*scl])
         h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -200*scl]).add(h)
@@ -694,10 +703,27 @@ def screen_end(scl, ht=60):
         h = cube([(20+100)*scl, 10*scl, (25)*scl])
         h = translate([(boxlength+30)*scl, (16.5-ht)*scl, 50*scl]).add(h)
         c += h
-        h = cube([(55)*scl, 10*scl, (25)*scl])
-        h = translate([(-40)*scl, (16.5-ht)*scl, 8*scl]).add(h)
+        h = cube([(20+100)*scl, 10*scl, (25)*scl])
+        h = translate([(-40)*scl, (16.5-ht)*scl, -5*scl]).add(h)
         c += h
         a.add(c)
+
+    # hinge hole
+    r = union()
+    r = cylinder(r=15*scl, h=(ht+0.3)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl,
+                        (-ht/2+16.5)*scl,
+                        (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
+    a -= t
+
+    a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
+    p = lcd_panel(scl, offs=3)
+    p = translate(v=[155.5*scl,61*scl,0]).add(p)
+    a -= p
+
+    # screw holes through lid
+    a -= lid_screwholes(scl, edge_inset)
 
     return a
 
@@ -788,19 +814,22 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     return a
 
 def back_box_base(scl, ht_offset, ht):
-    bdep = 360
+    bdep = 310
+    ethdep = 160
     edge_inset = bwid
-    bht = boxheight+bwid*3
+    bht = boxheight+bwid*2
     blen = ht
     a = union()
-    c = hollowbox(scl, bdep, blen, bht,
-                    {T:-1, B: bwid, L:bwid, R:bwid, F:-1, D:bwid},
+    c = hollowbox(scl, ethdep, blen, bht,
+                    {T:-1, B: bwid, L:-25.0, R:bwid, F:-1, D:bwid},
                     curverads={ D|R:(bwid, 0),
-                               B|R:(70, 0),
-                               D|L:(bwid, 0),
-                               F|D:(bwid, 0),
+                               B|R:(80, 0),
                                })
-    c = translate(v=[(-80)*scl, 0, (lcd_d-32+bwid*3)*scl]).add(c)
+    c = translate(v=[(bdep-ethdep)*scl, 0, (lcd_d-32)*scl]).add(c)
+    a.add(c)
+    c = hollowbox(scl, bdep-ethdep+1, blen, boxheight,
+                    {T:-1, B: bwid, L:-25.0, R:-1, F:-1, D:bwid})
+    c = translate(v=[0, 0, (lcd_d-32+bwid*2)*scl]).add(c)
     a.add(c)
 
     a = translate(v=[(lcd_w+35)*scl, 0, 0]).add(a)
@@ -887,17 +916,17 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     a += box
 
     # cutout for base top "hook" with screw-hole in it
-    a -= box_hook_cutout(scl, ht+40, inner=True)
+    a -= box_hook_cutout(scl, hinge_depth, inner=True)
 
-    holes = [0, 1, 2] if test else [0, 1, 2, 3]
+    holes = [0, 2] if test else [0, 1, 3]
     # screw support at both ends
     for end in holes:
         r = union()
-        c = cylinder(r=29*scl, h=(boxdepth)*scl, segments=50)
+        c = cylinder(r=29*scl, h=(boxdepth+18.5-20)*scl, segments=50)
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
-        t = translate(v=[(0)*scl, (-boxdepth/2-8)*scl,
+        t = translate(v=[(0)*scl, (-hinge_depth/2+3+20)*scl,
                         (boxheight)*scl]).add(t)
         a += t
 
@@ -1018,6 +1047,8 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         l = [(0, 36), (1, -46), (2, 36), (3, -46), (3, 36)]
     for (end, offs) in l:
         doffs = boxheight-45
+        if end == 2:
+            doffs += 20
         b = cube([10*scl, (boxdepth-63.5)*scl, (60)*scl])
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(offs)*scl, (-boxdepth/2+105)*scl, doffs*scl]).add(t)
@@ -1035,9 +1066,16 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     # screw support at both ends
     for end in range(3 if test else 4):
         if end != 0:
-            bht = 80
-            b = cube([(29.1*2+bwid*2)*scl, 70*scl, 60*scl])
-            b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
+            if end == 2:
+                bht = 29.1*2
+            else:
+                bht = 80
+            if end == 2:
+                b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
+                b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
+            else:
+                b = cube([(29.1*2+bwid*2)*scl, 70*scl, 60*scl])
+                b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
             t = case_bolthole(scl, end=end).add(b)
             t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl,
                         (boxheight-bwid)*scl]).add(t)
@@ -1206,13 +1244,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
-    #if part != 7 and part != 1:
+    #if part == -1:
     #if part > 3:
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
     if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
-        part != 0.1 and part != -4:
+        part != 0 and part != 4:
         return
 
     c = color(colour)
@@ -1222,9 +1260,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 0:
         b.add(screen_end(scl, lcd_end_ht))
-        m = screen_mid1(scl, hinge_depth+lcd_end_ht, hole_depth+lcd_end_ht,
-                        closeend=True)
-        #m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
+        m = screen_mid1(scl, hinge_depth, hole_depth)
+        m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
         b.add(m)
         #ht2 += lcd_end_ht
 
@@ -1236,13 +1273,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 7:
         b.add(lid_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
 
-    base_end_ht = 30
     if part == 6:
-        e = base_end2(scl, lcd_end_ht, ht, base_end_ht, hole_depth)
+        e = base_end2(scl, lcd_end_ht, ht, hinge_depth, hole_depth)
         e = translate(v=[0, (lcd_end_ht+ht+hinge_depth)*scl,0]).add(e)
         b.add(e)
 
-    offs = (lcd_end_ht+ht+hinge_depth+base_end_ht+40)
+    offs = (lcd_end_ht+ht+hinge_depth*2+40)
     wid = lcd_l/2-offs-50
     if part == 8:
         e = back_box_base(scl, lcd_end_ht, wid)
@@ -1301,7 +1337,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [130]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
@@ -1319,13 +1355,13 @@ if __name__ == '__main__':
                 t.add(p)
                 # ethernet, amphenol RJCSE-538X-01
                 eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
-                p = translate(v=[(lcd_w+160)*scl,380*scl,(30+43)*scl]).add(eth)
+                p = translate(v=[(lcd_w+190)*scl,440*scl,(5+13)*scl]).add(eth)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
-                r = translate([(lcd_w+350)*scl, 1200*scl, 115*scl]).add(r)
+                r = translate([(lcd_w+350)*scl, 1200*scl, 135*scl]).add(r)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog.scad")
