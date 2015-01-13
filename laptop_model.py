@@ -735,20 +735,13 @@ def screen_end(scl, ht=60):
 
     return a
 
-def box_hook_cutout(scl, hinge_depth, inner=False):
+def box_hook_cutout(scl, hinge_depth):
     a = union()
-    if not inner:
-        b = cube([29.1*2*scl, 90*scl, 70*scl])
-        b = translate([-29.1*scl, -10*scl, -30*scl]).add(b)
-        t = case_bolthole(scl, end=0).add(b)
-        t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl,
-                      (boxheight)*scl]).add(t)
-        a += t
-    b = cube([29.1*scl, 400*scl, 30*scl])
-    b = translate([-29.1*1*scl, -10*scl, 1*scl]).add(b)
+    b = cube([29.1*2*scl, 90*scl, 70*scl])
+    b = translate([-29.1*scl, -10*scl, -30*scl]).add(b)
     t = case_bolthole(scl, end=0).add(b)
-    t = translate(v=[(lcd_inset_top-30)*scl,
-                        (-hinge_depth/2+3)*scl, (boxheight)*scl]).add(t)
+    t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl,
+                  (boxheight)*scl]).add(t)
     a += t
     return a
 
@@ -786,9 +779,6 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     a = translate(v=[(30-lcd_inset_top)*scl, (-bwid)*scl,
                         (+50+boxtopoffs)*scl]).add(a)
-
-    # cutout for base top "hook" with screw-hole in it
-    a -= box_hook_cutout(scl, hinge_depth, inner=True)
 
     # insets for nuts and threaded bar
     holes = [0, 1, 2] if test else [0, 1, 2, 3]
@@ -989,7 +979,6 @@ def front_box_base(scl, ht_offset, ht):
     r.add(c)
     t = case_bolthole(scl, end=0).add(r)
     t = translate(v=[(0)*scl, (0)*scl, (boxheight)*scl]).add(t)
-    co = box_hook_cutout(scl, ht+10, inner=True)
     t -= translate(v=[0, (ht+20)*scl/2.0, 0]).add(co)
     a += t
 
@@ -1023,12 +1012,9 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     # base hinge box
     boxdepth = hinge_depth+ht
     box = base_box(scl, boxdepth, hole_depth, ht, extralen=extradepth,
-                   hollow=True, inner=True, mid=True)
+                   hollow=True, inner=True)
 
     a += box
-
-    # cutout for base top "hook" with screw-hole in it
-    a -= box_hook_cutout(scl, ht+40, inner=True)
 
     holes = [0, 1, 2] if test else [0, 1, 2, 3]
     # screw support at both ends
@@ -1038,7 +1024,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
-        t = translate(v=[(0)*scl, (-(boxdepth)/2-3)*scl,
+        t = translate(v=[(0)*scl, (-(boxdepth)/2-3.5)*scl,
                         (boxheight)*scl]).add(t)
         a += t
 
@@ -1139,7 +1125,8 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, lcd_ext_rot_angle+110, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+6.5-7.5)*scl, 0]).add(t)
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+6.5-7.5)*scl,
+                     0]).add(t)
     a -=t
 
     # hollow out base box at edge
@@ -1186,7 +1173,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                 b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
                 b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
             else:
-                b = cube([(29.1*2+bwid*2)*scl, 70*scl, 60*scl])
+                b = cube([(29.1*2+bwid*2)*scl, 70*scl, 64*scl])
                 b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
             t = case_bolthole(scl, end=end).add(b)
             t = translate(v=[(0)*scl, (-hinge_depth/2+3)*scl,
@@ -1227,41 +1214,62 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     return a
 
 def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
-                hollow=True, inner=False, mid=False):
+                hollow=True, inner=False):
     blen = boxlength+extralen
     # base hinge box
     c = union()
-    b = cube([blen*scl, (boxdepth)*scl, boxheight*scl])
-    b = translate([0, 20*scl, 0*scl]).add(b)
-    c.add(b)
+    nonhollowb = cube([blen*scl, (boxdepth)*scl, boxheight*scl])
+    nonhollowb = translate([0, 20*scl, 0*scl]).add(nonhollowb)
+    if not hollow:
+        c.add(nonhollowb)
     if hollow:
-        if inner:
-            hoffs=bwid*2
-            loffs=bwid
-            bl = blen-bwid*2
-        else:
-            hoffs = -0.3
-            loffs=0
-            bl = blen-lcd_outer_rad-80-bwid*2
-        h = cube([bl*scl, (boxdepth+0.3)*scl,
-                   ((boxheight-bwid)+0.3)*scl])
-        h = translate(v=[bwid*scl, hoffs*scl, -0.3*scl]).add(h)
-        c -= h
-        h = cube([(boxlength-lcd_outer_rad-80-bwid-loffs+0.3)*scl,
-                   (boxdepth+bwid+0.3)*scl,
-                   (boxinset+0.3)*scl])
-        h = translate(v=[(loffs-0.3)*scl, (bwid-0.3)*scl, -0.3*scl]).add(h)
-        c -= h
-        h = cube([(blen-bwid*2)*scl, (boxdepth-bwid*2)*scl,
-                   (boxheight-bwid+0.2)*scl])
-        h = translate(v=[bwid*scl, (bwid*2)*scl, -0.1*scl]).add(h)
-        c -= h
+        if True:
+            curverads={
+                       D|L:(30, 0),
+                       D|R:(bwid, bwid),
+                       }
+            b = hollowbox(scl, blen, boxdepth, boxheight,
+                            {T:-1, B: -1,
+                            L:bwid, R:bwid*3, F:bwid, D:bwid},
+                            curverads=curverads)
+            b = translate([0, 20*scl, 0*scl]).add(b)
+            c.add(b)
+            if inner:
+                hoffs=bwid*2
+                loffs=0
+                bl = blen-bwid*2
+            else:
+                hoffs = -0.3
+                loffs=0
+                bl = blen-lcd_outer_rad-80-bwid*2
+            h = cube([(boxlength-lcd_outer_rad-80-bwid-loffs+0.3)*scl,
+                       (boxdepth+bwid+0.3)*scl,
+                       (boxinset+0.3)*scl])
+            h = translate(v=[(loffs-0.3)*scl, (bwid-0.3)*scl, -0.3*scl]).add(h)
+            c -= h
         if not inner:
             h = cube([(bwid+0.5)*scl, (boxdepth)*scl,
                        (boxheight)*scl])
             h = translate(v=[(blen-lcd_outer_rad-80-bwid)*scl, 20*scl,
                               -0.0*scl]).add(h)
             c += h
+
+        if not inner:
+            # add some structural support
+            sstep = 140
+            sdep = sstep
+            while sdep <= boxlength-sstep*(2 if test else 2):
+                u = intersection()
+                u.add(nonhollowb)
+                r = union()
+                h = cube([bwid*scl, 100*scl, 100*scl])
+                h = rotate([-45, 0, 0]).add(h)
+                h = translate(v=[sdep*scl, 100*scl, (boxheight-2)*scl]).add(h)
+                r.add(h)
+                u.add(r)
+                c += u
+                sdep += sstep
+
         # cutout in side of box for cable
         h = cube([(140)*scl, (60)*scl,
                    (55+0.2)*scl])
@@ -1310,23 +1318,6 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                         -10*scl]).add(h)
             c += h
 
-
-        if not inner:
-            # add some structural support
-            sstep = 140
-            sdep = sstep
-            while sdep <= boxlength-sstep*(2 if test else 2):
-                u = intersection()
-                u.add(b)
-                r = union()
-                h = cube([bwid*scl, 100*scl, 100*scl])
-                h = rotate([-45, 0, 0]).add(h)
-                h = translate(v=[sdep*scl, 100*scl, (boxheight-2)*scl]).add(h)
-                r.add(h)
-                u.add(r)
-                c += u
-                sdep += sstep
-
     # lid at hinge end
     b = cube([(lcd_outer_rad+100+extralen-3)*scl, (boxdepth)*scl, 20*scl])
     b = translate(v=[(boxlength-lcd_outer_rad-100+3)*scl, 20*scl, 0]).add(b)
@@ -1356,13 +1347,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
-    #if part != 4:
+    if part != 1 and part != 6:
     #if part > 3:
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
-    if part != 8 and part != 6 and part != 9 and part != -1 and part != -7 and \
-        part != -0.1 and part != -4 and part != 10 and part != 11:
+    #if part != 8 and part != 6 and part != 9 and part != -1 and part != -7 and \
+    #    part != -0.1 and part != -4 and part != 10 and part != 11:
         return
 
     c = color(colour)
