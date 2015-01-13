@@ -752,51 +752,79 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     border=3.0
     slot_depth = 100
     boxdepth = hinge_depth+ht+edge_inset
+    lid_depth = (boxlength-lcd_inset_bot+bwid-2)
 
     c = union()
-    # long outside wall
-    b = cube([(boxlength)*scl, (bwid)*scl, boxheight*scl])
-    b = translate([0, 20*scl, 0*scl]).add(b)
-    c.add(b)
-    # top of lid
-    lid_depth = (boxlength-lcd_inset_top-lcd_inset_bot+5)
-    b = cube([lid_depth*scl,
-              (boxdepth)*scl, bwid*scl])
-    b = translate([0, 20*scl, 0*scl]).add(b)
-    c.add(b)
-    # short wall hinge-end
-    b = cube([(bwid)*scl, (boxdepth)*scl, (boxinset-border)*scl])
-    b = translate([(lid_depth-bwid)*scl, 20*scl, 0*scl]).add(b)
-    c.add(b)
-    # short front-facing wall
-    b = cube([(bwid)*scl, (boxdepth)*scl, boxheight*scl])
-    b = translate([0, 20*scl, 0*scl]).add(b)
-    c.add(b)
-    b = cube([(bwid+1)*scl, (boxdepth)*scl, boxinset*scl])
-    b = translate([-0.5*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
-    c -= b
-    a.add(c)
+    if True:
+        curverads={
+                   D|L:(30, 0),
+                   D|R:(bwid*2, 0),
+                   T|L:(bwid, 0),
+                   #B|L:(bwid, 0), # XXX: bug in hollowbox
+                   D|B:(bwid, 0),
+                   T|B:(bwid, 0),
+                   }
+        b = hollowbox(scl, boxlength, boxdepth, boxheight,
+                        {T:bwid, B: bwid,
+                        L:bwid, R:-1, F:-1, D:-1},
+                        curverads=curverads)
+        b = translate([0, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        # short wall hinge-end
+        b = cube([(bwid)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
+        b = translate([(lid_depth-bwid)*scl, (20+bwid)*scl, 0*scl]).add(b)
+        c.add(b)
 
+        b = cube([(50)*scl, (boxdepth)*scl, (boxinset+100)*scl])
+        b = translate([-1*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
+        c -= b
+        b = cube([(400)*scl, (boxdepth)*scl, (boxinset+100)*scl])
+        b = translate([(lid_depth)*scl, (bwid*2+3.0)*scl, (-1)*scl]).add(b)
+        c -= b
+    else:
+        # long outside wall
+        b = cube([(boxlength)*scl, (bwid)*scl, boxheight*scl])
+        b = translate([0, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        # top of lid
+        lid_depth = (boxlength-lcd_inset_top-lcd_inset_bot+5)
+        b = cube([lid_depth*scl,
+                  (boxdepth)*scl, bwid*scl])
+        b = translate([0, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        # short wall hinge-end
+        b = cube([(bwid)*scl, (boxdepth)*scl, (boxinset-border)*scl])
+        b = translate([(lid_depth-bwid)*scl, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        # short front-facing wall
+        b = cube([(bwid)*scl, (boxdepth)*scl, boxheight*scl])
+        b = translate([0, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        b = cube([(bwid+1)*scl, (boxdepth)*scl, boxinset*scl])
+        b = translate([-0.5*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
+        c -= b
+    a.add(c)
     a = translate(v=[(30-lcd_inset_top)*scl, (-bwid)*scl,
                         (+50+boxtopoffs)*scl]).add(a)
 
     # insets for nuts and threaded bar
     holes = [0, 1, 2] if test else [0, 1, 2, 3]
+    cdep = 60
     for end in holes:
         r = union()
-        c = cylinder(r=29*scl, h=(77)*scl, segments=50)
+        c = cylinder(r=29*scl, h=(cdep)*scl, segments=50)
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         if end != 0:
-            dp = 0
-            c = cube([29*2*scl, 77*scl, (dp+29*2)*scl], center=True)
-            c = translate(v=[(0)*scl, (77/2)*scl, (dp/2)*scl]).add(c)
+            dp = 3
+            c = cube([29*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
+            c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
         else:
-            c = cube([29*scl, 77*scl, (29)*scl], center=True)
-            c = translate(v=[(29/2.0)*scl, (77/2)*scl, (29/2.0)*scl]).add(c)
+            c = cube([35*scl, cdep*scl, (29)*scl], center=True)
+            c = translate(v=[(35/2.0-6)*scl, (cdep/2)*scl, (29/2.0+3)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
-        t = translate(v=[(0)*scl, (3)*scl, (boxheight)*scl]).add(t)
+        t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
         a += t
 
     # screw holes in box
@@ -974,12 +1002,8 @@ def front_box_base(scl, ht_offset, ht):
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     dp = 0
-    c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
-    c = translate(v=[(0)*scl, (hwid/2)*scl, (dp/2)*scl]).add(c)
-    r.add(c)
     t = case_bolthole(scl, end=0).add(r)
     t = translate(v=[(0)*scl, (0)*scl, (boxheight)*scl]).add(t)
-    t -= translate(v=[0, (ht+20)*scl/2.0, 0]).add(co)
     a += t
 
     # screw holes in box
@@ -1226,7 +1250,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
         if True:
             curverads={
                        D|L:(30, 0),
-                       D|R:(bwid, bwid),
+                       D|R:(bwid*2, 0),
                        }
             b = hollowbox(scl, blen, boxdepth, boxheight,
                             {T:-1, B: -1,
@@ -1347,13 +1371,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
-    if part != 1 and part != 6:
+    if part != 1 and part != 7:
     #if part > 3:
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
-    #if part != 8 and part != 6 and part != 9 and part != -1 and part != -7 and \
-    #    part != -0.1 and part != -4 and part != 10 and part != 11:
+    #if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
+        #part != -0.1 and part != -4 and part != 10 and part != 11:
         return
 
     c = color(colour)
