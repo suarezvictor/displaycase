@@ -53,8 +53,10 @@ hinge_depth = 130
 hole_depth = 80
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 
-bdep = 310
+bdep = 325
 ethdep = 160
+bdepoffs = 15
+csw = 50.0 # centre support width (for screws to go into)
 
 def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
@@ -846,10 +848,10 @@ def chamfered_backbox_screwholes(scl, x, y, z, sht):
     # chamfered screw holes in top of lid 
     c = union()
     c.add(cylinder(r=topscrewrad*scl, r1=topscrewrad*2*scl,
-                    h=(bwid/2)*scl,
+                    h=((bwid+1)/2)*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl, 
-                    h=(bwid+0.5)*scl,
+                    h=(bwid+2.5)*scl,
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2)*0.5*scl]).add(d)
     c.add(d)
@@ -875,13 +877,12 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     
     a -= c
 
-    csw = 50.0
-    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw):
+    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw, overhanglid=50):
         c = chamfered_backbox_screwholes(scl, x, y, z, sht)
         c = translate(v=[-99*scl, extraht*scl, -(bwid+0.5)*0.75*scl]).add(c)
         a -= c
 
-    a = translate(v=[(lcd_w+35)*scl, 0, 0]).add(a)
+    a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 40
@@ -916,25 +917,27 @@ def back_box_lid(scl, ht_offset, ht, extraht):
                     {T:bwid, B: -1, L:bwid, R:-1, F:-1, D:-1},
                     curverads={ T|L:(bwid, 0),
                                T|R:(bwid, 0),
-                               B|R:(80, 0),
+                               B|R:(50, 0),
                                })
     c = translate(v=[(bdep-ethdep-bwid)*scl, 0, (lcd_d-22-bwid)*scl]).add(c)
     a.add(c)
 
-    csw = 50.0
-    for ((x,y,z), sht) in backboxsupports(blen, csw):
+    for ((x,y,z), sht) in backboxsupports(blen, csw, overhanglid=50):
         c = chamfered_backbox_screwholes(scl, x, y, z, sht)
         c = translate(v=[-99*scl, 0*scl, -(bwid+0.5)*0.75*scl]).add(c)
         a -= c
 
-    a = translate(v=[(lcd_w+35)*scl, 0, 0]).add(a)
+    a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
 
     return a
 
-def backboxsupports(blen, csw):
-    return [
+def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False):
+    if onlyoverhang:
+        l = []
+    else:
+        l = [
             # towards back of box
-            ([(bdep+100-ethdep+csw/2)*scl, (csw/2)*scl, (lcd_d-22)*scl], 
+            ([(bdep+100-csw/2-15)*scl, (15+csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
             ([(bdep+100-ethdep+csw/2)*scl, (csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
@@ -946,22 +949,35 @@ def backboxsupports(blen, csw):
             ([(bdep+100-ethdep-csw/2)*scl, (blen-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
-            ([(csw/2)*scl, (blen*0.7-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+            ([(csw/2)*scl, (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ([(csw/2)*scl, (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*3)),
+            ([(csw/2)*scl, (csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ([(bdep+100-ethdep-csw/2)*scl, (csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ]
+    if overhanglid:
+        blen += overhanglid
+        l += [
+            # towards back of box
+            ([(bdep+100-csw/2-bwid)*scl, (blen-csw/2)*scl, (lcd_d-22)*scl], 
+                backboxheight),
+            # these are for the keyboard lid
+            ([(csw/2)*scl, (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*3)),
+        ]
+    return l
 
-def back_box_base(scl, ht_offset, ht, supports=True):
+def back_box_base(scl, ht_offset, ht, midpart=False):
     edge_inset = bwid
     blen = ht
     a = union()
     curverads={ D|R:(bwid, 0),
                }
-    if supports:
-        curverads[B|R] = (80, 0)
+    if not midpart:
+        curverads[B|R] = (50, 0)
     c = hollowbox(scl, ethdep, blen, backboxheight,
                     {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
                     curverads=curverads)
@@ -972,16 +988,26 @@ def back_box_base(scl, ht_offset, ht, supports=True):
     c = translate(v=[0, 0, (lcd_d-32+bwid*3)*scl]).add(c)
     a.add(c)
 
-    if supports:
-        csw = 50.0
-        # add corner supports
-        for (xyz, sht) in backboxsupports(blen, csw):
-            c = cube([scl*csw, scl*csw, sht*scl])
-            c = translate(v=xyz).add(c)
-            c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-            a.add(c)
+    if not midpart:
+        overhanglid = 0
+        boxlen = blen
+        onlyoverhang = False
+    else:
+        overhanglid = 50 # XXX: total guess-work
+        boxlen = 0
+        onlyoverhang = True
+    # add corner supports
+    for (xyz, sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
+                                            onlyoverhang=onlyoverhang):
+        c = cube([scl*csw, scl*csw, sht*scl])
+        c = translate(v=xyz).add(c)
+        c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
+        a.add(c)
+        if midpart:
+            c = translate(v=[0, 40*scl, 0]).add(c) # XXX: guesswork!
+        a.add(c)
 
-    a = translate(v=[(lcd_w+35-100)*scl, 0, 0]).add(a)
+    a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
 
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
@@ -1005,11 +1031,12 @@ def back_box_base(scl, ht_offset, ht, supports=True):
         a += t
 
     # screw holes in box
-    t = box_screwholes(scl, edge_inset, holes=[1,2])
+    holes = [1,2] if not midpart else [2]
+    t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
 
-    if supports:
+    if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
         dep = 40
         for (end, offs) in [(1, 25), ]:
@@ -1024,7 +1051,7 @@ def back_box_base(scl, ht_offset, ht, supports=True):
 
     return a
 
-def front_box_base(scl, ht_offset, ht, bdep = 310):
+def front_box_base(scl, ht_offset, ht, bdep = 300):
     edge_inset = bwid
     bht = boxheight-boxinset
     blen = ht
@@ -1055,7 +1082,7 @@ def front_box_base(scl, ht_offset, ht, bdep = 310):
 def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     edge_inset = bwid
     a = union()
-    a += back_box_base(scl, ht_offset, ht, supports=False)
+    a += back_box_base(scl, ht_offset, ht, midpart=True)
     a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-30)
 
     return a
@@ -1455,7 +1482,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(e)
 
     offs = (lcd_end_ht+ht+hinge_depth+base_ht+40)
-    mid_ht = 100
+    mid_ht = 90
     wid = lcd_l/2-offs-mid_ht/2
     if part == 8:
         e = back_box_base(scl, lcd_end_ht, wid)
@@ -1485,7 +1512,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b = screen_adjust(b, scl, angle)
 
     if part == 12:
-        e = base_mid(scl, lcd_end_ht, 120, base_ht, hole_depth)
+        e = base_mid(scl, lcd_end_ht, mid_ht, base_ht, hole_depth)
         e = translate(v=[0, (offs+wid)*scl,0]).add(e)
         b.add(e)
 
@@ -1548,7 +1575,7 @@ if __name__ == '__main__':
                 p = translate(v=[(lcd_w+190)*scl,340*scl,(5+23)*scl]).add(eth)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
