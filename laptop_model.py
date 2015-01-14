@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -1399,9 +1399,9 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                 sdep += sstep
 
         # cutout in side of box for cable
-        h = cube([(140)*scl, (60)*scl,
+        h = cube([(100)*scl, (60)*scl,
                    (55+0.2)*scl])
-        h = translate(v=[(boxlength-bwid-120)*scl,
+        h = translate(v=[(boxlength-bwid-90)*scl,
                             (boxdepth-32+0.1)*scl, (20)*scl]).add(h)
         if not inner:
             c -= h
@@ -1484,8 +1484,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != -0.1 and part != -4 and part != 10 and part != 11 and \
         #part != 12:
         #return
-    if part != 1 and part != 7 and part != 6 and part != 11 and \
-        part != 8 and part != 12:
+    #if part != 1 and part != 7 and part != 6 and part != 11 and \
+    #    part != 8 and part != 12:
+    if part != 1:
         return
 
     c = color(colour)
@@ -1598,7 +1599,7 @@ if __name__ == '__main__':
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
-            if True: # add inner parts for reference
+            if False: # add inner parts for reference
                 p = lcd_panel(scl)
                 p = translate(v=[155.5*scl,61*scl,0]).add(p)
                 p = hinge_rotate(scl, p, angle)
