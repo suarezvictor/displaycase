@@ -856,7 +856,6 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
                     -1*scl, (lcd_d-15+bwid-1)*scl]).add(c)
     
     a -= c
-
     for ((x,y,z), sht) in backboxsupports(blen-extraht, csw, overhanglid=55,
                                                     underhanglid=0.0):
         c = chamfered_backbox_screwholes(scl, x, y, z, sht)
@@ -864,6 +863,14 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         a -= c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
+
+    # cutout in lid which matches the base_mid screwhole cross-supports
+    c = cube([(29+2)*2*scl, (extraht+26)*scl, 25*scl])
+    c = translate(v=[(-29-2)*scl,
+                    (ht+extraht-25-2)*scl, (105)*scl]).add(c)
+    c = case_bolthole(scl, end=2).add(c)
+    
+    a -= c
 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 40
@@ -1002,15 +1009,19 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
 
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
-    hwid = 25.0
+    hwid = 25.0 if not midpart else 50.0
     for (hole, offs) in [(1, 0), (2, 0), (2, blen-hwid)]:
         r = union()
-        if hole == 2:
+        doffs = 0
+        if midpart and hole == 2:
+            doffs = -70
+            dp = 70
+        elif hole == 2:
             dp = 0
         else:
             dp = 50
         c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
-        c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2)*scl]).add(c)
+        c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2-doffs)*scl]).add(c)
         r.add(c)
         if hole == 2 and offs == 0:
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
