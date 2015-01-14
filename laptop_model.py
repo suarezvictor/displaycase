@@ -336,7 +336,7 @@ def case_bolthole(scl, end):
     bht = lcd_hinge_inner_rad+boxtopoffs-2.1-lcd_d
     print bht
     if end == 0:
-        return translate([(29.0+80-lcd_d-lcd_inset_top+30)*scl, 0*scl, bht*scl])
+        return translate([(29.0+80-lcd_d-lcd_inset_top+6)*scl, 0*scl, bht*scl])
     elif end == 1:
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
@@ -778,12 +778,6 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         # short wall hinge-end
         b = cube([(bwid)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
         b = translate([(lid_depth-bwid)*scl, (20+bwid)*scl, 0*scl]).add(b)
-        c.add(b)
-
-        # wall to complete back from hinge to rest of cover
-        b = cube([(300)*scl, (bwid)*scl, (boxinset-border)*scl])
-        # XXX: lcd_w-102.. hmmm....
-        b = translate([(lcd_w-102)*scl, (boxdepth+20-bwid)*scl, 0*scl]).add(b)
         c.add(b)
 
         # back hinge-end cutout
@@ -1450,7 +1444,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != -0.1 and part != -4 and part != 10 and part != 11 and \
         #part != 12:
         #return
-    if part != 1 and part != 8 and part != 6 and part != 11 and \
+    if part != -11 and part != 7 and part != 6 and part != 11 and \
         part != 5 and part != 12:
         return
 
