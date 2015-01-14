@@ -751,6 +751,10 @@ def box_hook_cutout(scl, hinge_depth):
     return a
 
 def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
+    """
+        TODO:
+        fill in between hinge-end small stop-part and screwhole support 2
+    """
     edge_inset = bwid
     a = union()
 
