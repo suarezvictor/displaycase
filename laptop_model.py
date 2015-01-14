@@ -1238,6 +1238,12 @@ def hollow_out_basebox(scl, border, hinge_depth):
     return t
 
 def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
+    """
+        TODO:
+        fill in screwholes with cubes not cylinders
+        fill in between lid screwhole gap 1 and 2
+        increase size of insets a bit to fit with the lid
+    """
     edge_inset = bwid
     a = union()
 
