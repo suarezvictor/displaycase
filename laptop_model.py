@@ -802,11 +802,11 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         r.add(c)
         if end != 0:
             dp = 3
-            c = cube([29*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
+            c = cube([26*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
         else:
-            c = cube([35*scl, cdep*scl, (29)*scl], center=True)
-            c = translate(v=[(35/2.0-6)*scl, (cdep/2)*scl, (29/2.0+3)*scl]).add(c)
+            c = cube([30*scl, cdep*scl, (29)*scl], center=True)
+            c = translate(v=[(30/2.0-6)*scl, (cdep/2)*scl, (29/2.0+3)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
@@ -1486,7 +1486,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 8 and part != 12:
-    if part != 1:
+    if part != 7:
         return
 
     c = color(colour)
