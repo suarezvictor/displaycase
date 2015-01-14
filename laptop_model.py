@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -43,7 +43,7 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
-screwrad = 33 / 2.0
+screwrad = 32 / 2.0
 topscrewrad = 15 / 2.0
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
@@ -1165,21 +1165,21 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     border=3.0 # move cylinders inwards so that lid cylinders fit around them
     slot_depth = 100
     extradepth = 0
+    boxdepth = hinge_depth+ht
 
     if mid:
         extradepth = 140
     else:
         # inner tube
         r = union()
-        r = cylinder(r=(lcd_hinge_inside_rad-border)*scl, h=(bwid)*scl,
+        r = cylinder(r=(lcd_hinge_inside_rad-border)*scl, h=(boxdepth)*scl,
                      segments=50, center=True)
         r = rotate([180, 90, 90]).add(r)
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (-27-bwid/2)*scl, 0]).add(t)
+        t = translate(v=[0, (-27-bwid+boxdepth/2)*scl, 0]).add(t)
         a.add(t)
 
     # base hinge box
-    boxdepth = hinge_depth+ht
     box = base_box(scl, boxdepth, hole_depth, ht, extralen=extradepth,
                    hollow=True, inner=True)
 
@@ -1193,6 +1193,11 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         a.add(c)
 
     a += box
+
+    # hollow out the inner tube
+    ho = hollow_out_basebox(scl, border, boxdepth)
+    t = translate(v=[0, (-60.5-bwid)*scl, 0]).add(ho)
+    a -= t
 
     holes = [0, 1, 2] if test else [0, 1, 2, 3]
     # screw support at both ends
@@ -1218,10 +1223,10 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         a -= t
 
         # cutout for cable
-        h = cube([(105)*scl, (60)*scl,
-                   (50)*scl])
-        h = translate(v=[(boxlength-bwid-105)*scl,
-                            (-70-0.2)*scl, (89)*scl]).add(h)
+        h = cube([(105)*scl, (boxdepth-bwid)*scl,
+                   (60)*scl])
+        h = translate(v=[(boxlength-bwid-95)*scl,
+                            (-45-0.2)*scl, (73)*scl]).add(h)
         a -= h
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
@@ -1542,7 +1547,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 7:
+    if part != 6:
         return
 
     c = color(colour)
