@@ -812,15 +812,54 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
         a += t
 
+    # add some structural support, algorithm matches up with
+    # back_box lid_end base_mid
+    sstep = 140
+    sdep = sstep
+    while sdep <= boxlength-sstep*2:
+        h = cube([bwid*scl, 70*scl, 60*scl])
+        h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
+        a.add(h)
+        sdep += sstep
+
     # screw holes in box
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
 
     # hollow out tube including base box
-    t = hollow_out_edge(scl, hole_depth, ht, border)
-    t = translate(v=[0, (-20)*scl, 0]).add(t)
-    a -= t
+    t = hollow_out_edge(scl, bwid-10, 0, border)
+    t = translate(v=[0, (-9)*scl, 0]).add(t)
+    a += t
+
+    if pin_parts_3d:
+        c = union()
+        h = cube([25*scl, 6*scl, (500)*scl])
+        h = translate([-50*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, (500)*scl])
+        h = translate([60*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, (500)*scl])
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([45*scl, 6*scl, (500)*scl])
+        h = translate([(boxlength+140)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
+        h = translate([(-50)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
+        h = translate([(-50)*scl, (16.5-ht)*scl, 245*scl]).add(h)
+        c += h
+        h = cube([(20+100)*scl, 6*scl, (25)*scl])
+        h = translate([(boxlength+30)*scl, (16.5-ht)*scl, 50*scl]).add(h)
+        c += h
+        h = cube([(20+100)*scl, 6*scl, (25)*scl])
+        h = translate([(-40)*scl, (16.5-ht)*scl, 95*scl]).add(h)
+        c += h
+        c = translate([0*scl, (26.5)*scl, -5*scl]).add(c)
+        a.add(c)
 
     return a
 
@@ -1088,7 +1127,7 @@ def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-30)
 
     # add some structural support, algorithm matches up with
-    # back_box
+    # back_box lid_end
     sstep = 140
     sdep = sstep
     while sdep <= boxlength-sstep:
