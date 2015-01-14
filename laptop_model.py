@@ -1071,6 +1071,16 @@ def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     a += back_box_base(scl, ht_offset, ht, midpart=True)
     a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-30)
 
+    # add some structural support, algorithm matches up with
+    # back_box
+    sstep = 140
+    sdep = sstep
+    while sdep <= boxlength-sstep:
+        h = cube([bwid*scl, ht*scl, 50*scl])
+        h = translate(v=[sdep*scl, 0*scl, (boxheight)*scl]).add(h)
+        a.add(h)
+        sdep += sstep
+
     return a
 
 def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
@@ -1339,7 +1349,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
             c += h
 
         if not inner:
-            # add some structural support
+            # add some structural support, algorithm matches with base_mid
             sstep = 140
             sdep = sstep
             while sdep <= boxlength-sstep*(2 if test else 2):
@@ -1440,7 +1450,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != -0.1 and part != -4 and part != 10 and part != 11 and \
         #part != 12:
         #return
-    if part != 8 and part != 6 and part != 11 and \
+    if part != 1 and part != 8 and part != 6 and part != 11 and \
         part != 5 and part != 12:
         return
 
