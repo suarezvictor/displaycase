@@ -56,7 +56,7 @@ boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 bdep = 325
 ethdep = 160
 bdepoffs = 15
-csw = 50.0 # centre support width (for screws to go into)
+csw = 55.0 # centre support width (for screws to go into)
 
 def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
@@ -780,33 +780,19 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         b = translate([(lid_depth-bwid)*scl, (20+bwid)*scl, 0*scl]).add(b)
         c.add(b)
 
+        # wall to complete back from hinge to rest of cover
+        b = cube([(300)*scl, (bwid)*scl, (boxinset-border)*scl])
+        # XXX: lcd_w-102.. hmmm....
+        b = translate([(lcd_w-102)*scl, (boxdepth+20-bwid)*scl, 0*scl]).add(b)
+        c.add(b)
+
+        # back hinge-end cutout
         b = cube([(50)*scl, (boxdepth)*scl, (boxinset+100)*scl])
         b = translate([-1*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
         c -= b
+        # front cut-out 
         b = cube([(400)*scl, (boxdepth)*scl, (boxinset+100)*scl])
         b = translate([(lid_depth)*scl, (bwid*2+3.0)*scl, (-1)*scl]).add(b)
-        c -= b
-    else:
-        # long outside wall
-        b = cube([(boxlength)*scl, (bwid)*scl, boxheight*scl])
-        b = translate([0, 20*scl, 0*scl]).add(b)
-        c.add(b)
-        # top of lid
-        lid_depth = (boxlength-lcd_inset_top-lcd_inset_bot+5)
-        b = cube([lid_depth*scl,
-                  (boxdepth)*scl, bwid*scl])
-        b = translate([0, 20*scl, 0*scl]).add(b)
-        c.add(b)
-        # short wall hinge-end
-        b = cube([(bwid)*scl, (boxdepth)*scl, (boxinset-border)*scl])
-        b = translate([(lid_depth-bwid)*scl, 20*scl, 0*scl]).add(b)
-        c.add(b)
-        # short front-facing wall
-        b = cube([(bwid)*scl, (boxdepth)*scl, boxheight*scl])
-        b = translate([0, 20*scl, 0*scl]).add(b)
-        c.add(b)
-        b = cube([(bwid+1)*scl, (boxdepth)*scl, boxinset*scl])
-        b = translate([-0.5*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
         c -= b
     a.add(c)
     a = translate(v=[(30-lcd_inset_top)*scl, (-bwid)*scl,
@@ -955,7 +941,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False):
                 (backboxheight-bwid*3)),
             ([(csw/2)*scl, (csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
-            ([(bdep+100-ethdep-csw/2)*scl, (csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+            ([(bdep+100-ethdep-csw/2)*scl, (csw/2+bwid-1)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ]
     if overhanglid:
@@ -993,7 +979,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
         boxlen = blen
         onlyoverhang = False
     else:
-        overhanglid = 50 # XXX: total guess-work
+        overhanglid = 55 # XXX: total guess-work
         boxlen = 0
         onlyoverhang = True
     # add corner supports
@@ -1004,7 +990,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         a.add(c)
         if midpart:
-            c = translate(v=[0, 40*scl, 0]).add(c) # XXX: guesswork!
+            c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
         a.add(c)
 
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
@@ -1450,9 +1436,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
-    if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
-        part != -0.1 and part != -4 and part != 10 and part != 11 and \
-        part != 12:
+    #if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
+        #part != -0.1 and part != -4 and part != 10 and part != 11 and \
+        #part != 12:
+        #return
+    if part != 8 and part != 6 and part != 11 and \
+        part != 5 and part != 12:
         return
 
     c = color(colour)
