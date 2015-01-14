@@ -764,7 +764,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         curverads={
                    D|L:(30, 0),
                    D|R:(bwid*2, 0),
-                   T|L:(bwid, 0),
+                   #T|L:(bwid, 0), # XXX: gcode chops this separate
                    #B|L:(bwid, 0), # XXX: bug in hollowbox
                    D|B:(bwid, 0),
                    T|B:(bwid, 0),
@@ -828,9 +828,8 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     a -= t
 
     # hollow out tube including base box
-    t = hollow_out_edge(scl, bwid-10, 0, border)
-    t = translate(v=[0, (-9)*scl, 0]).add(t)
-    a += t
+    t = hollow_out_edge(scl, 100, ht, border)
+    a -= t
 
     if pin_parts_3d:
         c = union()
@@ -841,7 +840,10 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = translate([60*scl, (16.5-ht)*scl, -200*scl]).add(h)
         c += h
         h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = translate([(boxlength+8)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, (500)*scl])
+        h = translate([(boxlength-120)*scl, (16.5-ht)*scl, -200*scl]).add(h)
         c += h
         h = cube([45*scl, 6*scl, (500)*scl])
         h = translate([(boxlength+140)*scl, (16.5-ht)*scl, -200*scl]).add(h)
@@ -852,14 +854,14 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
         h = translate([(-50)*scl, (16.5-ht)*scl, 245*scl]).add(h)
         c += h
-        h = cube([(20+100)*scl, 6*scl, (25)*scl])
-        h = translate([(boxlength+30)*scl, (16.5-ht)*scl, 50*scl]).add(h)
+        h = cube([(20+200)*scl, 6*scl, (25)*scl])
+        h = translate([(boxlength-40)*scl, (16.5-ht)*scl, 150*scl]).add(h)
         c += h
         h = cube([(20+100)*scl, 6*scl, (25)*scl])
         h = translate([(-40)*scl, (16.5-ht)*scl, 95*scl]).add(h)
         c += h
         c = translate([0*scl, (26.5)*scl, -5*scl]).add(c)
-        a.add(c)
+        a += c
 
     return a
 
@@ -1524,7 +1526,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != 12:
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
-    #    part != 8 and part != 12:
+    #    part != 0 and part != 8 and part != 12:
     if part != 7:
         return
 
