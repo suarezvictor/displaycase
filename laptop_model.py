@@ -857,7 +857,8 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     
     a -= c
 
-    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw, overhanglid=50):
+    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw, overhanglid=55,
+                                                    underhanglid=0.0):
         c = chamfered_backbox_screwholes(scl, x, y, z, sht)
         c = translate(v=[-99*scl, extraht*scl, -(bwid+0.5)*0.75*scl]).add(c)
         a -= c
@@ -911,7 +912,8 @@ def back_box_lid(scl, ht_offset, ht, extraht):
 
     return a
 
-def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False):
+def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
+                               underhanglid=None):
     if onlyoverhang:
         l = []
     else:
@@ -939,13 +941,20 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False):
                 (backboxheight-bwid*3)),
             ]
     if overhanglid:
-        blen += overhanglid
+        _blen = blen + overhanglid
         l += [
             # towards back of box
-            ([(bdep+100-csw/2-bwid)*scl, (blen-csw/2)*scl, (lcd_d-22)*scl], 
+            ([(bdep+100-csw/2-bwid)*scl, (_blen-csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
             # these are for the keyboard lid
-            ([(csw/2)*scl, (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+            ([(csw/2)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*3)),
+        ]
+    if underhanglid is not None:
+        l += [
+            # these are for the keyboard lid
+            ([(csw/2)*scl, (-underhanglid-csw/2)*scl,
+                                           (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
         ]
     return l
@@ -957,6 +966,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
     curverads={ D|R:(bwid, 0),
                }
     if not midpart:
+        # XXX: minor problem with this one, it covers the screwhole support
+        # in the corner.
         curverads[B|R] = (50, 0)
     c = hollowbox(scl, ethdep, blen, backboxheight,
                     {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
@@ -979,7 +990,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
     # add corner supports
     for (xyz, sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
                                             onlyoverhang=onlyoverhang):
-        c = cube([scl*csw, scl*csw, sht*scl])
+        c = screwsupport(scl, csw, csw, sht)
         c = translate(v=xyz).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         a.add(c)
@@ -1077,6 +1088,15 @@ def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     return a
 
+def screwsupport(scl, w, d, h):
+    sht = 50 # screw hole height: 4mm
+    u = union()
+    u.add(cube([w*scl, d*scl, h*scl]))
+    sh = cylinder(r=topscrewrad*scl, h=sht*scl, center=True, segments=50)
+    sh = translate(v=[w/2.0*scl, d/2.0*scl, +(sht-0.5)/2.0*scl]).add(sh)
+    u -= sh
+    return u
+
 def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     edge_inset = bwid
     a = union()
@@ -1101,6 +1121,15 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     boxdepth = hinge_depth+ht
     box = base_box(scl, boxdepth, hole_depth, ht, extralen=extradepth,
                    hollow=True, inner=True)
+
+    # add corner supports
+    # XXX: locations are all a bit bogus (magic numbers)
+    for (xyz, sht) in backboxsupports(0, csw, underhanglid=-20-bwid,
+                                            onlyoverhang=True):
+        c = screwsupport(scl, csw, csw, sht)
+        c = translate(v=xyz).add(c)
+        c = translate(v=[(lcd_w-80-csw/2.0)*scl, -csw/2.0*scl, 0]).add(c)
+        a.add(c)
 
     a += box
 
@@ -1444,8 +1473,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != -0.1 and part != -4 and part != 10 and part != 11 and \
         #part != 12:
         #return
-    if part != -11 and part != 7 and part != 6 and part != 11 and \
-        part != 5 and part != 12:
+    if part != 1 and part != 7 and part != 6 and part != 11 and \
+        part != 8 and part != 12:
         return
 
     c = color(colour)
