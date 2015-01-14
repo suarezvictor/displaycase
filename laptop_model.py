@@ -43,7 +43,7 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
-screwrad = 30 / 2.0
+screwrad = 33 / 2.0
 topscrewrad = 15 / 2.0
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
