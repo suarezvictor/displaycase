@@ -754,6 +754,11 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     """
         TODO:
         fill in between hinge-end small stop-part and screwhole support 2
+        shrink cube screwhole supports top and bottom to stop "levering"
+        when fitting against base_end
+        add structural support bits on edge (inset by bwid) to stop
+        base_end bowing inwards on long side
+        fix curving on end T|L so that printhead is a bit happier
     """
     edge_inset = bwid
     a = union()
