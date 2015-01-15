@@ -347,7 +347,7 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+56)*scl, 0*scl, (42-lcd_d)*scl])
+        return translate([(-lcd_inset_top+58)*scl, 0*scl, (42-lcd_d)*scl])
     else:
         return translate([(95+lcd_w)*scl, 0*scl, (16)*scl])
 
@@ -807,7 +807,7 @@ def screen_end(scl, ht=60):
         h = translate([(boxlength+30)*scl, (16.5-ht)*scl, 50*scl]).add(h)
         c += h
         h = cube([(20+100)*scl, 6*scl, (25)*scl])
-        h = translate([(-40)*scl, (16.5-ht)*scl, -5*scl]).add(h)
+        h = translate([(-40)*scl, (16.5-ht)*scl, 2*scl]).add(h)
         c += h
         a.add(c)
 
