@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -624,40 +624,36 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
 def friction_hinge_inner(scl, ht):
 
     a = union()
+    hht = 30
 
     # inner hexagon
     r = union()
     c = cylinder(r=48*scl, 
-                        h=(bwid)*scl, segments=50, center=True)
+                        h=(hht)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    r.add(c)
-    c = cylinder(r=30*scl, 
-                        h=(bwid)*scl, segments=50, center=True)
-    c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (10)*scl, 0]).add(c)
     r.add(c)
     # cutout to match with inset in the wall, stops the friction hinge turning
     for ang in [0, 180]:
-        c = touch_arc(lcd_hinge_inner_rad-20, 30, bwid,
+        c = touch_arc(lcd_hinge_inner_rad-20, 60, bwid,
                             13, scl,
-                      angle=54)
+                      angle=58)
         c = rotate([180, 90, 90]).add(c)
-        c = rotate([0, lcd_ext_rot_angle+223+ang, 0]).add(c)
-        c = translate(v=[0, (-15)*scl, 0]).add(c)
+        c = rotate([0, lcd_ext_rot_angle+221+ang, 0]).add(c)
+        c = translate(v=[0, (-25)*scl, 0]).add(c)
         r -= c
     # cutout for the cable
-    c = touch_arc(lcd_hinge_inner_rad-20, 30, bwid,
-                        28, scl,
+    c = touch_arc(lcd_hinge_inner_rad-20, 60, bwid,
+                        25, scl,
                   angle=0)
     c = rotate([0, 90, 90]).add(c)
-    c = rotate([0, lcd_ext_rot_angle+223+215, 0]).add(c)
+    c = rotate([0, lcd_ext_rot_angle+223+210, 0]).add(c)
     c = translate(v=[0, (20)*scl, 0]).add(c)
     r -= c
-    c = touch_arc(lcd_hinge_inner_rad-20, 30, bwid,
-                        28, scl,
+    c = touch_arc(lcd_hinge_inner_rad-20, 40, bwid,
+                        25, scl,
                   angle=0)
     c = rotate([0, 90, 90]).add(c)
-    c = rotate([0, lcd_ext_rot_angle+223+200, 0]).add(c)
+    c = rotate([0, lcd_ext_rot_angle+223+205, 0]).add(c)
     c = translate(v=[0, (20)*scl, 0]).add(c)
     r -= c
     t = hinge_translate(scl).add(r)
@@ -1460,13 +1456,13 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     # additional support for friction hinge
     r = union()
-    cable_slot_depth = 25
+    cable_slot_depth = 30
     for ang in [0, 180]:
         c = touch_arc(lcd_hinge_inner_rad-20, cable_slot_depth, bwid,
                             10, scl,
-                      angle=60)
+                      angle=65)
         c = rotate([180, 90, 90]).add(c)
-        c = rotate([0, lcd_ext_rot_angle+220+ang, 0]).add(c)
+        c = rotate([0, lcd_ext_rot_angle+218+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+22.5)*scl,
@@ -1535,42 +1531,42 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                 sdep += sstep
 
         if pin_parts_3d:
-            h = cube([25*scl, 10*scl, (500)*scl])
+            h = cube([25*scl, 6*scl, (500)*scl])
             h = translate([-50*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(90)*scl, 10*scl, (20)*scl])
+            h = cube([(90)*scl, 6*scl, (20)*scl])
             h = translate([(-50)*scl, (boxdepth+10)*scl, 40*scl]).add(h)
             c += h
-            h = cube([(60)*scl, 10*scl, (25)*scl])
+            h = cube([(60)*scl, 6*scl, (25)*scl])
             h = translate([(-50)*scl, (boxdepth+10)*scl, 95*scl]).add(h)
             c += h
             if not test:
                 for m in [0.2, 0.45, 0.7]:
-                    h = cube([17*scl, 10*scl, (500)*scl])
+                    h = cube([17*scl, 6*scl, (500)*scl])
                     h = translate([(boxlength*m)*scl,
                                    (boxdepth+10)*scl, -200*scl]).add(h)
                     c += h
-            h = cube([17*scl, 10*scl, (500)*scl])
+            h = cube([17*scl, 6*scl, (500)*scl])
             h = translate([30*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([15*scl, 10*scl, (500)*scl])
+            h = cube([15*scl, 6*scl, (500)*scl])
             h = translate([(boxlength)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([25*scl, 10*scl, (300)*scl])
+            h = cube([25*scl, 6*scl, (300)*scl])
             h = translate([(boxlength-180)*scl, (boxdepth+10)*scl,
                         -200*scl]).add(h)
             c += h
-            h = cube([45*scl, 10*scl, (500)*scl])
+            h = cube([45*scl, 6*scl, (500)*scl])
             h = translate([(boxlength+110)*scl, (boxdepth+10)*scl,
                         -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20+150)*scl, 10*scl, (55)*scl])
+            h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
             h = translate([(-40)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
             c += h
-            h = cube([(boxlength+20+150)*scl, 10*scl, (55)*scl])
+            h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
             h = translate([(-40)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
             c += h
-            h = cube([(20+100)*scl, 10*scl, (25)*scl])
+            h = cube([(20+100)*scl, 6*scl, (25)*scl])
             h = translate([(boxlength+10)*scl, (boxdepth+10)*scl,
                         -10*scl]).add(h)
             c += h
@@ -1615,7 +1611,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 14:
+    if part != 1:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
