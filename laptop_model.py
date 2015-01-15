@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -918,9 +918,9 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = cube([bwid*scl, 70*scl, 50*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
         a.add(h)
-        h = cube([bwid*scl, 10*scl, 10*scl])
+        h = cube([bwid*scl, 15*scl, 20*scl])
         h = translate(v=[sdep*scl, bwid*scl,
-                    (boxheight+50+boxtopoffs-bwid-10)*scl]).add(h)
+                    (boxheight+50+boxtopoffs-bwid-20)*scl]).add(h)
         a.add(h)
         sdep += sstep
 
@@ -1634,7 +1634,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 0 and part != -2:
+    if part != 7:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
