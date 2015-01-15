@@ -859,8 +859,8 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c.add(b)
 
         # back hinge-end cutout
-        b = cube([(50)*scl, (boxdepth)*scl, (boxinset+100)*scl])
-        b = translate([-1*scl, (20+77)*scl, (boxinset-border)*scl]).add(b)
+        b = cube([(90)*scl, (boxdepth)*scl, (boxinset+100)*scl])
+        b = translate([-1*scl, (20+bwid)*scl, (boxinset-border)*scl]).add(b)
         c -= b
         # front cut-out 
         b = cube([(400)*scl, (boxdepth)*scl, (boxinset+100)*scl])
@@ -878,13 +878,9 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c = cylinder(r=29*scl, h=(cdep)*scl, segments=50)
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        if end != 0:
-            dp = 3
-            c = cube([26*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
-            c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
-        else:
-            c = cube([30*scl, cdep*scl, (29)*scl], center=True)
-            c = translate(v=[(30/2.0-6)*scl, (cdep/2)*scl, (29/2.0+3)*scl]).add(c)
+        dp = 3
+        c = cube([26*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
+        c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
@@ -893,10 +889,14 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
     sstep = 140
-    sdep = sstep
+    sdep = sstep*2
     while sdep <= boxlength-sstep*2:
-        h = cube([bwid*scl, 70*scl, 60*scl])
+        h = cube([bwid*scl, 70*scl, 50*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
+        a.add(h)
+        h = cube([bwid*scl, 10*scl, 10*scl])
+        h = translate(v=[sdep*scl, bwid*scl,
+                    (boxheight+50+boxtopoffs-bwid-10)*scl]).add(h)
         a.add(h)
         sdep += sstep
 
@@ -1401,36 +1401,31 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     t = case_bolthole(scl, end=0).add(b)
     t = translate(v=[(20)*scl, (-boxdepth/2+105+soffset)*scl, (boxheight)*scl]).add(t)
     a += t
-    # 1/4 cutouts at the corner edges for case rounding
-    b = cube([80*scl, 90*scl, 170*scl])
-    t = case_bolthole(scl, end=0).add(b)
-    t = translate(v=[(-90)*scl, (-hinge_depth/2-7+soffset)*scl, (0)*scl]).add(t)
-    a -= t
 
     # screw support at both ends
     for end in range(3 if test else 4):
-        if end != 0:
-            if end == 2:
-                bht = 29.1*2
-            else:
-                bht = 80
-            if end == 2:
-                b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
-                b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
-            else:
-                b = cube([(29.1*2+bwid*2)*scl, 70*scl, 64*scl])
-                b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
-            t = case_bolthole(scl, end=end).add(b)
-            t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
-                        (boxheight-bwid)*scl]).add(t)
-            a += t
+        if end == 2:
+            bht = 29.1*2
+        else:
+            bht = 80
+        if end == 2:
+            b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
+            b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
+        else:
+            b = cube([(29.1*2+bwid*2)*scl, 70*scl, 64*scl])
+            b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
+        t = case_bolthole(scl, end=end).add(b)
+        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
+                    (boxheight-bwid)*scl]).add(t)
+        a += t
 
-            b = cube([29.1*2*scl, 70*scl, bht*scl])
-            b = translate([-29.1*scl, 10*scl, -30*scl]).add(b)
-            t = case_bolthole(scl, end=end).add(b)
-            t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
-                        (boxheight)*scl]).add(t)
-            a -= t
+        b = cube([29.1*2*scl, 70*scl, bht*scl])
+        b = translate([-29.1*scl, 10*scl, -30*scl]).add(b)
+        t = case_bolthole(scl, end=end).add(b)
+        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
+                    (boxheight)*scl]).add(t)
+        a -= t
+
         r = union()
         c = cube([29*2*scl, 50*scl, 29*1.7*scl])
         r += translate([-29*scl, 78.5*scl, -30*scl]).add(c)
@@ -1588,7 +1583,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
-    #if part != 1 and part != 7:
+    if part != 1 and part != 7:
     #if part > 3:
     #if part > 6:
     #    return
@@ -1599,7 +1594,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 6 and part != 0 and part != 1 and part != 7 and part != 13:
+    #if part != 6 and part != 0 and part != 1 and part != 7 and part != 13:
         return
 
     c = color(colour)
