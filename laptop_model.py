@@ -500,6 +500,10 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
     return a
 
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
+    """
+        TODO: inside edge of lcd support is too thin, gcode is 2 layers
+              separated by a large gap
+    """
 
     shear = 0
     innershear = 0
@@ -1630,7 +1634,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 0:
+    if part != 0 and part != 2:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
@@ -1642,7 +1646,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 0:
         b.add(screen_end(scl, lcd_end_ht))
-        m = screen_mid1(scl, hinge_depth, hole_depth)
+        m = screen_mid1(scl, hinge_depth, hole_depth-10)
         m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
         b.add(m)
         #ht2 += lcd_end_ht
