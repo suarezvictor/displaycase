@@ -677,18 +677,23 @@ def friction_hinge_outer(scl, ht):
     # inner hexagon
     r = union()
     c = cylinder(r=43*scl, 
-                        h=(bwid+5)*scl, segments=6, center=True)
+                        h=(bwid+15)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
+    r.add(c)
+    c = cylinder(r=30*scl, 
+                        h=(bwid*2)*scl, segments=50, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, (bwid*2)*scl, 0]).add(c)
     r.add(c)
     c = cylinder(r=60*scl, r1=65*scl,
-                        h=bwid*scl, segments=50, center=True)
+                        h=(bwid+5)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    c = translate(v=[0, -(bwid+2.5)*scl, 0]).add(c)
     r.add(c)
-    c = cylinder(r=(25)*scl,
-                        h=(bwid+1)*scl, segments=6, center=True)
+    c = cylinder(r=(28)*scl,
+                        h=(bwid*2)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    c = translate(v=[0, -(bwid+5)*scl, 0]).add(c)
     r -= c
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+27.5)*scl, 0]).add(t)
@@ -1611,7 +1616,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 1:
+    if part != 13 and part != 0:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
