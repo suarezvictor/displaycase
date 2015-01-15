@@ -624,9 +624,9 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
 def friction_hinge_inner(scl, ht):
 
     a = union()
-    hht = 30
+    hht = 50
 
-    # inner hexagon
+    # outer disc
     r = union()
     c = cylinder(r=48*scl, 
                         h=(hht)*scl, segments=50, center=True)
@@ -639,7 +639,7 @@ def friction_hinge_inner(scl, ht):
                       angle=58)
         c = rotate([180, 90, 90]).add(c)
         c = rotate([0, lcd_ext_rot_angle+221+ang, 0]).add(c)
-        c = translate(v=[0, (-25)*scl, 0]).add(c)
+        c = translate(v=[0, (-55)*scl, 0]).add(c)
         r -= c
     # cutout for the cable
     c = touch_arc(lcd_hinge_inner_rad-20, 60, bwid,
@@ -647,14 +647,14 @@ def friction_hinge_inner(scl, ht):
                   angle=0)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, lcd_ext_rot_angle+223+210, 0]).add(c)
-    c = translate(v=[0, (20)*scl, 0]).add(c)
+    c = translate(v=[0, (24)*scl, 0]).add(c)
     r -= c
-    c = touch_arc(lcd_hinge_inner_rad-20, 40, bwid,
+    c = touch_arc(lcd_hinge_inner_rad-20, 60, bwid,
                         25, scl,
                   angle=0)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, lcd_ext_rot_angle+223+205, 0]).add(c)
-    c = translate(v=[0, (20)*scl, 0]).add(c)
+    c = translate(v=[0, (26)*scl, 0]).add(c)
     r -= c
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+27.5-bwid)*scl, 0]).add(t)
@@ -1314,9 +1314,23 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         # cutout for cable
         h = cube([(105)*scl, (boxdepth)*scl,
                    (60)*scl])
-        h = translate(v=[(boxlength-bwid-95)*scl,
-                            (-60-0.2)*scl, (73)*scl]).add(h)
+        h = translate(v=[(boxlength-bwid-100)*scl,
+                            (-72-0.2)*scl, (73)*scl]).add(h)
         a -= h
+
+        # arc cutout for cable
+        r = union()
+        cable_slot_depth = 60
+        c = touch_arc(lcd_hinge_inner_rad-10, cable_slot_depth, bwid,
+                            20, scl,
+                      angle=33)
+        c = rotate([180, 90, 90]).add(c)
+        c = rotate([0, lcd_ext_rot_angle+96, 0]).add(c)
+        r += c
+        t = hinge_translate(scl).add(r)
+        t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-22)*scl,
+                         0]).add(t)
+        a -=t
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
 
@@ -1467,7 +1481,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                             10, scl,
                       angle=65)
         c = rotate([180, 90, 90]).add(c)
-        c = rotate([0, lcd_ext_rot_angle+218+ang, 0]).add(c)
+        c = rotate([0, lcd_ext_rot_angle+168+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+21.5)*scl,
@@ -1616,7 +1630,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 13 and part != 0:
+    if part != 6:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
