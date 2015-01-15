@@ -349,7 +349,7 @@ def lid_bolthole(scl, end=True):
     if end:
         return translate([(-lcd_inset_top+56)*scl, 0*scl, (42-lcd_d)*scl])
     else:
-        return translate([(95+lcd_w)*scl, 0*scl, (42-lcd_d)*scl])
+        return translate([(95+lcd_w)*scl, 0*scl, (16)*scl])
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
 
@@ -400,13 +400,13 @@ def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True,
 
     # add hinge-end filler over top of screwhole
     r = union()
-    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
+    c = shearedcube(size=[(lcd_d+10+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     t = translate(v=[(+lcd_inset_bot+lcd_w-100)*scl,
-                        (16.5-ht)*scl, (30+lcd_gap)*scl])
+                        (16.5-ht)*scl, (37+lcd_gap)*scl])
     t.add(r)
     a.add(t)
 
@@ -452,7 +452,7 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(38)*scl, (16.5-ht)*scl, (-2)*scl]).add(r)
+    t = translate(v=[(55)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
 
@@ -559,7 +559,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[(+lcd_inset_bot+lcd_w-75)*scl, (16.5-ht)*scl,
+        t = translate(v=[(+lcd_inset_bot+lcd_w-115)*scl, (16.5-ht)*scl,
                         (30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
@@ -1583,7 +1583,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 1 and part != 8 and part != 6 and part != 7:
     #if part != 3 and part != 4 and part != 0 and part != 2:
-    if part != 1 and part != 7:
+    #if part != 1 and part != 7:
     #if part > 3:
     #if part > 6:
     #    return
@@ -1594,7 +1594,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    #if part != 6 and part != 0 and part != 1 and part != 7 and part != 13:
+    if part != 4:
+    #if part != 6 and part != 0 and part != 1 and part != 7 and part != 13 \
+        #and part != 2 and part != 4:
         return
 
     c = color(colour)
