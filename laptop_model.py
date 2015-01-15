@@ -899,11 +899,14 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     cdep = 60
     for end in holes:
         r = union()
-        c = cylinder(r=29*scl, h=(cdep)*scl, segments=50)
+        c = cylinder(r=26*scl, h=(cdep)*scl, segments=50)
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        dp = 3
-        c = cube([26*2*scl, cdep*scl, (dp+29*2)*scl], center=True)
+        if end == 2:
+            dp = -3
+        else:
+            dp = 5
+        c = cube([26*2*scl, cdep*scl, (27*2)*scl], center=True)
         c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
@@ -918,7 +921,9 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = cube([bwid*scl, 70*scl, 50*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
         a.add(h)
-        h = cube([bwid*scl, 15*scl, 20*scl])
+        h = shearedcube([25*scl, 15*scl, 20*scl],
+                shear=[-10*scl, 0, 0], innershear=[0,0,0])
+        h = rotate([0, 0, 90]).add(h)
         h = translate(v=[sdep*scl, bwid*scl,
                     (boxheight+50+boxtopoffs-bwid-20)*scl]).add(h)
         a.add(h)
