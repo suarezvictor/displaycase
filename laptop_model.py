@@ -761,13 +761,13 @@ def screen_end(scl, ht=60):
 
     # middle filler
     r = union()
-    c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,(w+lcd_gap*2)*scl,ht*scl],
+    c = shearedcube(size=[(lcd_d+lcd_gap*4)*scl,(w+lcd_gap*2)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl,
-                        (30+lcd_gap)*scl])
+                        (30+lcd_gap*2)*scl])
     t.add(r)
     a.add(t)
 
