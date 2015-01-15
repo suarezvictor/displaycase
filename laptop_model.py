@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -49,8 +49,8 @@ boxheight = 140
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
 boxinset = 55
-hinge_depth = 70
-hole_depth = 80
+hinge_depth = 70 
+hole_depth = hinge_depth
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 
 bdep = 325
@@ -378,7 +378,7 @@ def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     a += screen_mid1(scl, ht, hole_ht, nohinge=True, endpart=True)
     return a
 
-def screen_mid2(scl, ht, hole_ht, nohinge=True, endpart=True,
+def screen_mid2(scl, ht, hole_ht, endpart=True,
                 removemiddle=True):
 
     shear = 0
@@ -499,7 +499,8 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
 
     return a
 
-def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
+def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
+                        halfhollow=False):
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
@@ -610,14 +611,38 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
         t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
         a -= t
 
+    if halfhollow:
+        hrad = lcd_hinge_inside_rad-20
+    else:
+        hrad = lcd_hinge_inside_rad
     # hinge hole
     r = union()
-    r = cylinder(r=lcd_hinge_inside_rad*scl,
+    r = cylinder(r=hrad*scl,
                         h=(ht+90+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+28.5)*scl, 0]).add(t)
     a -= t
+    if halfhollow:
+        # hinge hole inset against base hinge part, only we have
+        # to take a tiny bit out of it for the cable
+        r = union()
+        r = cylinder(r=lcd_hinge_inside_rad*scl,
+                            h=(ht)*scl, segments=50, center=True)
+        r = rotate([180, 90, 90]).add(r)
+        t = hinge_translate(scl).add(r)
+        t = translate(v=[0, (-ht/2+65)*scl, 0]).add(t)
+        a -= t
+        # hole for cable
+        r = union()
+        r = touch_arc(hrad, hinge_depth+ht, bwid,
+                        lcd_hinge_inner_rad-20, scl,
+                      angle=14)
+        r = rotate([180, 90, 90]).add(r)
+        r = rotate([0, lcd_ext_rot_angle+28, 0]).add(r)
+        t = hinge_translate(scl).add(r)
+        t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
+        a -= t
 
     # screw holes through lid
     a -= lid_screwholes(scl, edge_inset)
@@ -1634,14 +1659,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
-    #if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
-        #part != -0.1 and part != -4 and part != 10 and part != 11 and \
-        #part != 12:
-        #return
+    if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
+        part != -0 and part != -4 and part != 10 and part != 11 and \
+        part != 12:
+        return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 6:
-    #if part != 6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
+    if part != 0:
+    #if part != 6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != -14:
         return
 
@@ -1652,7 +1677,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 0:
         b.add(screen_end(scl, lcd_end_ht))
-        m = screen_mid1(scl, hinge_depth, hole_depth-10)
+        m = screen_mid1(scl, hinge_depth, hole_depth, halfhollow=True)
         m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
         b.add(m)
         #ht2 += lcd_end_ht
@@ -1771,7 +1796,7 @@ if __name__ == '__main__':
                 p = translate(v=[(lcd_w+190)*scl,340*scl,(5+23)*scl]).add(eth)
                 t.add(p)
 
-            if False:
+            if True:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
