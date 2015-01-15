@@ -852,6 +852,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         add structural support bits on edge (inset by bwid) to stop
         base_end bowing inwards on long side
         fix curving on end T|L so that printhead is a bit happier
+        create clips to lock matching base_end into place
     """
     edge_inset = bwid
     a = union()
@@ -1639,9 +1640,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 7:
-    #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
-    #    and part != -2 and part != -4 and part != 14:
+    if part != 6:
+    #if part != 6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
+    #    and part != 2 and part != 4 and part != -14:
         return
 
     c = color(colour)
