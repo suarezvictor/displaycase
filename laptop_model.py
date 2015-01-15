@@ -459,7 +459,8 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
     return a
 
 def screen_frontedge(scl, ht, toplen, toplenoffs, 
-                            curvefront=True, curvetopback=False):
+                            curvefront=True, curvetopback=False,
+                            edge=False):
     shear = 0
     innershear = 0
     edge_inset = bwid
@@ -478,6 +479,8 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
     curverads={
                D|R:(bwid+5, 5),
                }
+    if edge:
+        curverads[B|T] = (bwid, 0)
     if curvefront:
         curverads[L|T] = (bwid, bwid)
         curverads[L|D] = (bwid, 0)
@@ -618,20 +621,72 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False):
     a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
     return a
 
-def friction_hinge_outer(scl):
+def friction_hinge_inner(scl, ht):
+
+    a = union()
+
+    # inner hexagon
+    r = union()
+    c = cylinder(r=43*scl, 
+                        h=(bwid+5)*scl, segments=6, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    r.add(c)
+    c = cylinder(r=60*scl, r1=65*scl,
+                        h=bwid*scl, segments=50, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    r.add(c)
+    c = cylinder(r=(25)*scl,
+                        h=(bwid+1)*scl, segments=6, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    r -= c
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (-ht/2+27.5)*scl, 0]).add(t)
+    a += t
+
     # hinge hole
     r = union()
-    r = cylinder(r=lcd_hinge_inside_rad*scl,
-                        h=(ht+90+0.3)*scl, segments=50, center=True)
+    r = cylinder(r=screwrad*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (-ht/2+28.5)*scl, 0]).add(t)
+    t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
     a -= t
 
-    # screw holes through lid
-    a -= lid_screwholes(scl, edge_inset)
+    return a
 
-    a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
+def friction_hinge_outer(scl, ht):
+
+    a = union()
+
+    # inner hexagon
+    r = union()
+    c = cylinder(r=43*scl, 
+                        h=(bwid+5)*scl, segments=6, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    r.add(c)
+    c = cylinder(r=60*scl, r1=65*scl,
+                        h=bwid*scl, segments=50, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    r.add(c)
+    c = cylinder(r=(25)*scl,
+                        h=(bwid+1)*scl, segments=6, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, -bwid*scl, 0]).add(c)
+    r -= c
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (-ht/2+27.5)*scl, 0]).add(t)
+    a += t
+
+    # hinge hole
+    r = union()
+    r = cylinder(r=screwrad*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
+    r = rotate([180, 90, 90]).add(r)
+    t = hinge_translate(scl).add(r)
+    t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
+    a -= t
+
     return a
 
 def box_screwholes(scl, edge_inset, holes=None, h=lcd_l*2+100):
@@ -738,7 +793,7 @@ def screen_end(scl, ht=60):
 
     # hinge hole
     r = union()
-    r = cylinder(r=35*scl, h=(ht+0.3)*scl, segments=6, center=True)
+    r = cylinder(r=45*scl, h=(ht+0.3)*scl, segments=6, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
@@ -1544,7 +1599,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 6 and part != 0 and part != 1 and part != 7:
+    if part != 6 and part != 0 and part != 1 and part != 7 and part != 13:
         return
 
     c = color(colour)
@@ -1566,6 +1621,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(base_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
     if part == 7:
         b.add(lid_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
+    if part == 13:
+        b.add(friction_hinge_outer(scl, ht))
 
     base_ht = 40
     if part == 6:
@@ -1647,13 +1704,13 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [140]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(13):
+            for i in range(14):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
