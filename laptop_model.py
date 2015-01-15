@@ -1465,7 +1465,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         c = rotate([0, lcd_ext_rot_angle+218+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+22.5)*scl,
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+21.5)*scl,
                      0]).add(t)
     a +=t
 
