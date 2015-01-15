@@ -303,7 +303,7 @@ def lcd_panel(scl, offs=0):
     c = cube(size=[(w+offs*2)*scl,(h+offs*2)*scl,(d+offs*2)*scl])
     c = rotate([00, 0, 0 ]).add(c)
     r.add(c)
-    t = translate(v=[(-93-offs)*scl, (-40-offs)*scl, (32.5-d-offs)*scl])
+    t = translate(v=[(-93-offs)*scl, (-40-offs)*scl, (29.5-d-offs)*scl])
     t.add(r)
     a.add(t)
 
@@ -1634,7 +1634,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 0 and part != 2:
+    if part != 0 and part != -2:
     #if part != -6 and part != 0.1 and part != 1 and part != -7 and part != 13 \
     #    and part != -2 and part != -4 and part != 14:
         return
