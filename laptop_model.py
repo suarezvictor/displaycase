@@ -1531,45 +1531,45 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                 sdep += sstep
 
         if pin_parts_3d:
+            p = union()
             h = cube([25*scl, 6*scl, (500)*scl])
             h = translate([-50*scl, (boxdepth+10)*scl, -200*scl]).add(h)
-            c += h
+            p += h
             h = cube([(90)*scl, 6*scl, (20)*scl])
-            h = translate([(-50)*scl, (boxdepth+10)*scl, 40*scl]).add(h)
-            c += h
-            h = cube([(60)*scl, 6*scl, (25)*scl])
-            h = translate([(-50)*scl, (boxdepth+10)*scl, 95*scl]).add(h)
-            c += h
+            h = translate([(-50)*scl, (boxdepth+10)*scl, 55*scl]).add(h)
+            p += h
             if not test:
                 for m in [0.2, 0.45, 0.7]:
                     h = cube([17*scl, 6*scl, (500)*scl])
                     h = translate([(boxlength*m)*scl,
                                    (boxdepth+10)*scl, -200*scl]).add(h)
-                    c += h
+                    p += h
             h = cube([17*scl, 6*scl, (500)*scl])
-            h = translate([30*scl, (boxdepth+10)*scl, -200*scl]).add(h)
-            c += h
+            h = translate([70*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            p += h
             h = cube([15*scl, 6*scl, (500)*scl])
             h = translate([(boxlength)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
-            c += h
+            p += h
             h = cube([25*scl, 6*scl, (300)*scl])
             h = translate([(boxlength-180)*scl, (boxdepth+10)*scl,
                         -200*scl]).add(h)
-            c += h
+            p += h
             h = cube([45*scl, 6*scl, (500)*scl])
             h = translate([(boxlength+110)*scl, (boxdepth+10)*scl,
                         -200*scl]).add(h)
-            c += h
+            p += h
             h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
             h = translate([(-40)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
-            c += h
+            p += h
             h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
             h = translate([(-40)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
-            c += h
+            p += h
             h = cube([(20+100)*scl, 6*scl, (25)*scl])
             h = translate([(boxlength+10)*scl, (boxdepth+10)*scl,
                         -10*scl]).add(h)
-            c += h
+            p += h
+            p = translate([0, 4*scl, 0]).add(p)
+            c += p
 
     # lid at hinge end
     b = cube([(lcd_outer_rad+100+extralen-3)*scl, (boxdepth)*scl, 20*scl])
