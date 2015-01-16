@@ -500,7 +500,7 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
     return a
 
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
-                        halfhollow=False):
+                        halfhollow=False, fillinner=False):
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
@@ -542,6 +542,20 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         t.add(r)
         a.add(t)
 
+    if fillinner:
+        # add hinge-end filler over top of screwhole
+        r = union()
+        c = shearedcube(size=[60*scl,
+                        bwid*scl,(lcd_d+10+lcd_gap*2)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        #c = rotate([0, 90, 90]).add(c)
+        r.add(c)
+        t = translate(v=[(+lcd_inset_bot+lcd_w-52)*scl, (-0.5)*scl,
+                        (-26)*scl])
+        t.add(r)
+        a.add(t)
+
     if not endpart:
         # middle filler, doesn't fill up hinge part, allow cable access
         r = union()
@@ -574,7 +588,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         r = touch_arc(lcd_hinge_inner_rad, ht, bwid, 30, scl)
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, -30, 0]).add(r)
-        r = rotate([0, lcd_ext_rot_angle, 0]).add(r)
+        r = rotate([0, lcd_ext_rot_angle+20, 0]).add(r)
         t = translate(v=[+(-lcd_inset_top+w+63-lcd_gap)*scl, (-ht+24-7.5)*scl,
                         (30-lcd_d+lcd_hinge_inner_rad)*scl]).add(r)
         a.add(t)
@@ -1659,15 +1673,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part > 6:
     #    return
     #if part != 0 and part != 2 and part != 4 and part != 5 and part != 3:
-    if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
-        part != -0 and part != -4 and part != 10 and part != 11 and \
-        part != 12:
-        return
+    #if part != 8 and part != 6 and part != 9 and part != 1 and part != 7 and \
+    #    part != -0 and part != -4 and part != 10 and part != 11 and \
+    #    part != 12:
+    #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 0:
-    #if part != 6 and part != 0 and part != 1 and part != 7 and part != -13 \
-    #    and part != 2 and part != 4 and part != -14:
+    #if part != 0:
+    if part != 6 and part != 0 and part != 1 and part != 7 and part != -13 \
+        and part != 2 and part != -4 and part != -14:
         return
 
     c = color(colour)
@@ -1726,7 +1740,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(e)
 
     if part == 2:
-        m = screen_mid1(scl, 40.0, hole_depth, nohinge=True)
+        m = screen_mid1(scl, 40.0, hole_depth, nohinge=True, fillinner=True)
         m = translate(v=[0, (lcd_end_ht+hinge_depth)*scl,0]).add(m)
         b.add(m)
 
@@ -1776,7 +1790,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [130]
 
     for i in range(rpt):
         for angle in angles:
