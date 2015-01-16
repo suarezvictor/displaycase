@@ -1478,9 +1478,6 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     # hollow out tube including base box
     a -= hollow_out_basebox(scl, border, hinge_depth)
 
-    # cutout for base top "hook" with screw-hole in it
-    a -= box_hook_cutout(scl, hinge_depth+60)
-
     soffset = -30.0
     if test:
         l = [(0, 26), (1, -46), (2, 26)]
@@ -1524,8 +1521,8 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         a -= t
 
         r = union()
-        c = cube([29*2*scl, 50*scl, 29*1.7*scl])
-        r += translate([-29*scl, 78.5*scl, -30*scl]).add(c)
+        c = cube([29*2*scl, 48*scl, 29*1.7*scl])
+        r += translate([-29*scl, 80*scl, -28*scl]).add(c)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
                         (boxheight)*scl]).add(t)
@@ -1547,7 +1544,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         c = rotate([0, lcd_ext_rot_angle+168+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+21.5)*scl,
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2)*scl,
                      0]).add(t)
     a +=t
 
