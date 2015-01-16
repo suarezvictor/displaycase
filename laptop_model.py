@@ -400,12 +400,12 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
 
     # add hinge-end filler over top of screwhole
     r = union()
-    c = shearedcube(size=[(lcd_d+10+lcd_gap*2)*scl,(lcd_gap*2+bwid)*scl,ht*scl],
+    c = shearedcube(size=[(lcd_d+10+lcd_gap*2)*scl,(lcd_gap*2+bwid+5)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(+lcd_inset_bot+lcd_w-100)*scl,
+    t = translate(v=[(+lcd_inset_bot+lcd_w-110)*scl,
                         (16.5-ht)*scl, (37+lcd_gap)*scl])
     t.add(r)
     a.add(t)
