@@ -395,7 +395,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
     toplenoffs = (w-lcd_inset_top-10)
 
     # top and bottom edge
-    a += screen_frontedge(scl, ht, toplen, toplenoffs, 
+    a += screen_frontedge(scl, ht, 80, toplenoffs, 
                                curvefront=False, curvetopback=True)
 
     # add hinge-end filler over top of screwhole
@@ -416,13 +416,13 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
         # top edge
         r = union()
         c = shearedcube(size=[(bwid*3+iro)*scl,
-                            (w-toplen-lcd_inset_top-lcd_inset_bot)*scl,
+                            (w-toplen-lcd_inset_top-lcd_inset_bot-80)*scl,
                             (ht+2)*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[(w-lcd_inset_bot-lcd_inset_top)*scl,
+        t = translate(v=[(w-lcd_inset_bot-lcd_inset_top-80)*scl,
                         (16.5-ht-1)*scl, (-bwid)*scl])
         t.add(r)
         a -= t
@@ -458,7 +458,7 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
 
     return a
 
-def screen_frontedge(scl, ht, toplen, toplenoffs, 
+def screen_frontedge(scl, ht, extralen, toplenoffs, 
                             curvefront=True, curvetopback=False,
                             edge=False):
     shear = 0
@@ -490,11 +490,12 @@ def screen_frontedge(scl, ht, toplen, toplenoffs,
         offs = lcd_w
     if curvetopback:
         curverads[T|R] = (bwid+lcd_gap, bwid*2)
-    c = hollowbox(scl, to+15, ht, lcd_d+35+lcd_gap*2,
+    c = hollowbox(scl, to+15+extralen, ht, lcd_d+35+lcd_gap*2,
                     {T:bwid, B: -1,
                     L:80, R:bwid+lcd_gap, F:-1, D:bwid},
                     curverads=curverads)
-    c = translate(v=[(offs)*scl, (16.5-ht)*scl, (12-lcd_d-lcd_gap)*scl]).add(c)
+    c = translate(v=[(offs-extralen)*scl, (16.5-ht)*scl,
+                    (12-lcd_d-lcd_gap)*scl]).add(c)
     a.add(c)
 
     return a
@@ -517,15 +518,18 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
     a = union()
 
     if endpart:
-        toplen = 120 if test else 200
-        toplenoffs = (toplen-131+165)
+        toplen = 140 if test else 200
+        toplenoffs = (toplen-131+165)+40
 
     else:
         toplen = w+lcd_gap*2
-        toplenoffs = (-lcd_inset_top+w+65)
+        toplenoffs = (-lcd_inset_top+w+65)+30
+    extralen = 0
+    if nohinge and not endpart:
+        extralen = 80
 
     # top and bottom edge
-    a += screen_frontedge(scl, ht, toplen, toplenoffs,
+    a += screen_frontedge(scl, ht, extralen, toplenoffs,
                 curvefront=not fillinner,
                 curvetopback=not (nohinge and endpart))
 
@@ -546,16 +550,23 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if fillinner:
         # add hinge-end filler over top of screwhole
-        r = union()
         c = shearedcube(size=[60*scl,
                         bwid*scl,(lcd_d+10+lcd_gap*2)*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
-        #c = rotate([0, 90, 90]).add(c)
-        r.add(c)
         t = translate(v=[(+lcd_inset_bot+lcd_w-52)*scl, (-0.5)*scl,
                         (-26)*scl])
-        t.add(r)
+        t.add(c)
+        a.add(t)
+
+        # add a tiny clip which locks into the screen end part
+        c = shearedcube(size=[30*scl,
+                        ht*scl,(15)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        t = translate(v=[(+lcd_inset_bot+lcd_w-44)*scl, (-ht+5)*scl,
+                        (-25)*scl])
+        t.add(c)
         a.add(t)
 
     if not endpart:
@@ -803,7 +814,7 @@ def screen_end(scl, ht=60):
 
     toplen = w+lcd_gap*2
     toplenoffs = (-lcd_inset_top+w+65)
-    a += screen_frontedge(scl, ht, toplen, toplenoffs, curvetopback=True)
+    a += screen_frontedge(scl, ht, 0, toplenoffs, curvetopback=True)
 
     # middle filler
     r = union()
