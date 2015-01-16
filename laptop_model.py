@@ -347,7 +347,7 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+58)*scl, 0*scl, (42-lcd_d)*scl])
+        return translate([(-lcd_inset_top+58)*scl, 0*scl, (16)*scl])
     else:
         return translate([(95+lcd_w)*scl, 0*scl, (16)*scl])
 
@@ -482,7 +482,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     if edge:
         curverads[B|T] = (bwid, 0)
     if curvefront:
-        curverads[L|T] = (bwid, bwid)
+        curverads[L|T] = (lcd_d+bwid+5, 0)
         curverads[L|D] = (bwid, 0)
         offs = 0
     else:
