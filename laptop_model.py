@@ -44,7 +44,7 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 32 / 2.0
-topscrewrad = 15 / 2.0
+topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
