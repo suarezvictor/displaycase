@@ -291,6 +291,11 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
     t.add(r)
     return t
 
+def ethernet(scl):
+    # ethernet, amphenol RJCSE-538X-01
+    eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
+    return translate(v=[(lcd_w+190)*scl,130*scl,(4+23)*scl]).add(eth)
+
 def lcd_panel(scl, offs=0):
 
     w = lcd_w
@@ -1130,6 +1135,8 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             # towards back of box
             ([(bdep+100-csw/2-15)*scl, (15+csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
+            ([(bdep+100-csw/2-15)*scl, (320+csw/2)*scl, (lcd_d-22)*scl], 
+                backboxheight),
             ([(bdep+100-ethdep+csw/2)*scl, (csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
             ([(bdep+100-ethdep+csw/2)*scl, (blen-csw/2)*scl, (lcd_d-22)*scl], 
@@ -1177,7 +1184,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
     if not midpart:
         # XXX: minor problem with this one, it covers the screwhole support
         # in the corner.
-        curverads[B|R] = (50, 0)
+        curverads[B|R] = (bwid, 0)
     c = hollowbox(scl, ethdep, blen, backboxheight,
                     {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
                     curverads=curverads)
@@ -1253,6 +1260,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
             t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
             a -= t
 
+    a -= ethernet(scl)
     return a
 
 def front_box_base(scl, ht_offset, ht, bdep = 300):
@@ -1690,7 +1698,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0 and part != 8 and part != 12:
-    if part != 13 and part != 1:
+    if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
@@ -1731,6 +1739,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     mid_ht = 90
     wid = lcd_l/2-offs-mid_ht/2
     if part == 8:
+        print "wid, offs",  wid, offs
         e = back_box_base(scl, lcd_end_ht, wid)
         e = translate(v=[0, offs*scl,0]).add(e)
         b.add(e)
@@ -1811,12 +1820,11 @@ if __name__ == '__main__':
                 p = translate(v=[155.5*scl,61*scl,0]).add(p)
                 p = hinge_rotate(scl, p, angle)
                 t.add(p)
-                # ethernet, amphenol RJCSE-538X-01
-                eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
-                p = translate(v=[(lcd_w+190)*scl,340*scl,(5+23)*scl]).add(eth)
+                p = ethernet(scl)
+                p  = translate(v=[0, 210*scl,0]).add(p)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
