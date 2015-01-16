@@ -1058,8 +1058,8 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     c = translate(v=[(-100-bwid)*scl,
                     0*scl, (lcd_d-15+bwid)*scl]).add(c)
     a.add(c)
-    c = cube([159*scl, (extraht+26)*scl, 200*scl])
-    c = translate(v=[(40)*scl,
+    c = cube([159*scl, (extraht+48)*scl, 200*scl])
+    c = translate(v=[(55)*scl,
                     -1*scl, (lcd_d-15+bwid-1)*scl]).add(c)
     
     a -= c
@@ -1072,17 +1072,17 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
 
     # cutout in lid which matches the base_mid screwhole cross-supports
-    c = cube([(29+2)*2*scl, (extraht+26)*scl, 25*scl])
+    c = cube([(59+2)*2*scl, (extraht+26)*scl, 25*scl])
     c = translate(v=[(-29-2)*scl,
-                    (ht+extraht-25-2)*scl, (105)*scl]).add(c)
+                    (ht+extraht-45-1)*scl, (105)*scl]).add(c)
     c = case_bolthole(scl, end=2).add(c)
     
     a -= c
 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 40
-    holes = [(1, extraht+25), (2, extraht+25),
-                (2, (blen-dep)/2.0), (2, blen-dep-25)]
+    holes = [(1, extraht+45), (2, extraht+55),
+                (2, (blen-dep)/2.0), (2, blen-dep-50)]
     for (end, offs) in holes:
         r = union()
         if end == 1:
@@ -1144,7 +1144,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ([(bdep+100-csw/2-bwid)*scl, (blen-csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
             # these are for the keyboard lid
-            ([(bdep+100-ethdep-csw/2)*scl, (blen-csw/2)*scl,
+            ([(bdep+107-ethdep-csw/2)*scl, (blen-csw/2-40)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ([(csw/2)*scl, (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
@@ -1153,7 +1153,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
                 (backboxheight-bwid*3)),
             ([(csw/2)*scl, (csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
-            ([(bdep+100-ethdep-csw/2)*scl, (csw/2+bwid-1)*scl, (lcd_d-32+bwid*3)*scl],
+            ([(bdep+107-ethdep-csw/2)*scl, (csw/2+bwid+25)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*3)),
             ]
     if overhanglid:
@@ -1218,7 +1218,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
 
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
-    hwid = 25.0 if not midpart else 50.0
+    hwid = 45.0 if not midpart else 50.0
     for (hole, offs) in [(1, 0), (2, 0), (2, blen-hwid)]:
         r = union()
         doffs = 0
@@ -1232,7 +1232,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
         c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
         c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2-doffs)*scl]).add(c)
         r.add(c)
-        if hole == 2 and offs == 0:
+        if hole == 2:#and offs == 0:
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(+28*2)*scl, (hwid/2-3)*scl,
                         (dp/2)*scl]).add(c)
@@ -1250,7 +1250,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
         dep = 40
-        for (end, offs) in [(1, 25), ]:
+        for (end, offs) in [(1, 45), ]:
             r = union()
             dp = 0
             c = cube([29*2*scl, dep*scl, (30+29*2)*scl], center=True)
@@ -1697,8 +1697,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 12:
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
-    #    part != 0 and part != 8 and part != 12:
-    if part != 8 and part != 1 and part != 6:
+    #    part != 0.1 and part != 8 and part != 12:
+    if part != 8:
+    #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
