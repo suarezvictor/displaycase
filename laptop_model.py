@@ -1112,7 +1112,7 @@ def back_box_lid(scl, ht_offset, ht, extraht):
                     {T:bwid, B: -1, L:bwid, R:-1, F:-1, D:-1},
                     curverads={ T|L:(bwid, 0),
                                T|R:(bwid, 0),
-                               B|R:(50, 0),
+                               B|R:(bwid, 0),
                                })
     c = translate(v=[(bdep-ethdep-bwid)*scl, 0, (lcd_d-22-bwid)*scl]).add(c)
     a.add(c)
