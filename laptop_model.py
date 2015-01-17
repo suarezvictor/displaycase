@@ -1589,30 +1589,29 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
     if not hollow:
         c.add(nonhollowb)
     if hollow:
-        if True:
-            curverads={
-                       D|L:(80, 0),
-                       D|R:(bwid*2, 0),
-                       }
-            b = hollowbox(scl, blen, boxdepth, boxheight,
-                            {T:-1, B: -1,
-                            L:bwid, R:bwid*3, F:bwid, D:bwid},
-                            curverads=curverads)
-            b = translate([0, 20*scl, 0*scl]).add(b)
-            c.add(b)
-            if inner:
-                hoffs=bwid*2
-                loffs=0
-                bl = blen-bwid*2
-            else:
-                hoffs = -0.3
-                loffs=0
-                bl = blen-lcd_outer_rad-80-bwid*2
-            h = cube([(boxlength-lcd_outer_rad-80-bwid-loffs+0.3)*scl,
-                       (boxdepth+bwid+0.3)*scl,
-                       (boxinset+0.3)*scl])
-            h = translate(v=[(loffs-0.3)*scl, (bwid-0.3)*scl, -0.3*scl]).add(h)
-            c -= h
+        curverads={
+                   D|L:(80, 0),
+                   D|R:(bwid*2, 0),
+                   }
+        b = hollowbox(scl, blen, boxdepth, boxheight,
+                        {T:-1, B: -1,
+                        L:bwid, R:bwid*3, F:bwid, D:bwid},
+                        curverads=curverads)
+        b = translate([0, 20*scl, 0*scl]).add(b)
+        c.add(b)
+        if inner:
+            hoffs=bwid*2
+            bl = blen-bwid*2
+        else:
+            hoffs = -0.3
+            bl = blen-lcd_outer_rad-80-bwid*2
+        # cut out top front part of box (for base lid, keyboard etc.)
+        h = cube([(boxlength-lcd_outer_rad-80-bwid+0.3)*scl,
+                   (boxdepth+bwid+0.3)*scl,
+                   (boxinset+0.3)*scl])
+        h = translate(v=[(-0.3)*scl, (bwid-0.3)*scl, -0.3*scl]).add(h)
+        c -= h
+
         if not inner:
             h = cube([(bwid+0.5)*scl, (boxdepth)*scl,
                        (boxheight)*scl])
