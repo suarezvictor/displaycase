@@ -1208,11 +1208,12 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
         ]
     return l
 
-def back_box_base(scl, ht_offset, ht, midpart=False):
+def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
     * underfill (shearedcube) underneath the screwhole supports
     * add some "part pinning" as the edges warped and lifted off
+    * reduce thickness of floor
     """
     edge_inset = bwid
     blen = ht
@@ -1252,19 +1253,24 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
 
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
 
+    if frontpart:
+        a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-80)
+
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
     hwid = 45.0 if not midpart else ht/2+1
     hoffsl = [(2, 0), (2, blen-hwid)]
     if not midpart:
         hoffsl += [(1, 0)]
+    if midpart and not test:
+        hoffsl += [(3, 0), (3, blen-hwid)]
     for (hole, offs) in hoffsl:
         r = union()
         doffs = 0
         if midpart and hole == 2:
             doffs = -70
             dp = 70
-        elif hole == 2:
+        elif hole == 2 or hole == 3:
             dp = 0
         else:
             dp = 50
@@ -1282,6 +1288,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
 
     # screw holes in box
     holes = [1,2] if not midpart else [2]
+    if midpart and not test:
+        holes.append(3)
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
@@ -1322,6 +1330,10 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
     return a
 
 def front_box_lid(scl, ht_offset, ht, bdep=300):
+    """
+    TODO:
+    * reduce thickness of ceiling
+    """
     # matches up with lid_end
     edge_inset = bwid
     bht = boxheight-88 # XXX: magic number...
@@ -1385,6 +1397,14 @@ def front_box_lid(scl, ht_offset, ht, bdep=300):
     return a
 
 def front_box_base(scl, ht_offset, ht, bdep = 300):
+    """
+    TODO:
+    * add in small runner supports for long bolt so it doesn't bow box
+    * make a small cut-out so that front lid can drop hooks down to the
+      long bolt (like in back box)
+    * put a similar support into the opposite wall on the long bolt
+    * reduce thickness of floor
+    """
     edge_inset = bwid
     bht = boxheight-boxinset
     blen = ht
@@ -1415,8 +1435,7 @@ def front_box_base(scl, ht_offset, ht, bdep = 300):
 def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     edge_inset = bwid
     a = union()
-    a += back_box_base(scl, ht_offset, ht, midpart=True)
-    a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-80)
+    a += back_box_base(scl, ht_offset, ht, midpart=True, frontpart=True)
 
     # add some structural support, algorithm matches up with
     # back_box lid_end
@@ -1906,7 +1925,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         e = translate(v=[0, offs*scl,0]).add(e)
         b.add(e)
 
-    tpanel_wid = 400.0
+    if test:
+        tpanel_wid = 400.0
+    else:
+        tpanel_wid = 700.0
     front_lid_ht = wid+(base_ht+40)+mid_ht/2-tpanel_wid/2
     if part == 15:
         # 
