@@ -913,12 +913,13 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         fix curving on end T|L so that printhead is a bit happier
         create clips to lock matching base_end into place
     """
+    # matches up with front_box_lid
     edge_inset = bwid
     a = union()
 
     border=3.0
     slot_depth = 100
-    boxdepth = hinge_depth+ht+edge_inset
+    boxdepth = hinge_depth+ht+edge_inset # matches front_box_lid
     lid_depth = (boxlength-lcd_inset_bot+bwid-2)
 
     c = union()
@@ -1317,6 +1318,69 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
 
     if not midpart:
         a -= ethernet(scl)
+
+    return a
+
+def front_box_lid(scl, ht_offset, ht, bdep=300):
+    # matches up with lid_end
+    edge_inset = bwid
+    bht = boxheight-88 # XXX: magic number...
+    blen = ht
+    a = union()
+    c = hollowbox(scl, bdep, blen, bht,
+                    {T:bwid, B: -1, L:bwid, R:-1, F:bwid, D:-1},
+                    curverads={ T|L:(bwid, 0),
+                               })
+    c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
+    a.add(c)
+    return a
+
+    # cutout at outer edge for base_end2 bits to poke through
+    c = cube([159*scl, (extraht+48)*scl, 200*scl])
+    c = translate(v=[(55)*scl,
+                    -1*scl, (lcd_d-15+bwid-1)*scl]).add(c)
+    
+    a -= c
+    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw,
+                                            overhanglid=boxextraht,
+                                            underhanglid=25,
+                                            frontlidonly=True):
+        c = screwsupport(scl, csw, csw, sht)
+        c = translate(v=[x,y,z]).add(c)
+        c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
+        c = translate(v=[-99*scl, extraht*scl, -7*scl]).add(c)
+        a += c
+
+    a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
+
+    # cutout in lid which matches the base_mid screwhole cross-supports
+    c = cube([(59+2)*2*scl, (extraht+56)*scl, 25*scl])
+    c = translate(v=[(-29-2)*scl,
+                    (ht+extraht-45-1)*scl, (105)*scl]).add(c)
+    c = case_bolthole(scl, end=2).add(c)
+    a -= c
+
+    # supports for threads, one (end=1) needs a cutout in the base box
+    dep = 40
+    holes = [(1, extraht+45), (2, extraht+105),
+                (2, (blen-dep)/2.0), (2, blen-dep-50)]
+    for (end, offs) in holes:
+        r = union()
+        if end == 1:
+            dp = 70
+        else:
+            dp = 0
+        c = cube([29*2*scl, dep*scl, (dp+29*2)*scl], center=True)
+        c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
+        r.add(c)
+        t = case_bolthole(scl, end=end).add(r)
+        t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
+        a += t
+
+    # screw holes in box
+    t = box_screwholes(scl, edge_inset, holes=[1,2])
+    t = translate(v=[0, 0, boxheight*scl]).add(t)
+    a -= t
 
     return a
 
@@ -1780,7 +1844,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 8:
     if part != 10 and part != -11 and part != 12 and part != 8 and \
-        part != 6 and part != 9:
+        part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
@@ -1842,6 +1906,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         e = translate(v=[0, offs*scl,0]).add(e)
         b.add(e)
 
+    tpanel_wid = 400.0
+    front_lid_ht = wid+(base_ht+40)+mid_ht/2-tpanel_wid/2
+    if part == 15:
+        # 
+        e = front_box_lid(scl, lcd_end_ht, front_lid_ht)
+        e = translate(v=[0, (offs-base_ht-40)*scl,0]).add(e)
+        b.add(e)
+
     if part == 12:
         e = base_mid(scl, lcd_end_ht, mid_ht, base_ht, hole_depth)
         e = translate(v=[0, (offs+wid)*scl,0]).add(e)
@@ -1894,7 +1966,7 @@ if __name__ == '__main__':
         for angle in angles:
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(15):
+            for i in range(16):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
