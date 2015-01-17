@@ -1121,6 +1121,12 @@ def back_box_lid(scl, ht_offset, ht, extraht):
                                })
     c = translate(v=[(bdep-ethdep-bwid)*scl, 0, (lcd_d-22-bwid)*scl]).add(c)
     a.add(c)
+    # ok limitations of hollowbox we need to cut out the back right corner
+    c = cube([159*scl, (bwid+1)*scl, 50*scl])
+    c = translate(v=[(ethdep+bwid)*scl,
+                    -0.9*scl, (lcd_d-22)*scl]).add(c)
+    
+    a -= c
 
     for ((x,y,z), sht) in backboxsupports(blen, csw, overhanglid=extraht,
                                                 backlidonly=True):
@@ -1165,9 +1171,9 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
                 backboxheight),
             ([(bdep+100-csw/2-19)*scl, (320+csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
-            ([(bdep+100-ethdep+csw/2+0)*scl, (19+csw/2)*scl, (lcd_d-22)*scl], 
+            ([(bdep+100-ethdep+csw/2-1)*scl, (19+csw/2)*scl, (lcd_d-22)*scl], 
                 backboxheight),
-            ([(bdep+100-ethdep+csw/2+0)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl], 
+            ([(bdep+100-ethdep+csw/2-1)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl], 
                 backboxheight),
             ([(bdep+100-csw/2-19)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl], 
                 backboxheight),
@@ -1759,9 +1765,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 11:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != -9:
+    if part != 10:
+    #if part != 10 and part != -11 and part != 12 and part != 8 and \
+    #    part != -6 and part != -9:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
