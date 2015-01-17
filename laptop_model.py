@@ -1263,11 +1263,11 @@ def back_box_base(scl, ht_offset, ht, midpart=False):
         # match up with base_end2 hinge location
         r = union()
         r = cylinder(r=16*scl,
-                            h=bwid*scl, segments=50, center=True)
+                            h=90*scl, segments=50, center=True)
         r = rotate([180, 90, 90]).add(r)
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, (-bwid/2+0.5)*scl, 0]).add(t)
-        a += t
+        a -= t
 
 
     a -= ethernet(scl)
@@ -1413,9 +1413,9 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
                          0]).add(t)
         a -=t
 
-    # hinge hole, not for screw but for back box inset to match and lock
+    # hinge hole, for friction hinge to poke through and support back box
     r = union()
-    r = cylinder(r=18*scl,
+    r = cylinder(r=16*scl,
                         h=(ht+90+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
@@ -1717,7 +1717,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6:
+        part != 6 and part != 9:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
