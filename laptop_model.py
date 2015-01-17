@@ -1209,7 +1209,9 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
 
 def back_box_base(scl, ht_offset, ht, midpart=False):
     """
-    TODO: underfill (shearedcube) underneath the screwhole supports
+    TODO:
+    * underfill (shearedcube) underneath the screwhole supports
+    * add some "part pinning" as the edges warped and lifted off
     """
     edge_inset = bwid
     blen = ht
