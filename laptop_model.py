@@ -1280,7 +1280,7 @@ def front_box_base(scl, ht_offset, ht, bdep = 300):
     a = union()
     c = hollowbox(scl, bdep, blen, bht,
                     {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:bwid},
-                    curverads={ D|L:(29, 0),
+                    curverads={ D|L:(80, 0),
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
     a.add(c)
