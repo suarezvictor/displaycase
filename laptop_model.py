@@ -1251,6 +1251,9 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         if midpart:
             c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
         a -= c
+        if midpart:
+            c = translate(v=[0, 55*scl, 0]).add(c) # XXX: guesswork!
+            a -= c
 
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
 
@@ -1331,7 +1334,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     return a
 
 def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
-                               underhanglid=None):
+                               underhanglid=None,
+                               touchpaneltray=None):
     l = []
     if not onlyoverhang:
         l = [
@@ -1357,6 +1361,15 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
         l += [
             # these go into base_end2
             ([(csw/2-12)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+        ]
+    if touchpaneltray is not None:
+        _blen = blen + touchpaneltray
+        l += [
+            # these go into base_end2
+            ([(csw/2+124-0.5)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(dep-csw/2)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
         ]
     if underhanglid is not None:
@@ -1451,19 +1464,27 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
     a.add(c)
+
+    # add a structural support for bolthole (nut lock point)
     hwid = 25
-    r = union()
-    c = cylinder(r=29*scl, h=(hwid)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    dp = 0
-    t = case_bolthole(scl, end=0).add(r)
-    t = translate(v=[(0)*scl, (0)*scl, (boxheight)*scl]).add(t)
-    a += t
+    hoffsl = [(0, hwid/2), (0, blen-hwid*1.5)]
+    if not midpart:
+        hoffsl += [(0, (blen-hwid)/2)]
+    for (hole, offs) in hoffsl:
+        r = union()
+        doffs = 0
+        dp = 0
+        c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
+        c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2-doffs)*scl]).add(c)
+        r.add(c)
+        t = case_bolthole(scl, end=hole).add(r)
+        t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
+        a += t
 
     if not midpart:
-        # XXX: magic constant for length...
-        for ((x,y,z), sht) in frontboxsupports(blen-130, fdep, csw, 0):
+        # XXX: magic constant for length and touchpaneltray arg
+        for ((x,y,z), sht) in frontboxsupports(blen-130, fdep, csw, 0,
+                                                touchpaneltray=57):
             c = chamfered_backbox_screwholes(scl, sht)
             c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
             a -= c
@@ -1931,9 +1952,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 8:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != 7:
+    if part != 9 and part != 12:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+        #part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
