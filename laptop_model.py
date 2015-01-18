@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -1051,6 +1051,13 @@ def chamfered_backbox_screwholes(scl, sht):
 
 
 def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
+    """ TODO:
+        * lift down-pillars slightly
+        * move down-pillar and lid screw support to overlap at each end
+        * increase border round cut-out on screwsupport that pokes
+          into base.  remember to add room for a nut as well
+        * move cable-cutout hole because pillar is in the way
+    """
     edge_inset = bwid
     bht = bwid*3-10
     blen = ht+extraht
@@ -1997,7 +2004,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 9:
+    if part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
