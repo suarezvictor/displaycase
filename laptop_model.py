@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -1492,9 +1492,9 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
         hdep = 24
-        dep = 20
+        cdep = 20
         holes = [(0, extraht+50), 
-                    (0, (flen-dep)/2.0), (0, flen-dep),
+                    (0, (flen-cdep)/2.0), (0, flen-cdep),
                     (0, blen+20) # XXX: magic number, for touchpanel tray
                 ]
         for (end, offs) in holes:
@@ -1504,7 +1504,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
             c = translate(v=[(0)*scl, (hdep/2.0)*scl, (-dp/2)*scl]).add(c)
             r.add(c)
             t = case_bolthole(scl, end=end).add(r)
-            t = translate(v=[(0)*scl, (offs-extraht-(hdep-dep)/2)*scl,
+            t = translate(v=[(0)*scl, (offs-extraht-(hdep-cdep)/2)*scl,
                     (boxheight)*scl]).add(t)
             a -= t
 
@@ -1513,6 +1513,49 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
     t = box_screwholes(scl, edge_inset, holes=[0])
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
+
+    if pin_parts_3d:
+        c = union()
+        # horizontal
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (30+blen)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (blen/2)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (blen-20)*scl, boxheight*scl]).add(h)
+        c += h
+
+        # vertical
+        h = cube([15*scl, (blen+60)*scl, (6)*scl])
+        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([80*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([80*scl, (blen-30)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([12*scl, (blen+60)*scl, (6)*scl])
+        h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (blen+60)*scl, (6)*scl])
+        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
+        c += h
+        if not test:
+            h = cube([15*scl, (blen+60)*scl, (6)*scl])
+            h = translate([(dep/2)*scl, (-28)*scl, boxheight*scl]).add(h)
+            c += h
+
+        c = translate(v=[(5)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
+        a += c
 
     return a
 
@@ -1952,7 +1995,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 9 and part != 12:
+    if part != 9:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
