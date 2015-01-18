@@ -33,6 +33,7 @@ else:
     lcd_d = 50
 
 scl = 0.1
+hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
 lcd_inset_top = 25
 lcd_inset_bot = 200
@@ -1054,7 +1055,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     blen = ht+extraht
     a = union()
     c = hollowbox(scl, bdep-ethdep+100+lidfront_offs+bwid, blen+boxextraht, bht,
-                    {T:bwid, B: -1, L:bwid, R:-1, F:-1, D:-1},
+                    {T:hthick, B: -1, L:bwid, R:-1, F:-1, D:-1},
                     curverads={ T|L:(bwid, 0),
                                })
     c = translate(v=[(-100-lidfront_offs-bwid)*scl,
@@ -1111,16 +1112,16 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
 
 def back_box_lid(scl, ht_offset, ht, extraht):
     edge_inset = bwid
-    bht = bwid*3-10
+    bht = bwid*2+hthick-10
     blen = ht
     a = union()
-    c = hollowbox(scl, ethdep+bwid, blen+extraht, bht,
-                    {T:bwid, B: -1, L:bwid, R:-1, F:-1, D:-1},
-                    curverads={ T|L:(bwid, 0),
-                               T|R:(bwid, 0),
+    c = hollowbox(scl, ethdep+hthick, blen+extraht, bht,
+                    {T:hthick, B: -1, L:hthick, R:-1, F:-1, D:-1},
+                    curverads={ T|L:(hthick, 0),
+                               T|R:(hthick, 0),
                                B|R:(bwid, 0),
                                })
-    c = translate(v=[(bdep-ethdep-bwid)*scl, 0, (lcd_d-22-bwid)*scl]).add(c)
+    c = translate(v=[(bdep-ethdep-hthick)*scl, 0, (lcd_d-22-hthick)*scl]).add(c)
     a.add(c)
     # ok limitations of hollowbox we need to cut out the back right corner
     c = cube([159*scl, (bwid+1)*scl, 50*scl])
@@ -1135,7 +1136,7 @@ def back_box_lid(scl, ht_offset, ht, extraht):
         #c = chamfered_backbox_screwholes(scl, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, 0*scl, -(7)*scl]).add(c)
+        c = translate(v=[-99*scl, 0*scl, -(12)*scl]).add(c)
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
@@ -1152,19 +1153,19 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(bdep+98-ethdep-csw/2)*scl, (blen-csw/2-100)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
             ([(csw/2-lidfront_offs-0.5)*scl, 
                 (blen-csw/2-19)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
             ([(csw/2-lidfront_offs-0.5)*scl, 
                 (csw/2+19)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
             ([(bdep+98-ethdep-csw/2)*scl, 
                 (csw/2+bwid+30)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
             ]
         bl = [
             # towards back of box
@@ -1204,7 +1205,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(csw/2-12)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
         ]
     return l
 
@@ -1225,13 +1226,13 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         # in the corner.
         curverads[B|R] = (bwid, 0)
     c = hollowbox(scl, ethdep, blen, backboxheight,
-                    {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:bwid},
+                    {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:hthick},
                     curverads=curverads)
     c = translate(v=[(bdep+100-ethdep)*scl, 0, (lcd_d-22)*scl]).add(c)
     a.add(c)
-    c = hollowbox(scl, bdep+100+lidfront_offs-ethdep+1, blen, boxheight-bwid,
-                    {T:-1, B: bwid, L:-25.0, R:-1, F:bwid, D:bwid})
-    c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*3)*scl]).add(c)
+    c = hollowbox(scl, bdep+100+lidfront_offs-ethdep+1, blen, boxheight-hthick,
+                    {T:-1, B: bwid, L:-25.0, R:-1, F:bwid, D:hthick})
+    c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*2+hthick)*scl]).add(c)
     a.add(c)
 
     if not midpart:
@@ -1340,7 +1341,7 @@ def front_box_lid(scl, ht_offset, ht, bdep=300):
     blen = ht
     a = union()
     c = hollowbox(scl, bdep, blen, bht,
-                    {T:bwid, B: -1, L:bwid, R:-1, F:bwid, D:-1},
+                    {T:hthick, B: -1, L:bwid, R:-1, F:bwid, D:-1},
                     curverads={ T|L:(bwid, 0),
                                })
     c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
@@ -1410,7 +1411,7 @@ def front_box_base(scl, ht_offset, ht, bdep = 300):
     blen = ht
     a = union()
     c = hollowbox(scl, bdep, blen, bht,
-                    {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:bwid},
+                    {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:hthick},
                     curverads={ D|L:(80, 0),
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
@@ -1553,9 +1554,9 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         # fill-in just above front box lid, in between two screwholes
         # XXX: magic numbers here... *sigh*
         h = cube([(100)*scl, (bwid)*scl,
-                   (50)*scl])
+                   (55)*scl])
         h = translate(v=[(boxlength-bwid-260)*scl,
-                            (bwid+2.5)*scl, (53+bwid)*scl]).add(h)
+                            (bwid+2.5)*scl, (53+hthick)*scl]).add(h)
         a += h
 
     # hinge hole, for friction hinge to poke through and support back box
@@ -1862,7 +1863,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 8:
-    if part != 10 and part != -11 and part != 12 and part != 8 and \
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
         part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
