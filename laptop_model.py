@@ -33,7 +33,7 @@ else:
     lcd_d = 50
 
 scl = 0.1
-hthick = 12 # horizontal pieces not as thick
+hthick = 10 # horizontal pieces not as thick
 bwid = 17 # 24
 lcd_inset_top = 25
 lcd_inset_bot = 200
@@ -56,6 +56,7 @@ boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 lidfront_offs = 10
 
 bdep = 325
+fdep = 300
 ethdep = 160
 bdepoffs = 15
 csw = 55.0 # centre support width (for screws to go into)
@@ -1133,7 +1134,6 @@ def back_box_lid(scl, ht_offset, ht, extraht):
     for ((x,y,z), sht) in backboxsupports(blen, csw, overhanglid=extraht,
                                                 backlidonly=True):
         c = screwsupport(scl, csw, csw, sht)
-        #c = chamfered_backbox_screwholes(scl, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         c = translate(v=[-99*scl, 0*scl, -(12)*scl]).add(c)
@@ -1255,7 +1255,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
 
     if frontpart:
-        a += front_box_base(scl, ht_offset, ht, bdep=lcd_w-80)
+        a += front_box_base(scl, ht_offset, ht, dep=lcd_w-80, midpart=True)
 
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
@@ -1330,7 +1330,48 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     return a
 
-def front_box_lid(scl, ht_offset, ht, bdep=300):
+def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
+                               underhanglid=None):
+    l = []
+    if not onlyoverhang:
+        l = [
+            # these are for the keyboard lid
+            ([(dep-csw/2)*scl, (blen-csw/2)*scl,
+                                           (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(csw/2+120-0.5)*scl, 
+                (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(csw/2+120-0.5)*scl, 
+                (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(csw/2+120-0.5)*scl, 
+                (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(dep-csw/2)*scl, 
+                (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ]
+    if overhanglid:
+        _blen = blen + overhanglid
+        l += [
+            # these go into base_end2
+            ([(csw/2-12)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+        ]
+    if underhanglid is not None:
+        l += [
+            # these are for the keyboard lid
+            ([(csw/2+120-0.5)*scl, (-underhanglid-csw/2)*scl,
+                                           (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+            ([(dep-csw/2-0.5)*scl, (-underhanglid-csw/2)*scl,
+                                           (lcd_d-32+bwid*3)*scl],
+                (backboxheight-bwid*2-hthick)),
+        ]
+    return l
+
+def front_box_lid(scl, ht_offset, ht, extraht=0):
     """
     TODO:
     * reduce thickness of ceiling
@@ -1338,45 +1379,37 @@ def front_box_lid(scl, ht_offset, ht, bdep=300):
     # matches up with lid_end
     edge_inset = bwid
     bht = boxheight-88 # XXX: magic number...
-    blen = ht
+    flen = ht+extraht
+    boxextraht = 0
     a = union()
-    c = hollowbox(scl, bdep, blen, bht,
+    c = hollowbox(scl, fdep, flen, bht,
                     {T:hthick, B: -1, L:bwid, R:-1, F:bwid, D:-1},
                     curverads={ T|L:(bwid, 0),
                                })
     c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
     a.add(c)
-    return a
 
-    # cutout at outer edge for base_end2 bits to poke through
-    c = cube([159*scl, (extraht+48)*scl, 200*scl])
-    c = translate(v=[(55)*scl,
-                    -1*scl, (lcd_d-15+bwid-1)*scl]).add(c)
-    
-    a -= c
-    for ((x,y,z), sht) in backboxsupports(blen-extraht, csw,
+    for ((x,y,z), sht) in frontboxsupports(flen-extraht, fdep, csw,
                                             overhanglid=boxextraht,
-                                            underhanglid=25,
-                                            frontlidonly=True):
+                                            underhanglid=18):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, extraht*scl, -7*scl]).add(c)
+        c = translate(v=[5*scl, extraht*scl, -7*scl]).add(c)
         a += c
 
-    a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
+    # bridge between supports, stops front box from moving about
+    # XXX: magic constants
+    c = cube([30*scl, (extraht+56)*scl, 44*scl])
+    c = translate(v=[(fdep-25)*scl,
+                    (extraht-65-1)*scl, (60)*scl]).add(c)
+    a += c
 
-    # cutout in lid which matches the base_mid screwhole cross-supports
-    c = cube([(59+2)*2*scl, (extraht+56)*scl, 25*scl])
-    c = translate(v=[(-29-2)*scl,
-                    (ht+extraht-45-1)*scl, (105)*scl]).add(c)
-    c = case_bolthole(scl, end=2).add(c)
-    a -= c
-
+    return a 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 40
     holes = [(1, extraht+45), (2, extraht+105),
-                (2, (blen-dep)/2.0), (2, blen-dep-50)]
+                (2, (flen-dep)/2.0), (2, flen-dep-50)]
     for (end, offs) in holes:
         r = union()
         if end == 1:
@@ -1397,7 +1430,7 @@ def front_box_lid(scl, ht_offset, ht, bdep=300):
 
     return a
 
-def front_box_base(scl, ht_offset, ht, bdep = 300):
+def front_box_base(scl, ht_offset, ht, dep=None, midpart=False):
     """
     TODO:
     * add in small runner supports for long bolt so it doesn't bow box
@@ -1406,11 +1439,13 @@ def front_box_base(scl, ht_offset, ht, bdep = 300):
     * put a similar support into the opposite wall on the long bolt
     * reduce thickness of floor
     """
+    if dep is None:
+        dep = fdep
     edge_inset = bwid
     bht = boxheight-boxinset
     blen = ht
     a = union()
-    c = hollowbox(scl, bdep, blen, bht,
+    c = hollowbox(scl, dep, blen, bht,
                     {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:hthick},
                     curverads={ D|L:(80, 0),
                                })
@@ -1425,6 +1460,13 @@ def front_box_base(scl, ht_offset, ht, bdep = 300):
     t = case_bolthole(scl, end=0).add(r)
     t = translate(v=[(0)*scl, (0)*scl, (boxheight)*scl]).add(t)
     a += t
+
+    if not midpart:
+        # XXX: magic constant for length...
+        for ((x,y,z), sht) in frontboxsupports(blen-130, fdep, csw, 0):
+            c = chamfered_backbox_screwholes(scl, sht)
+            c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
+            a -= c
 
     # screw holes in box
     t = box_screwholes(scl, edge_inset, holes=[0])
@@ -1493,6 +1535,13 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         c = chamfered_backbox_screwholes(scl, sht)
         c = translate(v=[x,y,(boxdepth+92+bwid)*scl]).add(c)
         c = translate(v=[(lcd_w-80)*scl, 0, 0]).add(c)
+        a -= c
+
+    for ((x,y,z), sht) in frontboxsupports(0, fdep, csw,
+                                            onlyoverhang=True,
+                                            underhanglid=-18): # XXX: magic
+        c = chamfered_backbox_screwholes(scl, sht)
+        c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
         a -= c
 
     # hollow out the inner tube
@@ -1891,11 +1940,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(lid_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
     if part == 13:
         b.add(friction_hinge_outer(scl, ht))
+
     base_ht = 40
-    if part == 6:
-        e = base_end2(scl, lcd_end_ht, ht, base_ht, hole_depth)
-        e = translate(v=[0, (lcd_end_ht+ht+hinge_depth)*scl,0]).add(e)
-        b.add(e)
 
     if part == 14:
         h = friction_hinge_inner(scl, ht)
@@ -1930,11 +1976,16 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         tpanel_wid = 400.0
     else:
         tpanel_wid = 700.0
-    front_lid_ht = wid+(base_ht+40)+mid_ht/2-tpanel_wid/2
+    front_lid_ht = wid+mid_ht/2-tpanel_wid/2
     if part == 15:
         # 
-        e = front_box_lid(scl, lcd_end_ht, front_lid_ht)
+        e = front_box_lid(scl, lcd_end_ht, front_lid_ht, extraht=(base_ht+40))
         e = translate(v=[0, (offs-base_ht-40)*scl,0]).add(e)
+        b.add(e)
+
+    if part == 6:
+        e = base_end2(scl, lcd_end_ht, ht, base_ht, hole_depth)
+        e = translate(v=[0, (lcd_end_ht+ht+hinge_depth)*scl,0]).add(e)
         b.add(e)
 
     if part == 12:
