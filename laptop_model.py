@@ -1339,13 +1339,13 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
             ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+120-0.5)*scl, 
+            ([(csw/2+124-0.5)*scl, 
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+120-0.5)*scl, 
+            ([(csw/2+124-0.5)*scl, 
                 (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+120-0.5)*scl, 
+            ([(csw/2+124-0.5)*scl, 
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ([(dep-csw/2)*scl, 
@@ -1405,18 +1405,17 @@ def front_box_lid(scl, ht_offset, ht, extraht=0):
                     (extraht-65-1)*scl, (60)*scl]).add(c)
     a += c
 
-    return a 
     # supports for threads, one (end=1) needs a cutout in the base box
-    dep = 40
-    holes = [(1, extraht+45), (2, extraht+105),
-                (2, (flen-dep)/2.0), (2, flen-dep-50)]
+    dep = 20
+    holes = [(0, extraht+50), 
+                (0, (flen-dep)/2.0), (0, flen-dep)]
     for (end, offs) in holes:
         r = union()
-        if end == 1:
+        if end == 0:
             dp = 70
         else:
             dp = 0
-        c = cube([29*2*scl, dep*scl, (dp+29*2)*scl], center=True)
+        c = cube([29*2*scl, dep*scl, (dp+31*2)*scl], center=True)
         c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
@@ -1424,13 +1423,13 @@ def front_box_lid(scl, ht_offset, ht, extraht=0):
         a += t
 
     # screw holes in box
-    t = box_screwholes(scl, edge_inset, holes=[1,2])
+    t = box_screwholes(scl, edge_inset, holes=[0])
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     a -= t
 
     return a
 
-def front_box_base(scl, ht_offset, ht, dep=None, midpart=False):
+def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=False):
     """
     TODO:
     * add in small runner supports for long bolt so it doesn't bow box
@@ -1444,6 +1443,7 @@ def front_box_base(scl, ht_offset, ht, dep=None, midpart=False):
     edge_inset = bwid
     bht = boxheight-boxinset
     blen = ht
+    flen = lid_ht+extraht
     a = union()
     c = hollowbox(scl, dep, blen, bht,
                     {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:hthick},
@@ -1467,6 +1467,26 @@ def front_box_base(scl, ht_offset, ht, dep=None, midpart=False):
             c = chamfered_backbox_screwholes(scl, sht)
             c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
             a -= c
+
+    if not midpart:
+        # this is a cut-out so that the lid's thread-support goes through
+        hdep = 24
+        dep = 20
+        holes = [(0, extraht+50), 
+                    (0, (flen-dep)/2.0), (0, flen-dep),
+                    (0, blen+20) # XXX: magic number, for touchpanel tray
+                ]
+        for (end, offs) in holes:
+            r = union()
+            dp = 0
+            c = cube([31*2*scl, hdep*scl, (40+29*2)*scl], center=True)
+            c = translate(v=[(0)*scl, (hdep/2.0)*scl, (-dp/2)*scl]).add(c)
+            r.add(c)
+            t = case_bolthole(scl, end=end).add(r)
+            t = translate(v=[(0)*scl, (offs-extraht-(hdep-dep)/2)*scl,
+                    (boxheight)*scl]).add(t)
+            a -= t
+
 
     # screw holes in box
     t = box_screwholes(scl, edge_inset, holes=[0])
@@ -1967,11 +1987,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         e = translate(v=[0, (offs-base_ht-40)*scl,0]).add(e)
         b.add(e)
 
-    if part == 9:
-        e = front_box_base(scl, lcd_end_ht, wid)
-        e = translate(v=[0, offs*scl,0]).add(e)
-        b.add(e)
-
     if test:
         tpanel_wid = 400.0
     else:
@@ -1981,6 +1996,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         # 
         e = front_box_lid(scl, lcd_end_ht, front_lid_ht, extraht=(base_ht+40))
         e = translate(v=[0, (offs-base_ht-40)*scl,0]).add(e)
+        b.add(e)
+
+    if part == 9:
+        e = front_box_base(scl, lcd_end_ht, wid,
+                        front_lid_ht, extraht=(base_ht+40))
+        e = translate(v=[0, offs*scl,0]).add(e)
         b.add(e)
 
     if part == 6:
