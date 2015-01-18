@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -1052,6 +1052,7 @@ def chamfered_backbox_screwholes(scl, sht):
 
 def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
+        * add part-pin because corners lift
         * lift down-pillars slightly
         * move down-pillar and lid screw support to overlap at each end
         * increase border round cut-out on screwsupport that pokes
@@ -1337,6 +1338,22 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     return a
 
+def tpanel_supports(blen, dep, csw):
+    return [
+        ([(dep-csw/2)*scl, (blen-csw/2)*scl,
+                                       (lcd_d-32+bwid*3)*scl],
+            (backboxheight-bwid*2-hthick)),
+        ([(csw/2+124-0.5)*scl, 
+            (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+            (backboxheight-bwid*2-hthick)),
+        ([(csw/2+124-0.5)*scl, 
+            (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
+            (backboxheight-bwid*2-hthick)),
+        ([(dep-csw/2)*scl, 
+            (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
+            (backboxheight-bwid*2-hthick)),
+        ]
+
 def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
                                underhanglid=None,
                                touchpaneltray=None):
@@ -1388,7 +1405,7 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
         ]
     return l
 
-def front_box_lid(scl, ht_offset, ht, extraht=0):
+def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     """
     TODO:
     * reduce thickness of ceiling
@@ -1399,42 +1416,74 @@ def front_box_lid(scl, ht_offset, ht, extraht=0):
     flen = ht+extraht
     boxextraht = 0
     a = union()
+    thick = {T:hthick, B: -1, L:bwid, R:-1, F:-1, D:-1}
+    if not tpanel:
+        thick[F] = bwid
     c = hollowbox(scl, fdep, flen, bht,
-                    {T:hthick, B: -1, L:bwid, R:-1, F:bwid, D:-1},
+                    thick,
                     curverads={ T|L:(bwid, 0),
                                })
     c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
     a.add(c)
 
-    for ((x,y,z), sht) in frontboxsupports(flen-extraht, fdep, csw,
+    if not tpanel:
+        supports = frontboxsupports(flen-extraht, fdep, csw,
                                             overhanglid=boxextraht,
-                                            underhanglid=18):
+                                            underhanglid=18)
+    else:
+        supports = tpanel_supports(flen-extraht, fdep, csw)
+
+    for ((x,y,z), sht) in supports:
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         c = translate(v=[5*scl, extraht*scl, -7*scl]).add(c)
         a += c
 
-    # bridge between supports, stops front box from moving about
-    # XXX: magic constants
-    c = cube([30*scl, (extraht+56)*scl, 44*scl])
-    c = translate(v=[(fdep-25)*scl,
-                    (extraht-65-1)*scl, (60)*scl]).add(c)
-    a += c
+    if not tpanel:
+        # bridge between supports, stops front box from moving about
+        # XXX: magic constants
+        c = cube([30*scl, (extraht+56)*scl, 44*scl])
+        c = translate(v=[(fdep-25)*scl,
+                        (extraht-65-1)*scl, (60)*scl]).add(c)
+        a += c
 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 20
-    holes = [(0, extraht+50), 
-                (0, (flen-dep)/2.0), (0, flen-dep)]
+    if tpanel:
+        holes = [(0, dep+51), (0, flen-dep-51)]
+        holes = [(0, 71), (0, flen-dep-71)]
+    else:
+        holes = [(0, extraht+50), 
+                    (0, (flen-dep)/2.0), (0, flen-dep)]
     for (end, offs) in holes:
-        if end == 0:
-            dp = 70
-        else:
-            dp = 0
-        r = lidscrewsupport(scl, dep, 72, 70)
+        r = lidscrewsupport(scl, dep, 112, -20)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
         a += t
+
+    if tpanel:
+
+        pdep = 300
+        plen = 200
+        plent = (flen - plen) / 2
+        pht = bht+hthick
+        pdept =  50
+        pborder = 15
+        c = cube([(pdep+1)*scl, plen*scl, (pht+1)*scl])
+        t = translate([(5+pdept)*scl, plent*scl, (+50+boxtopoffs-1)*scl]).add(c)
+        a -= t
+
+        thick = {T:-1, B: hthick, L:hthick, R:hthick, F:hthick, D:hthick}
+        c = hollowbox(scl, pdep, plen, pht,
+                        thick)
+        t = translate([(5+pdept)*scl, plent*scl, (+50+boxtopoffs)*scl]).add(c)
+        a += t
+
+        c = cube([(pdep+1-pborder*2)*scl, (plen-pborder*2)*scl, (pht+2)*scl])
+        t = translate([((5+pdept)+pborder)*scl, (plent+pborder)*scl,
+                            (+50+boxtopoffs-1)*scl]).add(c)
+        a -= t
 
     # screw holes in box
     t = box_screwholes(scl, edge_inset, holes=[0])
@@ -2004,9 +2053,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 11:
+    if part != 16:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 7:
+    #    part != 6 and part != 9 and part != 15 and part != 7 and \
+    #    part != 16:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
@@ -2069,6 +2119,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         # 
         e = front_box_lid(scl, lcd_end_ht, front_lid_ht, extraht=(base_ht+40))
         e = translate(v=[0, (offs-base_ht-40)*scl,0]).add(e)
+        b.add(e)
+
+    if part == 16:
+        # 
+        e = front_box_lid(scl, lcd_end_ht, tpanel_wid, extraht=0,
+                        tpanel=True)
+        e = translate(v=[0, (offs+front_lid_ht)*scl,0]).add(e)
         b.add(e)
 
     if part == 9:
@@ -2134,7 +2191,7 @@ if __name__ == '__main__':
         for angle in angles:
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
-            for i in range(16):
+            for i in range(17):
                 create_laptop(t, scl, 1.0, c, part=i, angle=angle)
             t = color(c).add(t)
 
