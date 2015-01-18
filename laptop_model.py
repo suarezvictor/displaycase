@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -1094,12 +1094,13 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     for (end, offs) in holes:
         r = union()
         if end == 1:
-            dp = 70
+            dp = -20
+            r = lidscrewsupport(scl, dep, 112, dp)
         else:
             dp = 0
-        c = cube([29*2*scl, dep*scl, (dp+29*2)*scl], center=True)
-        c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
-        r.add(c)
+            c = cube([29*2*scl, dep*scl, (dp+29*2)*scl], center=True)
+            c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
+            r.add(c)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
         a += t
@@ -1300,13 +1301,9 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
-        dep = 40
+        dep = 45
         for (end, offs) in [(1, 45), ]:
-            r = union()
-            dp = 0
-            c = cube([29*2*scl, dep*scl, (30+29*2)*scl], center=True)
-            c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
-            r.add(c)
+            r = lidscrewsupport(scl, dep, 72, 0)
             t = case_bolthole(scl, end=end).add(r)
             t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
             a -= t
@@ -1423,14 +1420,11 @@ def front_box_lid(scl, ht_offset, ht, extraht=0):
     holes = [(0, extraht+50), 
                 (0, (flen-dep)/2.0), (0, flen-dep)]
     for (end, offs) in holes:
-        r = union()
         if end == 0:
             dp = 70
         else:
             dp = 0
-        c = cube([29*2*scl, dep*scl, (dp+31*2)*scl], center=True)
-        c = translate(v=[(0)*scl, (dep/2.0)*scl, (-dp/2)*scl]).add(c)
-        r.add(c)
+        r = lidscrewsupport(scl, dep, 72, 70)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
         a += t
@@ -1441,6 +1435,18 @@ def front_box_lid(scl, ht_offset, ht, extraht=0):
     a -= t
 
     return a
+
+def lidscrewsupport(scl, hdep, ht, dp, offs=0):
+    r = union()
+    c = cube([(29+offs)*2*scl, hdep*scl, (ht)*scl], center=True)
+    c = translate(v=[(0)*scl, (hdep/2.0)*scl, (+ht/2-10)*scl]).add(c)
+    r.add(c)
+    c = shearedcube([(29+offs)*2*scl, hdep*scl, (17)*scl], 
+            shear=[-15*scl,0,0], innershear=[15*scl, 0, 0], center=True)
+    c = translate(v=[(0)*scl, (hdep/2.0)*scl, (ht-3)*scl]).add(c)
+    r.add(c)
+    r = translate(v=[(0)*scl, 0, (dp-ht/2-13)*scl]).add(r)
+    return r
 
 def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=False):
     """
@@ -1498,11 +1504,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
                     (0, blen+20) # XXX: magic number, for touchpanel tray
                 ]
         for (end, offs) in holes:
-            r = union()
-            dp = 0
-            c = cube([31*2*scl, hdep*scl, (40+29*2)*scl], center=True)
-            c = translate(v=[(0)*scl, (hdep/2.0)*scl, (-dp/2)*scl]).add(c)
-            r.add(c)
+            r = lidscrewsupport(scl, hdep, 72, 0)
             t = case_bolthole(scl, end=end).add(r)
             t = translate(v=[(0)*scl, (offs-extraht-(hdep-cdep)/2)*scl,
                     (boxheight)*scl]).add(t)
@@ -1997,7 +1999,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     if part != 9:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
-        #part != 6 and part != 9 and part != 15 and part != 7:
+    #    part != 6 and part != 9 and part != 15 and part != 7:
     #if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
