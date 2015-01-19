@@ -1912,7 +1912,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     box = base_box(scl, boxdepth, hole_depth, ht, hollow=True)
 
     # add big strengthening bar, help reduce torquing
-    h = cube([(boxlength-96)*scl, 60*scl, 54*scl])
+    h = cube([(boxlength-96)*scl, 60*scl, 60*scl])
     h = translate(v=[50*scl, 0*scl, (boxdepth+14)*scl]).add(h)
     a.add(h)
 
