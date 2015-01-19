@@ -2084,41 +2084,38 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
 
         if pin_parts_3d:
             p = union()
-            h = cube([25*scl, 6*scl, (500)*scl])
-            h = translate([-50*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = cube([15*scl, 6*scl, (50)*scl])
+            h = translate([-20*scl, (boxdepth+10)*scl, 30*scl]).add(h)
             p += h
-            h = cube([(90)*scl, 6*scl, (20)*scl])
-            h = translate([(-50)*scl, (boxdepth+10)*scl, 55*scl]).add(h)
+            h = cube([(90)*scl, 6*scl, (15)*scl])
+            h = translate([(-20)*scl, (boxdepth+10)*scl, 55*scl]).add(h)
             p += h
             if not test:
                 for m in [0.2, 0.45, 0.7]:
-                    h = cube([17*scl, 6*scl, (500)*scl])
+                    h = cube([17*scl, 6*scl, (150)*scl])
                     h = translate([(boxlength*m)*scl,
-                                   (boxdepth+10)*scl, -200*scl]).add(h)
+                                   (boxdepth+10)*scl, 15*scl]).add(h)
                     p += h
-            h = cube([17*scl, 6*scl, (500)*scl])
-            h = translate([70*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = cube([15*scl, 6*scl, (150)*scl])
+            h = translate([70*scl, (boxdepth+10)*scl, 15*scl]).add(h)
             p += h
-            h = cube([15*scl, 6*scl, (500)*scl])
-            h = translate([(boxlength)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
+            h = cube([15*scl, 6*scl, (250)*scl])
+            h = translate([(boxlength-10)*scl, (boxdepth+10)*scl, -95*scl]).add(h)
             p += h
-            h = cube([25*scl, 6*scl, (300)*scl])
+            h = cube([15*scl, 6*scl, (100)*scl])
             h = translate([(boxlength-180)*scl, (boxdepth+10)*scl,
-                        -200*scl]).add(h)
+                        -60*scl]).add(h)
             p += h
-            h = cube([45*scl, 6*scl, (500)*scl])
-            h = translate([(boxlength+110)*scl, (boxdepth+10)*scl,
-                        -200*scl]).add(h)
+            h = cube([15*scl, 6*scl, (100)*scl])
+            h = translate([(boxlength+70)*scl, (boxdepth+10)*scl,
+                        -50*scl]).add(h)
             p += h
-            h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
-            h = translate([(-40)*scl, (boxdepth+10)*scl, -200*scl]).add(h)
-            p += h
-            h = cube([(boxlength+20+150)*scl, 6*scl, (55)*scl])
-            h = translate([(-40)*scl, (boxdepth+10)*scl, 245*scl]).add(h)
-            p += h
-            h = cube([(20+100)*scl, 6*scl, (25)*scl])
+            h = cube([(75)*scl, 6*scl, (15)*scl])
             h = translate([(boxlength+10)*scl, (boxdepth+10)*scl,
                         -10*scl]).add(h)
+            p += h
+            h = cube([(90)*scl, 6*scl, (15)*scl])
+            h = translate([(boxlength-20)*scl, (boxdepth+10)*scl, 70*scl]).add(h)
             p += h
             p = translate([0, 4*scl, 0]).add(p)
             c += p
@@ -2163,10 +2160,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 11 and part != 10:
+    if part != 1:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 1 and \
-    #    part != 16:
+        #part != 6 and part != 9 and part != 15 and part != 1 and \
+        #part != 16:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
