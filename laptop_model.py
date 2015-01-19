@@ -1197,7 +1197,7 @@ def back_box_lid(scl, ht_offset, ht, extraht):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, 0*scl, -(12)*scl]).add(c)
+        c = translate(v=[-99*scl, 0*scl, -(10)*scl]).add(c)
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
@@ -1224,22 +1224,22 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ([(csw/2-lidfront_offs-0.5)*scl, 
                 (csw/2+19)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(bdep+98-ethdep-csw/2)*scl, 
+            ([(bdep+88-ethdep-csw/2)*scl, 
                 (csw/2+bwid+30)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ]
         bl = [
             # towards back of box
             ([(bdep+100-csw/2-19)*scl, (19+csw/2)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
             ([(bdep+100-csw/2-19)*scl, (320+csw/2)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
             ([(bdep+100-ethdep+csw/2-1)*scl, (19+csw/2)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
             ([(bdep+100-ethdep+csw/2-1)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
             ([(bdep+100-csw/2-19)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
         ]
         if backlidonly:
             l = bl
@@ -1253,7 +1253,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             l += [
             # towards back of box
             ([(bdep+100-csw/2-bwid-2)*scl, (_blen-csw/2)*scl, (lcd_d-22)*scl], 
-                backboxheight),
+                backboxheight-2),
             ]
         if not backlidonly:
             l += [
@@ -2163,7 +2163,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 11:
+    if part != 11 and part != 10:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16:
