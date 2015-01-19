@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -1069,7 +1069,9 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
                                })
     c = translate(v=[(-100-lidfront_offs-bwid)*scl,
                     0*scl, (lcd_d-15+bwid)*scl]).add(c)
+
     a.add(c)
+
     # cutout at outer edge for base_end2 bits to poke through
     c = cube([159*scl, (extraht+48)*scl, 200*scl])
     c = translate(v=[(55)*scl,
@@ -1084,6 +1086,55 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         c = translate(v=[-99*scl, extraht*scl, -9*scl]).add(c)
+        a += c
+
+    if pin_parts_3d:
+        dep = bdep
+        pblen = blen+boxextraht
+        c = union()
+        # horizontal
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (30+pblen)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (pblen/2)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (pblen-20)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = translate([(dep-20)*scl, (pblen-135)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = translate([(dep-20)*scl, (135)*scl, boxheight*scl]).add(h)
+        c += h
+
+        # vertical
+        h = cube([15*scl, (pblen+75)*scl, (6)*scl])
+        h = translate([20*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([60*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([60*scl, (pblen-30)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (pblen+60)*scl, (6)*scl])
+        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (pblen+60)*scl, (6)*scl])
+        h = translate([(dep-140)*scl, (-28)*scl, boxheight*scl]).add(h)
+        c += h
+
+        #c = translate(v=[(-0)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
+        c = translate(v=[(-135-lidfront_offs-bwid)*scl,
+                        0*scl, (-boxheight+bht+11)*scl]).add(c)
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
@@ -1244,6 +1295,50 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                     {T:-1, B: bwid, L:-25.0, R:-1, F:bwid, D:hthick})
     c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*2+hthick)*scl]).add(c)
     a.add(c)
+
+    if pin_parts_3d:
+        dep = bdep+ethdep
+        c = union()
+        # horizontal
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (30+blen)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (blen/2)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(dep)*scl, 15*scl, (6)*scl])
+        h = translate([30*scl, (blen-20)*scl, boxheight*scl]).add(h)
+        c += h
+
+        # vertical
+        h = cube([15*scl, (blen+60)*scl, (6)*scl])
+        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([80*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (60)*scl, (6)*scl])
+        h = translate([80*scl, (blen-30)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([12*scl, (blen+60)*scl, (6)*scl])
+        h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (blen+60)*scl, (6)*scl])
+        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
+        c += h
+        if not test:
+            h = cube([15*scl, (blen+60)*scl, (6)*scl])
+            h = translate([(dep/2)*scl, (-28)*scl, boxheight*scl]).add(h)
+            c += h
+
+        c = translate(v=[(-75)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
+        a += c
 
     if not midpart:
         overhanglid = 0
@@ -2068,10 +2163,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 1:
+    if part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
-        #part != 6 and part != 9 and part != 15 and part != 1 and \
-        #part != 16:
+    #    part != 6 and part != 9 and part != 15 and part != 1 and \
+    #    part != 16:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
