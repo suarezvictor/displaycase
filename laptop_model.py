@@ -1098,13 +1098,14 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     a -= c
 
     # supports for threads, one (end=1) needs a cutout in the base box
+    # (for which it matches with back_box_base on end=1)
     dep = 40
     holes = [(1, extraht+45), (2, extraht+50),
                 (2, (blen-dep)/2.0), (2, blen-dep-50)]
     for (end, offs) in holes:
         r = union()
         if end == 1:
-            dp = -20
+            dp = -22
             r = lidscrewsupport(scl, dep, 112, dp)
         else:
             dp = 0
@@ -1311,9 +1312,10 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
-        dep = 45
+        # matches with back_box_lidfront
+        dep = 60 # add room for a nut
         for (end, offs) in [(1, 45), ]:
-            r = lidscrewsupport(scl, dep, 72, 0)
+            r = lidscrewsupport(scl, dep, 72, 1)
             t = case_bolthole(scl, end=end).add(r)
             t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
             a -= t
