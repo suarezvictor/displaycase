@@ -12,7 +12,7 @@ from copy import deepcopy
 # tend to come unstuck.
 pin_parts_3d=False
 
-test = False
+test = True
 
 
 if not test:
@@ -981,13 +981,10 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
-    h = cube([(boxlength-140)*scl, 60*scl, 44*scl])
-    h = translate(v=[10*scl, 10*scl, (60)*scl]).add(h)
-    a.add(h)
-    sstep = 140
+    sstep = 200
     sdep = sstep
     while sdep <= boxlength-sstep*2:
-        h = cube([sstep*scl, 50*scl, 40*scl])
+        h = cube([bwid*scl, 50*scl, 40*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
         a.add(h)
         h = shearedcube([25*scl, 15*scl, 20*scl],
@@ -1820,6 +1817,11 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     boxdepth = hinge_depth+ht
     box = base_box(scl, boxdepth, hole_depth, ht, hollow=True)
 
+    # add big strengthening bar, help reduce torquing
+    h = cube([(boxlength-96)*scl, 60*scl, 54*scl])
+    h = translate(v=[50*scl, 10*scl, (boxdepth+14)*scl]).add(h)
+    a.add(h)
+
     # add curved inner wall
     u = intersection()
     r = union()
@@ -2067,11 +2069,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 7:
+    #if part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 7 and \
     #    part != 16:
-    #if part != 8 and part != 1 and part != 6:
+    if part != 8 and part != 1 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
