@@ -33,7 +33,7 @@ else:
     lcd_d = 50
 
 scl = 0.1
-hthick = 10 # horizontal pieces not as thick
+hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
 lcd_inset_top = 25
 lcd_inset_bot = 200
