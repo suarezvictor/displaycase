@@ -1096,25 +1096,25 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         pblen = blen+boxextraht
         c = union()
         # horizontal
-        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = cube([(70)*scl, 15*scl, (6)*scl])
         h = translate([(dep-130)*scl, (10)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = cube([(70)*scl, 15*scl, (6)*scl])
         h = translate([(dep-20)*scl, (pblen-130)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = cube([(70)*scl, 15*scl, (6)*scl])
         h = translate([(dep-10)*scl, (128)*scl, boxheight*scl]).add(h)
         c += h
 
         # vertical
-        h = cube([15*scl, (60)*scl, (6)*scl])
-        h = translate([60*scl, -30*scl, boxheight*scl]).add(h)
+        h = cube([15*scl, (70)*scl, (6)*scl])
+        h = translate([60*scl, -50*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([15*scl, (60)*scl, (6)*scl])
-        h = translate([60*scl, (pblen-30)*scl, boxheight*scl]).add(h)
+        h = cube([15*scl, (70)*scl, (6)*scl])
+        h = translate([60*scl, (pblen-20)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([15*scl, (pblen+60)*scl, (6)*scl])
-        h = translate([(dep-140)*scl, (-28)*scl, boxheight*scl]).add(h)
+        h = cube([15*scl, (pblen+100)*scl, (6)*scl])
+        h = translate([(dep-140)*scl, (-50)*scl, boxheight*scl]).add(h)
         c += h
 
         #c = translate(v=[(-0)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
