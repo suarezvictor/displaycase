@@ -1083,7 +1083,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, extraht*scl, -7*scl]).add(c)
+        c = translate(v=[-99*scl, extraht*scl, -9*scl]).add(c)
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
@@ -1208,7 +1208,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             l += [
             # these are for the keyboard lid
             ([(csw/2-12)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*3)),
+                (backboxheight-bwid*2-hthick)),
         ]
     if underhanglid is not None:
         l += [
@@ -1885,7 +1885,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
             b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
             b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
         else:
-            b = cube([(29.1*2+bwid*2)*scl, 70*scl, 64*scl])
+            b = cube([(29.1*2+bwid*2)*scl, 70*scl, 71*scl])
             b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
@@ -1947,7 +1947,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                    }
         b = hollowbox(scl, blen, boxdepth, boxheight,
                         {T:-1, B: -1,
-                        L:bwid, R:bwid*3, F:bwid, D:bwid},
+                        L:bwid, R:bwid*3, F:bwid, D:hthick},
                         curverads=curverads)
         b = translate([0, 20*scl, 0*scl]).add(b)
         c.add(b)
@@ -2069,10 +2069,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 7:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 7 and \
-    #    part != 16:
-    if part != 8 and part != 15 and part != 6 and part != 11:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16:
+    #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
