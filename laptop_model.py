@@ -1057,7 +1057,6 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
         * add part-pin because corners lift
         * lift down-pillars slightly
-        * move down-pillar and lid screw support to overlap at each end
         * increase border round cut-out on screwsupport that pokes
           into base.  remember to add room for a nut as well
         * move cable-cutout hole because pillar is in the way
@@ -1100,7 +1099,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
 
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 40
-    holes = [(1, extraht+45), (2, extraht+105),
+    holes = [(1, extraht+45), (2, extraht+50),
                 (2, (blen-dep)/2.0), (2, blen-dep-50)]
     for (end, offs) in holes:
         r = union()
@@ -1163,7 +1162,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
     if not onlyoverhang:
         fl = [
             # these are for the keyboard lid
-            ([(bdep+98-ethdep-csw/2)*scl, (blen-csw/2-100)*scl,
+            ([(bdep+88-ethdep-csw/2)*scl, (blen-csw/2-48)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ([(csw/2-lidfront_offs-0.5)*scl,
@@ -2073,7 +2072,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 7 and \
     #    part != 16:
-    if part != 8 and part != 15 and part != 6:
+    if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
