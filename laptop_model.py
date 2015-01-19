@@ -1439,7 +1439,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[5*scl, extraht*scl, -7*scl]).add(c)
+        c = translate(v=[5*scl, extraht*scl, -9*scl]).add(c)
         a += c
 
     if not tpanel:
@@ -2068,10 +2068,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 7:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != 1 and \
-        part != 16:
+    if part != 1:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+        #part != 6 and part != 9 and part != 15 and part != 1 and \
+        #part != 16:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
