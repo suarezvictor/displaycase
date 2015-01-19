@@ -1367,13 +1367,13 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
             ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+124-0.5)*scl, 
+            ([(csw/2+134-0.5)*scl, 
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+124-0.5)*scl, 
+            ([(csw/2+134-0.5)*scl, 
                 (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(csw/2+124-0.5)*scl, 
+            ([(csw/2+134-0.5)*scl, 
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ([(dep-csw/2)*scl, 
@@ -1399,7 +1399,7 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
     if underhanglid is not None:
         l += [
             # these are for the keyboard lid
-            ([(csw/2+120-0.5)*scl, (-underhanglid-csw/2)*scl,
+            ([(csw/2+134-0.5)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ([(dep-csw/2-0.5)*scl, (-underhanglid-csw/2)*scl,
@@ -1694,7 +1694,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
                                             onlyoverhang=True,
                                             underhanglid=-18): # XXX: magic
         c = chamfered_backbox_screwholes(scl, sht)
-        c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
+        c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
         a -= c
 
     # hollow out the inner tube
@@ -2073,7 +2073,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 7 and \
     #    part != 16:
-    if part != 8 and part != 1 and part != 6:
+    if part != 8 and part != 15 and part != 6:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
         return
