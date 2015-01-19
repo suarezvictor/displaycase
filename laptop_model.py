@@ -1057,8 +1057,6 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
         * add part-pin because corners lift
         * lift down-pillars slightly
-        * increase border round cut-out on screwsupport that pokes
-          into base.  remember to add room for a nut as well
         * move cable-cutout hole because pillar is in the way
     """
     edge_inset = bwid
