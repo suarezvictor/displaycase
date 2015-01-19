@@ -1370,7 +1370,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         r.add(c)
         if hole == 2:#and offs == 0:
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
-            c = translate(v=[(+25.5*2)*scl, (hwid/2-3)*scl,
+            c = translate(v=[(+26.0*2)*scl, (hwid/2-3)*scl,
                         (dp/2)*scl]).add(c)
             r.add(c)
             c = shearedcube([109*scl, hwid*scl, (10)*scl],
