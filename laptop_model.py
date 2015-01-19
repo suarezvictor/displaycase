@@ -1096,40 +1096,22 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         pblen = blen+boxextraht
         c = union()
         # horizontal
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (30+pblen)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (pblen/2)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (pblen-20)*scl, boxheight*scl]).add(h)
+        h = cube([(50)*scl, 15*scl, (6)*scl])
+        h = translate([(dep-130)*scl, (10)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(50)*scl, 15*scl, (6)*scl])
-        h = translate([(dep-20)*scl, (pblen-135)*scl, boxheight*scl]).add(h)
+        h = translate([(dep-20)*scl, (pblen-130)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(50)*scl, 15*scl, (6)*scl])
-        h = translate([(dep-20)*scl, (135)*scl, boxheight*scl]).add(h)
+        h = translate([(dep-10)*scl, (128)*scl, boxheight*scl]).add(h)
         c += h
 
         # vertical
-        h = cube([15*scl, (pblen+75)*scl, (6)*scl])
-        h = translate([20*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
         h = cube([15*scl, (60)*scl, (6)*scl])
         h = translate([60*scl, -30*scl, boxheight*scl]).add(h)
         c += h
         h = cube([15*scl, (60)*scl, (6)*scl])
         h = translate([60*scl, (pblen-30)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([15*scl, (pblen+60)*scl, (6)*scl])
-        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([15*scl, (pblen+60)*scl, (6)*scl])
         h = translate([(dep-140)*scl, (-28)*scl, boxheight*scl]).add(h)
@@ -1276,7 +1258,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
 def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
-    * underfill (shearedcube) underneath the screwhole supports
+    * move chamfered screws up a bit due to hthick being less than bwid
     """
     edge_inset = bwid
     blen = ht
@@ -2149,7 +2131,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 8:
+    if part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16:
