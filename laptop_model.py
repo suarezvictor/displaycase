@@ -100,13 +100,16 @@ def shearedcube(size, center=False, shear=None, innershear=None):
             if not center:
                 points[i][j] += 0.5
             points[i][j] *= v[j]
+    if innershear is None:
+        innershear = shear
     if shear:
-        if innershear is None:
-            innershear = shear
         for i in range(len(points)/4):
-            for j in range(len(v)):
-                points[i*2][j] += shear[j]
-                points[i*2+4][j] += innershear[j]
+            points[i*2][0] += shear[0]
+            points[i*2+4][0] += innershear[0]
+            points[i*4][1] += shear[1]
+            points[i*4+1][1] += innershear[1]
+            #points[i*4][2] += shear[2]
+            #points[i*4+4][2] += innershear[2]
     return polyhedron(points, faces)
 
 L=0x1
@@ -1274,8 +1277,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
     * underfill (shearedcube) underneath the screwhole supports
-    * add some "part pinning" as the edges warped and lifted off
-    * reduce thickness of floor
     """
     edge_inset = bwid
     blen = ht
@@ -1301,15 +1302,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         c = union()
         # horizontal
         h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (30+blen)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (blen/2)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(dep)*scl, 15*scl, (6)*scl])
@@ -1317,9 +1309,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         c += h
 
         # vertical
-        h = cube([15*scl, (blen+60)*scl, (6)*scl])
-        h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
         h = cube([15*scl, (60)*scl, (6)*scl])
         h = translate([80*scl, -30*scl, boxheight*scl]).add(h)
         c += h
@@ -1329,15 +1318,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         h = cube([12*scl, (blen+60)*scl, (6)*scl])
         h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([15*scl, (blen+60)*scl, (6)*scl])
-        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
-        c += h
-        if not test:
-            h = cube([15*scl, (blen+60)*scl, (6)*scl])
-            h = translate([(dep/2)*scl, (-28)*scl, boxheight*scl]).add(h)
-            c += h
 
-        c = translate(v=[(-75)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
+        c = translate(v=[(-75)*scl, 0, (lcd_d-33+bwid+hthick)*scl]).add(c)
         a += c
 
     if not midpart:
@@ -1390,6 +1372,13 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(+25.5*2)*scl, (hwid/2-3)*scl,
                         (dp/2)*scl]).add(c)
+            r.add(c)
+            c = shearedcube([109*scl, hwid*scl, (10)*scl],
+                    shear=[0,-28*scl, 0], 
+                    innershear=[0,0,0], center=True)
+            if offs != 0:
+                c = rotate([0,0,180]).add(c)
+            c = translate(v=[(25.5)*scl, (hwid/2-3)*scl, (-dp/2-doffs+34)*scl]).add(c)
             r.add(c)
         t = case_bolthole(scl, end=hole).add(r)
         t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
@@ -2160,7 +2149,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 1:
+    if part != 8:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16:
