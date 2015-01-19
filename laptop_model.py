@@ -12,7 +12,7 @@ from copy import deepcopy
 # tend to come unstuck.
 pin_parts_3d=False
 
-test = True
+test = False
 
 
 if not test:
@@ -360,6 +360,9 @@ def lid_bolthole(scl, end=True):
         return translate([(95+lcd_w)*scl, 0*scl, (16)*scl])
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
+    """
+        TODO: middle join part not quite right (too low, too long)
+    """
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot-200
     iro = 0
@@ -978,10 +981,13 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
+    h = cube([(boxlength-140)*scl, 60*scl, 44*scl])
+    h = translate(v=[10*scl, 10*scl, (60)*scl]).add(h)
+    a.add(h)
     sstep = 140
-    sdep = sstep*2
+    sdep = sstep
     while sdep <= boxlength-sstep*2:
-        h = cube([bwid*scl, 70*scl, 50*scl])
+        h = cube([sstep*scl, 50*scl, 40*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
         a.add(h)
         h = shearedcube([25*scl, 15*scl, 20*scl],
@@ -1468,7 +1474,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         plen = 200
         plent = (flen - plen) / 2
         pht = bht+hthick
-        pdept =  50
+        pdept =  20
         pborder = 15
         c = cube([(pdep+1)*scl, plen*scl, (pht+1)*scl])
         t = translate([(5+pdept)*scl, plent*scl, (+50+boxtopoffs-1)*scl]).add(c)
@@ -1504,7 +1510,8 @@ def lidscrewsupport(scl, hdep, ht, dp, offs=0):
     r = translate(v=[(0)*scl, 0, (dp-ht/2-13)*scl]).add(r)
     return r
 
-def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=False):
+def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
+                midpart=False):
     """
     TODO:
     * add in small runner supports for long bolt so it doesn't bow box
@@ -1526,6 +1533,13 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None, midpart=Fa
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
     a.add(c)
+
+    # remove front part for touchpanel
+    c = cube([500*scl, (blen+2)*scl, (bwid+2)*scl])
+    c = translate(v=[(23)*scl, (-1)*scl,
+                (lcd_d-37+boxinset+bwid+hthick)*scl]).add(c)
+    a -= c
+        
 
     # add a structural support for bolthole (nut lock point)
     hwid = 25
@@ -2053,7 +2067,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 16:
+    if part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 7 and \
     #    part != 16:
