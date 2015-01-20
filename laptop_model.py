@@ -1315,6 +1315,12 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         h = cube([(dep)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, (blen-20)*scl, boxheight*scl]).add(h)
         c += h
+        h = cube([(80)*scl, 15*scl, (6)*scl])
+        h = translate([(dep-40)*scl, (-30)*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([(80)*scl, 15*scl, (6)*scl])
+        h = translate([(dep-40)*scl, (blen+20)*scl, boxheight*scl]).add(h)
+        c += h
 
         # vertical
         h = cube([15*scl, (60)*scl, (6)*scl])
@@ -1325,6 +1331,12 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         c += h
         h = cube([12*scl, (blen+60)*scl, (6)*scl])
         h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([12*scl, (blen+65)*scl, (6)*scl])
+        h = translate([(dep+30)*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([12*scl, (blen+65)*scl, (6)*scl])
+        h = translate([(dep-50)*scl, -30*scl, boxheight*scl]).add(h)
         c += h
 
         c = translate(v=[(-75)*scl, 0, (lcd_d-33+bwid+hthick)*scl]).add(c)
