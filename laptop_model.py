@@ -697,7 +697,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 def friction_hinge_inner(scl, ht):
 
     a = union()
-    hht = 50
+    hht = 40
 
     # outer disc
     r = union()
@@ -750,18 +750,18 @@ def friction_hinge_outer(scl, ht):
     # inner hexagon
     r = union()
     c = cylinder(r=42*scl,
-                        h=(bwid+35)*scl, segments=6, center=True)
+                        h=(bwid+30)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
     r.add(c)
     c = cylinder(r=30*scl,
                         h=(bwid*2)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (bwid*2)*scl, 0]).add(c)
+    c = translate(v=[0, (20)*scl, 0]).add(c)
     r.add(c)
     c = cylinder(r=60*scl, r1=65*scl,
-                        h=(bwid+5)*scl, segments=50, center=True)
+                        h=(bwid)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, -(bwid+2.5)*scl, 0]).add(c)
+    c = translate(v=[0, -(bwid)*scl, 0]).add(c)
     r.add(c)
     c = cylinder(r=(25)*scl, # XXX: nuts are 4mm hex diameter!
                         h=(bwid*3)*scl, segments=6, center=True)
@@ -2055,7 +2055,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     # additional support for friction hinge
     r = union()
-    cable_slot_depth = 30
+    cable_slot_depth = 25
     for ang in [0, 180]:
         c = touch_arc(lcd_hinge_inner_rad-20, cable_slot_depth, bwid,
                             10, scl,
@@ -2064,7 +2064,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         c = rotate([0, lcd_ext_rot_angle+168+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2)*scl,
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-12)*scl,
                      0]).add(t)
     a +=t
 
@@ -2206,10 +2206,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 14:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 1 and \
-    #    part != 16 and part != 7:
+    #if part != 11:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
