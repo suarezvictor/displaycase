@@ -1703,13 +1703,13 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     if pin_parts_3d:
         c = union()
         # horizontal
-        h = cube([(65)*scl, 15*scl, (6)*scl])
+        h = cube([(105)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(45)*scl, 15*scl, (6)*scl])
         h = translate([(dep-15)*scl, -30*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(65)*scl, 15*scl, (6)*scl])
+        h = cube([(105)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, (20+blen)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(45)*scl, 15*scl, (6)*scl])
@@ -1725,6 +1725,9 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
         # vertical
         h = cube([15*scl, (blen+60)*scl, (6)*scl])
         h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
+        c += h
+        h = cube([15*scl, (blen+60)*scl, (6)*scl])
+        h = translate([120*scl, -30*scl, boxheight*scl]).add(h)
         c += h
         h = cube([15*scl, (60)*scl, (6)*scl])
         h = translate([80*scl, -30*scl, boxheight*scl]).add(h)
