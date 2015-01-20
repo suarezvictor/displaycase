@@ -2207,7 +2207,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 11:
+    #if part != 16 and part != 12:
     if part != 10 and part != 11 and part != 12 and part != 8 and \
         part != 6 and part != 9 and part != 15 and part != 1 and \
         part != 16 and part != 7:
@@ -2246,7 +2246,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(h)
 
     offs = (lcd_end_ht+ht+hinge_depth+base_ht+40)
-    mid_ht = 140
+    mid_ht = 150
     wid = lcd_l/2-offs-mid_ht/2
     if part == 8:
         print "wid, offs",  wid, offs
