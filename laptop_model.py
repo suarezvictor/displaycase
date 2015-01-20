@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -1058,9 +1058,7 @@ def chamfered_backbox_screwholes(scl, sht):
 
 def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
-        * add part-pin because corners lift
-        * lift down-pillars slightly
-        * move cable-cutout hole because pillar is in the way
+        * lift down-pillars slightly more
     """
     edge_inset = bwid
     bht = bwid*3-10
@@ -1167,6 +1165,9 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     return a
 
 def back_box_lid(scl, ht_offset, ht, extraht):
+    """ TODO:
+        * lift down-pillars slightly 
+    """
     edge_inset = bwid
     bht = bwid*2+hthick-10
     blen = ht
@@ -1268,6 +1269,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
     * move chamfered screws up a bit due to hthick being less than bwid
+    * need a holder for an M2 nut on floor, putting lid on is too inconvenient
+    * chamfered screwholes need raising up (indenting more), thick reduction
     """
     edge_inset = bwid
     blen = ht
@@ -1486,6 +1489,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     """
     TODO:
     * reduce thickness of ceiling
+    * lift down-pillars slightly 
     """
     # matches up with lid_end
     edge_inset = bwid
@@ -1729,6 +1733,11 @@ def screwsupport(scl, w, d, h):
     return u
 
 def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
+    """
+        TODO:
+        * hole for friction hinge bolt too large a diameter.  reduce.
+        * back_box_base moving around too much.  needs lock-together
+    """
     edge_inset = bwid
     a = union()
 
@@ -2140,10 +2149,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 11:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-        #part != 6 and part != 9 and part != 15 and part != 1 and \
-        #part != 16:
+    #if part != 11:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
