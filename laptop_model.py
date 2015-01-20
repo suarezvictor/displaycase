@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -45,7 +45,7 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 32 / 2.0
-topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
+topscrewrad = 27 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
@@ -1290,12 +1290,12 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         # in the corner.
         curverads[B|R] = (bwid, 0)
     c = hollowbox(scl, ethdep, blen, backboxheight,
-                    {T:-1, B: bwid, L:-25.0, R:bwid, F:bwid, D:hthick},
+                    {T:-1, B: hthick, L:-25.0, R:bwid, F:hthick, D:hthick},
                     curverads=curverads)
     c = translate(v=[(bdep+100-ethdep)*scl, 0, (lcd_d-22)*scl]).add(c)
     a.add(c)
     c = hollowbox(scl, bdep+100+lidfront_offs-ethdep+1, blen, boxheight-hthick,
-                    {T:-1, B: bwid, L:-25.0, R:-1, F:bwid, D:hthick})
+                    {T:-1, B: hthick, L:-25.0, R:-1, F:hthick, D:hthick})
     c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*2+hthick)*scl]).add(c)
     a.add(c)
 
@@ -1646,7 +1646,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     flen = lid_ht+extraht
     a = union()
     c = hollowbox(scl, dep, blen, bht,
-                    {T:-1, B: bwid, R:-25.0, L:bwid, F:bwid, D:hthick},
+                    {T:-1, B: hthick, R:-25.0, L:bwid, F:hthick, D:hthick},
                     curverads={ D|L:(80, 0),
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
@@ -2206,10 +2206,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 12:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-        #part != 6 and part != 9 and part != 15 and part != 1 and \
-        #part != 16 and part != 7:
+    #if part != 11:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
