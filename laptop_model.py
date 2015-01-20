@@ -2018,31 +2018,35 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a += t
 
     # screw support at both ends
+    bhwid = 29.1+6
     for end in range(3 if test else 4):
         if end == 2:
-            bht = 29.1*2
+            bht = bhwid*2
         else:
             bht = 80
         if end == 2:
-            b = cube([(29.1*2+15)*scl, 70*scl, 53*scl])
-            b = translate([(-29.1+5)*scl, 18.5*scl, 7*scl]).add(b)
+            b = cube([(bhwid*2+15)*scl, 70*scl, (bhwid+36)*scl])
+            b = translate([(-bhwid+5)*scl, 18.5*scl, 7*scl]).add(b)
         else:
-            b = cube([(29.1*2+bwid*2)*scl, 70*scl, 71*scl])
-            b = translate([(-29.1-bwid)*scl, 18.5*scl, -30*scl]).add(b)
+            b = cube([(bhwid*2+bwid*2)*scl, 70*scl, 73*scl])
+            b = translate([(-bhwid-bwid)*scl, 18.5*scl, -(bhwid)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
                     (boxheight-bwid)*scl]).add(t)
         a += t
 
-        b = cube([29.1*2*scl, 70*scl, bht*scl])
-        b = translate([-29.1*scl, 10*scl, -30*scl]).add(b)
+        b = cube([bhwid*2*scl, 70*scl, bht*scl])
+        if end == 2:
+            b = translate([-bhwid*scl, 10*scl, -(bhwid-2)*scl]).add(b)
+        else:
+            b = translate([-bhwid*scl, 10*scl, -(bhwid+2)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
                     (boxheight)*scl]).add(t)
         a -= t
 
         r = union()
-        c = cube([29*2*scl, 48*scl, 29*1.7*scl])
+        c = cube([29*2*scl, 48*scl, bhwid*1.7*scl])
         r += translate([-29*scl, 80*scl, -28*scl]).add(c)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
@@ -2207,13 +2211,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 16 and part != 12:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != 1 and \
-        part != 16 and part != 7:
+    if part != 1:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+        #part != 6 and part != 9 and part != 15 and part != 1 and \
+        #part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
-    #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
-    #    and part != 2 and part != 4 and part != 3:
+    #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
+        #and part != 2 and part != -4 and part != -3:
         return
 
     c = color(colour)
