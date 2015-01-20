@@ -1046,7 +1046,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 def chamfered_backbox_screwholes(scl, sht):
     # chamfered screw holes in top of lid
     c = union()
-    c.add(cylinder(r=topscrewrad*scl, r1=topscrewrad*2.2*scl,
+    c.add(cylinder(r=topscrewrad*scl, r1=topscrewrad*1.9*scl,
                     h=((bwid+1)/2)*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl,
