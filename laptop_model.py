@@ -1301,8 +1301,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     # cutout in supports, matched by join between downsupports
     # needed because 3d printing joins close downsupports anyway
-    c = cube([57*scl, (blen+2)*scl, 53*scl])
-    c = translate(v=[-lidfront_offs*scl, -1*scl, 50*scl]).add(c)
+    c = cube([58*scl, (blen+2)*scl, 53*scl])
+    c = translate(v=[-(lidfront_offs+1)*scl, -1*scl, 50*scl]).add(c)
     a -= c
 
     if pin_parts_3d:
@@ -1365,7 +1365,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
 
     if frontpart:
-        a += front_box_base(scl, ht_offset, ht, dep=lcd_w-80, midpart=True)
+        a += front_box_base(scl, ht_offset, ht, dep=lcd_w-92, midpart=True)
 
     # add a structural support for bolthole (nut lock point)
     # has to be extended slightly so that the lid can sit on top of it
@@ -1718,13 +1718,13 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
         h = cube([(105)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, -30*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(45)*scl, 15*scl, (6)*scl])
+        h = cube([(65)*scl, 15*scl, (6)*scl])
         h = translate([(dep-15)*scl, -30*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(105)*scl, 15*scl, (6)*scl])
         h = translate([30*scl, (20+blen)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(45)*scl, 15*scl, (6)*scl])
+        h = cube([(65)*scl, 15*scl, (6)*scl])
         h = translate([(dep-15)*scl, (30+blen)*scl, boxheight*scl]).add(h)
         c += h
         h = cube([(dep)*scl, 15*scl, (6)*scl])
@@ -1747,11 +1747,11 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
         h = cube([15*scl, (60)*scl, (6)*scl])
         h = translate([80*scl, (blen-30)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([12*scl, (blen+60)*scl, (6)*scl])
-        h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
+        h = cube([12*scl, (blen+75)*scl, (6)*scl])
+        h = translate([(dep-22)*scl, -30*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([15*scl, (blen+60)*scl, (6)*scl])
-        h = translate([(dep+15)*scl, (-28)*scl, boxheight*scl]).add(h)
+        h = cube([15*scl, (blen+75)*scl, (6)*scl])
+        h = translate([(dep+45)*scl, (-30)*scl, boxheight*scl]).add(h)
         c += h
         if not test:
             h = cube([15*scl, (blen+60)*scl, (6)*scl])
