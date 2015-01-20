@@ -1276,8 +1276,6 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
 def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
-    * move chamfered screws up a bit due to hthick being less than bwid
-    * need a holder for an M2 nut on floor, putting lid on is too inconvenient
     * chamfered screwholes need raising up (indenting more), thick reduction
     """
     edge_inset = bwid
@@ -1392,14 +1390,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
         a += t
 
-    # screw holes in box
-    holes = [1,2] if not midpart else [2]
-    if midpart and not test:
-        holes.append(3)
-    t = box_screwholes(scl, edge_inset, holes=holes)
-    t = translate(v=[0, 0, boxheight*scl]).add(t)
-    a -= t
-
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
         # matches with back_box_lidfront
@@ -1418,6 +1408,28 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, (-bwid/2+0.5)*scl, 0]).add(t)
         a -= t
+
+    # add a holder for a nut
+    if not midpart:
+        r = union()
+        c = cube([80*scl, 40*scl, 30*scl], center=True)
+        r.add(c)
+        c = cylinder(r=(28)*scl, # XXX: nuts are 4mm hex diameter!
+                            h=(25)*scl, segments=6, center=True)
+        c = rotate([180, 90, 90]).add(c)
+        c = translate(v=[0, -10*scl, -10*scl]).add(c)
+        r -= c
+        t = case_bolthole(scl, end=1).add(r)
+        t = translate(v=[0, 107*scl, (boxheight+10)*scl]).add(t)
+        a += t
+
+    # screw holes in box
+    holes = [1,2] if not midpart else [2]
+    if midpart and not test:
+        holes.append(3)
+    t = box_screwholes(scl, edge_inset, holes=holes)
+    t = translate(v=[0, 0, boxheight*scl]).add(t)
+    a -= t
 
     if not midpart:
         # cutout in other side for cable
