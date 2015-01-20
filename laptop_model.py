@@ -1086,7 +1086,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, extraht*scl, -9*scl]).add(c)
+        c = translate(v=[-99*scl, extraht*scl, -10*scl]).add(c)
         a += c
 
     if pin_parts_3d:
@@ -1146,7 +1146,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     for (end, offs) in holes:
         r = union()
         if end == 1:
-            dp = -22
+            dp = -23
             r = lidscrewsupport(scl, dep, 112, dp)
         else:
             dp = 0
@@ -1391,7 +1391,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         # matches with back_box_lidfront
         dep = 60 # add room for a nut
         for (end, offs) in [(1, 45), ]:
-            r = lidscrewsupport(scl, dep, 72, 1)
+            r = lidscrewsupport(scl, dep, 72, 1, wid=32)
             t = case_bolthole(scl, end=end).add(r)
             t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
             a -= t
@@ -1573,12 +1573,12 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
 
     return a
 
-def lidscrewsupport(scl, hdep, ht, dp, offs=0):
+def lidscrewsupport(scl, hdep, ht, dp, offs=0, wid=29):
     r = union()
-    c = cube([(29+offs)*2*scl, hdep*scl, (ht)*scl], center=True)
+    c = cube([(wid+offs)*2*scl, hdep*scl, (ht)*scl], center=True)
     c = translate(v=[(0)*scl, (hdep/2.0)*scl, (+ht/2-10)*scl]).add(c)
     r.add(c)
-    c = shearedcube([(29+offs)*2*scl, hdep*scl, (17)*scl], 
+    c = shearedcube([(wid+offs)*2*scl, hdep*scl, (17)*scl], 
             shear=[-15*scl,0,0], innershear=[15*scl, 0, 0], center=True)
     c = translate(v=[(0)*scl, (hdep/2.0)*scl, (ht-3)*scl]).add(c)
     r.add(c)
