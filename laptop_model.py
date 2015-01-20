@@ -1398,7 +1398,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                     innershear=[0,0,0], center=True)
             if offs != 0:
                 c = rotate([0,0,180]).add(c)
-            c = translate(v=[(25.5)*scl, (hwid/2-3)*scl, (-dp/2-doffs+34)*scl]).add(c)
+            c = translate(v=[(25.5)*scl, (hwid/2-3)*scl,
+                             (-dp/2-doffs+34)*scl]).add(c)
             r.add(c)
         t = case_bolthole(scl, end=hole).add(r)
         t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
@@ -1428,7 +1429,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         r = union()
         c = cube([80*scl, 40*scl, 30*scl], center=True)
         r.add(c)
-        c = cylinder(r=(28)*scl, # XXX: nuts are 4mm hex diameter!
+        c = cylinder(r=(25)*scl, # XXX: nuts are 4mm hex diameter!
                             h=(25)*scl, segments=6, center=True)
         c = rotate([180, 90, 90]).add(c)
         c = translate(v=[0, -10*scl, -10*scl]).add(c)
