@@ -1743,7 +1743,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
             h = translate([(dep/2)*scl, (-28)*scl, boxheight*scl]).add(h)
             c += h
 
-        c = translate(v=[(5)*scl, 0, (lcd_d-31+bwid+hthick)*scl]).add(c)
+        c = translate(v=[(5)*scl, 0, (lcd_d-33+bwid+hthick)*scl]).add(c)
         a += c
 
     return a
