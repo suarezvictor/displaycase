@@ -1073,9 +1073,15 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
 
     a.add(c)
 
+    # cutout in lid which matches the base_mid screwhole cross-supports
+    c = cube([(59+2)*2*scl, (extraht+56)*scl, 25*scl])
+    c = translate(v=[(54)*scl,
+                    (ht+extraht-45-2)*scl, (lcd_d-15+bwid-1)*scl]).add(c)
+    a -= c
+
     # cutout at outer edge for base_end2 bits to poke through
     c = cube([159*scl, (extraht+48)*scl, 200*scl])
-    c = translate(v=[(55)*scl,
+    c = translate(v=[(54)*scl,
                     -1*scl, (lcd_d-15+bwid-1)*scl]).add(c)
     
     a -= c
@@ -1088,6 +1094,15 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
         c = translate(v=[-99*scl, extraht*scl, -10*scl]).add(c)
         a += c
+
+    # join left and right supports together, needed because of 3dprint errs
+    c = cube([54*scl, (154)*scl, 48*scl])
+    c = translate(v=[(-100-lidfront_offs)*scl, 0*scl, 52*scl]).add(c)
+    a += c
+    c = cube([54*scl, (144)*scl, 48*scl])
+    c = translate(v=[(-100-lidfront_offs)*scl, (blen+boxextraht-144)*scl,
+                    52*scl]).add(c)
+    a += c
 
     if pin_parts_3d:
         dep = bdep
@@ -1130,13 +1145,6 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
-
-    # cutout in lid which matches the base_mid screwhole cross-supports
-    c = cube([(59+2)*2*scl, (extraht+56)*scl, 25*scl])
-    c = translate(v=[(-29-2)*scl,
-                    (ht+extraht-45-1)*scl, (105)*scl]).add(c)
-    c = case_bolthole(scl, end=2).add(c)
-    a -= c
 
     # supports for threads, one (end=1) needs a cutout in the base box
     # (for which it matches with back_box_base on end=1)
@@ -1290,6 +1298,12 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                     {T:-1, B: bwid, L:-25.0, R:-1, F:bwid, D:hthick})
     c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*2+hthick)*scl]).add(c)
     a.add(c)
+
+    # cutout in supports, matched by join between downsupports
+    # needed because 3d printing joins close downsupports anyway
+    c = cube([57*scl, (blen+2)*scl, 53*scl])
+    c = translate(v=[-lidfront_offs*scl, -1*scl, 50*scl]).add(c)
+    a -= c
 
     if pin_parts_3d:
         dep = bdep+ethdep
@@ -2149,10 +2163,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 11:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != 1 and \
-        part != 16 and part != 7:
+    if part != 11 and part != 8:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+    #    part != 6 and part != 9 and part != 15 and part != 1 and \
+    #    part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0 and part != 1 and part != 7 and part != -13 \
     #    and part != 2 and part != 4 and part != 3:
