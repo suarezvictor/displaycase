@@ -10,6 +10,22 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
+
+B0 = 1
+B45 = 2
+
+def pin(spec):
+    ht = 6
+    if spec == B0 or spec == B45:
+        c = union()
+        h = cube([75*scl, ht*scl, (75)*scl], center=True)
+        c += h
+        h = cube([60*scl, (ht+1)*scl, (60)*scl], center=True)
+        c -= h
+    if spec == B45:
+        c = rotate([0, 45, 0]).add(c)
+    return c
+        
 pin_parts_3d=True
 
 test = True
@@ -2192,43 +2208,29 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
 
         if pin_parts_3d:
             p = union()
-            h = cube([15*scl, 6*scl, (50)*scl])
-            h = translate([-20*scl, (boxdepth+10)*scl, 30*scl]).add(h)
+            h = pin(B0)
+            h = translate([20*scl, (boxdepth+10)*scl, 30*scl]).add(h)
             p += h
-            h = cube([(90)*scl, 6*scl, (15)*scl])
-            h = translate([(-20)*scl, (boxdepth+10)*scl, 55*scl]).add(h)
+            h = pin(B0)
+            h = translate([170*scl, (boxdepth+10)*scl, 30*scl]).add(h)
             p += h
-            if not test:
-                for m in [0.2, 0.45, 0.7]:
-                    h = cube([17*scl, 6*scl, (150)*scl])
-                    h = translate([(boxlength*m)*scl,
-                                   (boxdepth+10)*scl, 15*scl]).add(h)
-                    p += h
-            h = cube([15*scl, 6*scl, (210)*scl])
-            h = translate([70*scl, (boxdepth+10)*scl, -15*scl]).add(h)
+            h = pin(B0)
+            h = translate([120*scl, (boxdepth+10)*scl, 145*scl]).add(h)
             p += h
-            h = cube([15*scl, 6*scl, (180)*scl])
-            h = translate([(boxlength-250)*scl, (boxdepth+10)*scl, -45*scl]).add(h)
+            h = pin(B0)
+            h = translate([(boxlength-200)*scl, (boxdepth+10)*scl, 10*scl]).add(h)
             p += h
-            h = cube([15*scl, 6*scl, (250)*scl])
-            h = translate([(boxlength-10)*scl, (boxdepth+10)*scl, -95*scl]).add(h)
+            h = pin(B0)
+            h = translate([(boxlength-10)*scl, (boxdepth+10)*scl, 125*scl]).add(h)
             p += h
-            h = cube([15*scl, 6*scl, (100)*scl])
-            h = translate([(boxlength-180)*scl, (boxdepth+10)*scl,
-                        -60*scl]).add(h)
+            h = pin(B0)
+            h = translate([(boxlength-50)*scl,
+                    (boxdepth+10)*scl, -30*scl]).add(h)
             p += h
-            h = cube([15*scl, 6*scl, (100)*scl])
-            h = translate([(boxlength+70)*scl, (boxdepth+10)*scl,
-                        -50*scl]).add(h)
+            h = pin(B0)
+            h = translate([(boxlength+38)*scl, (boxdepth+10)*scl, 38*scl]).add(h)
             p += h
-            h = cube([(75)*scl, 6*scl, (15)*scl])
-            h = translate([(boxlength+10)*scl, (boxdepth+10)*scl,
-                        -10*scl]).add(h)
-            p += h
-            h = cube([(90)*scl, 6*scl, (15)*scl])
-            h = translate([(boxlength-20)*scl, (boxdepth+10)*scl, 70*scl]).add(h)
-            p += h
-            p = translate([0, 4*scl, 0]).add(p)
+            p = translate([0, 8*scl, 0]).add(p)
             c += p
 
     # lid at hinge end
