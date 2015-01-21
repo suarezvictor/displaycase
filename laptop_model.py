@@ -952,16 +952,16 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         curverads={
                    D|L:(80, 0),
                    #D|R:(bwid*2, 0),
-                   T|L:(bwid, 0), # XXX: gcode chops this separate
+                   T|L:(hthick, 0), # XXX: gcode chops this separate
                    #B|L:(bwid, 0), # XXX: bug in hollowbox
-                   D|B:(bwid, 0),
-                   T|B:(bwid, 0),
+                   D|B:(hthick, 0),
+                   T|B:(hthick, 0),
                    }
-        b = hollowbox(scl, boxlength-122, boxdepth, boxheight,
-                        {T:bwid, B: bwid,
-                        L:bwid, R:-1, F:-1, D:-1},
+        b = hollowbox(scl, boxlength-122, boxdepth-bwid+hthick, boxheight,
+                        {T:hthick, B: hthick,
+                        L:hthick, R:-1, F:-1, D:-1},
                         curverads=curverads)
-        b = translate([0, 20*scl, 0*scl]).add(b)
+        b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
         c.add(b)
         # short wall hinge-end
         b = cube([(bwid)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
@@ -1594,13 +1594,12 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         holes = [(0, extraht+50),
                     (0, (flen-dep)/2.0), (0, flen-dep)]
     for (end, offs) in holes:
-        r = lidscrewsupport(scl, dep, 112, -20)
+        r = lidscrewsupport(scl, dep, 105, -13)
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
         a += t
 
     if tpanel:
-
         plen = 200
         plent = (flen - plen) / 2
         pht = bht+hthick
@@ -1649,7 +1648,6 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     * make a small cut-out so that front lid can drop hooks down to the
       long bolt (like in back box)
     * put a similar support into the opposite wall on the long bolt
-    * reduce thickness of floor
     """
     if dep is None:
         dep = fdep
@@ -1659,7 +1657,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     flen = lid_ht+extraht
     a = union()
     c = hollowbox(scl, dep, blen, bht,
-                    {T:-1, B: hthick, R:-25.0, L:bwid, F:hthick, D:hthick},
+                    {T:-1, B: hthick, R:-25.0, L:hthick, F:hthick, D:hthick},
                     curverads={ D|L:(80, 0),
                                })
     c = translate(v=[(5)*scl, 0, (lcd_d-32+bwid*2+boxinset)*scl]).add(c)
@@ -1673,15 +1671,15 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
 
 
     # add a structural support for bolthole (nut lock point)
-    hwid = 25
-    hoffsl = [(0, hwid/2), (0, blen-hwid*1.5)]
+    hwid = 34
+    hoffsl = [(0, 1), (0, blen-hwid)]
     if not midpart:
         hoffsl += [(0, (blen-hwid)/2)]
     for (hole, offs) in hoffsl:
         r = union()
-        doffs = 0
+        doffs = -5
         dp = 0
-        c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
+        c = cube([40*2*scl, hwid*scl, (dp+34*2)*scl], center=True)
         c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2-doffs)*scl]).add(c)
         r.add(c)
         t = case_bolthole(scl, end=hole).add(r)
@@ -1706,14 +1704,14 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
 
     if not midpart:
         # this is a cut-out so that the lid's thread-support goes through
-        hdep = 24
+        hdep = 30
         cdep = 20
         holes = [(0, extraht+50),
                     (0, (flen-cdep)/2.0), (0, flen-cdep),
                     (0, blen+20) # XXX: magic number, for touchpanel tray
                 ]
         for (end, offs) in holes:
-            r = lidscrewsupport(scl, hdep, 72, 0)
+            r = lidscrewsupport(scl, hdep, 70, 3, wid=35)
             t = case_bolthole(scl, end=end).add(r)
             t = translate(v=[(0)*scl, (offs-extraht-(hdep-cdep)/2)*scl,
                     (boxheight)*scl]).add(t)
@@ -1968,9 +1966,9 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     # base hinge box
     boxdepth = hinge_depth+ht
-    box = base_box(scl, boxdepth+bwid, hole_depth, ht,
+    box = base_box(scl, boxdepth+hthick, hole_depth, ht,
                             hollow=True, endpart=True)
-    box = translate(v=[0, -bwid*scl, 0]).add(box)
+    box = translate(v=[0, -hthick*scl, 0]).add(box)
 
     # add big strengthening bar, help reduce torquing
     h = cube([(boxlength-96)*scl, 60*scl, 60*scl])
@@ -1978,17 +1976,17 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a.add(h)
     # XXX: blegh!  must be a better way to do this...
     # fill in end part near hinge (might as well)
-    h = cube([(159)*scl, (60+bwid)*scl, 52*scl])
-    h = translate(v=[(boxlength-205)*scl, (-43.5-bwid)*scl,
+    h = cube([(159)*scl, (60+hthick)*scl, 52*scl])
+    h = translate(v=[(boxlength-205)*scl, (-43.5-hthick)*scl,
                         (boxdepth+14)*scl]).add(h)
     a.add(h)
-    h = cube([(90)*scl, (60+bwid)*scl, 60*scl])
-    h = translate(v=[(105)*scl, (-43.5-bwid)*scl,
+    h = cube([(90)*scl, (60+hthick)*scl, 60*scl])
+    h = translate(v=[(105)*scl, (-43.5-hthick)*scl,
                         (boxdepth+14)*scl]).add(h)
     a.add(h)
-    h = cube([(40)*scl, (hole_depth+ht+bwid)*scl, 60*scl])
+    h = cube([(40)*scl, (hole_depth+ht+hthick)*scl, 60*scl])
     h = rotate([0, 30, 0]).add(h) # hilarious....
-    h = translate(v=[(boxlength-120)*scl, (-43.5-bwid)*scl, 95*scl]).add(h)
+    h = translate(v=[(boxlength-120)*scl, (-43.5-hthick)*scl, 95*scl]).add(h)
     a.add(h)
 
     # add curved inner wall
@@ -1999,8 +1997,8 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
-    b = base_box(scl, boxdepth+bwid, hole_depth, ht, hollow=False)
-    b = translate(v=[0, -bwid*scl, 0]).add(b)
+    b = base_box(scl, boxdepth+hthick, hole_depth, ht, hollow=False)
+    b = translate(v=[0, -hthick*scl, 0]).add(b)
     u.add(b)
     u.add(t)
 
@@ -2041,15 +2039,11 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(offs)*scl, (-boxdepth/2+105+soffset)*scl, doffs*scl]).add(t)
         a += t
-    b = cube([25*scl, (boxdepth-70)*scl, (bwid*1.2)*scl])
-    t = case_bolthole(scl, end=0).add(b)
-    t = translate(v=[(20)*scl, (-boxdepth/2+105+soffset)*scl, (boxheight)*scl]).add(t)
-    a += t
 
     # screw support at both ends.  also have self-tap screw-holes above
     # bolts
     bhwid = 29.1+6
-    bhdep = ht + hinge_depth +bwid
+    bhdep = ht + hinge_depth +hthick
     for end in range(3 if test else 4):
         if end == 2:
             bht = bhwid*2
@@ -2057,7 +2051,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
             bht = 90
         if end == 2:
             b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+36)*scl])
-            b = translate([(-bhwid+5)*scl, (18.5-bwid)*scl, 7*scl]).add(b)
+            b = translate([(-bhwid+5)*scl, (18.5-hthick)*scl, 7*scl]).add(b)
         else:
             b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, 130*scl])
             b = translate([(-bhwid-bwid)*scl, (18.5-bwid)*scl,
@@ -2258,7 +2252,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 8 and part != 11:
+    if part != 15 and part != 9:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
