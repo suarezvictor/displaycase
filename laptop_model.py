@@ -1038,34 +1038,22 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     if pin_parts_3d:
         c = union()
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([-50*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([-20*scl, (16.5-ht)*scl, 45*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([60*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([70*scl, (16.5-ht)*scl, 200*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength+8)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-100)*scl, (16.5-ht)*scl, 50*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength-120)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 130*scl]).add(h)
         c += h
-        h = cube([45*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength+140)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-100)*scl, (16.5-ht)*scl, 210*scl]).add(h)
         c += h
-        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
-        h = translate([(-50)*scl, (16.5-ht)*scl, -200*scl]).add(h)
-        c += h
-        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
-        h = translate([(-50)*scl, (16.5-ht)*scl, 245*scl]).add(h)
-        c += h
-        h = cube([(20+200)*scl, 6*scl, (25)*scl])
-        h = translate([(boxlength-40)*scl, (16.5-ht)*scl, 150*scl]).add(h)
-        c += h
-        h = cube([(20+100)*scl, 6*scl, (25)*scl])
-        h = translate([(-40)*scl, (16.5-ht)*scl, 95*scl]).add(h)
-        c += h
-        c = translate([0*scl, (26.5)*scl, -5*scl]).add(c)
+        c = translate([0*scl, (29.5)*scl, -5*scl]).add(c)
         a += c
 
     return a
@@ -2273,7 +2261,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 1 and part != -7:
+    if part != -1 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
