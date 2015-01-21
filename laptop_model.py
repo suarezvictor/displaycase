@@ -1165,8 +1165,8 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     for (end, offs) in holes:
         r = union()
         if end == 1:
-            dp = -23
-            r = lidscrewsupport(scl, dep, 112, dp)
+            dp = -11
+            r = lidscrewsupport(scl, dep, 105, dp)
         else:
             dp = 0
             c = cube([29*2*scl, dep*scl, (dp+29*2)*scl], center=True)
@@ -2252,7 +2252,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 15 and part != 9:
+    if part != 11 and part != -8:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
