@@ -18,9 +18,9 @@ def pin(spec):
     ht = 6
     if spec == B0 or spec == B45:
         c = union()
-        h = cube([75*scl, ht*scl, (75)*scl], center=True)
+        h = cube([90*scl, ht*scl, (90)*scl], center=True)
         c += h
-        h = cube([60*scl, (ht+1)*scl, (60)*scl], center=True)
+        h = cube([65*scl, (ht+1)*scl, (65)*scl], center=True)
         c -= h
     if spec == B45:
         c = rotate([0, 45, 0]).add(c)
