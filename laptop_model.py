@@ -369,7 +369,7 @@ def case_bolthole(scl, end):
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
         return translate([(lcd_w+lcd_inset_bot-95)*scl, 0*scl,
-                            (-lcd_d+133+boxtopoffs-boxheight)*scl])
+                            (-lcd_d+135+boxtopoffs-boxheight)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2.0+30)*scl, 0*scl, bht*scl])
 
@@ -986,8 +986,8 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     for end in holes:
         r = union()
         dp = -3
-        c = cube([36*2*scl, cdep*scl, (67)*scl], center=True)
-        c = translate(v=[(-3)*scl, (cdep/2)*scl, (dp/2+2.5)*scl]).add(c)
+        c = cube([36*2*scl, cdep*scl, (69)*scl], center=True)
+        c = translate(v=[(-3)*scl, (cdep/2)*scl, (dp/2+1.5)*scl]).add(c)
         r.add(c)
         c = cylinder(r=28*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
@@ -1047,7 +1047,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = pin(B0)
         h = translate([(boxlength-100)*scl, (16.5-ht)*scl, 210*scl]).add(h)
         c += h
-        c = translate([0*scl, (29.5)*scl, -5*scl]).add(c)
+        c = translate([0*scl, (34.5)*scl, -5*scl]).add(c)
         a += c
 
     return a
@@ -1226,7 +1226,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
     if not onlyoverhang:
         fl = [
             # these are for the keyboard lid
-            ([(bdep+88-ethdep-csw/2)*scl, (blen-csw/2-48)*scl,
+            ([(bdep+98-ethdep-csw/2)*scl, (blen-csw/2-48)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ([(csw/2-lidfront_offs-0.5)*scl,
@@ -1238,7 +1238,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (csw/2+19)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
-            ([(bdep+88-ethdep-csw/2)*scl,
+            ([(bdep+98-ethdep-csw/2)*scl,
                 (csw/2+bwid+30)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick)),
             ]
@@ -1391,7 +1391,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             doffs = -70
             dp = 70
         elif hole == 2 or hole == 3:
-            dp = 4
+            dp = 0
+            doffs = 6
         else:
             dp = 50
         c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
@@ -1400,7 +1401,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         if hole == 2:#and offs == 0:
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(+26.0*2)*scl, (hwid/2-3)*scl,
-                        (dp/2-4)*scl]).add(c)
+                        (dp/2-doffs)*scl]).add(c)
             r.add(c)
             c = shearedcube([109*scl, hwid*scl, (10)*scl],
                     shear=[0,-28*scl, 0],
@@ -1408,7 +1409,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             if offs != 0:
                 c = rotate([0,0,180]).add(c)
             c = translate(v=[(25.5)*scl, (hwid/2-3)*scl,
-                             (-dp/2-doffs+34)*scl]).add(c)
+                             (-dp/2-doffs+32)*scl]).add(c)
             r.add(c)
         t = case_bolthole(scl, end=hole).add(r)
         t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
@@ -2252,7 +2253,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 11 and part != -8:
+    if part != 8 and part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
@@ -2403,7 +2404,7 @@ if __name__ == '__main__':
                 p  = translate(v=[0, 210*scl,0]).add(p)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
