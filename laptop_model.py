@@ -976,6 +976,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         r.add(c)
         c = cylinder(r=26*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
+        c = rotate([0, 30, 0]).add(c)
         c = translate(v=[(0)*scl, (-30)*scl, 0*scl]).add(c)
         r -= c
         t = case_bolthole(scl, end=end).add(r)
