@@ -984,20 +984,36 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
         a += t
 
+    # add screw-hole for lid_end to lock against
+    sholes = [(165, 150), (boxlength-65, 150)]
+    for end in range(3 if test else 4):
+        if end == 2:
+            continue
+        d = chamfered_backbox_screwholes(scl, 50)
+        d = rotate([90, 0, 0]).add(d)
+        d = case_bolthole(scl, end=end).add(d)
+        d = translate(v=[0*scl, 7*scl, 75*scl]).add(d) # XXX: magic constant
+        a -= d
+    for (x,h) in sholes:
+        d = chamfered_backbox_screwholes(scl, 50)
+        d = rotate([90, 0, 0]).add(d)
+        d = translate(v=[x*scl, 7*scl, h*scl]).add(d) # XXX: magic constant
+        a -= d
+
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
     sstep = 200
     sdep = sstep
     while sdep <= boxlength-sstep*2:
-        h = cube([bwid*scl, 50*scl, 40*scl])
+        h = cube([bwid*scl, 60*scl, 40*scl])
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
-        a.add(h)
+        a += h
         h = shearedcube([25*scl, 15*scl, 20*scl],
                 shear=[-10*scl, 0, 0], innershear=[0,0,0])
         h = rotate([0, 0, 90]).add(h)
-        h = translate(v=[sdep*scl, bwid*scl,
+        h = translate(v=[(sdep+15)*scl, bwid*scl,
                     (boxheight+50+boxtopoffs-bwid-20)*scl]).add(h)
-        a.add(h)
+        a += h
         sdep += sstep
 
     # screw holes in box
@@ -1962,6 +1978,20 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     h = cube([(boxlength-96)*scl, 60*scl, 60*scl])
     h = translate(v=[50*scl, 0*scl, (boxdepth+14)*scl]).add(h)
     a.add(h)
+    # XXX: blegh!  must be a better way to do this...
+    # fill in end part near hinge (might as well)
+    h = cube([(159)*scl, 60*scl, 60*scl])
+    h = translate(v=[(boxlength-205)*scl, (-43.5)*scl,
+                        (boxdepth+14)*scl]).add(h)
+    a.add(h)
+    h = cube([(90)*scl, 60*scl, 60*scl])
+    h = translate(v=[(105)*scl, (-43.5)*scl,
+                        (boxdepth+14)*scl]).add(h)
+    a.add(h)
+    h = cube([(40)*scl, (hole_depth+ht)*scl, 60*scl])
+    h = rotate([0, 30, 0]).add(h) # hilarious....
+    h = translate(v=[(boxlength-120)*scl, (-43.5)*scl, 95*scl]).add(h)
+    a.add(h)
 
     # add curved inner wall
     u = intersection()
@@ -2017,24 +2047,37 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     t = translate(v=[(20)*scl, (-boxdepth/2+105+soffset)*scl, (boxheight)*scl]).add(t)
     a += t
 
-    # screw support at both ends
+    # screw support at both ends.  also have self-tap screw-holes above
+    # bolts
     bhwid = 29.1+6
+    bhdep = ht + hinge_depth
     for end in range(3 if test else 4):
         if end == 2:
             bht = bhwid*2
         else:
             bht = 80
         if end == 2:
-            b = cube([(bhwid*2+15)*scl, 70*scl, (bhwid+36)*scl])
+            b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+36)*scl])
             b = translate([(-bhwid+5)*scl, 18.5*scl, 7*scl]).add(b)
         else:
-            b = cube([(bhwid*2+bwid*2)*scl, 70*scl, 73*scl])
-            b = translate([(-bhwid-bwid)*scl, 18.5*scl, -(bhwid)*scl]).add(b)
+            b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, 110*scl])
+            b = translate([(-bhwid-bwid)*scl, 18.5*scl,
+                            -(bhwid+37)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
                     (boxheight-bwid)*scl]).add(t)
         a += t
 
+        if end != 2:
+            # add screw-hole for lid_end to lock against
+            d = cylinder(r=topscrewrad*scl,
+                            h=(80)*scl,
+                            segments=50, center=True)
+            d = rotate([90, 0, 0]).add(d)
+            d = translate(v=[0, -4*scl, (75)*scl]).add(d) # XXX: magic constant
+            d = case_bolthole(scl, end=end).add(d)
+            a -= d
+            
         b = cube([bhwid*2*scl, 70*scl, bht*scl])
         if end == 2:
             b = translate([-bhwid*scl, 10*scl, -(bhwid-2)*scl]).add(b)
@@ -2052,6 +2095,15 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
                         (boxheight)*scl]).add(t)
         a += t
+
+    for (x,h) in [(165, 150), (boxlength-65, 150)]:
+        # add screw-hole for lid_end to lock against
+        d = cylinder(r=topscrewrad*scl,
+                        h=(80)*scl,
+                        segments=50, center=True)
+        d = rotate([90, 0, 0]).add(d)
+        d = translate(v=[x*scl, -4*scl, h*scl]).add(d) # XXX: magic constant
+        a -= d
 
     # screw holes in box
     t = box_screwholes(scl, edge_inset)
@@ -2211,7 +2263,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 1:
+    if part != -1 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
