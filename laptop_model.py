@@ -966,20 +966,18 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
                         (+50+boxtopoffs)*scl]).add(a)
 
     # insets for nuts and threaded bar
-    holes = [0, 1, 2] if test else [0, 1, 2, 3]
+    holes = [2]
     cdep = 60
     for end in holes:
         r = union()
-        c = cylinder(r=26*scl, h=(cdep)*scl, segments=50)
+        dp = -3
+        c = cube([34*2*scl, cdep*scl, (63)*scl], center=True)
+        c = translate(v=[(-3)*scl, (cdep/2)*scl, (dp/2+4.5)*scl]).add(c)
+        r.add(c)
+        c = cylinder(r=26*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
-        r.add(c)
-        if end == 2:
-            dp = -3
-        else:
-            dp = 5
-        c = cube([26*2*scl, cdep*scl, (27*2)*scl], center=True)
-        c = translate(v=[(0)*scl, (cdep/2)*scl, (dp/2)*scl]).add(c)
-        r.add(c)
+        c = translate(v=[(0)*scl, (-30)*scl, 0*scl]).add(c)
+        r -= c
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
         a += t
@@ -989,16 +987,16 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     for end in range(3 if test else 4):
         if end == 2:
             continue
-        d = chamfered_backbox_screwholes(scl, 50)
+        d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
         d = case_bolthole(scl, end=end).add(d)
         d = translate(v=[0*scl, 7*scl, 75*scl]).add(d) # XXX: magic constant
-        a -= d
+        a += d
     for (x,h) in sholes:
-        d = chamfered_backbox_screwholes(scl, 50)
+        d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
         d = translate(v=[x*scl, 7*scl, h*scl]).add(d) # XXX: magic constant
-        a -= d
+        a += d
 
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
@@ -1019,7 +1017,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     # screw holes in box
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
-    a -= t
+    #a -= t
 
     # hollow out tube including base box
     t = hollow_out_edge(scl, 100, ht, border)
@@ -1066,9 +1064,9 @@ def chamfered_backbox_screwholes(scl, sht):
                     h=((bwid+1)/2)*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl,
-                    h=(bwid+2.5)*scl,
+                    h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
-    d = translate(v=[0, 0, +(bwid+0.2)*0.5*scl]).add(d)
+    d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
     c.add(d)
     c = rotate([180, 0, 0]).add(c)
     return c
@@ -1369,7 +1367,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     # add corner supports
     for ((x,y,z), sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
                                             onlyoverhang=onlyoverhang):
-        c = chamfered_backbox_screwholes(scl, sht)
+        c = chamfered_backbox_screwholes(scl, 0)
         c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
         if midpart:
             c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
@@ -1696,14 +1694,14 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
         # XXX: magic constant for length and touchpaneltray arg
         for ((x,y,z), sht) in frontboxsupports(blen-130, fdep, csw, 0,
                                                 touchpaneltray=57):
-            c = chamfered_backbox_screwholes(scl, sht)
+            c = chamfered_backbox_screwholes(scl, 0)
             c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
             a -= c
 
     # screwhole for
     if midpart:
         sht = (backboxheight-bwid*2-hthick)
-        c = chamfered_backbox_screwholes(scl, sht)
+        c = chamfered_backbox_screwholes(scl, 0)
         c = translate(v=[(27+paneldepth)*scl, ht/2*scl,
                             (backboxheight+7+bwid)*scl]).add(c)
         a -= c
@@ -1842,7 +1840,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     # XXX: locations are all a bit bogus (magic numbers)
     for ((x,y,z), sht) in backboxsupports(0, csw, underhanglid=-10,
                                             onlyoverhang=True):
-        c = chamfered_backbox_screwholes(scl, sht)
+        c = chamfered_backbox_screwholes(scl, 0)
         c = translate(v=[x,y,(boxdepth+92+bwid)*scl]).add(c)
         c = translate(v=[(lcd_w-80)*scl, 0, 0]).add(c)
         a -= c
@@ -1850,7 +1848,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     for ((x,y,z), sht) in frontboxsupports(0, fdep, csw,
                                             onlyoverhang=True,
                                             underhanglid=-18): # XXX: magic
-        c = chamfered_backbox_screwholes(scl, sht)
+        c = chamfered_backbox_screwholes(scl, 0)
         c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
         a -= c
 
