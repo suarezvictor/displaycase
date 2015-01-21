@@ -10,7 +10,7 @@ from copy import deepcopy
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
 # tend to come unstuck.
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -2204,8 +2204,11 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                     h = translate([(boxlength*m)*scl,
                                    (boxdepth+10)*scl, 15*scl]).add(h)
                     p += h
-            h = cube([15*scl, 6*scl, (150)*scl])
-            h = translate([70*scl, (boxdepth+10)*scl, 15*scl]).add(h)
+            h = cube([15*scl, 6*scl, (210)*scl])
+            h = translate([70*scl, (boxdepth+10)*scl, -15*scl]).add(h)
+            p += h
+            h = cube([15*scl, 6*scl, (210)*scl])
+            h = translate([(boxlength-250)*scl, (boxdepth+10)*scl, -45*scl]).add(h)
             p += h
             h = cube([15*scl, 6*scl, (250)*scl])
             h = translate([(boxlength-10)*scl, (boxdepth+10)*scl, -95*scl]).add(h)
@@ -2268,7 +2271,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 1 and part != 7:
+    if part != 1 and part != -7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
