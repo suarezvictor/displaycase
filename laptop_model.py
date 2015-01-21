@@ -2230,7 +2230,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
             h = pin(B0)
             h = translate([(boxlength+38)*scl, (boxdepth+10)*scl, 38*scl]).add(h)
             p += h
-            p = translate([0, 8*scl, 0]).add(p)
+            p = translate([0, 7*scl, 0]).add(p)
             c += p
 
     # lid at hinge end
