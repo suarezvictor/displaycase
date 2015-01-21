@@ -991,12 +991,12 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         d = rotate([90, 0, 0]).add(d)
         d = case_bolthole(scl, end=end).add(d)
         d = translate(v=[0*scl, 7*scl, 75*scl]).add(d) # XXX: magic constant
-        a += d
+        a -= d
     for (x,h) in sholes:
         d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
         d = translate(v=[x*scl, 7*scl, h*scl]).add(d) # XXX: magic constant
-        a += d
+        a -= d
 
     # add some structural support, algorithm matches up with
     # back_box lid_end base_mid
