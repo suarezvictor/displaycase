@@ -936,13 +936,13 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     if True:
         curverads={
                    D|L:(80, 0),
-                   D|R:(bwid*2, 0),
+                   #D|R:(bwid*2, 0),
                    T|L:(bwid, 0), # XXX: gcode chops this separate
                    #B|L:(bwid, 0), # XXX: bug in hollowbox
                    D|B:(bwid, 0),
                    T|B:(bwid, 0),
                    }
-        b = hollowbox(scl, boxlength, boxdepth, boxheight,
+        b = hollowbox(scl, boxlength-124, boxdepth, boxheight,
                         {T:bwid, B: bwid,
                         L:bwid, R:-1, F:-1, D:-1},
                         curverads=curverads)
@@ -984,7 +984,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         a += t
 
     # add screw-hole for lid_end to lock against
-    sholes = [(165, 150), (boxlength-65, 150)]
+    sholes = [(165, 150), (boxlength-180, 150)]
     for end in range(3 if test else 4):
         if end == 2:
             continue
@@ -1004,7 +1004,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     sstep = 200
     sdep = sstep
     while sdep <= boxlength-sstep*2:
-        h = cube([bwid*scl, 60*scl, 40*scl])
+        h = cube([bwid*scl, 65*scl, 62*scl]) # sit just above strengthener
         h = translate(v=[sdep*scl, 10*scl, (60)*scl]).add(h)
         a += h
         h = shearedcube([25*scl, 15*scl, 20*scl],
@@ -1019,10 +1019,6 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     t = box_screwholes(scl, edge_inset, holes=holes)
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     #a -= t
-
-    # hollow out tube including base box
-    t = hollow_out_edge(scl, 100, ht, border)
-    a -= t
 
     if pin_parts_3d:
         c = union()
@@ -1971,7 +1967,9 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     # base hinge box
     boxdepth = hinge_depth+ht
-    box = base_box(scl, boxdepth, hole_depth, ht, hollow=True)
+    box = base_box(scl, boxdepth+bwid, hole_depth, ht,
+                            hollow=True, endpart=True)
+    box = translate(v=[0, -bwid*scl, 0]).add(box)
 
     # add big strengthening bar, help reduce torquing
     h = cube([(boxlength-96)*scl, 60*scl, 60*scl])
@@ -1979,17 +1977,17 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a.add(h)
     # XXX: blegh!  must be a better way to do this...
     # fill in end part near hinge (might as well)
-    h = cube([(159)*scl, 60*scl, 60*scl])
-    h = translate(v=[(boxlength-205)*scl, (-43.5)*scl,
+    h = cube([(159)*scl, (60+bwid)*scl, 52*scl])
+    h = translate(v=[(boxlength-205)*scl, (-43.5-bwid)*scl,
                         (boxdepth+14)*scl]).add(h)
     a.add(h)
-    h = cube([(90)*scl, 60*scl, 60*scl])
-    h = translate(v=[(105)*scl, (-43.5)*scl,
+    h = cube([(90)*scl, (60+bwid)*scl, 60*scl])
+    h = translate(v=[(105)*scl, (-43.5-bwid)*scl,
                         (boxdepth+14)*scl]).add(h)
     a.add(h)
-    h = cube([(40)*scl, (hole_depth+ht)*scl, 60*scl])
+    h = cube([(40)*scl, (hole_depth+ht+bwid)*scl, 60*scl])
     h = rotate([0, 30, 0]).add(h) # hilarious....
-    h = translate(v=[(boxlength-120)*scl, (-43.5)*scl, 95*scl]).add(h)
+    h = translate(v=[(boxlength-120)*scl, (-43.5-bwid)*scl, 95*scl]).add(h)
     a.add(h)
 
     # add curved inner wall
@@ -2000,7 +1998,8 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
-    b = base_box(scl, boxdepth, hole_depth, ht, hollow=False)
+    b = base_box(scl, boxdepth+bwid, hole_depth, ht, hollow=False)
+    b = translate(v=[0, -bwid*scl, 0]).add(b)
     u.add(b)
     u.add(t)
 
@@ -2049,7 +2048,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     # screw support at both ends.  also have self-tap screw-holes above
     # bolts
     bhwid = 29.1+6
-    bhdep = ht + hinge_depth
+    bhdep = ht + hinge_depth +bwid
     for end in range(3 if test else 4):
         if end == 2:
             bht = bhwid*2
@@ -2057,10 +2056,10 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
             bht = 80
         if end == 2:
             b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+36)*scl])
-            b = translate([(-bhwid+5)*scl, 18.5*scl, 7*scl]).add(b)
+            b = translate([(-bhwid+5)*scl, (18.5-bwid)*scl, 7*scl]).add(b)
         else:
             b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, 110*scl])
-            b = translate([(-bhwid-bwid)*scl, 18.5*scl,
+            b = translate([(-bhwid-bwid)*scl, (18.5-bwid)*scl,
                             -(bhwid+37)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
@@ -2095,7 +2094,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                         (boxheight)*scl]).add(t)
         a += t
 
-    for (x,h) in [(165, 150), (boxlength-65, 150)]:
+    for (x,h) in [(165, 150), (boxlength-179, 150)]:
         # add screw-hole for lid_end to lock against
         d = cylinder(r=topscrewrad*scl,
                         h=(80)*scl,
@@ -2124,12 +2123,16 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                      0]).add(t)
     a +=t
 
+    b = cube([(boxlength)*scl, (3+bwid)*scl, (boxheight+20)*scl])
+    b = translate(v=[(-115*scl), (-boxdepth+bwid*2+14.5)*scl, 40*scl]).add(b)
+    a -= b
+
     a = translate(v=[0, (ht-edge_inset+ht_offset+20)*scl, 0]).add(a)
 
     return a
 
 def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
-                hollow=True, inner=False):
+                hollow=True, inner=False, endpart=False):
     blen = boxlength+extralen
     # base hinge box
     c = union()
@@ -2142,6 +2145,9 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                    D|L:(80, 0),
                    D|R:(bwid*2, 0),
                    }
+        if endpart:
+           curverads[T|B] = (bwid, 0) # XXX: hmm, gets covered up...
+           curverads[D|B] = (bwid, 0)
         b = hollowbox(scl, blen, boxdepth, boxheight,
                         {T:-1, B: -1,
                         L:bwid, R:bwid*3, F:bwid, D:hthick},
@@ -2262,7 +2268,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != -1 and part != 7:
+    if part != 1 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
