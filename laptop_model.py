@@ -1286,7 +1286,8 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
 def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
-    * chamfered screwholes need raising up (indenting more), thick reduction
+    * chamfered screwholes need raising up (indenting more)
+    * use new 3d pin style (old doesn't work)
     """
     edge_inset = bwid
     blen = ht
@@ -2255,7 +2256,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 0:
+    if part != 8:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
