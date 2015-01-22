@@ -877,33 +877,25 @@ def screen_end(scl, ht=60):
 
     if pin_parts_3d:
         c = union()
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([-50*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([20*scl, (16.5-ht)*scl, -20*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([40*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 70*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, (300)*scl])
-        h = translate([(boxlength-180)*scl, (16.5-ht)*scl, 0*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength+60)*scl, (16.5-ht)*scl, 0*scl]).add(h)
         c += h
-        h = cube([45*scl, 6*scl, (500)*scl])
-        h = translate([(boxlength+140)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 110*scl]).add(h)
         c += h
-        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
-        h = translate([(-50)*scl, (16.5-ht)*scl, -200*scl]).add(h)
+        h = pin(B0)
+        h = translate([(20)*scl, (16.5-ht)*scl, 60*scl]).add(h)
         c += h
-        h = cube([(boxlength+20+200)*scl, 6*scl, (55)*scl])
-        h = translate([(-50)*scl, (16.5-ht)*scl, 245*scl]).add(h)
-        c += h
-        h = cube([(20+100)*scl, 6*scl, (25)*scl])
-        h = translate([(boxlength+30)*scl, (16.5-ht)*scl, 50*scl]).add(h)
-        c += h
-        h = cube([(20+100)*scl, 6*scl, (25)*scl])
-        h = translate([(-40)*scl, (16.5-ht)*scl, 2*scl]).add(h)
-        c += h
+        c = translate([0*scl, (3)*scl, 0*scl]).add(c)
         a.add(c)
 
     # hinge hole
