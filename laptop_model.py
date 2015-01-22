@@ -1097,7 +1097,7 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
 
     a -= c
     for ((x,y,z), sht) in backboxsupports(blen-extraht, csw,
-                                            overhanglid=boxextraht,
+                                            overhanglid=boxextraht-3,
                                             underhanglid=25,
                                             frontlidonly=True):
         c = screwsupport(scl, csw, csw, sht)
@@ -1356,7 +1356,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         boxlen = blen
         onlyoverhang = False
     else:
-        overhanglid = 35 # XXX: total guess-work
+        overhanglid = 36 # XXX: total guess-work
         boxlen = 0
         onlyoverhang = True
     # add corner supports
@@ -1368,7 +1368,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
         a -= c
         if midpart:
-            c = translate(v=[0, 55*scl, 0]).add(c) # XXX: guesswork!
+            c = translate(v=[0, 63*scl, 0]).add(c) # XXX: guesswork!
             a -= c
 
     a = translate(v=[(lcd_w+35-100-bdepoffs)*scl, 0, 0]).add(a)
@@ -1387,12 +1387,14 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     for (hole, offs) in hoffsl:
         r = union()
         doffs = 0
+        dmoffs = 0
         if midpart and hole == 2:
             doffs = -70
             dp = 70
         elif hole == 2 or hole == 3:
             dp = 0
             doffs = 6
+            dmoffs = 6
         else:
             dp = 50
         c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
@@ -1401,7 +1403,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         if hole == 2:#and offs == 0:
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(+26.0*2)*scl, (hwid/2-3)*scl,
-                        (dp/2-doffs)*scl]).add(c)
+                        (dp/2-dmoffs)*scl]).add(c)
             r.add(c)
             c = shearedcube([109*scl, hwid*scl, (10)*scl],
                     shear=[0,-28*scl, 0],
@@ -1851,19 +1853,20 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # hollow out the inner tube
     ho = hollow_out_basebox(scl, border, boxdepth)
-    t = translate(v=[0, (-60.5-bwid)*scl, 0]).add(ho)
+    t = translate(v=[0, (-60.5)*scl, 0]).add(ho)
     a -= t
 
     holes = [0, 1, 2] if test else [0, 1, 2, 3]
     # screw support at both ends
     for end in holes:
         r = union()
-        c = cylinder(r=29*scl, h=boxdepth*scl, segments=50)
-        c = rotate([0, 90, 90]).add(c)
+        cht = 32*2 if end == 2 else 74
+        doff = 0 if end == 2 else -7
+        c = cube([29*2*scl, boxdepth*scl, cht*scl], center=True)
         r.add(c)
         t = case_bolthole(scl, end=end).add(r)
-        t = translate(v=[(0)*scl, (-(boxdepth)/2-3.5)*scl,
-                        (boxheight)*scl]).add(t)
+        t = translate(v=[(0)*scl, (-(0)/2-3.5)*scl,
+                        (boxheight-doff)*scl]).add(t)
         a += t
 
     # screw holes in box
@@ -1881,12 +1884,12 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         h = cube([(105)*scl, (boxdepth)*scl,
                    (60)*scl])
         h = translate(v=[(boxlength-bwid-100)*scl,
-                            (-72-0.2)*scl, (73)*scl]).add(h)
+                            (-55)*scl, (73)*scl]).add(h)
         a -= h
 
         # arc cutout for cable
         r = union()
-        cable_slot_depth = 60
+        cable_slot_depth = 70
         c = touch_arc(lcd_hinge_inner_rad-10, cable_slot_depth, bwid,
                             20, scl,
                       angle=33)
@@ -1894,7 +1897,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         c = rotate([0, lcd_ext_rot_angle+96, 0]).add(c)
         r += c
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-22)*scl,
+        t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-10)*scl,
                          0]).add(t)
         a -=t
 
@@ -2146,7 +2149,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
            curverads[D|B] = (bwid, 0)
         b = hollowbox(scl, blen, boxdepth, boxheight,
                         {T:-1, B: -1,
-                        L:bwid, R:bwid*3, F:bwid, D:hthick},
+                        L:bwid, R:bwid*3, F:hthick, D:hthick},
                         curverads=curverads)
         b = translate([0, 20*scl, 0*scl]).add(b)
         c.add(b)
@@ -2253,7 +2256,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 8 and part != 11:
+    if part != 6:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
