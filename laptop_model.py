@@ -1647,10 +1647,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
                 midpart=False):
     """
     TODO:
-    * add in small runner supports for long bolt so it doesn't bow box
-    * make a small cut-out so that front lid can drop hooks down to the
-      long bolt (like in back box)
-    * put a similar support into the opposite wall on the long bolt
+    * use new 3d pin style 
     """
     if dep is None:
         dep = fdep
@@ -2256,7 +2253,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 8:
+    if part != 9:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
