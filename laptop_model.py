@@ -1098,12 +1098,12 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     a -= c
     for ((x,y,z), sht) in backboxsupports(blen-extraht, csw,
                                             overhanglid=boxextraht-3,
-                                            underhanglid=25,
+                                            underhanglid=18,
                                             frontlidonly=True):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, extraht*scl, -10*scl]).add(c)
+        c = translate(v=[-100*scl, extraht*scl, -10*scl]).add(c)
         a += c
 
     # join left and right supports together, needed because of 3dprint errs
@@ -1206,12 +1206,12 @@ def back_box_lid(scl, ht_offset, ht, extraht):
 
     a -= c
 
-    for ((x,y,z), sht) in backboxsupports(blen, csw, overhanglid=extraht,
+    for ((x,y,z), sht) in backboxsupports(blen, csw, overhanglid=extraht-4,
                                                 backlidonly=True):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[-99*scl, 0*scl, -(10)*scl]).add(c)
+        c = translate(v=[-100*scl, 0*scl, -(10)*scl]).add(c)
         a += c
 
     a = translate(v=[(lcd_w+35-bdepoffs)*scl, 0, 0]).add(a)
@@ -1691,7 +1691,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
 
     if not midpart:
         # XXX: magic constant for length and touchpaneltray arg
-        for ((x,y,z), sht) in frontboxsupports(blen-130, fdep, csw, 0,
+        for ((x,y,z), sht) in frontboxsupports(blen-125, fdep, csw, 0,
                                                 touchpaneltray=57):
             c = chamfered_backbox_screwholes(scl, 0)
             c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
@@ -1837,7 +1837,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # add corner supports
     # XXX: locations are all a bit bogus (magic numbers)
-    for ((x,y,z), sht) in backboxsupports(0, csw, underhanglid=-10,
+    for ((x,y,z), sht) in backboxsupports(0, csw, underhanglid=-18,
                                             onlyoverhang=True):
         c = chamfered_backbox_screwholes(scl, 0)
         c = translate(v=[x,y,(boxdepth+92+bwid)*scl]).add(c)
@@ -2256,10 +2256,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 6:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 1 and \
-    #    part != 16 and part != 7:
+    #if part != 6:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
