@@ -26,7 +26,7 @@ def pin(spec):
         c = rotate([0, 45, 0]).add(c)
     return c
         
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -694,11 +694,18 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a -= t
         # hole for cable
         r = union()
-        r = touch_arc(hrad, hinge_depth+ht, bwid,
+        rc = touch_arc(hrad, hinge_depth+ht, bwid,
                         lcd_hinge_inner_rad-20, scl,
-                      angle=14)
-        r = rotate([180, 90, 90]).add(r)
-        r = rotate([0, lcd_ext_rot_angle+28, 0]).add(r)
+                      angle=00)
+        rc = rotate([180, 90, 90]).add(rc)
+        rc = rotate([0, lcd_ext_rot_angle+38, 0]).add(rc)
+        r.add(rc)
+        rc = touch_arc(hrad, hinge_depth+ht, bwid,
+                        lcd_hinge_inner_rad-20, scl,
+                      angle=00)
+        rc = rotate([180, 90, 90]).add(rc)
+        rc = rotate([0, lcd_ext_rot_angle+128, 0]).add(rc)
+        r.add(rc)
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
         a -= t
@@ -2256,7 +2263,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 8:
+    if part != 0:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
@@ -2407,7 +2414,7 @@ if __name__ == '__main__':
                 p  = translate(v=[0, 210*scl,0]).add(p)
                 t.add(p)
 
-            if True:
+            if False:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,-90]).add(card)
                 r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
