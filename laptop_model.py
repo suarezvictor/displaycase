@@ -881,13 +881,13 @@ def screen_end(scl, ht=60):
         h = translate([20*scl, (16.5-ht)*scl, -20*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
+        h = translate([(boxlength+20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
         c += h
         h = pin(B0)
         h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 70*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength+60)*scl, (16.5-ht)*scl, 0*scl]).add(h)
+        h = translate([(boxlength+80)*scl, (16.5-ht)*scl, 20*scl]).add(h)
         c += h
         h = pin(B0)
         h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 110*scl]).add(h)
@@ -2270,7 +2270,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     b = union()
 
     if part == 0:
-        b.add(screen_end(scl, lcd_end_ht))
+        se = screen_end(scl, hthick)
+        se = translate(v=[0, (lcd_end_ht-hthick)*scl,0]).add(se)
+        b.add(se)
         m = screen_mid1(scl, hinge_depth, hole_depth, halfhollow=True)
         m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
         b.add(m)
