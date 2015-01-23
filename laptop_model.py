@@ -1554,7 +1554,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     """
     # matches up with lid_end
     edge_inset = bwid
-    bht = boxheight-88 # XXX: magic number...
+    bht = boxheight-86 # XXX: magic number...
     flen = ht+extraht
     boxextraht = 0
     a = union()
@@ -2250,10 +2250,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 15 and part != 16 and part != 12:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-        #part != 6 and part != 9 and part != 15 and part != 1 and \
-        #part != 16 and part != 7:
+    #if part != 15 and part != 16 and part != 12:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != 1 and \
+        part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
