@@ -944,7 +944,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 
     border=3.0
     slot_depth = 100
-    boxdepth = hinge_depth+ht+edge_inset # matches front_box_lid
+    boxdepth = hinge_depth+ht+edge_inset# matches front_box_lid
     lid_depth = (boxlength-lcd_inset_bot+bwid-2)
 
     c = union()
@@ -968,9 +968,9 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         b = translate([(lid_depth-bwid)*scl, (20+bwid)*scl, 0*scl]).add(b)
         c.add(b)
 
-        # back hinge-end cutout
+        # back hinge-end cutout XXX: inset adjust for print inaccuracy by -2
         b = cube([(90)*scl, (boxdepth)*scl, (boxinset+100)*scl])
-        b = translate([-1*scl, (20+bwid)*scl, (boxinset-border)*scl]).add(b)
+        b = translate([-1*scl, (20+bwid)*scl, (boxinset-2)*scl]).add(b)
         c -= b
         # front cut-out
         b = cube([(400)*scl, (boxdepth)*scl, (boxinset+100)*scl])
@@ -992,7 +992,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c = cylinder(r=28*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
         c = rotate([0, 30, 0]).add(c)
-        c = translate(v=[(0)*scl, (-30)*scl, 0*scl]).add(c)
+        c = translate(v=[(0)*scl, (15)*scl, 0*scl]).add(c)
         r -= c
         t = case_bolthole(scl, end=end).add(r)
         t = translate(v=[(0)*scl, (3+bwid-1)*scl, (boxheight)*scl]).add(t)
@@ -2250,10 +2250,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    #if part != 15 and part != 16 and part != 12:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != 1 and \
-        part != 16 and part != 7:
+    if part != 7:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+    #    part != 6 and part != 9 and part != 15 and part != 1 and \
+    #    part != 16 and part != 7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
