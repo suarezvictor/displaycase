@@ -1480,19 +1480,19 @@ def tpanel_supports(blen, dep, csw):
     return [
         ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                        (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick)),
+            (backboxheight-bwid*2-hthick+8)),
         ([(csw/2+124-0.5)*scl,
             (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick)),
+            (backboxheight-bwid*2-hthick+8)),
         ([(csw/2+124-0.5)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick)),
+            (backboxheight-bwid*2-hthick+8)),
         ([(dep-csw/2)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick)),
+            (backboxheight-bwid*2-hthick+8)),
         ([(paneldepth+pdept+30-csw/2)*scl,
             (blen/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick)),
+            (backboxheight-bwid*2-hthick+8)),
         ]
 
 def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
@@ -1576,7 +1576,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         c = screwsupport(scl, csw, csw, sht)
         c = translate(v=[x,y,z]).add(c)
         c = translate(v=[-csw/2.0*scl, -csw/2.0*scl, 0]).add(c)
-        c = translate(v=[5*scl, extraht*scl, -9*scl]).add(c)
+        c = translate(v=[5*scl, extraht*scl, -17*scl]).add(c)
         a += c
 
     if not tpanel:
@@ -1590,7 +1590,6 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 20
     if tpanel:
-        holes = [(0, dep+51), (0, flen-dep-51)]
         holes = [(0, 71), (0, flen-dep-71)]
     else:
         holes = [(0, extraht+50),
