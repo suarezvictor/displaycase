@@ -78,6 +78,7 @@ bdepoffs = 15
 csw = 55.0 # centre support width (for screws to go into)
 
 paneldepth = 300
+pdept =  130
 
 def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
@@ -1488,7 +1489,7 @@ def tpanel_supports(blen, dep, csw):
         ([(dep-csw/2)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
             (backboxheight-bwid*2-hthick)),
-        ([(paneldepth+50-csw/2)*scl,
+        ([(paneldepth+pdept+30-csw/2)*scl,
             (blen/2)*scl, (lcd_d-32+bwid*3)*scl],
             (backboxheight-bwid*2-hthick)),
         ]
@@ -1556,13 +1557,10 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     flen = ht+extraht
     boxextraht = 0
     a = union()
-    thick = {T:hthick, B: -1, L:bwid, R:-1, F:-1, D:-1}
-    if not tpanel:
-        thick[F] = bwid
+    thick = {T:hthick, B: 40, L:bwid, R:-1, F:40, D:-1}
+    curverads={ T|L:(bwid, 0) }
     c = hollowbox(scl, fdep, flen, bht,
-                    thick,
-                    curverads={ T|L:(bwid, 0),
-                               })
+                    thick, curverads)
     c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
     a.add(c)
 
@@ -1606,7 +1604,6 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         plen = 200
         plent = (flen - plen) / 2
         pht = bht+hthick
-        pdept =  20
         pborder = 18
         c = cube([(paneldepth+1)*scl, plen*scl, (pht+1)*scl])
         t = translate([(5+pdept)*scl, plent*scl, (+50+boxtopoffs-1)*scl]).add(c)
@@ -1698,7 +1695,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     if midpart:
         sht = (backboxheight-bwid*2-hthick)
         c = chamfered_backbox_screwholes(scl, 0)
-        c = translate(v=[(27+paneldepth)*scl, ht/2*scl,
+        c = translate(v=[(7+paneldepth+pdept)*scl, ht/2*scl,
                             (backboxheight+7+bwid)*scl]).add(c)
         a -= c
 
@@ -2253,7 +2250,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 9:
+    if part != 15 and part != 16 and part != 12:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != 1 and \
         #part != 16 and part != 7:
