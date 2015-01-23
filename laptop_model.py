@@ -77,7 +77,7 @@ ethdep = 160
 bdepoffs = 15
 csw = 55.0 # centre support width (for screws to go into)
 
-paneldepth = 300
+paneldepth = 190
 pdept =  130
 
 def hinge_translate(scl):
