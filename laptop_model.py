@@ -1558,7 +1558,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     flen = ht+extraht
     boxextraht = 0
     a = union()
-    thick = {T:hthick, B: 40, L:bwid, R:-1, F:40, D:-1}
+    thick = {T:hthick, B: 40, L:bwid, R:25, F:40, D:-1}
     curverads={ T|L:(bwid, 0) }
     c = hollowbox(scl, fdep, flen, bht,
                     thick, curverads)
