@@ -61,7 +61,7 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 
 screwrad = 32 / 2.0
-topscrewrad = 27 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
+topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
@@ -1055,7 +1055,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 def chamfered_backbox_screwholes(scl, sht):
     # chamfered screw holes in top of lid
     c = union()
-    c.add(cylinder(r=topscrewrad*scl, r1=topscrewrad*1.9*scl,
+    c.add(cylinder(r=topscrewrad*1.2*scl, r1=25*scl,
                     h=((bwid+1)/2)*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl,
