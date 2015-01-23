@@ -26,7 +26,7 @@ def pin(spec):
         c = rotate([0, 45, 0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -1390,8 +1390,9 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         doffs = 0
         dmoffs = 0
         if midpart and hole == 2:
-            doffs = -70
-            dp = 70
+            doffs = -80+6
+            dp = 80
+            dmoffs = 6
         elif hole == 2 or hole == 3:
             dp = 0
             doffs = 6
