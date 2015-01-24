@@ -1611,7 +1611,7 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     # supports for threads, one (end=1) needs a cutout in the base box
     dep = 20
     if tpanel:
-        holes = [(0, 71), (0, flen-dep-71)]
+        holes = [(0, 71), (0, flen-dep-71), (0, (flen-dep)/2)]
     else:
         holes = [(0, extraht+50),
                     (0, (flen-dep)/2.0), (0, flen-dep)]
@@ -1683,8 +1683,8 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
 
     # remove front part for touchpanel
     c = cube([500*scl, (blen+2)*scl, (bwid+2)*scl])
-    c = translate(v=[(23)*scl, (-1)*scl,
-                (lcd_d-37+boxinset+bwid+hthick)*scl]).add(c)
+    c = translate(v=[(73)*scl, (-1)*scl,
+                (lcd_d-34+boxinset+bwid+hthick)*scl]).add(c)
     a -= c
 
 
@@ -1712,7 +1712,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
             c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
             a -= c
 
-    # screwhole for
+    # screwhole for touchpanel
     if midpart:
         sht = (backboxheight-bwid*2-hthick)
         c = chamfered_backbox_screwholes(scl, 0)
@@ -1720,20 +1720,25 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
                             (backboxheight+7+bwid)*scl]).add(c)
         a -= c
 
-    if not midpart:
-        # this is a cut-out so that the lid's thread-support goes through
-        hdep = 30
+
+    # cut-outs so that the lid's thread-support goes through
+    hdep = 30
+    cdep = 20
+    if midpart:
+        holes = [(0, (flen-cdep)/2.0+74)] # XXX: 74=magic constant
+        hdep = 40
         cdep = 20
+    else:
         holes = [(0, extraht+50),
                     (0, (flen-cdep)/2.0), (0, flen-cdep),
                     (0, blen+20) # XXX: magic number, for touchpanel tray
                 ]
-        for (end, offs) in holes:
-            r = lidscrewsupport(scl, hdep, 70, 3, wid=35)
-            t = case_bolthole(scl, end=end).add(r)
-            t = translate(v=[(0)*scl, (offs-extraht-(hdep-cdep)/2)*scl,
-                    (boxheight)*scl]).add(t)
-            a -= t
+    for (end, offs) in holes:
+        r = lidscrewsupport(scl, hdep, 70, 3, wid=35)
+        t = case_bolthole(scl, end=end).add(r)
+        t = translate(v=[(0)*scl, (offs-extraht-(hdep-cdep)/2)*scl,
+                (boxheight)*scl]).add(t)
+        a -= t
 
 
     # screw holes in box
@@ -2271,10 +2276,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 10:#and part != 8 and part != 11:
+    if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != 1 and \
-    #    part != 16 and part != 7:
+    #    part != 6 and part != 9 and part != 15 and part != -1 and \
+    #    part != 16 and part != -7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
