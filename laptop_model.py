@@ -1109,10 +1109,10 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
         a += c
 
     # join left and right supports together, needed because of 3dprint errs
-    c = cube([54*scl, (154)*scl, 48*scl])
+    c = cube([54*scl, (154)*scl, 53*scl])
     c = translate(v=[(-100-lidfront_offs)*scl, 0*scl, 52*scl]).add(c)
     a += c
-    c = cube([54*scl, (144)*scl, 48*scl])
+    c = cube([54*scl, (144)*scl, 50*scl])
     c = translate(v=[(-100-lidfront_offs)*scl, (blen+boxextraht-144)*scl,
                     52*scl]).add(c)
     a += c
@@ -2276,10 +2276,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 12 and part != 16:#and part != 8 and part != 11:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
-    #    part != 6 and part != 9 and part != 15 and part != -1 and \
-    #    part != 16 and part != -7:
+    #if part != 12 and part != 16:#and part != 8 and part != 11:
+    if part != 10 and part != 11 and part != 12 and part != 8 and \
+        part != 6 and part != 9 and part != 15 and part != -1 and \
+        part != 16 and part != -7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
