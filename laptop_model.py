@@ -50,6 +50,7 @@ else:
     lcd_wa = lcd_w-113.0+40
     lcd_d = 50
 
+lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
@@ -335,7 +336,7 @@ def lcd_panel(scl, offs=0):
     c = cube(size=[(w+offs*2)*scl,(h+offs*2)*scl,(d+offs*2)*scl])
     c = rotate([00, 0, 0 ]).add(c)
     r.add(c)
-    t = translate(v=[(-93-offs)*scl, (-40-offs)*scl, (29.5-d-offs)*scl])
+    t = translate(v=[(-93-offs)*scl, (-40-offs)*scl, (lcd_doff+29.5-d-offs)*scl])
     t.add(r)
     a.add(t)
 
@@ -378,9 +379,9 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+58)*scl, 0*scl, (16)*scl])
+        return translate([(-lcd_inset_top+58)*scl, 0*scl, (16+lcd_doff)*scl])
     else:
-        return translate([(95+lcd_w)*scl, 0*scl, (16)*scl])
+        return translate([(95+lcd_w)*scl, 0*scl, (16+lcd_doff)*scl])
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     """
@@ -440,7 +441,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     t = translate(v=[(+lcd_inset_bot+lcd_w-110)*scl,
-                        (16.5-ht)*scl, (37+lcd_gap)*scl])
+                        (16.5-ht)*scl, (lcd_doff+37+lcd_gap)*scl])
     t.add(r)
     a.add(t)
 
@@ -457,7 +458,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         t = translate(v=[(w-lcd_inset_bot-lcd_inset_top-80)*scl,
-                        (16.5-ht-1)*scl, (-bwid)*scl])
+                        (16.5-ht-1)*scl, (lcd_doff-bwid)*scl])
         t.add(r)
         a -= t
     # screw holes through lid
@@ -529,7 +530,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     L:80, R:bwid+lcd_gap, F:-1, D:hthick},
                     curverads=curverads)
     c = translate(v=[(offs-extralen)*scl, (16.5-ht)*scl,
-                    (12-lcd_d-lcd_gap)*scl]).add(c)
+                    (lcd_doff+12-lcd_d-lcd_gap)*scl]).add(c)
     a.add(c)
 
     return a
@@ -578,7 +579,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (30+lcd_gap)*scl])
+        t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (lcd_doff+30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
 
@@ -589,7 +590,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         t = translate(v=[(+lcd_inset_bot+lcd_w-52)*scl, (-0.5)*scl,
-                        (-26)*scl])
+                        (lcd_doff-26)*scl])
         t.add(c)
         a.add(t)
 
@@ -599,7 +600,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         t = translate(v=[(+lcd_inset_bot+lcd_w-44)*scl, (-ht+5)*scl,
-                        (-25)*scl])
+                        (lcd_doff-25)*scl])
         t.add(c)
         a.add(t)
 
@@ -613,7 +614,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
         t = translate(v=[(+lcd_inset_bot+lcd_w-115)*scl, (16.5-ht)*scl,
-                        (30+lcd_gap)*scl])
+                        (lcd_doff+30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
 
@@ -834,7 +835,7 @@ def screen_end(scl, ht=60):
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
     t = translate(v=[(-lcd_inset_top+w+65)*scl, (16.5-ht)*scl,
-                        (30+lcd_gap*2)*scl])
+                        (lcd_doff+30+lcd_gap*2)*scl])
     t.add(r)
     a.add(t)
 
@@ -885,6 +886,9 @@ def screen_end(scl, ht=60):
 
     # screw holes through lid
     a -= lid_screwholes(scl, edge_inset)
+
+    a = translate(v=[0, (-hthick)*scl,0]).add(a)
+    a += screen_mid1(scl, hinge_depth, hole_depth, halfhollow=True)
 
     return a
 
@@ -2224,7 +2228,7 @@ def screen_adjust(b, scl, angle):
     b -= p
 
     p = lcd_view_area(scl, offs=3)
-    p = translate(v=[155.5*scl,61*scl,0*scl]).add(p)
+    p = translate(v=[155.5*scl,61*scl,lcd_doff*scl]).add(p)
     b -= p
 
     return hinge_rotate(scl, b, angle)
@@ -2246,7 +2250,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0.1 and part != 3 and part != 2 and part != 4:
+    if part != 0 and part != 3 and part != 2 and part != 4 and \
+        part != 1 and part != 10:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
@@ -2262,10 +2267,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 0:
         se = screen_end(scl, hthick)
-        se = translate(v=[0, (lcd_end_ht-hthick)*scl,0]).add(se)
-        b.add(se)
-        m = screen_mid1(scl, hinge_depth, hole_depth, halfhollow=True)
-        m = translate(v=[0, lcd_end_ht*scl,0]).add(m)
+        m = translate(v=[0, lcd_end_ht*scl,0]).add(se)
         b.add(m)
         #ht2 += lcd_end_ht
 
