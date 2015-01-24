@@ -674,7 +674,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a -= t
 
     if halfhollow:
-        hrad = lcd_hinge_inside_rad-20
+        hrad = lcd_hinge_inside_rad-8
     else:
         hrad = lcd_hinge_inside_rad
     # hinge hole
@@ -694,23 +694,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         r = rotate([180, 90, 90]).add(r)
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, (-ht/2+65)*scl, 0]).add(t)
-        a -= t
-        # hole for cable
-        r = union()
-        rc = touch_arc(hrad, hinge_depth+ht, bwid,
-                        lcd_hinge_inner_rad-20, scl,
-                      angle=00)
-        rc = rotate([180, 90, 90]).add(rc)
-        rc = rotate([0, lcd_ext_rot_angle+38, 0]).add(rc)
-        r.add(rc)
-        rc = touch_arc(hrad, hinge_depth+ht, bwid,
-                        lcd_hinge_inner_rad-20, scl,
-                      angle=00)
-        rc = rotate([180, 90, 90]).add(rc)
-        rc = rotate([0, lcd_ext_rot_angle+128, 0]).add(rc)
-        r.add(rc)
-        t = hinge_translate(scl).add(r)
-        t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
         a -= t
 
     # screw holes through lid
@@ -2277,9 +2260,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 10 and part != 11 and part != 12 and part != 8 and \
-        part != 6 and part != 9 and part != 15 and part != -1 and \
-        part != 16 and part != -7:
+    if part != 0:
+    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+        #part != 6 and part != 9 and part != 15 and part != -1 and \
+        #part != 16 and part != -7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
     #if part != -6 and part != 0.1 and part != 1 and part != 7 and part != -13 \
         #and part != 2 and part != -4 and part != -3:
