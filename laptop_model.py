@@ -14,7 +14,7 @@ from copy import deepcopy
 B0 = 1
 B45 = 2
 
-def pin(spec):
+def pin(spec, r=0):
     ht = 6
     if spec == B0 or spec == B45:
         c = union()
@@ -24,9 +24,11 @@ def pin(spec):
         c -= h
     if spec == B45:
         c = rotate([0, 45, 0]).add(c)
+    if r == 1:
+        c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 
@@ -989,7 +991,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c = cube([36*2*scl, cdep*scl, (69)*scl], center=True)
         c = translate(v=[(-3)*scl, (cdep/2)*scl, (dp/2+1.5)*scl]).add(c)
         r.add(c)
-        c = cylinder(r=28*scl, h=(200)*scl, segments=6)
+        c = cylinder(r=29*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
         c = rotate([0, 30, 0]).add(c)
         c = translate(v=[(0)*scl, (15)*scl, 0*scl]).add(c)
@@ -1191,14 +1193,33 @@ def back_box_lid(scl, ht_offset, ht, extraht):
     bht = bwid*2+hthick-10
     blen = ht
     a = union()
-    c = hollowbox(scl, ethdep+hthick, blen+extraht, bht,
+    c = union()
+    b = hollowbox(scl, ethdep+hthick, blen+extraht, bht,
                     {T:hthick, B: -1, L:hthick, R:-1, F:-1, D:-1},
                     curverads={ T|L:(hthick, 0),
                                T|R:(hthick, 0),
                                B|R:(bwid, 0),
                                })
+    c.add(b)
+    if pin_parts_3d:
+        u = union()
+        h = pin(B0, 1)
+        h = translate([0*scl, -10*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(ethdep)*scl, -10*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(ethdep)*scl, (blen+extraht)*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(0)*scl, (blen+extraht)*scl, 0*scl]).add(h)
+        u += h
+        u = translate([0*scl, (0)*scl, 3*scl]).add(u)
+        c += u
+
     c = translate(v=[(bdep-ethdep-hthick)*scl, 0, (lcd_d-22-hthick)*scl]).add(c)
-    a.add(c)
+    a += c
     # ok limitations of hollowbox we need to cut out the back right corner
     c = cube([159*scl, (bwid+1)*scl, 50*scl])
     c = translate(v=[(ethdep+bwid)*scl,
@@ -2250,7 +2271,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 7:
+    if part != 10:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
