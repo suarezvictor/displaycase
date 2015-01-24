@@ -481,12 +481,12 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
     r = union()
-    c = shearedcube(size=[(bwid+5+iro)*scl,(70+lcd_gap*2)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+5+iro)*scl,(50+lcd_gap*2)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(55)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
+    t = translate(v=[(35)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
 
@@ -524,9 +524,9 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
         offs = lcd_w
     if curvetopback:
         curverads[T|R] = (bwid+lcd_gap, bwid*2)
-    c = hollowbox(scl, to+15+extralen, ht, lcd_d+35+lcd_gap*2,
+    c = hollowbox(scl, to+15+extralen, ht, lcd_d+18+hthick+lcd_gap*2,
                     {T:bwid, B: -1,
-                    L:80, R:bwid+lcd_gap, F:-1, D:bwid},
+                    L:80, R:bwid+lcd_gap, F:-1, D:hthick},
                     curverads=curverads)
     c = translate(v=[(offs-extralen)*scl, (16.5-ht)*scl,
                     (12-lcd_d-lcd_gap)*scl]).add(c)
@@ -604,20 +604,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a.add(t)
 
     if not endpart:
-        if not fillinner:
-            # lid end filler for front screwhole
-            r = union()
-            c = shearedcube(size=[(lcd_d+lcd_gap*2)*scl,
-                            (w-lcd_inset_bot+lcd_gap*2)*scl,ht*scl],
-                        shear=[-shear*scl, 0, 0],
-                        innershear=[-innershear*scl, 0, 0])
-            c = rotate([0, 90, 90]).add(c)
-            r.add(c)
-            t = translate(v=[(-lcd_inset_top-lcd_inset_bot+w+65)*scl,
-                            (16.5-ht)*scl, (30+lcd_gap)*scl])
-            t.add(r)
-            a.add(t)
-
         # add hinge-end filler over top of screwhole
         r = union()
         c = shearedcube(size=[(lcd_d+bwid+lcd_gap*2)*scl,
