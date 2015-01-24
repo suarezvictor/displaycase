@@ -398,7 +398,7 @@ def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
 
     # top edge
     toplen = w+lcd_gap*2
-    toplenoffs = (-lcd_inset_top+w+65)
+    toplenoffs = (-lcd_inset_top+w+75)
     r = union()
     c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
@@ -428,7 +428,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
     a = union()
 
     toplen = 180 if test else 250
-    toplenoffs = (w-lcd_inset_top-10)
+    toplenoffs = (w-lcd_inset_top)
 
     # top and bottom edge
     a += screen_frontedge(scl, ht, 80, toplenoffs,
@@ -483,12 +483,12 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
     r = union()
-    c = shearedcube(size=[(bwid+5+iro)*scl,(70+lcd_gap*2)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+5+iro)*scl,(60+lcd_gap*2)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(55)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
+    t = translate(v=[(45)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
 
@@ -514,7 +514,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
         to = toplenoffs
 
     curverads={
-               D|R:(bwid+5, 5),
+               D|R:(bwid+lcd_gap, bwid*2),
                }
     if edge:
         curverads[B|T] = (bwid, 0)
@@ -526,7 +526,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
         to -= lcd_w
         offs = lcd_w
     if curvetopback:
-        curverads[T|R] = (bwid+lcd_gap, bwid*2)
+        curverads[T|R] = (bwid+5, 0)
     ld = lcd_d+18+hthick+lcd_gap*2
     c = union()
     b = hollowbox(scl, to+15+extralen, ht, ld,
@@ -873,7 +873,7 @@ def screen_end(scl, ht=60):
     a = union()
 
     toplen = w+lcd_gap*2
-    toplenoffs = (-lcd_inset_top+w+65)
+    toplenoffs = (-lcd_inset_top+w+95)
     a += screen_frontedge(scl, ht, 0, toplenoffs, curvetopback=True)
 
     # middle filler
@@ -2299,9 +2299,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    #if part != 0 and part != 3 and part != 2 and part != 4 and \
-        #part != -1 and part != -10 and part != -8:
-    if part != 4:
+    if part != 0 and part != 3 and part != 2 and part != 4 and \
+        part != 1 and part != 10 and part != 8 and part != 5:
+    #if part != 4 and part != 0 and part != 2:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
