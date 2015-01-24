@@ -481,12 +481,12 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
     r = union()
-    c = shearedcube(size=[(bwid+5+iro)*scl,(50+lcd_gap*2)*scl,ht*scl],
+    c = shearedcube(size=[(bwid+5+iro)*scl,(70+lcd_gap*2)*scl,ht*scl],
                 shear=[-shear*scl, 0, 0],
                 innershear=[-innershear*scl, 0, 0])
     c = rotate([0, 90, 90]).add(c)
     r.add(c)
-    t = translate(v=[(35)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
+    t = translate(v=[(55)*scl, (16.5-ht)*scl, (25)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
 
@@ -584,7 +584,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if fillinner:
         # add hinge-end filler over top of screwhole
-        c = shearedcube(size=[60*scl,
+        c = shearedcube(size=[70*scl,
                         bwid*scl,(lcd_d+10+lcd_gap*2)*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
@@ -2246,7 +2246,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0:
+    if part != 0.1 and part != 3 and part != 2 and part != 4:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
@@ -2350,7 +2350,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
                                 fillinner=True, endpart=False)
         if part == 3:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True, endpart=True)
-        if part == 4:
+        if part == 4 and i > 0:
             m = screen_mid2(scl, midht, hole_depth)
 
         if m:
