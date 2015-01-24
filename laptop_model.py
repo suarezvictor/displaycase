@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 
@@ -1265,16 +1265,16 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ]
         bl = [
             # towards back of box
-            ([(bdep+100-csw/2-19)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
-            ([(bdep+100-csw/2-19)*scl, (320+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
-            ([(bdep+100-ethdep+csw/2-1)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
-            ([(bdep+100-ethdep+csw/2-1)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
-            ([(bdep+100-csw/2-19)*scl, (blen-csw/2-19)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
+            ([(bdep+100-csw/2-bwid-4)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
+            ([(bdep+100-csw/2-bwid-4)*scl, (320+csw/2)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
+            ([(bdep+100-ethdep+csw/2+4)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
+            ([(bdep+100-ethdep+csw/2+4)*scl, (blen-csw/2-hthick-5)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
+            ([(bdep+100-csw/2-bwid-4)*scl, (blen-csw/2-hthick-5)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
         ]
         if backlidonly:
             l = bl
@@ -1287,8 +1287,8 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
         if not frontlidonly:
             l += [
             # towards back of box
-            ([(bdep+100-csw/2-bwid-2)*scl, (_blen-csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-2),
+            ([(bdep+100-csw/2-bwid-4)*scl, (_blen-csw/2)*scl, (lcd_d-22)*scl],
+                backboxheight-5.5),
             ]
         if not backlidonly:
             l += [
@@ -2271,7 +2271,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
-    if part != 10:
+    if part != 10:#and part != 8 and part != 11:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
     #    part != 6 and part != 9 and part != 15 and part != 1 and \
     #    part != 16 and part != 7:
