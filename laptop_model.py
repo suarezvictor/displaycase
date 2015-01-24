@@ -495,7 +495,9 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
 
 def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
-                            edge=False):
+                            edge=False,
+                            indent=True,
+                            outdent=True):
     shear = 0
     innershear = 0
     edge_inset = bwid
@@ -510,7 +512,6 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     else:
         to = toplenoffs
 
-    print "box", ht, to, lcd_d+40
     curverads={
                D|R:(bwid+5, 5),
                }
@@ -525,10 +526,51 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
         offs = lcd_w
     if curvetopback:
         curverads[T|R] = (bwid+lcd_gap, bwid*2)
-    c = hollowbox(scl, to+15+extralen, ht, lcd_d+18+hthick+lcd_gap*2,
+    ld = lcd_d+18+hthick+lcd_gap*2
+    c = union()
+    b = hollowbox(scl, to+15+extralen, ht, ld,
                     {T:bwid, B: -1,
                     L:80, R:bwid+lcd_gap, F:-1, D:hthick},
                     curverads=curverads)
+    c.add(b)
+    if indent:
+        # remove a matching part to clip
+        o = shearedcube(size=[25*scl,
+                        15*scl,(10)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        t = translate(v=[(36)*scl, (ht-8)*scl,
+                        (9)*scl])
+        t.add(o)
+        c -= t
+        o = shearedcube(size=[25*scl,
+                        15*scl,(10)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        t = translate(v=[(-1)*scl, (ht-8)*scl,
+                        (-1)*scl])
+        t.add(o)
+        c -= t
+
+    if outdent:
+        # add a tiny clip which locks into the next part
+        o = shearedcube(size=[21*scl,
+                        10*scl,(7)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        t = translate(v=[(0)*scl, (-5)*scl,
+                        (0)*scl])
+        t.add(o)
+        c += t
+        o = shearedcube(size=[20*scl,
+                        10*scl,(7)*scl],
+                    shear=[-shear*scl, 0, 0],
+                    innershear=[-innershear*scl, 0, 0])
+        t = translate(v=[(38)*scl, (-5)*scl,
+                        (11)*scl])
+        t.add(o)
+        c += t
+
     c = translate(v=[(offs-extralen)*scl, (16.5-ht)*scl,
                     (lcd_doff+12-lcd_d-lcd_gap)*scl]).add(c)
     a.add(c)
@@ -2250,8 +2292,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0 and part != 3 and part != 2 and part != 4 and \
-        part != 1 and part != 10:
+    #if part != 0 and part != 3 and part != 2 and part != 4 and \
+        #part != -1 and part != -10 and part != -8:
+    if part != 2:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
