@@ -1501,19 +1501,19 @@ def tpanel_supports(blen, dep, csw):
     return [
         ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                        (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+8)),
+            (backboxheight-bwid*2-hthick+7)),
         ([(csw/2+124-0.5)*scl,
             (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+8)),
+            (backboxheight-bwid*2-hthick+7)),
         ([(csw/2+124-0.5)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+8)),
+            (backboxheight-bwid*2-hthick+7)),
         ([(dep-csw/2)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+8)),
+            (backboxheight-bwid*2-hthick+7)),
         ([(paneldepth+pdept+30-csw/2)*scl,
             (blen/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+8)),
+            (backboxheight-bwid*2-hthick+7)),
         ]
 
 def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
@@ -1525,19 +1525,19 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ([(csw/2+134-0.5)*scl,
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ([(csw/2+134-0.5)*scl,
                 (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ([(csw/2+134-0.5)*scl,
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ([(dep-csw/2)*scl,
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ]
     if overhanglid:
         _blen = blen + overhanglid
@@ -1560,10 +1560,10 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(csw/2+134-0.5)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
             ([(dep-csw/2-0.5)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick+7)),
         ]
     return l
 
