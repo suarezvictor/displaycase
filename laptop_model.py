@@ -943,7 +943,7 @@ def screen_end(scl, ht=60):
     t.add(b)
     a -= t
     if True: # XXX: hmmm... not sure if to do square or cylinder cutout
-        b = cube([35*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
+        b = cube([35*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+3)*scl])
         b = translate([-35*scl, -70*scl, -(lcd_d-20)*scl]).add(b)
     else:
         b = cylinder(r=28*scl, h=(ht+hinge_depth-12)*scl, 
@@ -969,10 +969,10 @@ def screen_end(scl, ht=60):
         h = translate([(boxlength+80)*scl, (16.5-ht)*scl, 20*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 110*scl]).add(h)
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 120*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(95)*scl, (16.5-ht)*scl, 60*scl]).add(h)
+        h = translate([(40)*scl, (16.5-ht)*scl, 20*scl]).add(h)
         c += h
         c = translate([0*scl, (-14)*scl, 0*scl]).add(c)
         a += c
