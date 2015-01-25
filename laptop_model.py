@@ -943,7 +943,7 @@ def screen_end(scl, ht=60):
     t.add(b)
     a -= t
     if True: # XXX: hmmm... not sure if to do square or cylinder cutout
-        b = cube([35*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+3)*scl])
+        b = cube([35*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+23)*scl])
         b = translate([-35*scl, -70*scl, -(lcd_d-20)*scl]).add(b)
     else:
         b = cylinder(r=28*scl, h=(ht+hinge_depth-12)*scl, 
@@ -953,6 +953,13 @@ def screen_end(scl, ht=60):
     t = lid_bolthole(scl)
     t.add(b)
     a -= t
+
+    # *sigh* have to add some external edge support
+    b = cube([35*2*scl, (30)*scl, (15)*scl])
+    b = translate([-35*scl, -20*scl, 25*scl]).add(b)
+    t = lid_bolthole(scl)
+    t.add(b)
+    a += t
 
     if pin_parts_3d:
         c = union()
@@ -979,6 +986,18 @@ def screen_end(scl, ht=60):
 
     # screw holes through lid
     a -= lid_screwholes(scl, edge_inset)
+
+    # more support
+    b = cylinder(r=18*scl, h=28*scl, 
+                    segments=50, center=True)
+    b = rotate([0, 90, 90]).add(b)
+    b = translate([0*scl, -6.5*scl, 0*scl]).add(b)
+    t = lid_bolthole(scl)
+    t.add(b)
+    a += t
+    t = lid_bolthole(scl, False)
+    t.add(b)
+    a += t
 
     a = translate(v=[0, (-lcd_end_offs)*scl,0]).add(a)
 
