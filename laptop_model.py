@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 single = True
@@ -879,29 +879,6 @@ def screen_end(scl, ht=60):
     t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
     a += t
 
-    if pin_parts_3d:
-        c = union()
-        h = pin(B0)
-        h = translate([20*scl, (16.5-ht)*scl, -20*scl]).add(h)
-        c += h
-        h = pin(B0)
-        h = translate([(boxlength+20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
-        c += h
-        h = pin(B0)
-        h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 70*scl]).add(h)
-        c += h
-        h = pin(B0)
-        h = translate([(boxlength+80)*scl, (16.5-ht)*scl, 20*scl]).add(h)
-        c += h
-        h = pin(B0)
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 110*scl]).add(h)
-        c += h
-        h = pin(B0)
-        h = translate([(20)*scl, (16.5-ht)*scl, 60*scl]).add(h)
-        c += h
-        c = translate([0*scl, (3)*scl, 0*scl]).add(c)
-        a += c
-
     # inner hexagon for nut
     c = cylinder(r=25*scl, # XXX: M2 nuts are 4mm hex diameter!
                         h=(bwid+30)*scl, segments=6, center=True)
@@ -976,6 +953,29 @@ def screen_end(scl, ht=60):
     t = lid_bolthole(scl)
     t.add(b)
     a -= t
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0)
+        h = translate([40*scl, (16.5-ht)*scl, -55*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(boxlength+20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 70*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(boxlength+80)*scl, (16.5-ht)*scl, 20*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 110*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(95)*scl, (16.5-ht)*scl, 60*scl]).add(h)
+        c += h
+        c = translate([0*scl, (-14)*scl, 0*scl]).add(c)
+        a += c
 
     # screw holes through lid
     a -= lid_screwholes(scl, edge_inset)
@@ -2330,7 +2330,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 4 and part != 2 and part != 0 and part != 3:
+    if part != 0:
+    #if part != 4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
