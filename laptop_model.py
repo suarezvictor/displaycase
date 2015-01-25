@@ -382,7 +382,7 @@ def lid_bolthole(scl, end=True):
     if end:
         return translate([(-lcd_inset_top+58)*scl, 0*scl, (16+lcd_doff)*scl])
     else:
-        return translate([(95+lcd_w)*scl, 0*scl, (16+lcd_doff)*scl])
+        return translate([(100+lcd_w)*scl, 0*scl, (16+lcd_doff)*scl])
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     """
@@ -928,16 +928,35 @@ def screen_end(scl, ht=60):
     t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(t)
     a -= t
 
+    # clear out area containing lcd panel
     a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
     p = lcd_panel(scl, offs=3)
     p = translate(v=[155.5*scl,61*scl,0]).add(p)
     a -= p
 
-    # screw holes through lid
-    a -= lid_screwholes(scl, edge_inset)
-
+    # add screen middle part
     a = translate(v=[0, (-hthick)*scl,0]).add(a)
     a += screen_mid1(scl, hinge_depth, hole_depth, halfhollow=True)
+
+    # clear out end edge for a nut
+    b = cube([50*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
+    b = translate([-50*scl, (-0.5)*scl, -lcd_d*scl]).add(b)
+    t = lid_bolthole(scl, False)
+    t.add(b)
+    a += t
+    b = cube([35*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
+    b = translate([-35*scl, -40*scl, -(lcd_d-20)*scl]).add(b)
+    t = lid_bolthole(scl, False)
+    t.add(b)
+    a -= t
+    b = cube([30*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
+    b = translate([-30*scl, -40*scl, -(lcd_d-20)*scl]).add(b)
+    t = lid_bolthole(scl)
+    t.add(b)
+    a -= t
+
+    # screw holes through lid
+    a -= lid_screwholes(scl, edge_inset)
 
     return a
 
@@ -2299,8 +2318,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0 and part != 3 and part != 2 and part != 4 and \
-        part != 1 and part != 10 and part != 8 and part != 5:
+    if part != 0:
+    #if part != 0 and part != 3 and part != 2 and part != 4 and \
+        #part != 1 and part != 10 and part != 8 and part != 5:
     #if part != 4 and part != 0 and part != 2:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
