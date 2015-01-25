@@ -65,7 +65,7 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 lcd_end_offs = 20
 
-lidscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 140
@@ -817,14 +817,14 @@ def lid_screwholes(scl, edge_inset):
     u = union()
 
     t = lid_bolthole(scl)
-    r = cylinder(r=lidscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = cylinder(r=lcdscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
     r = rotate([90, 0, 0]).add(r)
     r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
     t.add(r)
     u += t
 
     t = lid_bolthole(scl, False)
-    r = cylinder(r=lidscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = cylinder(r=lcdscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
     r = rotate([90, 0, 0]).add(r)
     r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
     t.add(r)
