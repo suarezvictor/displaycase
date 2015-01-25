@@ -433,7 +433,8 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
 
     # top and bottom edge
     a += screen_frontedge(scl, ht, 80, toplenoffs,
-                               curvefront=False, curvetopback=True)
+                               curvefront=False, curvetopback=True,
+                               indent=0, outdent=0)
 
     # add hinge-end filler over top of screwhole
     r = union()
@@ -499,8 +500,8 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
                             edge=False,
                             frontonly=False,
-                            indent=True,
-                            outdent=True):
+                            indent=None,
+                            outdent=None):
     shear = 0
     innershear = 0
     edge_inset = bwid
@@ -536,14 +537,14 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     L:80, R:bwid+lcd_gap, F:-1, D:hthick},
                     curverads=curverads)
     c.add(b)
-    if indent:
+    if indent is not None:
         # remove a matching part to clip
         o = shearedcube(size=[62*scl,
                         25*scl,(bwid+2)*scl],
                     shear=[0, 0*scl, 0],
                     innershear=[0, -20*scl, 0])
         o = rotate([0, 0, 180]).add(o)
-        t = translate(v=[(122)*scl, (ht+11)*scl,
+        t = translate(v=[(122+indent)*scl, (ht+11)*scl,
                         (-1)*scl])
         t.add(o)
         c -= t
@@ -553,29 +554,29 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     innershear=[0, -20*scl, 0])
         o = rotate([0, 0, 180]).add(o)
         o = rotate([0, 180, 0]).add(o)
-        t = translate(v=[(-1)*scl, (ht+11)*scl,
+        t = translate(v=[(-1+indent)*scl, (ht+11)*scl,
                         (bwid+2)*scl])
         t.add(o)
         c -= t
 
-    if outdent:
+    if outdent is not None:
         # add a tiny clip which locks into the next part
         o = shearedcube(size=[55*scl,
                         25*scl,(bwid)*scl],
                     shear=[0, 0*scl, 0],
-                    innershear=[0, -20*scl, 0])
+                    innershear=[0, -17*scl, 0])
         o = rotate([0, 0, 180]).add(o)
-        t = translate(v=[(119)*scl, (15)*scl,
+        t = translate(v=[(119+outdent)*scl, (14)*scl,
                         (0)*scl])
         t.add(o)
         c += t
         o = shearedcube(size=[57*scl,
                         25*scl,(bwid)*scl],
                     shear=[0, 0*scl, 0],
-                    innershear=[0, -20*scl, 0])
+                    innershear=[0, -17*scl, 0])
         o = rotate([0, 0, 180]).add(o)
         o = rotate([0, 180, 0]).add(o)
-        t = translate(v=[(0)*scl, (15)*scl,
+        t = translate(v=[(outdent)*scl, (14)*scl,
                         (bwid)*scl])
         t.add(o)
         c += t
@@ -588,7 +589,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
 
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                         halfhollow=False, fillinner=False,
-                        indent=False, outdent=False):
+                        indent=None, outdent=None):
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
@@ -840,8 +841,7 @@ def screen_end(scl, ht=60):
     toplen = w+lcd_gap*2
     toplenoffs = (-lcd_inset_top+w+95)
     a += screen_frontedge(scl, ht, 0, toplenoffs, curvetopback=True,
-                          frontonly=True,
-                          indent=False, outdent=False)
+                          frontonly=True)
 
     # middle filler
     r = union()
@@ -947,7 +947,7 @@ def screen_end(scl, ht=60):
     a = translate(v=[0, (-lcd_end_ht)*scl,0]).add(a)
     a += screen_mid1(scl, hinge_depth+lcd_end_offs,
                           hole_depth+lcd_end_offs, halfhollow=True,
-                          indent=False, outdent=False)
+                          indent=lcd_w-82)
 
     # clear out end edge for a nut
     b = cube([50*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
@@ -2325,7 +2325,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 1 and part != 7:# and part != 1 and part != 13:
+    if part != 4 and part != 2 and part != 0:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
@@ -2431,7 +2431,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = None
         if part == 2:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True,
-                                fillinner=True, endpart=False)
+                                fillinner=True, endpart=False,
+                                indent=0, outdent=0)
         if part == 3:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True, endpart=True)
         if part == 4 and i > 0:
