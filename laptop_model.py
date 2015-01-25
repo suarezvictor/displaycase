@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 single = True
@@ -65,7 +65,8 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 20 # 40
 lcd_end_offs = 20
 
-screwrad = 32 / 2.0
+lidscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 140
 backboxheight = boxheight+bwid*2-10
@@ -479,9 +480,9 @@ def lid_bottom_boltholder(scl, lcd_gap, ht, iro):
 
     # bottom edge bolt holder
     r = union()
-    c = cylinder(r=29*scl, h=ht*scl, segments=50)
+    c = cylinder(r=24*scl, h=ht*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    #r.add(c)
+    r.add(c)
     t = translate(v=[(0)*scl, (16.5-ht)*scl, (0)*scl]).add(r)
     t = lid_bolthole(scl, end=False).add(t)
     a.add(t)
@@ -816,14 +817,14 @@ def lid_screwholes(scl, edge_inset):
     u = union()
 
     t = lid_bolthole(scl)
-    r = cylinder(r=screwrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = cylinder(r=lidscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
     r = rotate([90, 0, 0]).add(r)
     r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
     t.add(r)
     u += t
 
     t = lid_bolthole(scl, False)
-    r = cylinder(r=screwrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
+    r = cylinder(r=lidscrewrad*scl, h=(lcd_l*2+100)*scl, segments=50, center=True)
     r = rotate([90, 0, 0]).add(r)
     r = translate(v=[0, (lcd_l/2+50-edge_inset)*scl, 0]).add(r)
     t.add(r)
@@ -2352,8 +2353,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0:
-    #if part != 4 and part != 2 and part != 0 and part != 3:
+    #if part != 0:
+    if part != 4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
