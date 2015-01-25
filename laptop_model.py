@@ -1019,7 +1019,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
                    D|B:(hthick, 0),
                    T|B:(hthick, 0),
                    }
-        b = hollowbox(scl, boxlength-122, boxdepth-bwid+hthick, boxheight,
+        b = hollowbox(scl, boxlength-122, boxdepth-bwid+hthick+30, boxheight,
                         {T:hthick, B: hthick,
                         L:hthick, R:-1, F:-1, D:-1},
                         curverads=curverads)
@@ -2049,40 +2049,40 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a.add(t)
 
     # base hinge box
-    boxdepth = hinge_depth+ht
+    boxdepth = hinge_depth+ht+lcd_end_offs+10
     box = base_box(scl, boxdepth+hthick, hole_depth, ht,
                             hollow=True, endpart=True)
-    box = translate(v=[0, -hthick*scl, 0]).add(box)
+    box = translate(v=[0, -(hthick+lcd_end_offs+10)*scl, 0]).add(box)
 
     # add big strengthening bar, help reduce torquing
     h = cube([(boxlength-96)*scl, 60*scl, 60*scl])
-    h = translate(v=[50*scl, 0*scl, (boxdepth+14)*scl]).add(h)
+    h = translate(v=[50*scl, 0*scl, (124)*scl]).add(h)
     a.add(h)
     # XXX: blegh!  must be a better way to do this...
     # fill in end part near hinge (might as well)
-    h = cube([(159)*scl, (60+hthick)*scl, 52*scl])
-    h = translate(v=[(boxlength-205)*scl, (-43.5-hthick)*scl,
-                        (boxdepth+14)*scl]).add(h)
+    h = cube([(159)*scl, (60+hthick+30)*scl, 52*scl])
+    h = translate(v=[(boxlength-205)*scl, (-43.5-hthick-30)*scl,
+                        (124)*scl]).add(h)
     a.add(h)
-    h = cube([(90)*scl, (60+hthick)*scl, 60*scl])
-    h = translate(v=[(105)*scl, (-43.5-hthick)*scl,
-                        (boxdepth+14)*scl]).add(h)
+    h = cube([(90)*scl, (60+hthick+30)*scl, 60*scl])
+    h = translate(v=[(105)*scl, (-43.5-hthick-30)*scl,
+                        (124)*scl]).add(h)
     a.add(h)
-    h = cube([(40)*scl, (hole_depth+ht+hthick)*scl, 60*scl])
+    h = cube([(40)*scl, (hole_depth+ht+hthick+30)*scl, 60*scl])
     h = rotate([0, 30, 0]).add(h) # hilarious....
-    h = translate(v=[(boxlength-120)*scl, (-43.5-hthick)*scl, 95*scl]).add(h)
+    h = translate(v=[(boxlength-120)*scl, (-43.5-hthick-30)*scl, 95*scl]).add(h)
     a.add(h)
 
     # add curved inner wall
     u = intersection()
     r = union()
-    r = cylinder(r=(lcd_outer_rad+20)*scl, h=(hole_depth+ht*2+bwid+0.1)*scl,
+    r = cylinder(r=(lcd_outer_rad+20)*scl, h=(hole_depth+ht*2+30+bwid+0.1)*scl,
                         segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (hole_depth-ht*2-hole_depth/2+16.5)*scl, 0]).add(t)
     b = base_box(scl, boxdepth+hthick, hole_depth, ht, hollow=False)
-    b = translate(v=[0, -hthick*scl, 0]).add(b)
+    b = translate(v=[0, -(hthick+30)*scl, 0]).add(b)
     u.add(b)
     u.add(t)
 
@@ -2110,38 +2110,26 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     # hollow out tube including base box
     a -= hollow_out_basebox(scl, border, hinge_depth)
 
-    soffset = -30.0
-    if test:
-        l = [(0, 26), (1, -46), (2, 26)]
-    else:
-        l = [(0, 26), (1, -46), (2, 26), (3, -46), (3, 26)]
-    for (end, offs) in l:
-        doffs = boxheight-45
-        if end == 2:
-            doffs += 20
-        b = cube([20*scl, (boxdepth-63.5)*scl, (60)*scl])
-        t = case_bolthole(scl, end=end).add(b)
-        t = translate(v=[(offs)*scl, (-boxdepth/2+105+soffset)*scl, doffs*scl]).add(t)
-        a += t
+    soffset = -30
 
     # screw support at both ends.  also have self-tap screw-holes above
     # bolts
     bhwid = 29.1+6
-    bhdep = ht + hinge_depth +hthick
+    bhdep = ht + hinge_depth +hthick+30
     for end in range(3 if test else 4):
         if end == 2:
-            bht = bhwid*2
+            bht = bhwid*2+5
         else:
             bht = 90
         if end == 2:
-            b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+36)*scl])
-            b = translate([(-bhwid+5)*scl, (18.5-hthick)*scl, 7*scl]).add(b)
+            b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+40)*scl])
+            b = translate([(-bhwid+5)*scl, (18.5-hthick)*scl, 0*scl]).add(b)
         else:
             b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, 130*scl])
-            b = translate([(-bhwid-bwid)*scl, (18.5-bwid)*scl,
+            b = translate([(-bhwid-bwid)*scl, (18.5-hthick)*scl,
                             -(bhwid+37)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
-        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
+        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset-30)*scl,
                     (boxheight-bwid)*scl]).add(t)
         a += t
 
@@ -2157,11 +2145,11 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
             
         b = cube([bhwid*2*scl, 70*scl, bht*scl])
         if end == 2:
-            b = translate([-bhwid*scl, 10*scl, -(bhwid-2)*scl]).add(b)
+            b = translate([-bhwid*scl, 10*scl, -(bhwid+3)*scl]).add(b)
         else:
             b = translate([-bhwid*scl, 10*scl, -(bhwid+2)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
-        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset)*scl,
+        t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset-30)*scl,
                     (boxheight)*scl]).add(t)
         a -= t
 
@@ -2337,7 +2325,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 0 and part != 1 and part != 13:
+    if part != 1 and part != 7:# and part != 1 and part != 13:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
@@ -2367,7 +2355,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 1:
         b.add(base_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
     if part == 7:
-        b.add(lid_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth))
+        le = lid_end(scl, lcd_end_ht, ht, hinge_depth, hole_depth)
+        le = translate(v=[0, (-30)*scl,0]).add(le)
+        b.add(le)
 
     base_ht = 40
 
