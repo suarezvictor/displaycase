@@ -75,6 +75,7 @@ hinge_depth = 70
 hole_depth = hinge_depth
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
 lidfront_offs = 10
+lcd_front_indent = 108
 
 bdep = 325
 fdep = 300
@@ -434,7 +435,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
     # top and bottom edge
     a += screen_frontedge(scl, ht, 80, toplenoffs,
                                curvefront=False, curvetopback=True,
-                               indent=0, outdent=0)
+                               indent=[0], outdent=[0])
 
     # add hinge-end filler over top of screwhole
     r = union()
@@ -510,6 +511,10 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     rad = 15
     rad2 = 2
     a = union()
+    if indent is None:
+        indent = []
+    if outdent is None:
+        outdent = []
 
     if curvetopback or frontonly:
         to = toplenoffs-40
@@ -537,14 +542,14 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     L:80, R:bwid+lcd_gap, F:-1, D:hthick},
                     curverads=curverads)
     c.add(b)
-    if indent is not None:
+    for ind in indent:
         # remove a matching part to clip
         o = shearedcube(size=[62*scl,
                         25*scl,(bwid+2)*scl],
                     shear=[0, 0*scl, 0],
                     innershear=[0, -20*scl, 0])
         o = rotate([0, 0, 180]).add(o)
-        t = translate(v=[(122+indent)*scl, (ht+11)*scl,
+        t = translate(v=[(122+ind)*scl, (ht+11)*scl,
                         (-1)*scl])
         t.add(o)
         c -= t
@@ -554,19 +559,19 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     innershear=[0, -20*scl, 0])
         o = rotate([0, 0, 180]).add(o)
         o = rotate([0, 180, 0]).add(o)
-        t = translate(v=[(-1+indent)*scl, (ht+11)*scl,
+        t = translate(v=[(-1+ind)*scl, (ht+11)*scl,
                         (bwid+2)*scl])
         t.add(o)
         c -= t
 
-    if outdent is not None:
+    for out in outdent:
         # add a tiny clip which locks into the next part
         o = shearedcube(size=[55*scl,
                         25*scl,(bwid)*scl],
                     shear=[0, 0*scl, 0],
                     innershear=[0, -17*scl, 0])
         o = rotate([0, 0, 180]).add(o)
-        t = translate(v=[(119+outdent)*scl, (14)*scl,
+        t = translate(v=[(119+out)*scl, (14)*scl,
                         (0)*scl])
         t.add(o)
         c += t
@@ -576,7 +581,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                     innershear=[0, -17*scl, 0])
         o = rotate([0, 0, 180]).add(o)
         o = rotate([0, 180, 0]).add(o)
-        t = translate(v=[(outdent)*scl, (14)*scl,
+        t = translate(v=[(out)*scl, (14)*scl,
                         (bwid)*scl])
         t.add(o)
         c += t
@@ -947,7 +952,7 @@ def screen_end(scl, ht=60):
     a = translate(v=[0, (-lcd_end_ht)*scl,0]).add(a)
     a += screen_mid1(scl, hinge_depth+lcd_end_offs,
                           hole_depth+lcd_end_offs, halfhollow=True,
-                          indent=lcd_w-82)
+                          indent=[lcd_w-82, lcd_front_indent])
 
     # clear out end edge for a nut
     b = cube([50*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
@@ -2325,7 +2330,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 4 and part != 2 and part != 0:
+    if part != 4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
@@ -2432,9 +2437,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         if part == 2:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True,
                                 fillinner=True, endpart=False,
-                                indent=0, outdent=0)
+                                indent=[0], outdent=[0])
         if part == 3:
-            m = screen_mid1(scl, midht, hole_depth, nohinge=True, endpart=True)
+            m = screen_mid1(scl, midht, hole_depth, nohinge=True,
+                            endpart=True,
+                            indent=[lcd_front_indent],
+                            outdent=[lcd_front_indent])
         if part == 4 and i > 0:
             m = screen_mid2(scl, midht, hole_depth)
 
