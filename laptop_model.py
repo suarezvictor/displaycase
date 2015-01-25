@@ -880,13 +880,13 @@ def screen_end(scl, ht=60):
     a += t
 
     # inner hexagon for nut
-    c = cylinder(r=25*scl, # XXX: M2 nuts are 4mm hex diameter!
+    c = cylinder(r=27*scl, # XXX: M2 nuts are 4mm hex diameter!
                         h=(bwid+30)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = hinge_translate(scl).add(c)
     a -= c
-    c = cylinder(r=30*scl,
-                        h=(bwid*2)*scl, segments=50, center=True)
+    c = cylinder(r=40*scl,
+                        h=(20)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (20)*scl, 0]).add(c)
     t = hinge_translate(scl).add(c)
@@ -932,7 +932,7 @@ def screen_end(scl, ht=60):
                           indent=[lcd_w-82, lcd_front_indent])
 
     # clear out end edge for a nut
-    b = cube([50*2*scl, (ht+hinge_depth-12)*scl, (lcd_d+28)*scl])
+    b = cube([50*2*scl, (55)*scl, (lcd_d+28)*scl])
     b = translate([-50*scl, (-0.5)*scl, -lcd_d*scl]).add(b)
     t = lid_bolthole(scl, False)
     t.add(b)
@@ -967,19 +967,22 @@ def screen_end(scl, ht=60):
         h = translate([40*scl, (16.5-ht)*scl, -55*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength+20)*scl, (16.5-ht)*scl, -20*scl]).add(h)
+        h = translate([(boxlength+20)*scl, (16.5-ht)*scl, -25*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength-60)*scl, (16.5-ht)*scl, 70*scl]).add(h)
+        h = translate([(boxlength-70)*scl, (16.5-ht)*scl, 70*scl]).add(h)
         c += h
         h = pin(B0)
         h = translate([(boxlength+80)*scl, (16.5-ht)*scl, 20*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 120*scl]).add(h)
+        h = translate([(boxlength-20)*scl, (16.5-ht)*scl, 125*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([(40)*scl, (16.5-ht)*scl, 20*scl]).add(h)
+        h = translate([(boxlength-145)*scl, (16.5-ht)*scl, 70*scl]).add(h)
+        c += h
+        h = pin(B0)
+        h = translate([(50)*scl, (16.5-ht)*scl, 45*scl]).add(h)
         c += h
         c = translate([0*scl, (-14)*scl, 0*scl]).add(c)
         a += c
