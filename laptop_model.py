@@ -711,7 +711,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if not endpart:
         # add hinge-end filler over top of screwhole
-        a.add(lcd_hinge_filler(scl, ht, True))
+        a.add(lcd_hinge_filler(scl, ht, cableduct))
 
         # bottom end curve (1st)
         r = union()
@@ -965,7 +965,8 @@ def screen_end(scl, ht=60):
     a = translate(v=[0, (-lcd_end_ht)*scl,0]).add(a)
     a += screen_mid1(scl, hinge_depth+lcd_end_offs,
                           hole_depth+lcd_end_offs, halfhollow=True,
-                          outdent=[lcd_w-82, lcd_front_indent])
+                          outdent=[lcd_w-82, lcd_front_indent],
+                          cableduct=False)
 
     # clear out end edge for a nut
     b = cube([50*2*scl, (55)*scl, (lcd_d+28)*scl])
@@ -2398,7 +2399,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 4:
+    if part != 0:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
