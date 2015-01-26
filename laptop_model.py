@@ -1021,6 +1021,9 @@ def screen_end(scl, ht=60):
         h = pin(B0)
         h = translate([(50)*scl, (16.5-ht)*scl, 45*scl]).add(h)
         c += h
+        h = pin(B0)
+        h = translate([(-25)*scl, (16.5-ht)*scl, 22*scl]).add(h)
+        c += h
         c = translate([0*scl, (-14)*scl, 0*scl]).add(c)
         a += c
 
