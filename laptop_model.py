@@ -389,7 +389,8 @@ def lid_bolthole(scl, end=True):
 
 def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     """
-        TODO: middle join part not quite right (too low, too long)
+        TODO:
+        * middle join part not quite right (too low, too long)
     """
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot-200
@@ -400,7 +401,7 @@ def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     a = union()
 
     # top edge
-    toplen = w+lcd_gap*2
+    toplen = w+lcd_gap*2-180
     toplenoffs = (-lcd_inset_top+w+75)
     r = union()
     c = shearedcube(size=[(bwid+iro)*scl,toplen*scl,ht*scl],
@@ -606,6 +607,8 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
+
+        * thin down edge from bwid to hthick at hinge end for cable duct
     """
 
     shear = 0
@@ -1932,6 +1935,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         TODO:
         * hole for friction hinge bolt too large a diameter.  reduce.
         * back_box_base moving around too much.  needs lock-together
+          (done, check it works)
     """
     edge_inset = bwid
     a = union()
@@ -2369,8 +2373,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 8 and part != -1 and part != 6:
-    #if part != -4 and part != 2 and part != 0 and part != 3:
+    #if part != 8 and part != -1 and part != 6:
+    if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
