@@ -1148,7 +1148,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
         d = case_bolthole(scl, end=end).add(d)
-        d = translate(v=[0*scl, 7*scl, 80*scl]).add(d) # XXX: magic constant
+        d = translate(v=[0*scl, 7*scl, 85*scl]).add(d) # XXX: magic constant
         a -= d
     for (x,h) in sholes:
         d = chamfered_backbox_screwholes(scl, 10)
@@ -2228,7 +2228,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                             h=(80)*scl,
                             segments=50, center=True)
             d = rotate([90, 0, 0]).add(d)
-            d = translate(v=[0, -34*scl, (80)*scl]).add(d) # XXX: magic constant
+            d = translate(v=[0, -34*scl, (85)*scl]).add(d) # XXX: magic constant
             d = case_bolthole(scl, end=end).add(d)
             a -= d
             
