@@ -1062,16 +1062,16 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
         c.add(b)
         # short wall hinge-end
-        b = cube([(bwid)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
-        b = translate([(lid_depth-bwid)*scl, (20+bwid)*scl, 0*scl]).add(b)
+        b = cube([(hthick)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
+        b = translate([(lid_depth-hthick)*scl, (20+bwid)*scl, 0*scl]).add(b)
         c.add(b)
 
         # back hinge-end cutout XXX: inset adjust for print inaccuracy by -2
-        b = cube([(90)*scl, (boxdepth)*scl, (boxinset+100)*scl])
+        b = cube([(90)*scl, (boxdepth+30)*scl, (boxinset+100)*scl])
         b = translate([-1*scl, (20+bwid)*scl, (boxinset-2)*scl]).add(b)
         c -= b
         # front cut-out
-        b = cube([(400)*scl, (boxdepth)*scl, (boxinset+100)*scl])
+        b = cube([(400)*scl, (boxdepth+30)*scl, (boxinset+100)*scl])
         b = translate([(lid_depth)*scl, (bwid*2+3.0)*scl, (-1)*scl]).add(b)
         c -= b
     a.add(c)
@@ -2361,7 +2361,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 4:
+    if part != 7:
     #if part != -4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
