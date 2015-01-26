@@ -419,7 +419,7 @@ def screen_mid3(scl, ht, hole_ht, nohinge=True, endpart=True):
     return a
 
 def screen_mid2(scl, ht, hole_ht, endpart=True,
-                removemiddle=True):
+                removemiddle=True, cableduct=False):
 
     shear = 0
     innershear = 0
@@ -440,16 +440,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
                                indent=[0], outdent=[0])
 
     # add hinge-end filler over top of screwhole
-    r = union()
-    c = shearedcube(size=[(lcd_d+10+lcd_gap*2)*scl,(lcd_gap*2+bwid+5)*scl,ht*scl],
-                shear=[-shear*scl, 0, 0],
-                innershear=[-innershear*scl, 0, 0])
-    c = rotate([0, 90, 90]).add(c)
-    r.add(c)
-    t = translate(v=[(+lcd_inset_bot+lcd_w-110)*scl,
-                        (16.5-ht)*scl, (lcd_doff+37+lcd_gap)*scl])
-    t.add(r)
-    a.add(t)
+    a.add(lcd_hinge_filler(scl, ht, cableduct))
 
     a.add(lid_bottom_boltholder(scl, lcd_gap, ht, iro))
 
@@ -624,9 +615,25 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
 
     return a
 
+def lcd_hinge_filler(scl, ht, cableduct):
+    fillerht = (lcd_d+10+lcd_gap*2)
+    if cableduct:
+        fillerht -= 20
+
+    r = union()
+    c = cube(size=[fillerht*scl,(lcd_gap*2+bwid+5)*scl,ht*scl])
+    c = rotate([0, 90, 90]).add(c)
+    r.add(c)
+    t = translate(v=[(+lcd_inset_bot+lcd_w-110)*scl,
+                        (16.5-ht)*scl, (lcd_doff+37+lcd_gap)*scl])
+    t.add(r)
+
+    return t
+
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                         halfhollow=False, fillinner=False,
-                        indent=None, outdent=None):
+                        indent=None, outdent=None,
+                        cableduct=False):
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
@@ -673,14 +680,15 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                     innershear=[-innershear*scl, 0, 0])
         c = rotate([0, 90, 90]).add(c)
         r.add(c)
-        t = translate(v=[toplenoffs*scl, (16.5-ht)*scl, (lcd_doff+30+lcd_gap)*scl])
+        t = translate(v=[toplenoffs*scl, (16.5-ht)*scl,
+                    (lcd_doff+30+lcd_gap)*scl])
         t.add(r)
         a.add(t)
 
     if fillinner:
         # add hinge-end filler over top of screwhole
         c = shearedcube(size=[70*scl,
-                        bwid*scl,(lcd_d+10+lcd_gap*2)*scl],
+                        bwid*scl,(lcd_d-10+lcd_gap*2)*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         t = translate(v=[(+lcd_inset_bot+lcd_w-34)*scl, (-0.5)*scl,
@@ -702,17 +710,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if not endpart:
         # add hinge-end filler over top of screwhole
-        r = union()
-        c = shearedcube(size=[(lcd_d+bwid+lcd_gap*2)*scl,
-                        (lcd_gap*2+bwid)*scl,ht*scl],
-                    shear=[-shear*scl, 0, 0],
-                    innershear=[-innershear*scl, 0, 0])
-        c = rotate([0, 90, 90]).add(c)
-        r.add(c)
-        t = translate(v=[(+lcd_inset_bot+lcd_w-115)*scl, (16.5-ht)*scl,
-                        (lcd_doff+30+lcd_gap)*scl])
-        t.add(r)
-        a.add(t)
+        a.add(lcd_hinge_filler(scl, ht, True))
 
         # bottom end curve (1st)
         r = union()
@@ -2400,7 +2398,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
     #if part != 4:
-    if part != 4 and part != -2 and part != 0 and part != 3 and part != 5:
+    if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
@@ -2507,14 +2505,16 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         if part == 2:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True,
                                 fillinner=True, endpart=False,
-                                indent=[0], outdent=[0])
+                                indent=[0], outdent=[0],
+                                cableduct=True)
         if part == 3:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True,
                             endpart=True,
                             indent=[lcd_front_indent],
                             outdent=[lcd_front_indent])
         if part == 4 and i > 0:
-            m = screen_mid2(scl, midht, hole_depth)
+            cableduct = i < 5
+            m = screen_mid2(scl, midht, hole_depth, cableduct = cableduct)
 
         if m:
             m = translate(v=[0, offs*scl,0]).add(m)
