@@ -922,11 +922,11 @@ def screen_end(scl, ht=60):
     c = hinge_translate(scl).add(c)
     a -= c
     c = cylinder(r=40*scl,
-                        h=(20)*scl, segments=50, center=True)
+                        h=(25)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (20)*scl, 0]).add(c)
+    c = translate(v=[0, (12)*scl, 0]).add(c)
     t = hinge_translate(scl).add(c)
-    t = translate(v=[0, (-ht/2+27.5)*scl, 0]).add(t)
+    t = translate(v=[0, (-ht/2+25.5)*scl, 0]).add(t)
     a += t
 
     # hinge hole
@@ -992,8 +992,13 @@ def screen_end(scl, ht=60):
     a -= t
 
     # *sigh* have to add some external edge support
-    b = cube([35*2*scl, (30)*scl, (15)*scl])
-    b = translate([-35*scl, -20*scl, 25*scl]).add(b)
+    b = cube([30*scl, (30)*scl, (15)*scl])
+    b = translate([-20*scl, -20*scl, 25*scl]).add(b)
+    t = lid_bolthole(scl)
+    t.add(b)
+    a += t
+    b = cube([15*scl, (30)*scl, (30)*scl])
+    b = translate([-40*scl, -20*scl, -15*scl]).add(b)
     t = lid_bolthole(scl)
     t.add(b)
     a += t
@@ -1031,7 +1036,7 @@ def screen_end(scl, ht=60):
     a -= lid_screwholes(scl, edge_inset)
 
     # more support
-    b = cylinder(r=18*scl, h=28*scl, 
+    b = cylinder(r=13*scl, h=28*scl, 
                     segments=50, center=True)
     b = rotate([0, 90, 90]).add(b)
     b = translate([0*scl, -6.5*scl, 0*scl]).add(b)
@@ -1042,6 +1047,13 @@ def screen_end(scl, ht=60):
     t.add(b)
     a += t
 
+    # more support, this is for friction hinge inner
+    c = cylinder(r=14*scl, 
+                        h=(bwid)*scl, segments=50, center=True)
+    c = rotate([180, 90, 90]).add(c)
+    c = translate(v=[0, (-12)*scl,0]).add(c)
+    c = hinge_translate(scl).add(c)
+    a += c
     a = translate(v=[0, (-lcd_end_offs)*scl,0]).add(a)
 
     return a
