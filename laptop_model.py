@@ -916,7 +916,7 @@ def screen_end(scl, ht=60):
     a += t
 
     # inner hexagon for nut
-    c = cylinder(r=27*scl, # XXX: M2 nuts are 4mm hex diameter!
+    c = cylinder(r=25.5*scl, # XXX: M2 nuts are 4mm hex diameter!
                         h=(bwid+30)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = hinge_translate(scl).add(c)
