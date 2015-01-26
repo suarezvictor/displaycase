@@ -689,7 +689,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
     if fillinner:
         # add hinge-end filler over top of screwhole
         c = shearedcube(size=[70*scl,
-                        bwid*scl,(lcd_d-10+lcd_gap*2)*scl],
+                        bwid*scl,(lcd_d+10+lcd_gap*2)*scl],
                     shear=[-shear*scl, 0, 0],
                     innershear=[-innershear*scl, 0, 0])
         t = translate(v=[(+lcd_inset_bot+lcd_w-34)*scl, (-0.5)*scl,
@@ -2415,7 +2415,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 0:
+    if part != 2:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
