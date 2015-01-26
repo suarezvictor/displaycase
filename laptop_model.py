@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 single = True
@@ -2161,9 +2161,9 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
             b = cube([(bhwid*2+15)*scl, bhdep*scl, (bhwid+40)*scl])
             b = translate([(-bhwid+5)*scl, (18.5-hthick)*scl, 0*scl]).add(b)
         else:
-            b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, 130*scl])
+            b = cube([(bhwid*2+bwid*2)*scl, (bhdep)*scl, (130-hthick)*scl])
             b = translate([(-bhwid-bwid)*scl, (18.5-hthick)*scl,
-                            -(bhwid+37)*scl]).add(b)
+                            -(bhwid+37-hthick)*scl]).add(b)
         t = case_bolthole(scl, end=end).add(b)
         t = translate(v=[(0)*scl, (-hinge_depth/2+3+soffset-30)*scl,
                     (boxheight-bwid)*scl]).add(t)
@@ -2361,7 +2361,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 7:
+    if part != 7 and part != 1:
     #if part != -4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
