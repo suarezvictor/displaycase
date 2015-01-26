@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 single = True
@@ -466,6 +466,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
         h = pin(B0)
         h = translate([(w-349)*scl, (13.5)*scl, 15*scl]).add(h)
         c += h
+        c = translate([0, (-ht+6)*scl, 0*scl]).add(c)
         a += c
 
     a = translate(v=[0, (ht-edge_inset)*scl, 0]).add(a)
