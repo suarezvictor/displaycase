@@ -1582,11 +1582,19 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
     if not midpart:
         # cutout in other side for cable
-        h = cube([(85)*scl, (50)*scl,
-                   (50)*scl])
+        h = cube([(85)*scl, (50)*scl, (50)*scl])
         h = translate(v=[(boxlength-bwid-125)*scl,
                             (-32-0.2)*scl, (120)*scl]).add(h)
         a -= h
+        # add a locking-part to base_end2 cutout
+        h = shearedcube([(10)*scl, (53)*scl, (hthick*2)*scl],
+                        shear=[0,-6*scl, 0],
+                        innershear=[0,0*scl, 0])
+        h = rotate([90, 0, 0]).add(h)
+        #h = rotate([0, 90, 0]).add(h)
+        h = translate(v=[(boxlength-bwid-50)*scl,
+                            (hthick)*scl, (120)*scl]).add(h)
+        a += h
 
     if not midpart:
         a -= ethernet(scl)
@@ -2018,7 +2026,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         a -=t
 
         # cutout in other side for cable
-        h = cube([(85)*scl, (boxdepth)*scl,
+        h = cube([(90)*scl, (boxdepth)*scl,
                    (50)*scl])
         h = translate(v=[(boxlength-bwid-125)*scl,
                             (-32-0.2)*scl, (120)*scl]).add(h)
@@ -2361,7 +2369,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 1 and part != 7 and part != 6 and part != 11 and \
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
-    if part != 7 and part != 1:
+    if part != 8 and part != -1 and part != 6:
     #if part != -4 and part != 2 and part != 0 and part != 3:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
