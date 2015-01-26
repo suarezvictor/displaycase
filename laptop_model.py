@@ -526,7 +526,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
 
     curverads={}
     if not frontonly:
-       curverads[D|R] = (bwid+lcd_gap-8, bwid*2+8)
+       curverads[D|R] = (bwid+lcd_gap+2, bwid*2-2)
     if edge:
         curverads[B|T] = (bwid, 0)
     if curvefront:
@@ -542,7 +542,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     c = union()
     b = hollowbox(scl, to+15+extralen, ht, ld,
                     {T:bwid, B: -1,
-                    L:80, R:hthick, F:-1, D:hthick},
+                    L:80, R:22, F:-1, D:hthick},
                     curverads=curverads)
     c.add(b)
     for ind in indent:
@@ -2397,8 +2397,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    #if part != 4:
-    if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
+    if part != 4:
+    #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
