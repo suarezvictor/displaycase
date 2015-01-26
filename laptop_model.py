@@ -992,8 +992,8 @@ def screen_end(scl, ht=60):
     a -= t
 
     # *sigh* have to add some external edge support
-    b = cube([30*scl, (30)*scl, (15)*scl])
-    b = translate([-20*scl, -20*scl, 25*scl]).add(b)
+    b = cube([55*scl, (30)*scl, (15)*scl])
+    b = translate([-30*scl, -20*scl, 25*scl]).add(b)
     t = lid_bolthole(scl)
     t.add(b)
     a += t
@@ -1047,14 +1047,15 @@ def screen_end(scl, ht=60):
     t.add(b)
     a += t
 
-    # more support, this is for friction hinge inner
-    c = cylinder(r=14*scl, 
-                        h=(bwid)*scl, segments=50, center=True)
-    c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (-12)*scl,0]).add(c)
-    c = hinge_translate(scl).add(c)
-    a += c
-    a = translate(v=[0, (-lcd_end_offs)*scl,0]).add(a)
+    if False: # XXX: disable. makes a bit of a mess of the hex hole
+        # more support, this is for friction hinge inner
+        c = cylinder(r=17*scl, 
+                            h=(bwid)*scl, segments=50, center=True)
+        c = rotate([180, 90, 90]).add(c)
+        c = translate(v=[0, (-12)*scl,0]).add(c)
+        c = hinge_translate(scl).add(c)
+        a += c
+        a = translate(v=[0, (-lcd_end_offs)*scl,0]).add(a)
 
     return a
 
