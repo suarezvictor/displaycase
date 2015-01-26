@@ -511,6 +511,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                             edge=False,
                             frontonly=False,
                             indent=None,
+                            indent2=None,
                             outdent=None):
     shear = 0
     innershear = 0
@@ -520,6 +521,8 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     rad = 15
     rad2 = 2
     a = union()
+    if indent2 is None:
+        indent2 = []
     if indent is None:
         indent = []
     if outdent is None:
@@ -532,7 +535,7 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
 
     curverads={}
     if not frontonly:
-       curverads[D|R] = (bwid+lcd_gap, bwid*2)
+       curverads[D|R] = (bwid+lcd_gap-8, bwid*2+8)
     if edge:
         curverads[B|T] = (bwid, 0)
     if curvefront:
@@ -548,11 +551,53 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
     c = union()
     b = hollowbox(scl, to+15+extralen, ht, ld,
                     {T:bwid, B: -1,
-                    L:80, R:bwid+lcd_gap, F:-1, D:hthick},
+                    L:80, R:hthick, F:-1, D:hthick},
                     curverads=curverads)
     c.add(b)
     for ind in indent:
         # remove a matching part to clip
+        o = shearedcube(size=[62*scl,
+                        25*scl,(bwid+2)*scl],
+                    shear=[0, 0*scl, 0],
+                    innershear=[0, -20*scl, 0])
+        #o = rotate([0, 0, 180]).add(o)
+        t = translate(v=[(60+ind)*scl, (-11)*scl,
+                        (-1)*scl])
+        t.add(o)
+        c -= t
+        o = shearedcube(size=[63*scl,
+                        25*scl,(bwid+3)*scl],
+                    shear=[0, 0*scl, 0],
+                    innershear=[0, -20*scl, 0])
+        o = rotate([0, 180, 0]).add(o)
+        t = translate(v=[(62+ind)*scl, (-11)*scl,
+                        (bwid+2)*scl])
+        t.add(o)
+        c -= t
+
+    for out in outdent:
+        # add a tiny clip which locks into the next part
+        o = shearedcube(size=[55*scl,
+                        25*scl,(bwid)*scl],
+                    shear=[0, 0*scl, 0],
+                    innershear=[0, -17*scl, 0])
+        #o = rotate([0, 0, 180]).add(o)
+        t = translate(v=[(64+out)*scl, (ht-14)*scl,
+                        (0)*scl])
+        t.add(o)
+        c += t
+        o = shearedcube(size=[57*scl,
+                        25*scl,(bwid)*scl],
+                    shear=[0, 0*scl, 0],
+                    innershear=[0, -17*scl, 0])
+        o = rotate([0, 180, 0]).add(o)
+        t = translate(v=[(57+out)*scl, (ht-14)*scl,
+                        (bwid)*scl])
+        t.add(o)
+        c += t
+
+    for ind in indent2:
+        # remove a matching part to clip, for screen_mid3
         o = shearedcube(size=[62*scl,
                         25*scl,(bwid+2)*scl],
                     shear=[0, 0*scl, 0],
@@ -572,28 +617,6 @@ def screen_frontedge(scl, ht, extralen, toplenoffs,
                         (bwid+2)*scl])
         t.add(o)
         c -= t
-
-    for out in outdent:
-        # add a tiny clip which locks into the next part
-        o = shearedcube(size=[55*scl,
-                        25*scl,(bwid)*scl],
-                    shear=[0, 0*scl, 0],
-                    innershear=[0, -17*scl, 0])
-        o = rotate([0, 0, 180]).add(o)
-        t = translate(v=[(119+out)*scl, (14)*scl,
-                        (0)*scl])
-        t.add(o)
-        c += t
-        o = shearedcube(size=[57*scl,
-                        25*scl,(bwid)*scl],
-                    shear=[0, 0*scl, 0],
-                    innershear=[0, -17*scl, 0])
-        o = rotate([0, 0, 180]).add(o)
-        o = rotate([0, 180, 0]).add(o)
-        t = translate(v=[(out)*scl, (14)*scl,
-                        (bwid)*scl])
-        t.add(o)
-        c += t
 
     c = translate(v=[(offs-extralen)*scl, (16.5-ht)*scl,
                     (lcd_doff+12-lcd_d-lcd_gap)*scl]).add(c)
@@ -665,12 +688,14 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         t.add(c)
         a.add(t)
 
+    if halfhollow:
         # add a tiny clip which locks into the screen end part
         c = shearedcube(size=[30*scl,
-                        ht*scl,(15)*scl],
-                    shear=[-shear*scl, 0, 0],
-                    innershear=[-innershear*scl, 0, 0])
-        t = translate(v=[(+lcd_inset_bot+lcd_w-44)*scl, (-ht+11)*scl,
+                        40*scl,(15)*scl],
+                    shear=[0, -10*scl, ],
+                    innershear=[0,0,0])
+        c = rotate([0, 0, 180]).add(c)
+        t = translate(v=[(+lcd_inset_bot+lcd_w-9)*scl, (25)*scl,
                         (lcd_doff-25)*scl])
         t.add(c)
         a.add(t)
@@ -941,7 +966,7 @@ def screen_end(scl, ht=60):
     a = translate(v=[0, (-lcd_end_ht)*scl,0]).add(a)
     a += screen_mid1(scl, hinge_depth+lcd_end_offs,
                           hole_depth+lcd_end_offs, halfhollow=True,
-                          indent=[lcd_w-82, lcd_front_indent])
+                          outdent=[lcd_w-82, lcd_front_indent])
 
     # clear out end edge for a nut
     b = cube([50*2*scl, (55)*scl, (lcd_d+28)*scl])
@@ -2374,7 +2399,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
+    #if part != 4:
+    if part != 4 and part != -2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
