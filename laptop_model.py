@@ -464,7 +464,7 @@ def screen_mid2(scl, ht, hole_ht, endpart=True,
     if pin_parts_3d:
         c = union()
         h = pin(B0)
-        h = translate([(w-349)*scl, (13.5)*scl, 15*scl]).add(h)
+        h = translate([(w-348)*scl, (13.5)*scl, -5*scl]).add(h)
         c += h
         c = translate([0, (-ht+6)*scl, 0*scl]).add(c)
         a += c
