@@ -2228,7 +2228,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                             h=(80)*scl,
                             segments=50, center=True)
             d = rotate([90, 0, 0]).add(d)
-            d = translate(v=[0, -4*scl, (75)*scl]).add(d) # XXX: magic constant
+            d = translate(v=[0, -34*scl, (75)*scl]).add(d) # XXX: magic constant
             d = case_bolthole(scl, end=end).add(d)
             a -= d
             
@@ -2256,7 +2256,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                         h=(80)*scl,
                         segments=50, center=True)
         d = rotate([90, 0, 0]).add(d)
-        d = translate(v=[x*scl, -4*scl, h*scl]).add(d) # XXX: magic constant
+        d = translate(v=[x*scl, -34*scl, h*scl]).add(d) # XXX: magic constant
         a -= d
 
     # screw holes in box
@@ -2415,7 +2415,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 2:
+    if part != 1:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
