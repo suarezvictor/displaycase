@@ -2278,7 +2278,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
         c = rotate([0, lcd_ext_rot_angle+168+ang, 0]).add(c)
         r += c
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-12)*scl,
+    t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2+23)*scl,
                      0]).add(t)
     a +=t
 
@@ -2423,10 +2423,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    #if part != 4 and part != 0 and part != 2:
-    if part != 10 and part != 11 and part != -12 and part != 8 and \
-        part != 6 and part != -9 and part != -15 and part != -1 and \
-        part != 0 and part != 7:
+    if part != 8:
+    #if part != 10 and part != 11 and part != -12 and part != 8 and \
+    #    part != 1 and part != -9 and part != -15 and part != -1 and \
+    #    part != 0 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
