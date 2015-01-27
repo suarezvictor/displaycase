@@ -1542,7 +1542,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             doffs = 6
             dmoffs = 6
         else:
-            dp = 50
+            dp = 60
+            doffs = -11
         c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
         c = translate(v=[(0)*scl, (hwid/2-3)*scl, (-dp/2-doffs)*scl]).add(c)
         r.add(c)
