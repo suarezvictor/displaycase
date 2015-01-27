@@ -1405,11 +1405,11 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ]
         bl = [
             # towards back of box
-            ([(bdep+100-csw/2-bwid-4)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
+            ([(bdep+100-csw/2-bwid-4)*scl, (59+csw/2)*scl, (lcd_d-22)*scl],
                 backboxheight-5.5),
             ([(bdep+100-csw/2-bwid-4)*scl, (320+csw/2)*scl, (lcd_d-22)*scl],
                 backboxheight-5.5),
-            ([(bdep+100-ethdep+csw/2+4)*scl, (19+csw/2)*scl, (lcd_d-22)*scl],
+            ([(bdep+100-ethdep+csw/2+4)*scl, (59+csw/2)*scl, (lcd_d-22)*scl],
                 backboxheight-5.5),
             ([(bdep+100-ethdep+csw/2+4)*scl, (blen-csw/2-hthick-5)*scl, (lcd_d-22)*scl],
                 backboxheight-5.5),
@@ -2418,15 +2418,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 8 and part != 6:
+    #if part != 8 and part != 6:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
     #if part != 4 and part != 0 and part != 2:
-    #if part != 10 and part != 11 and part != -12 and part != 8 and \
-        #part != 6 and part != -9 and part != -15 and part != -1 and \
-        #part != 0 and part != 7:
+    if part != 10 and part != 11 and part != -12 and part != 8 and \
+        part != 6 and part != -9 and part != -15 and part != -1 and \
+        part != 0 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
