@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 single = True
@@ -1480,37 +1480,20 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         dep = bdep+ethdep
         c = union()
         # horizontal
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (10)*scl, boxheight*scl]).add(h)
+        h = pin(B0, 1)
+        h = translate([50*scl, (-10)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(dep)*scl, 15*scl, (6)*scl])
-        h = translate([30*scl, (blen-20)*scl, boxheight*scl]).add(h)
+        h = pin(B0, 1)
+        h = translate([50*scl, (blen+10)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(80)*scl, 15*scl, (6)*scl])
-        h = translate([(dep-40)*scl, (-30)*scl, boxheight*scl]).add(h)
+        h = pin(B0, 1)
+        h = translate([(dep+10)*scl, (-20)*scl, boxheight*scl]).add(h)
         c += h
-        h = cube([(80)*scl, 15*scl, (6)*scl])
-        h = translate([(dep-40)*scl, (blen+20)*scl, boxheight*scl]).add(h)
-        c += h
-
-        # vertical
-        h = cube([15*scl, (60)*scl, (6)*scl])
-        h = translate([80*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([15*scl, (60)*scl, (6)*scl])
-        h = translate([80*scl, (blen-30)*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([12*scl, (blen+60)*scl, (6)*scl])
-        h = translate([(dep-12)*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([12*scl, (blen+65)*scl, (6)*scl])
-        h = translate([(dep+30)*scl, -30*scl, boxheight*scl]).add(h)
-        c += h
-        h = cube([12*scl, (blen+65)*scl, (6)*scl])
-        h = translate([(dep-50)*scl, -30*scl, boxheight*scl]).add(h)
+        h = pin(B0, 1)
+        h = translate([(dep+10)*scl, (blen+10)*scl, boxheight*scl]).add(h)
         c += h
 
-        c = translate(v=[(-75)*scl, 0, (lcd_d-33+bwid+hthick)*scl]).add(c)
+        c = translate(v=[(-75)*scl, 0, (lcd_d-30+bwid+hthick)*scl]).add(c)
         a += c
 
     if not midpart:
@@ -1637,12 +1620,12 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                             (-32-0.2)*scl, (120)*scl]).add(h)
         a -= h
         # add a locking-part to base_end2 cutout
-        h = shearedcube([(10)*scl, (53)*scl, (hthick*2)*scl],
+        h = shearedcube([(10)*scl, (53.1)*scl, (hthick*2)*scl],
                         shear=[0,-6*scl, 0],
                         innershear=[0,0*scl, 0])
         h = rotate([90, 0, 0]).add(h)
-        h = translate(v=[(boxlength-bwid-50)*scl,
-                            (hthick)*scl, (120)*scl]).add(h)
+        h = translate(v=[(boxlength-bwid-49.8)*scl,
+                            (hthick)*scl, (119.9)*scl]).add(h)
         a += h
 
     if not midpart:
