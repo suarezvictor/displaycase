@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 single = True
@@ -1592,12 +1592,18 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
         # match up with base_end2 hinge location
         r = union()
-        r = cylinder(r=16*scl,
-                            h=90*scl, segments=50, center=True)
-        r = rotate([180, 90, 90]).add(r)
+        r = cube([80*scl, 40*scl, 50*scl], center=True)
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (-bwid/2+0.5)*scl, 0]).add(t)
+        t = translate(v=[0, (bwid/2)*scl, (3*scl)]).add(t)
         a -= t
+        h = shearedcube([(10)*scl, (53.0)*scl, (hthick*2)*scl],
+                        shear=[0,-6*scl, 0],
+                        innershear=[0,0*scl, 0])
+        h = rotate([90, 0, 0]).add(h)
+        c = hinge_translate(scl).add(h)
+        c = translate(v=[(30.1)*scl, (hthick)*scl,
+                         (-22)*scl]).add(c)
+        a += c
 
     # add a holder for a nut
     if not midpart:
@@ -1635,7 +1641,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                         shear=[0,-6*scl, 0],
                         innershear=[0,0*scl, 0])
         h = rotate([90, 0, 0]).add(h)
-        #h = rotate([0, 90, 0]).add(h)
         h = translate(v=[(boxlength-bwid-50)*scl,
                             (hthick)*scl, (120)*scl]).add(h)
         a += h
@@ -2087,11 +2092,9 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # hinge hole, for friction hinge to poke through and support back box
     r = union()
-    r = cylinder(r=16*scl,
-                        h=(ht+90+0.3)*scl, segments=50, center=True)
-    r = rotate([180, 90, 90]).add(r)
+    r = cube([80*scl, 40*scl, 50*scl], center=True)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (-ht/2+28.5)*scl, 0]).add(t)
+    t = translate(v=[0, (-ht/2+48.5)*scl, (3*scl)]).add(t)
     a -= t
 
     a = translate(v=[0, (ht-edge_inset+ht_offset)*scl, 0]).add(a)
@@ -2415,12 +2418,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 7:
+    if part != 8 and part != 6:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
     #if part != 4 and part != 0 and part != 2:
+    #if part != 10 and part != 11 and part != -12 and part != 8 and \
+        #part != 6 and part != -9 and part != -15 and part != -1 and \
+        #part != 0 and part != 7:
     #if part != 10 and part != 11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
