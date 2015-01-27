@@ -1178,7 +1178,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         h = translate([-20*scl, (16.5-ht)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0)
-        h = translate([70*scl, (16.5-ht)*scl, 200*scl]).add(h)
+        h = translate([-5*scl, (16.5-ht)*scl, 200*scl]).add(h)
         c += h
         h = pin(B0)
         h = translate([(boxlength-100)*scl, (16.5-ht)*scl, 50*scl]).add(h)
@@ -2415,7 +2415,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    part != 0.1 and part != 8 and part != 12:
     #if part != 12 and part != 16:#and part != 8 and part != 11:
     #if part != 8 and part != -1 and part != 6:
-    if part != 1:
+    if part != 7:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
