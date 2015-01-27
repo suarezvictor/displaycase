@@ -1592,9 +1592,9 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
 
         # match up with base_end2 hinge location
         r = union()
-        r = cube([80*scl, 40*scl, 50*scl], center=True)
+        r = cube([80*scl, 40*scl, 52*scl], center=True)
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (bwid/2)*scl, (3*scl)]).add(t)
+        t = translate(v=[0, (bwid/2)*scl, (2*scl)]).add(t)
         a -= t
         h = shearedcube([(10)*scl, (53.0)*scl, (hthick*2)*scl],
                         shear=[0,-6*scl, 0],
