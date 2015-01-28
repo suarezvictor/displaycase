@@ -1212,6 +1212,7 @@ def chamfered_backbox_screwholes(scl, sht):
 def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
         * lift down-pillars slightly more
+        * add test mode for keyboard clips, and some non-test ones
     """
     edge_inset = bwid
     bht = bwid*3-10
@@ -1225,6 +1226,15 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
                     0*scl, (lcd_d-15+bwid)*scl]).add(c)
 
     a.add(c)
+
+    # clip on edge for keyboard
+    c = shearedcube([18*scl, 80*scl, 8*scl],
+                    shear=[5*scl, 0],
+                    innershear=[0,0,0])
+    c = rotate([0,90, 0]).add(c)
+    c = translate(v=[(-100-lidfront_offs-bwid-5)*scl,
+                    (150)*scl, (lcd_d+30+bwid-1)*scl]).add(c)
+    a += c
 
     # cutout in lid which matches the base_mid screwhole cross-supports
     c = cube([(59+2)*2*scl, (extraht+56)*scl, 25*scl])
@@ -2414,7 +2424,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 8 and part != 6:
+    if part != 11:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
