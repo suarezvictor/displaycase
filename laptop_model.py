@@ -28,7 +28,7 @@ def pin(spec, r=0):
         c = rotate([90,0,0]).add(c)
     return c
         
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 single = True
@@ -1470,6 +1470,13 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     c = translate(v=[-lidfront_offs*scl, 0, (lcd_d-32+bwid*2+hthick)*scl]).add(c)
     a.add(c)
 
+    # add extra bit at front (screw-holes are messed up otherwise)
+    # TODO: this will become a shelf/interlock for the rest of the base
+    c = cube([30*scl, blen*scl, hthick*scl])
+    c = translate(v=[-(lidfront_offs+20)*scl, 0*scl,
+                        (lcd_d-22-hthick+backboxheight)*scl]).add(c)
+    a += c
+
     # cutout in supports, matched by join between downsupports
     # needed because 3d printing joins close downsupports anyway
     c = cube([58*scl, (blen+2)*scl, 53*scl])
@@ -2076,7 +2083,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # hinge hole, for friction hinge to poke through and support back box
     r = union()
-    r = cube([80*scl, 40*scl, 50*scl], center=True)
+    r = cube([82*scl, 40*scl, 50*scl], center=True)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+48.5)*scl, (3*scl)]).add(t)
     a -= t
@@ -2407,7 +2414,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 8:
+    if part != 8 and part != 6:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
