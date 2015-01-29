@@ -1131,7 +1131,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         c = cube([36*2*scl, cdep*scl, (69)*scl], center=True)
         c = translate(v=[(-3)*scl, (cdep/2)*scl, (dp/2+1.5)*scl]).add(c)
         r.add(c)
-        c = cylinder(r=29*scl, h=(200)*scl, segments=6)
+        c = cylinder(r=27*scl, h=(200)*scl, segments=6)
         c = rotate([0, 90, 90]).add(c)
         c = rotate([0, 30, 0]).add(c)
         c = translate(v=[(0)*scl, (15)*scl, 0*scl]).add(c)
