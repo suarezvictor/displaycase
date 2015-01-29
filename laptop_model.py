@@ -1145,15 +1145,24 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     for end in range(3 if test else 4):
         if end == 2:
             continue
+        d = cube([60*scl, 60*scl, 25*scl], center=True)
+        d = rotate([90, 0, 0]).add(d)
+        d = case_bolthole(scl, end=end).add(d)
+        d = translate(v=[0*scl, 27*scl, 85*scl]).add(d) # XXX: magic constant
+        a += d
         d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
         d = case_bolthole(scl, end=end).add(d)
-        d = translate(v=[0*scl, 7*scl, 85*scl]).add(d) # XXX: magic constant
+        d = translate(v=[0*scl, 22*scl, 85*scl]).add(d) # XXX: magic constant
         a -= d
     for (x,h) in sholes:
+        d = cube([60*scl, 50*scl, 25*scl], center=True)
+        d = rotate([90, 0, 0]).add(d)
+        d = translate(v=[x*scl, 27*scl, h*scl]).add(d) # XXX: magic constant
+        a += d
         d = chamfered_backbox_screwholes(scl, 10)
         d = rotate([90, 0, 0]).add(d)
-        d = translate(v=[x*scl, 7*scl, h*scl]).add(d) # XXX: magic constant
+        d = translate(v=[x*scl, 22*scl, h*scl]).add(d) # XXX: magic constant
         a -= d
 
     # add some structural support, algorithm matches up with
@@ -2457,8 +2466,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 10 and part != 12 and part != 8 and part != 6 and \
-        part != 9 and part != 15 and part != 11 and part != 16:
+    if part != -1 and part != 7:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
