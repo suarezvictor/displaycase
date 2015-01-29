@@ -1100,7 +1100,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
                    T|B:(hthick, 0),
                    }
         b = hollowbox(scl, boxlength-122, boxdepth-bwid+hthick+30, boxheight,
-                        {T:hthick, B: hthick,
+                        {T:-1, B: -1,
                         L:hthick, R:-1, F:-1, D:-1},
                         curverads=curverads)
         b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
@@ -2264,21 +2264,6 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                     (boxheight-bwid)*scl]).add(t)
         a += t
 
-        if end != 2:
-            # add screw-hole for lid_end to lock against
-            v = union()
-            d = cylinder(r=topscrewrad*scl,
-                            h=(80)*scl,
-                            segments=50, center=True)
-            v.add(d)
-            d = cube([65*scl,62*scl,26*scl], center=True)
-            d = translate(v=[0, 0*scl, (30)*scl]).add(d) 
-            v.add(d)
-            v = rotate([90, 0, 0]).add(v)
-            d = translate(v=[0, -34*scl, (85)*scl]).add(v) # XXX: magic constant
-            d = case_bolthole(scl, end=end).add(d)
-            a -= d
-            
         b = cube([bhwid*2*scl, 70*scl, bht*scl])
         if end == 2:
             b = translate([-bhwid*scl, 10*scl, -(bhwid+3)*scl]).add(b)
@@ -2297,15 +2282,35 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
                         (boxheight)*scl]).add(t)
         a += t
 
+    for end in range(3 if test else 4):
+        if end == 2:
+            bht = bhwid*2+5
+        else:
+            bht = 90
+
+        if end != 2:
+            # add screw-hole for lid_end to lock against
+            d = cube([149*scl, 118*scl, 26*scl], center=True)
+            d = rotate([90, 0, 0]).add(d)
+            d = case_bolthole(scl, end=end).add(d)
+            d = translate(v=[40*scl, -64*scl, 116*scl]).add(d) # XXX: magic constant
+            a -= d
+            v = union()
+            d = cylinder(r=topscrewrad*scl,
+                            h=(80)*scl,
+                            segments=50, center=True)
+            v.add(d)
+            v = rotate([90, 0, 0]).add(v)
+            d = translate(v=[0, -34*scl, (85)*scl]).add(v) # XXX: magic constant
+            d = case_bolthole(scl, end=end).add(d)
+            a -= d
+
     for (x,h) in [(165, 150), (boxlength-179, 150)]:
         # add screw-hole for lid_end to lock against
         v = union()
         d = cylinder(r=topscrewrad*scl,
                         h=(80)*scl,
                         segments=50, center=True)
-        v.add(d)
-        d = cube([65*scl,53*scl,26*scl], center=True)
-        d = translate(v=[0, 0*scl, (30)*scl]).add(d) 
         v.add(d)
         v = rotate([90, 0, 0]).add(v)
         d = translate(v=[x*scl, -34*scl, h*scl]).add(v) # XXX: magic constant
@@ -2472,7 +2477,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 7:
+    if part != -7 and part != 1:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
