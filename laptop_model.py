@@ -1404,32 +1404,32 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(bdep+98-ethdep-csw/2)*scl, (blen-csw/2-48)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (blen-csw/2-19)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (csw/2+19)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ([(bdep+98-ethdep-csw/2)*scl,
                 (csw/2+bwid+30)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ]
         bl = [
             # towards back of box
             ([(bdep+100-csw/2-bwid-4)*scl, (59+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
             ([(bdep+100-csw/2-bwid-4)*scl, (320+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
             ([(bdep+100-ethdep+csw/2+4)*scl, (59+csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
             ([(bdep+100-ethdep+csw/2+4)*scl, (blen-csw/2-hthick-5)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
             ([(bdep+100-csw/2-bwid-4)*scl, (blen-csw/2-hthick-5)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
         ]
         if backlidonly:
             l = bl
@@ -1443,20 +1443,20 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             l += [
             # towards back of box
             ([(bdep+100-csw/2-bwid-4)*scl, (_blen-csw/2)*scl, (lcd_d-22)*scl],
-                backboxheight-5.5),
+                backboxheight-23.5),
             ]
         if not backlidonly:
             l += [
             # these are for the keyboard lid
             ([(csw/2-12)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
         ]
     if underhanglid is not None:
         l += [
             # these are for the keyboard lid
             ([(csw/2-12)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
         ]
     return l
 
@@ -1670,19 +1670,19 @@ def tpanel_supports(blen, dep, csw):
     return [
         ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                        (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+7)),
+            (backboxheight-bwid*2-hthick+7-18)),
         ([(csw/2+124-0.5)*scl,
             (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+7)),
+            (backboxheight-bwid*2-hthick+7-18)),
         ([(csw/2+124-0.5)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+7)),
+            (backboxheight-bwid*2-hthick+7-18)),
         ([(dep-csw/2)*scl,
             (csw/2+2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+7)),
+            (backboxheight-bwid*2-hthick+7-18)),
         ([(paneldepth+pdept+30-csw/2)*scl,
             (blen/2)*scl, (lcd_d-32+bwid*3)*scl],
-            (backboxheight-bwid*2-hthick+7)),
+            (backboxheight-bwid*2-hthick+7-18)),
         ]
 
 def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
@@ -1694,45 +1694,45 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
             # these are for the keyboard lid
             ([(dep-csw/2)*scl, (blen-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ([(csw/2+134-0.5)*scl,
                 (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ([(csw/2+134-0.5)*scl,
                 (blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ([(csw/2+134-0.5)*scl,
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ([(dep-csw/2)*scl,
                 (csw/2+bwid+2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ]
     if overhanglid:
         _blen = blen + overhanglid
         l += [
             # these go into base_end2
             ([(csw/2-12)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
         ]
     if touchpaneltray is not None:
         _blen = blen + touchpaneltray
         l += [
             # these go into base_end2
             ([(csw/2+124-0.5)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
             ([(dep-csw/2)*scl, (_blen-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick)),
+                (backboxheight-bwid*2-hthick-18)),
         ]
     if underhanglid is not None:
         l += [
             # these are for the keyboard lid
             ([(csw/2+134-0.5)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
             ([(dep-csw/2-0.5)*scl, (-underhanglid-csw/2)*scl,
                                            (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick+7)),
+                (backboxheight-bwid*2-hthick+7-18)),
         ]
     return l
 
@@ -2038,7 +2038,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     for ((x,y,z), sht) in backboxsupports(0, csw, underhanglid=-18,
                                             onlyoverhang=True):
         c = cube([75*scl, 68*scl, 25*scl], center=True)
-        c = translate(v=[x,y,(boxdepth+92+bwid-18)*scl]).add(c)
+        c = translate(v=[x,y,(boxdepth+92+bwid-16)*scl]).add(c)
         c = translate(v=[(lcd_w-80)*scl, 0, 0]).add(c)
         a += c
         c = chamfered_backbox_screwholes(scl, 10)
@@ -2050,7 +2050,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
                                             onlyoverhang=True,
                                             underhanglid=-18): # XXX: magic
         c = cube([63*scl, 68*scl, 25*scl], center=True)
-        c = translate(v=[x,y,(backboxheight+hthick)*scl]).add(c)
+        c = translate(v=[x,y,(backboxheight+hthick-3)*scl]).add(c)
         a += c
         c = chamfered_backbox_screwholes(scl, 10)
         c = translate(v=[x+5*scl,y,(backboxheight+hthick)*scl]).add(c)
@@ -2458,7 +2458,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
     if part != 10 and part != 12 and part != 8 and part != 6 and \
-        part != 9:
+        part != 9 and part != 15 and part != 11 and part != 16:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
