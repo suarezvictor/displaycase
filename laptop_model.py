@@ -1605,15 +1605,15 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         r = union()
         r = cube([80*scl, 40*scl, 52*scl], center=True)
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (bwid/2)*scl, (2*scl)]).add(t)
+        t = translate(v=[0, (bwid/2)*scl, (-3*scl)]).add(t)
         a -= t
-        h = shearedcube([(10)*scl, (53.0)*scl, (hthick*2)*scl],
+        h = shearedcube([(8)*scl, (43.0)*scl, (hthick*2)*scl],
                         shear=[0,-6*scl, 0],
                         innershear=[0,0*scl, 0])
         h = rotate([90, 0, 0]).add(h)
         c = hinge_translate(scl).add(h)
-        c = translate(v=[(30.1)*scl, (hthick)*scl,
-                         (-22)*scl]).add(c)
+        c = translate(v=[(34.1)*scl, (hthick)*scl,
+                         (-17)*scl]).add(c)
         a += c
 
     # add a holder for a nut
@@ -2066,30 +2066,33 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
         a -= t
 
         # cutout for cable
-        h = cube([(105)*scl, (boxdepth)*scl,
-                   (60)*scl])
-        h = translate(v=[(boxlength-bwid-100)*scl,
-                            (-55)*scl, (73)*scl]).add(h)
+        h = cylinder(r=33*scl, h=30*scl, segments=50, center=True)
+        h = rotate([180, 90, 90]).add(h)
+        h = hinge_translate(scl).add(h)
+        h = translate(v=[(0)*scl,
+                            (25)*scl, (0)*scl]).add(h)
         a -= h
 
         # arc cutout for cable
         r = union()
         cable_slot_depth = 70
-        c = touch_arc(lcd_hinge_inner_rad-10, cable_slot_depth, bwid,
-                            20, scl,
-                      angle=33)
+        c = touch_arc(lcd_hinge_inner_rad-37, 20, bwid,
+                            30, scl,
+                      angle=0)
         c = rotate([180, 90, 90]).add(c)
-        c = rotate([0, lcd_ext_rot_angle+96, 0]).add(c)
+        c = rotate([0, -29, 0]).add(c)
+        r += c
+        c = rotate([0, 29, 0]).add(c)
         r += c
         t = hinge_translate(scl).add(r)
-        t = translate(v=[0, (hinge_depth-ht-cable_slot_depth/2-10)*scl,
+        t = translate(v=[0, (hinge_depth-ht+cable_slot_depth/2-10)*scl,
                          0]).add(t)
         a -=t
 
-        # cutout in other side for cable
-        h = cube([(90)*scl, (boxdepth)*scl,
+        # cutout in other side for slot
+        h = cube([(30)*scl, (boxdepth)*scl,
                    (50)*scl])
-        h = translate(v=[(boxlength-bwid-125)*scl,
+        h = translate(v=[(boxlength-bwid-125+60)*scl,
                             (-32-0.2)*scl, (120)*scl]).add(h)
         a -= h
 
@@ -2103,7 +2106,7 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # hinge hole, for friction hinge to poke through and support back box
     r = union()
-    r = cube([82*scl, 40*scl, 50*scl], center=True)
+    r = cube([88*scl, 40*scl, 40*scl], center=True)
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+48.5)*scl, (3*scl)]).add(t)
     a -= t
@@ -2434,7 +2437,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 8:
+    if part != 10 and part != 6 and part != 8:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:

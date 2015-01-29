@@ -2,7 +2,7 @@ from pyopenscad import *
 
 
 u = union()
-u.add(dxf_linear_extrude(file="wing.dxf", height=6))
+u.add(dxf_linear_extrude(file="wing.dxf", height=5))
 
 r = dxf_linear_extrude(file="star.dxf", height=8)
 r = rotate([0,0,45]).add(r)
@@ -30,25 +30,25 @@ s = translate(v=[-10,46,0]).add(s)
 u -=s
 s = translate(v=[12,35,0]).add(s)
 u -=s
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[296,100,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[296,15,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[298,150,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[193,-4,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[208,-14,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[256,150,0]).add(c)
 u += c
-c = cube([8,20,6])
+c = cube([8,20,5])
 c = translate(v=[188,117,0]).add(c)
 u += c
 
