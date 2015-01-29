@@ -1530,9 +1530,14 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     for ((x,y,z), sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
                                             onlyoverhang=onlyoverhang):
         # add backing support for screwhole
-        c = cube([50*scl, 50*scl, 25*scl], center=True)
+        c = cube([63*scl, 70*scl, 25*scl], center=True)
         c = translate(v=[x,y,(backboxheight+7+bwid-15)*scl]).add(c)
+        if midpart:
+            c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
         a += c
+        if midpart:
+            c = translate(v=[0, 63*scl, 0]).add(c) # XXX: guesswork!
+            a += c
         # now drill holes
         c = chamfered_backbox_screwholes(scl, 10)
         c = translate(v=[x,y,(backboxheight+hthick+0)*scl]).add(c)
@@ -1872,16 +1877,24 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
         # XXX: magic constant for length and touchpaneltray arg
         for ((x,y,z), sht) in frontboxsupports(blen-125, fdep, csw, 0,
                                                 touchpaneltray=57):
-            c = chamfered_backbox_screwholes(scl, 0)
-            c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
+            # add backing support for screwhole
+            c = cube([63*scl, 70*scl, 25*scl], center=True)
+            c = translate(v=[x+5*scl,y,(backboxheight+7+bwid-15)*scl]).add(c)
+            a += c
+            c = chamfered_backbox_screwholes(scl, 10)
+            c = translate(v=[x+5*scl,y,(backboxheight+hthick)*scl]).add(c)
             a -= c
 
     # screwhole for touchpanel
     if midpart:
-        sht = (backboxheight-bwid*2-hthick)
-        c = chamfered_backbox_screwholes(scl, 0)
+        # add backing support for screwhole
+        c = cube([63*scl, 70*scl, 25*scl], center=True)
+        c = translate(v=[(7+paneldepth+pdept)*scl,
+                            ht/2*scl,(backboxheight+7+bwid-15)*scl]).add(c)
+        a += c
+        c = chamfered_backbox_screwholes(scl, 10)
         c = translate(v=[(7+paneldepth+pdept)*scl, ht/2*scl,
-                            (backboxheight+7+bwid)*scl]).add(c)
+                            (backboxheight+hthick)*scl]).add(c)
         a -= c
 
 
@@ -2024,16 +2037,23 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     # XXX: locations are all a bit bogus (magic numbers)
     for ((x,y,z), sht) in backboxsupports(0, csw, underhanglid=-18,
                                             onlyoverhang=True):
-        c = chamfered_backbox_screwholes(scl, 0)
-        c = translate(v=[x,y,(boxdepth+92+bwid)*scl]).add(c)
+        c = cube([75*scl, 68*scl, 25*scl], center=True)
+        c = translate(v=[x,y,(boxdepth+92+bwid-18)*scl]).add(c)
+        c = translate(v=[(lcd_w-80)*scl, 0, 0]).add(c)
+        a += c
+        c = chamfered_backbox_screwholes(scl, 10)
+        c = translate(v=[x,y,(boxdepth+92+hthick-7)*scl]).add(c)
         c = translate(v=[(lcd_w-80)*scl, 0, 0]).add(c)
         a -= c
 
     for ((x,y,z), sht) in frontboxsupports(0, fdep, csw,
                                             onlyoverhang=True,
                                             underhanglid=-18): # XXX: magic
-        c = chamfered_backbox_screwholes(scl, 0)
-        c = translate(v=[x+5*scl,y,(backboxheight+7+bwid)*scl]).add(c)
+        c = cube([63*scl, 68*scl, 25*scl], center=True)
+        c = translate(v=[x,y,(backboxheight+hthick)*scl]).add(c)
+        a += c
+        c = chamfered_backbox_screwholes(scl, 10)
+        c = translate(v=[x+5*scl,y,(backboxheight+hthick)*scl]).add(c)
         a -= c
 
     # hollow out the inner tube
@@ -2437,7 +2457,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 10 and part != 6 and part != 8:
+    if part != 10 and part != 12 and part != 8 and part != 6 and \
+        part != 9:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
