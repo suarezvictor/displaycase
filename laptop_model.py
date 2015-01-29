@@ -1106,7 +1106,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
         c.add(b)
         # short wall hinge-end
-        b = cube([(hthick)*scl, (boxdepth-bwid)*scl, (boxinset-border)*scl])
+        b = cube([(hthick)*scl, (boxdepth-bwid+30)*scl, (boxinset-20)*scl])
         b = translate([(lid_depth-hthick)*scl, (20+bwid)*scl, 0*scl]).add(b)
         c.add(b)
 
