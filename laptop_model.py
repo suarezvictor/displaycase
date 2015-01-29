@@ -2054,8 +2054,8 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     for ((x,y,z), sht) in frontboxsupports(0, fdep, csw,
                                             onlyoverhang=True,
                                             underhanglid=-18): # XXX: magic
-        c = cube([63*scl, 68*scl, 25*scl], center=True)
-        c = translate(v=[x,y,(backboxheight+hthick-3)*scl]).add(c)
+        c = cube([75*scl, 68*scl, 25*scl], center=True)
+        c = translate(v=[x+5*scl,y,(backboxheight+hthick-3)*scl]).add(c)
         a += c
         c = chamfered_backbox_screwholes(scl, 10)
         c = translate(v=[x+5*scl,y,(backboxheight+hthick)*scl]).add(c)
@@ -2477,7 +2477,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 7 and part != 1:
+    if part != 6:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
