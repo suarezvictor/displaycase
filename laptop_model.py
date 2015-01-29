@@ -1197,13 +1197,18 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
 def chamfered_backbox_screwholes(scl, sht):
     # chamfered screw holes in top of lid
     c = union()
-    c.add(cylinder(r=topscrewrad*1.2*scl, r1=25*scl,
-                    h=((bwid+1)/2)*scl,
+    c.add(cylinder(r=topscrewrad*1.2*scl, r1=22*scl,
+                    h=12*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
+    c.add(d)
+    d = cylinder(r=22*scl,
+                    h=(bwid+2.5+sht)*scl,
+                    segments=50, center=True)
+    d = translate(v=[0, 0, -20*scl]).add(d)
     c.add(d)
     c = rotate([180, 0, 0]).add(c)
     return c
@@ -1524,8 +1529,13 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     # add corner supports
     for ((x,y,z), sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
                                             onlyoverhang=onlyoverhang):
-        c = chamfered_backbox_screwholes(scl, 0)
-        c = translate(v=[x,y,(backboxheight+7+bwid)*scl]).add(c)
+        # add backing support for screwhole
+        c = cube([50*scl, 50*scl, 25*scl], center=True)
+        c = translate(v=[x,y,(backboxheight+7+bwid-15)*scl]).add(c)
+        a += c
+        # now drill holes
+        c = chamfered_backbox_screwholes(scl, 10)
+        c = translate(v=[x,y,(backboxheight+hthick+0)*scl]).add(c)
         if midpart:
             c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
         a -= c
@@ -2424,11 +2434,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 11:
+    if part != 8:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
-    #if part != 10 and part != 11 and part != 12 and part != 8 and \
+    #if part != 10 and part != -11 and part != 12 and part != 8 and \
         #part != 6 and part != 9 and part != 15 and part != -1 and \
         #part != 16 and part != -7:
     #if part != 8 and part != 15 and part != 6 and part != 11:
