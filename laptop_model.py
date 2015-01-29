@@ -1100,7 +1100,7 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
                    T|B:(hthick, 0),
                    }
         b = hollowbox(scl, boxlength-122, boxdepth-bwid+hthick+30, boxheight,
-                        {T:-1, B: -1,
+                        {T:hthick, B: hthick,
                         L:hthick, R:-1, F:-1, D:-1},
                         curverads=curverads)
         b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
@@ -2191,7 +2191,7 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
     a.add(h)
     # XXX: blegh!  must be a better way to do this...
     # fill in end part near hinge (might as well)
-    h = cube([(159)*scl, (60+hthick+30)*scl, 52*scl])
+    h = cube([(159)*scl, (60+hthick+30)*scl, 57*scl])
     h = translate(v=[(boxlength-205)*scl, (-43.5-hthick-30)*scl,
                         (124)*scl]).add(h)
     a.add(h)
@@ -2360,7 +2360,7 @@ def base_box(scl, boxdepth, hole_depth, ht, extralen=0,
                    }
         if endpart:
            curverads[T|B] = (bwid, 0) # XXX: hmm, gets covered up...
-           curverads[D|B] = (bwid, 0)
+           curverads[D|B] = (hthick, 0)
         b = hollowbox(scl, blen, boxdepth, boxheight,
                         {T:-1, B: -1,
                         L:bwid, R:bwid*3, F:hthick, D:hthick},
@@ -2477,7 +2477,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != -7 and part != 1:
+    if part != 7 and part != 1:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
