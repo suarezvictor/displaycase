@@ -2270,11 +2270,16 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
         if end != 2:
             # add screw-hole for lid_end to lock against
+            v = union()
             d = cylinder(r=topscrewrad*scl,
                             h=(80)*scl,
                             segments=50, center=True)
-            d = rotate([90, 0, 0]).add(d)
-            d = translate(v=[0, -34*scl, (85)*scl]).add(d) # XXX: magic constant
+            v.add(d)
+            d = cube([65*scl,62*scl,26*scl], center=True)
+            d = translate(v=[0, 0*scl, (30)*scl]).add(d) 
+            v.add(d)
+            v = rotate([90, 0, 0]).add(v)
+            d = translate(v=[0, -34*scl, (85)*scl]).add(v) # XXX: magic constant
             d = case_bolthole(scl, end=end).add(d)
             a -= d
             
@@ -2298,11 +2303,16 @@ def base_end(scl, ht_offset, ht, hinge_depth, hole_depth, innerpart=False):
 
     for (x,h) in [(165, 150), (boxlength-179, 150)]:
         # add screw-hole for lid_end to lock against
+        v = union()
         d = cylinder(r=topscrewrad*scl,
                         h=(80)*scl,
                         segments=50, center=True)
-        d = rotate([90, 0, 0]).add(d)
-        d = translate(v=[x*scl, -34*scl, h*scl]).add(d) # XXX: magic constant
+        v.add(d)
+        d = cube([65*scl,53*scl,26*scl], center=True)
+        d = translate(v=[0, 0*scl, (30)*scl]).add(d) 
+        v.add(d)
+        v = rotate([90, 0, 0]).add(v)
+        d = translate(v=[x*scl, -34*scl, h*scl]).add(v) # XXX: magic constant
         a -= d
 
     # screw holes in box
@@ -2466,7 +2476,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != -1 and part != 7:
+    if part != 7:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
