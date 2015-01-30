@@ -1586,8 +1586,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             dp = 80
             dmoffs = 6
         elif hole == 2 or hole == 3:
-            dp = 0
-            doffs = 6
+            dp = 80
+            doffs = -80+6
             dmoffs = 6
         else:
             dp = 60
@@ -1599,14 +1599,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
             c = cube([29*2*scl, hwid*scl, (dp+29*2)*scl], center=True)
             c = translate(v=[(+26.0*2)*scl, (hwid/2-3)*scl,
                         (dp/2-dmoffs)*scl]).add(c)
-            r.add(c)
-            c = shearedcube([109*scl, hwid*scl, (10)*scl],
-                    shear=[0,-28*scl, 0],
-                    innershear=[0,0,0], center=True)
-            if offs != 0:
-                c = rotate([0,0,180]).add(c)
-            c = translate(v=[(25.5)*scl, (hwid/2-3)*scl,
-                             (-dp/2-doffs+32)*scl]).add(c)
             r.add(c)
         t = case_bolthole(scl, end=hole).add(r)
         t = translate(v=[(0)*scl, (offs+3)*scl, (boxheight)*scl]).add(t)
