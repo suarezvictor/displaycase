@@ -1535,7 +1535,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     for ((x,y,z), sht) in backboxsupports(boxlen, csw, overhanglid=overhanglid,
                                             onlyoverhang=onlyoverhang):
         # add backing support for screwhole
-        c = cube([63*scl, 70*scl, 25*scl], center=True)
+        c = cube([63*scl, 55*scl, 25*scl], center=True)
         c = translate(v=[x,y,(backboxheight+7+bwid-15)*scl]).add(c)
         if midpart:
             c = translate(v=[0, 35*scl, 0]).add(c) # XXX: guesswork!
