@@ -1605,7 +1605,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         # cutout and inset for friction hinge bolt.
         # matches up with base_end2 hinge location
         r = union()
-        r = cube([80*scl, 40*scl, 52*scl], center=True)
+        r.add(cube([80*scl, 40*scl, 52*scl], center=True))
+        r.add(cube([60*scl, 40*scl, 82*scl], center=True))
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, (bwid/2)*scl, (-3*scl)]).add(t)
         a -= t
