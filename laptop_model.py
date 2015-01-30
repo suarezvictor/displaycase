@@ -1602,16 +1602,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
         a += t
 
     if not midpart:
-        # this is a cut-out so that the lid's thread-support goes through
-        # matches with back_box_lidfront
-        dep = 60 # add room for a nut
-        for (end, offs) in [(1, 45), ]:
-            r = lidscrewsupport(scl, dep, 72, 1, wid=32)
-            t = case_bolthole(scl, end=end).add(r)
-            t = translate(v=[(0)*scl, (offs)*scl, (boxheight)*scl]).add(t)
-            a -= t
-
-        # match up with base_end2 hinge location
+        # cutout and inset for friction hinge bolt.
+        # matches up with base_end2 hinge location
         r = union()
         r = cube([80*scl, 40*scl, 52*scl], center=True)
         t = hinge_translate(scl).add(r)
@@ -1622,7 +1614,7 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
                         innershear=[0,0*scl, 0])
         h = rotate([90, 0, 0]).add(h)
         c = hinge_translate(scl).add(h)
-        c = translate(v=[(32.1)*scl, (hthick)*scl,
+        c = translate(v=[(34.1)*scl, (hthick)*scl,
                          (-17)*scl]).add(c)
         a += c
 
@@ -1652,11 +1644,6 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     a -= t
 
     if not midpart:
-        # cutout in other side for cable
-        h = cube([(85)*scl, (50)*scl, (50)*scl])
-        h = translate(v=[(boxlength-bwid-125)*scl,
-                            (-32-0.2)*scl, (120)*scl]).add(h)
-        a -= h
         # add a locking-part to base_end2 cutout
         h = shearedcube([(10)*scl, (53.1)*scl, (hthick*2)*scl],
                         shear=[0,-6*scl, 0],
