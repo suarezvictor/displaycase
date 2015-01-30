@@ -84,6 +84,9 @@ ethdep = 160
 bdepoffs = 15
 csw = 55.0 # centre support width (for screws to go into)
 
+bbcutout_dep = bdep-50
+bbcutout_wid = 130
+
 paneldepth = 190
 pdept =  130
 
@@ -1410,9 +1413,10 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
             ([(bdep+98-ethdep-csw/2)*scl, (blen-csw/2-48)*scl,
                                            (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick-18)),
-            ([(csw/2-lidfront_offs-0.5)*scl,
-                (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
-                (backboxheight-bwid*2-hthick-18)),
+            # box now has a big hole in it
+            #([(csw/2-lidfront_offs-0.5)*scl,
+            #    (blen*0.45-csw/2)*scl, (lcd_d-32+bwid*3)*scl],
+            #    (backboxheight-bwid*2-hthick-18)),
             ([(csw/2-lidfront_offs-0.5)*scl,
                 (blen-csw/2-19)*scl, (lcd_d-32+bwid*3)*scl],
                 (backboxheight-bwid*2-hthick-18)),
@@ -1496,6 +1500,13 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     c = translate(v=[-(lidfront_offs+20)*scl, 0*scl,
                         (lcd_d-22-hthick+backboxheight)*scl]).add(c)
     a += c
+
+    if not midpart:
+        # cutout middle of base because there's too much plastic in the part
+        c = cube([(bbcutout_dep+30)*scl, (blen-bbcutout_wid*2)*scl, 20*scl])
+        c = translate(v=[-(lidfront_offs+30)*scl, bbcutout_wid*scl,
+                        (boxheight+(lcd_d-34+bwid*2-hthick))*scl]).add(c)
+        a -= c
 
     # cutout in supports, matched by join between downsupports
     # needed because 3d printing joins close downsupports anyway
