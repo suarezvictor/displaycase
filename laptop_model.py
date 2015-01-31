@@ -1082,6 +1082,8 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
         base_end bowing inwards on long side
         fix curving on end T|L so that printhead is a bit happier
         create clips to lock matching base_end into place
+        right edge is causing warping of the entire corner plastic
+        and has to go.
     """
     # matches up with front_box_lid
     edge_inset = bwid
@@ -1474,6 +1476,8 @@ def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     TODO:
     * chamfered screwholes need raising up (indenting more)
     * use new 3d pin style (old doesn't work)
+    * reduce height of screw downsupports (gap too large)
+    * increase hole size for cable (widen and deepen)
     """
     edge_inset = bwid
     blen = ht
@@ -1831,6 +1835,7 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     """
     TODO:
     * use new 3d pin style 
+    * reduce height of screw downsupports (gap too large)
     """
     if dep is None:
         dep = fdep
@@ -1977,10 +1982,10 @@ def base_mid(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
 
     # add some structural support, algorithm matches up with
     # back_box lid_end
-    sstep = 140
+    sstep = 134
     sdep = sstep
     while sdep <= boxlength-sstep*3:
-        h = cube([bwid*scl, ht*scl, 50*scl])
+        h = cube([8*scl, ht*scl, 50*scl])
         h = translate(v=[sdep*scl, 0*scl, (boxheight)*scl]).add(h)
         a.add(h)
         sdep += sstep
@@ -2468,7 +2473,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != 4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 8:
+    if part != 12:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
