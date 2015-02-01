@@ -31,7 +31,7 @@ def pin(spec, r=0):
     return c
         
 test = True
-single = False
+single = True
 
 
 if not test:
@@ -637,7 +637,7 @@ def lcd_hinge_filler(scl, ht, cableduct):
 def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                         halfhollow=False, fillinner=False,
                         indent=None, outdent=None,
-                        cableduct=False):
+                        cableduct=False, extra=None):
     """
         TODO: inside edge of lcd support is too thin, gcode is 2 layers
               separated by a large gap
@@ -673,7 +673,9 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                 indent=indent, outdent=outdent)
 
     if not endpart:
-        extra = 30 if fillinner else 0
+        if extra is None:
+            extra = 30 if fillinner else 0
+    if extra is not None:
         a.add(lid_bottom_boltholder(scl, lcd_gap, ht, iro, extra=extra))
 
     if endpart:
@@ -702,13 +704,13 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if halfhollow:
         # add a tiny clip which locks into the screen end part
-        c = shearedcube(size=[30*scl,
+        c = shearedcube(size=[32*scl,
                         40*scl,(15)*scl],
                     shear=[0, -10*scl, ],
                     innershear=[0,0,0])
-        c = rotate([0, 0, 180]).add(c)
-        t = translate(v=[(+lcd_inset_bot+lcd_w-9)*scl, (25)*scl,
-                        (lcd_doff-25)*scl])
+        c = rotate([180, 0, 0]).add(c)
+        t = translate(v=[(+lcd_inset_bot+lcd_w-59)*scl, (30)*scl,
+                        (lcd_doff+32)*scl])
         t.add(c)
         a.add(t)
 
@@ -717,7 +719,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a.add(lcd_hinge_filler(scl, ht, cableduct))
 
         # bottom end curve (1st)
-        r = union()
         r = touch_arc(lcd_hinge_inner_rad, ht, bwid, 30, scl)
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, -30, 0]).add(r)
@@ -727,7 +728,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a.add(t)
 
         # bottom end curve, overlap with 1st
-        r = union()
         r = touch_arc(lcd_hinge_inner_rad, ht, bwid, 30, scl)
         r = rotate([180, 90, 90]).add(r)
         r = rotate([0, 10, 0]).add(r)
@@ -738,7 +738,6 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
 
     if not nohinge:
         # outer surround
-        r = union()
         r = cylinder(r=(lcd_hinge_inner_rad+bwid)*scl, h=(hole_ht)*scl,
                      segments=50, center=True)
         r = rotate([180, 90, 90]).add(r)
@@ -748,14 +747,17 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
         a += t
 
         # hole for cable
-        r = union()
-        r = touch_arc(lcd_hinge_inner_rad+1, hinge_depth+ht, bwid,
+        r = touch_arc(lcd_hinge_inner_rad+5, hinge_depth+ht, bwid,
                         lcd_hinge_inner_rad, scl,
-                      angle=54)
+                      angle=64)
         r = rotate([180, 90, 90]).add(r)
-        r = rotate([0, lcd_ext_rot_angle+8, 0]).add(r)
+        r = rotate([0, lcd_ext_rot_angle+3, 0]).add(r)
         t = hinge_translate(scl).add(r)
         t = translate(v=[0, -(hole_ht+ht/2-7.5)*scl, 0]).add(t)
+        a -= t
+        r = cube([70*scl, (hinge_depth+ht)*scl, 50*scl])
+        t = hinge_translate(scl).add(r)
+        t = translate(v=[-lcd_hinge_inner_rad*scl, -(hole_ht+ht/2-7.5)*scl, (-lcd_hinge_inner_rad+1)*scl]).add(t)
         a -= t
 
     if halfhollow:
@@ -974,7 +976,7 @@ def screen_end(scl, ht=60):
     a += screen_mid1(scl, hinge_depth+lcd_end_offs,
                           hole_depth+lcd_end_offs, halfhollow=True,
                           outdent=[lcd_w-82, lcd_front_indent],
-                          cableduct=False)
+                          cableduct=False, extra=40.0)
 
     # clear out end edge for a nut
     b = cube([50*2*scl, (55)*scl, (lcd_d+28)*scl])
@@ -2475,10 +2477,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 8 and part != -1 and part != 6:
     #if part != 8 and part != 6:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
-    if part != 0 and part != 3 and part != 2 and part != 4 and \
-        part != 1 and part != -10 and part != -8 and part != -5 and \
-        part != -7:
-    #if part != 12:
+    #if part != 0 and part != 3 and part != 2 and part != -4 and \
+        #part != 1 and part != -10 and part != -8 and part != -5 and \
+        #part != -7:
+    if part != 0 and part != 2:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
@@ -2583,7 +2585,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = None
         if part == 2:
             m = screen_mid1(scl, midht, hole_depth, nohinge=True,
-                                fillinner=True, endpart=False,
+                                fillinner=False, endpart=False,
                                 indent=[0], outdent=[0],
                                 cableduct=True)
         if part == 3:
