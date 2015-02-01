@@ -7,7 +7,7 @@ from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
 
-pin_parts_3d=True
+pin_parts_3d=False
 
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
@@ -871,6 +871,11 @@ def lid_screwholes(scl, edge_inset):
     return u
 
 def screen_end(scl, ht=60):
+    """
+    TODO:
+    * move clip-holder to bottom of cable duct
+    * 
+    """
 
     shear = 0
     innershear = 0
@@ -2470,10 +2475,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 8 and part != -1 and part != 6:
     #if part != 8 and part != 6:
     #if part != 4 and part != 2 and part != 0 and part != 3 and part != 5:
-    #if part != 0 and part != 3 and part != 2 and part != 4 and \
-        #part != 1 and part != -10 and part != -8 and part != -5 and \
-        #part != -7:
-    if part != 12:
+    if part != 0 and part != 3 and part != 2 and part != 4 and \
+        part != 1 and part != -10 and part != -8 and part != -5 and \
+        part != -7:
+    #if part != 12:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
