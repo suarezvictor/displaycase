@@ -1080,14 +1080,8 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
     """
         TODO:
         fill in between hinge-end small stop-part and screwhole support 2
-        shrink cube screwhole supports top and bottom to stop "levering"
-        when fitting against base_end
-        add structural support bits on edge (inset by bwid) to stop
-        base_end bowing inwards on long side
         fix curving on end T|L so that printhead is a bit happier
         create clips to lock matching base_end into place
-        right edge is causing warping of the entire corner plastic
-        and has to go.
     """
     # matches up with front_box_lid
     edge_inset = bwid
@@ -1114,10 +1108,10 @@ def lid_end(scl, ht_offset, ht, hinge_depth, hole_depth):
                         curverads=curverads)
         b = translate([0, (20+bwid-hthick)*scl, 0*scl]).add(b)
         c.add(b)
-        # short wall hinge-end
-        b = cube([(hthick)*scl, (boxdepth-bwid+30)*scl, (boxinset-20)*scl])
-        b = translate([(lid_depth-hthick)*scl, (20+bwid)*scl, 0*scl]).add(b)
-        c.add(b)
+        # short wall hinge-end XXX had to go, causes curving of lid
+        #b = cube([(hthick)*scl, (boxdepth-bwid+30)*scl, (boxinset-20)*scl])
+        #b = translate([(lid_depth-hthick)*scl, (20+bwid)*scl, 0*scl]).add(b)
+        #c.add(b)
 
         # back hinge-end cutout XXX: inset adjust for print inaccuracy by -2
         b = cube([(90)*scl, (boxdepth+30)*scl, (boxinset+100)*scl])
