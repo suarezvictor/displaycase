@@ -639,9 +639,7 @@ def screen_mid1(scl, ht, hole_ht, nohinge=False, endpart=False,
                         indent=None, outdent=None,
                         cableduct=False, extra=None):
     """
-        TODO: inside edge of lcd support is too thin, gcode is 2 layers
-              separated by a large gap
-
+        TODO: 
         * thin down edge from bwid to hthick at hinge end for cable duct
     """
 
@@ -875,7 +873,6 @@ def lid_screwholes(scl, edge_inset):
 def screen_end(scl, ht=60):
     """
     TODO:
-    * move clip-holder to bottom of cable duct
     * 
     """
 
@@ -1233,7 +1230,6 @@ def chamfered_backbox_screwholes(scl, sht):
 
 def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
     """ TODO:
-        * lift down-pillars slightly more
         * add test mode for keyboard clips, and some non-test ones
     """
     edge_inset = bwid
@@ -1359,7 +1355,6 @@ def back_box_lidfront(scl, ht_offset, ht, extraht, boxextraht):
 
 def back_box_lid(scl, ht_offset, ht, extraht):
     """ TODO:
-        * lift down-pillars slightly
     """
     edge_inset = bwid
     bht = bwid*2+hthick-10
@@ -1481,9 +1476,7 @@ def backboxsupports(blen, csw, overhanglid=0, onlyoverhang=False,
 def back_box_base(scl, ht_offset, ht, midpart=False, frontpart=False):
     """
     TODO:
-    * chamfered screwholes need raising up (indenting more)
     * use new 3d pin style (old doesn't work)
-    * reduce height of screw downsupports (gap too large)
     * increase hole size for cable (widen and deepen)
     """
     edge_inset = bwid
@@ -1746,8 +1739,6 @@ def frontboxsupports(blen, dep, csw, overhanglid=0, onlyoverhang=False,
 def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     """
     TODO:
-    * reduce thickness of ceiling
-    * lift down-pillars slightly
     """
     # matches up with lid_end
     edge_inset = bwid
@@ -1842,7 +1833,6 @@ def front_box_base(scl, ht_offset, ht, lid_ht=0, extraht=0, dep=None,
     """
     TODO:
     * use new 3d pin style 
-    * reduce height of screw downsupports (gap too large)
     """
     if dep is None:
         dep = fdep
@@ -2012,8 +2002,6 @@ def base_end2(scl, ht_offset, ht, hinge_depth, hole_depth, mid=False):
     """
         TODO:
         * hole for friction hinge bolt too large a diameter.  reduce.
-        * back_box_base moving around too much.  needs lock-together
-          (done, check it works)
     """
     edge_inset = bwid
     a = union()
@@ -2480,7 +2468,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != -4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 8 and part != 6 and part != 10 and part != 11 and part != 15:
+    if part != 7:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
