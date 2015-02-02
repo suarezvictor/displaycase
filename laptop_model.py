@@ -7,7 +7,7 @@ from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
 
-pin_parts_3d=False
+pin_parts_3d=True
 
 # set this to add in some side-supports that help stabilise the parts
 # as they are being printed.  the parts are quite narrow and tall, so
@@ -1744,6 +1744,23 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     curverads={ T|L:(bwid, 0) }
     c = hollowbox(scl, fdep, flen, bht,
                     thick, curverads)
+    if pin_parts_3d:
+        u = union()
+        h = pin(B0, 1)
+        h = translate([-10*scl, -10*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(fdep+10)*scl, -10*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(fdep+10)*scl, (flen+10)*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(-10)*scl, (flen+10)*scl, 0*scl]).add(h)
+        u += h
+        u = translate([0*scl, (0)*scl, 3*scl]).add(u)
+        c += u
+
     c = translate([5*scl, 0, (+50+boxtopoffs)*scl]).add(c)
     a.add(c)
 
@@ -2462,7 +2479,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != -4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 7:
+    if part != 15:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
