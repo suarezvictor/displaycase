@@ -1738,6 +1738,10 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     edge_inset = bwid
     bht = boxheight-86 # XXX: magic number...
     flen = ht+extraht
+    plen = 200
+    plent = (flen - plen) / 2
+    pht = bht+hthick
+    pborder = 18
     boxextraht = 0
     a = union()
     thick = {T:hthick, B: 40, L:bwid, R:25, F:40, D:-1}
@@ -1757,6 +1761,15 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         u += h
         h = pin(B0, 1)
         h = translate([(-10)*scl, (flen+10)*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(fdep+30)*scl, (flen)/2*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(fdep+30)*scl, (plent)*scl, 0*scl]).add(h)
+        u += h
+        h = pin(B0, 1)
+        h = translate([(fdep+30)*scl, (plent+plen)*scl, 0*scl]).add(h)
         u += h
         u = translate([0*scl, (0)*scl, 3*scl]).add(u)
         c += u
@@ -1800,10 +1813,6 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
         a += t
 
     if tpanel:
-        plen = 200
-        plent = (flen - plen) / 2
-        pht = bht+hthick
-        pborder = 18
         c = cube([(paneldepth+1)*scl, plen*scl, (pht+1)*scl])
         t = translate([(5+pdept)*scl, plent*scl, (+50+boxtopoffs-1)*scl]).add(c)
         a -= t
@@ -2479,7 +2488,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != -4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 15:
+    if part != 16:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
