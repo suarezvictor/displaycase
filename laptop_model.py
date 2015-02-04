@@ -1744,8 +1744,8 @@ def front_box_lid(scl, ht_offset, ht, extraht=0, tpanel=False):
     pborder = 18
     boxextraht = 0
     a = union()
-    thick = {T:hthick, B: 40, L:bwid, R:25, F:40, D:-1}
-    curverads={ T|L:(bwid, 0) }
+    thick = {T:hthick, B: 40, L:hthick, R:25, F:40, D:-1}
+    curverads={ T|L:(hthick, 0) }
     c = hollowbox(scl, fdep, flen, bht,
                     thick, curverads)
     if pin_parts_3d:
@@ -2488,7 +2488,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 0 and part != 3 and part != 2 and part != -4 and \
         #part != 1 and part != -10 and part != -8 and part != -5 and \
         #part != -7:
-    if part != 16 and part != 12:
+    if part != 16 and part != 7:
     #if part != 10 and part != 11 and part != -12 and part != 8 and \
     #    part != 1 and part != -9 and part != -15 and part != -1 and \
     #    part != 0 and part != 7:
