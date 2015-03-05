@@ -633,20 +633,25 @@ def lid_screwholes(scl, edge_inset):
 def screen_end(scl, ht):
     u = union()
 
-    w = lcd_w+lcd_inset_top+lcd_inset_bot
+    hinge_or = 40
+    w = lcd_w+lcd_inset_top+lcd_inset_bot-hinge_or
     ld = lcd_d+hthick*2+lcd_gap*2
 
     b = hollowbox(scl, w, ht, ld,
                     {T:hthick, B: hthick,
-                    L:80, R:hthick, F:-1, D:20},
+                    L:80, R:-1, F:-1, D:20},
                     curverads={
                     L|T: (65, 0),
                     L|D: (hthick, 0),
-                    R|D: (hthick, 0),
-                    R|T: (65, 0),
+                    #R|D: (hthick, 0),
+                    #R|T: (hinge_od, 0),
         })
     b = translate(v=[0, 0, -(lcd_d-20)*scl]).add(b)
     u += b
+    c = cylinder(r=hinge_or*scl, h=ht*scl, segments=50)
+    c = rotate([-90,0,0]).add(c)
+    c = translate(v=[w*scl, 0, -(lcd_d-20-hinge_or)*scl]).add(c)
+    u += c
 
     return u
 
