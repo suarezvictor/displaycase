@@ -37,7 +37,7 @@ scl = 0.1
 hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
 lcd_inset_top = 25
-lcd_inset_bot = 130
+lcd_inset_bot = 150
 lcd_gap = 3
 lcd_hinge_inner_rad=70
 lcd_hinge_inside_rad=70
@@ -675,7 +675,7 @@ def screen_hinge(scl, ht):
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
     c = shearedcube([rad*2*scl, ht*scl, (70)*scl],
-                shear=[25*scl, 0, 0],
+                shear=[35*scl, 0, 0],
                 innershear=[-0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
@@ -690,8 +690,8 @@ def screen_hinge(scl, ht):
     u -= t
 
     c = shearedcube([(rad*2-10*2)*scl, (ht*2)*scl, (72)*scl],
-                shear=[25*scl, 0, 0],
-                innershear=[25*scl, 0, 0])
+                shear=[35*scl, 0, 0],
+                innershear=[35*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w-rad+25)*scl,-(ht+hthick)*scl,100*scl]).add(c)
