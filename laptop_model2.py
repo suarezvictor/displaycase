@@ -72,9 +72,9 @@ paneldepth = 190
 pdept =  130
 
 def hinge_translate(scl):
-    return translate(v=[+(+lcd_inset_bot+lcd_w+63-lcd_gap)*scl,
+    return translate(v=[+(+lcd_inset_bot+lcd_w-10)*scl,
                        0,
-                        (30-lcd_d+lcd_hinge_inner_rad)*scl])
+                        (148-lcd_d)*scl])
 
 def hinge_rotate(scl, o, angle):
     u = union()
@@ -630,52 +630,102 @@ def lid_screwholes(scl, edge_inset):
 
     return u
 
-def screen_end(scl, ht):
+def screen_box(scl, ht, end=True):
     u = union()
 
-    hinge_or = 40
-    w = lcd_w+lcd_inset_top+lcd_inset_bot-hinge_or
+    w = lcd_w+lcd_inset_top+lcd_inset_bot
     ld = lcd_d+hthick*2+lcd_gap*2
 
-    b = hollowbox(scl, w, ht, ld,
-                    {T:hthick, B: hthick,
-                    L:80, R:-1, F:-1, D:20},
-                    curverads={
-                    L|T: (65, 0),
-                    L|D: (hthick, 0),
-                    #R|D: (hthick, 0),
-                    #R|T: (hinge_od, 0),
-        })
+    walls = {T:hthick, L:80, R:hthick, F:-1, D:20}
+    curverads={
+                L|T: (65, 0),
+                L|D: (hthick, 0),
+                
+                }
+    if end:
+        walls[B] = hthick
+        curverads.update({ R|T: (65, 0),R|D: (hthick, 0),})
+    else:
+        walls[B] = -1
+        curverads.update({ R|T: (hthick, 65-hthick) })
+    b = hollowbox(scl, w, ht, ld, walls, curverads=curverads)
     b = translate(v=[0, 0, -(lcd_d-20)*scl]).add(b)
     u += b
-    c = cylinder(r=hinge_or*scl, h=ht*scl, segments=50)
-    c = rotate([-90,0,0]).add(c)
-    c = translate(v=[w*scl, 0, -(lcd_d-20-hinge_or)*scl]).add(c)
-    u += c
 
     return u
 
+def screen_end(scl, ht):
+    return screen_box(scl, ht, end=True)
+
+def screen_edge_complete(scl, ht):
+    return screen_box(scl, ht, end=False)
+
+def screen_hinge(scl, ht):
+    u = union()
+    b = screen_box(scl, ht, end=False)
+    u += b
+
+    rad=35.0
+    # add hinge
+    c = cylinder(r=rad*scl, h=(ht+30)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,-30*scl,0]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
+    w = lcd_w+lcd_inset_top+lcd_inset_bot
+    c = shearedcube([rad*2*scl, ht*scl, (70)*scl],
+                shear=[25*scl, 0, 0],
+                innershear=[-0*scl, 0, 0])
+    c = rotate([0, 0, 180]).add(c)
+    c = rotate([180, 0, 0]).add(c)
+    c = translate(v=[(w)*scl,0*scl,100*scl]).add(c)
+    u += c
+
+    # hollow hinge out
+    c = cylinder(r=(rad-10)*scl, h=(ht+51)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,-40*scl,0*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
+    c = shearedcube([(rad*2-10*2)*scl, (ht*2)*scl, (72)*scl],
+                shear=[25*scl, 0, 0],
+                innershear=[25*scl, 0, 0])
+    c = rotate([0, 0, 180]).add(c)
+    c = rotate([180, 0, 0]).add(c)
+    c = translate(v=[(w-rad+25)*scl,-(ht+hthick)*scl,100*scl]).add(c)
+    u -= c
+
+    return u
+    
+
 def screen_adjust(b, scl, angle):
+    u = union()
     p = lcd_panel(scl, offs=3)
     p = translate(v=[155.5*scl,61*scl,0]).add(p)
-    b += p
+    u += p
 
     p = lcd_view_area(scl, offs=3)
     p = translate(v=[155.5*scl,61*scl,lcd_doff*scl]).add(p)
-    b -= p
+    u += p
+
+    b -= u
 
     return hinge_rotate(scl, b, angle)
 
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 0:
-        return
+    #if part != 0 and part != 1:
+    #    return
 
     c = color(colour)
     c.add(t)
 
     b = union()
+
+    adjust_ht = 0
 
     if part == 0:
         se = screen_end(scl, lcd_end_ht)
@@ -683,6 +733,28 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
 
         b = screen_adjust(b, scl, angle)
+
+    adjust_ht += lcd_end_ht
+
+    if part == 1:
+        se = screen_edge_complete(scl, lcd_end_ht)
+        m = translate(v=[0, 0*scl,0]).add(se)
+        b.add(m)
+
+        b = translate(v=[0, adjust_ht*scl,0]).add(b)
+        b = screen_adjust(b, scl, angle)
+
+    adjust_ht += lcd_end_ht
+
+    if part == 2:
+        se = screen_hinge(scl, lcd_end_ht)
+        m = translate(v=[0, 0*scl,0]).add(se)
+        b.add(m)
+
+        b = translate(v=[0, adjust_ht*scl,0]).add(b)
+        b = screen_adjust(b, scl, angle)
+
+    adjust_ht += lcd_end_ht
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
