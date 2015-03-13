@@ -49,7 +49,7 @@ lcd_end_offs = 20
 lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
-boxheight = 140
+boxheight = 100
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
 boxinset = 55
@@ -71,10 +71,12 @@ bbcutout_wid = 130
 paneldepth = 190
 pdept =  130
 
+hinge_offs = 70
+
 def hinge_translate(scl):
-    return translate(v=[+(+lcd_inset_bot+lcd_w-10)*scl,
+    return translate(v=[+(+lcd_inset_bot+lcd_w-25)*scl,
                        0,
-                        (148-lcd_d)*scl])
+                        (78-lcd_d+hinge_offs)*scl])
 
 def hinge_rotate(scl, o, angle):
     u = union()
@@ -654,6 +656,24 @@ def screen_box(scl, ht, end=True):
 
     return u
 
+def base_end(scl, ht):
+    u = union()
+    w = lcd_w+lcd_inset_top+lcd_inset_bot-5
+
+    topcurve = 30
+    walls = {T:hthick, L:hthick, R:hthick, F:-1, D:-1}
+    curverads={
+                L|T: (hthick, 0),
+                L|D: (boxheight-hthick, 0),
+                R|T: (40, 0),
+                R|D: (boxheight-40, 0),
+                }
+    walls[B] = hthick
+    b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads)
+    b = translate(v=[0, 0, (55)*scl]).add(b)
+    u += b
+    return u
+    
 def screen_end(scl, ht):
     return screen_box(scl, ht, end=True)
 
@@ -674,12 +694,12 @@ def screen_hinge(scl, ht):
     u += t
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
-    c = shearedcube([rad*2*scl, ht*scl, (70)*scl],
-                shear=[35*scl, 0, 0],
+    c = shearedcube([(rad*2+15)*scl, ht*scl, (hinge_offs)*scl],
+                shear=[30*scl, 0, 0],
                 innershear=[-0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w)*scl,0*scl,100*scl]).add(c)
+    c = translate(v=[(w)*scl,0*scl,(30+hinge_offs)*scl]).add(c)
     u += c
 
     # hollow hinge out
@@ -689,12 +709,12 @@ def screen_hinge(scl, ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
-    c = shearedcube([(rad*2-10*2)*scl, (ht*2)*scl, (72)*scl],
+    c = shearedcube([(rad*2-10*2)*scl, (ht*2)*scl, (2+hinge_offs)*scl],
                 shear=[35*scl, 0, 0],
                 innershear=[35*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w-rad+25)*scl,-(ht+hthick)*scl,100*scl]).add(c)
+    c = translate(v=[(w-rad+25)*scl,-(ht+hthick)*scl,(30+hinge_offs)*scl]).add(c)
     u -= c
 
     return u
@@ -725,36 +745,43 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     b = union()
 
-    adjust_ht = 0
+    lid_adjust_ht = 0
+    base_adjust_ht = 0
+    scrn_end_ht = 30
 
     if part == 0:
-        se = screen_end(scl, lcd_end_ht)
+        se = screen_end(scl, scrn_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
-    adjust_ht += lcd_end_ht
+    lid_adjust_ht += scrn_end_ht
 
     if part == 1:
         se = screen_edge_complete(scl, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
 
-        b = translate(v=[0, adjust_ht*scl,0]).add(b)
+        b = translate(v=[0, lid_adjust_ht*scl,0]).add(b)
         b = screen_adjust(b, scl, angle)
 
-    adjust_ht += lcd_end_ht
+    lid_adjust_ht += lcd_end_ht
 
     if part == 2:
         se = screen_hinge(scl, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
 
-        b = translate(v=[0, adjust_ht*scl,0]).add(b)
+        b = translate(v=[0, lid_adjust_ht*scl,0]).add(b)
         b = screen_adjust(b, scl, angle)
 
-    adjust_ht += lcd_end_ht
+    lid_adjust_ht += lcd_end_ht
+
+    if part == 3:
+        se = base_end(scl, scrn_end_ht+lcd_end_ht)
+        m = translate(v=[0, 0*scl,0]).add(se)
+        b.add(m)
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
@@ -769,7 +796,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
