@@ -658,7 +658,7 @@ def screen_box(scl, ht, end=True):
 
 def base_end(scl, ht):
     u = union()
-    w = lcd_w+lcd_inset_top+lcd_inset_bot-5
+    w = lcd_w+lcd_inset_top+lcd_inset_bot-3
 
     topcurve = 30
     walls = {T:hthick, L:hthick, R:hthick, F:-1, D:-1}
@@ -672,6 +672,29 @@ def base_end(scl, ht):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads)
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
+
+    rad=35.0 + 12
+    # add hinge
+    c = cylinder(r=rad*scl, h=(ht)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,0*scl,0]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
+    # hollow hinge out
+    c = cylinder(r=(rad-10)*scl, h=(ht)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,hthick*scl,0*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
+    # cable access
+    c = cube([(ht)*scl, (rad+1)*scl, (rad+hthick)*scl])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
     return u
     
 def screen_end(scl, ht):
@@ -687,19 +710,19 @@ def screen_hinge(scl, ht):
 
     rad=35.0
     # add hinge
-    c = cylinder(r=rad*scl, h=(ht+30)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(ht+20)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,-30*scl,0]).add(c)
+    c = translate(v=[0*scl,-20*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
-    c = shearedcube([(rad*2+15)*scl, ht*scl, (hinge_offs)*scl],
+    c = shearedcube([(rad*2)*scl, ht*scl, (hinge_offs)*scl],
                 shear=[30*scl, 0, 0],
-                innershear=[-0*scl, 0, 0])
+                innershear=[-15*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w)*scl,0*scl,(30+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w-15)*scl,0*scl,(30+hinge_offs)*scl]).add(c)
     u += c
 
     # hollow hinge out
@@ -709,12 +732,12 @@ def screen_hinge(scl, ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
-    c = shearedcube([(rad*2-10*2)*scl, (ht*2)*scl, (2+hinge_offs)*scl],
+    c = shearedcube([(rad*2-25)*scl, (ht*2)*scl, (2+hinge_offs)*scl],
                 shear=[35*scl, 0, 0],
-                innershear=[35*scl, 0, 0])
+                innershear=[15*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w-rad+25)*scl,-(ht+hthick)*scl,(30+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w-rad+10)*scl,-(ht+hthick)*scl,(30+hinge_offs)*scl]).add(c)
     u -= c
 
     return u
@@ -739,6 +762,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
+    #if part == 3:
+        #return
 
     c = color(colour)
     c.add(t)
@@ -748,6 +773,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     lid_adjust_ht = 0
     base_adjust_ht = 0
     scrn_end_ht = 30
+    scrn_hinge_ht = 60
 
     if part == 0:
         se = screen_end(scl, scrn_end_ht)
@@ -769,14 +795,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     lid_adjust_ht += lcd_end_ht
 
     if part == 2:
-        se = screen_hinge(scl, lcd_end_ht)
+        se = screen_hinge(scl, scrn_hinge_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
 
         b = translate(v=[0, lid_adjust_ht*scl,0]).add(b)
         b = screen_adjust(b, scl, angle)
 
-    lid_adjust_ht += lcd_end_ht
+    lid_adjust_ht += scrn_hinge_ht
 
     if part == 3:
         se = base_end(scl, scrn_end_ht+lcd_end_ht)
