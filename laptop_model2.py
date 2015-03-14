@@ -762,8 +762,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
-    #if part == 3:
-        #return
+    #if part != 3:
+    #    return
 
     c = color(colour)
     c.add(t)
@@ -843,11 +843,11 @@ if __name__ == '__main__':
 
             if False:
                 card = import_stl(filename = "eoma68.stl")
-                r = rotate([90,180,-90]).add(card)
-                r = translate([(lcd_w+350)*scl, 1100*scl, 135*scl]).add(r)
+                r = rotate([90,180,180]).add(card)
+                r = translate([(lcd_w-250)*scl, 0*scl, 110*scl]).add(r)
                 t.add(r)
                 pcb = cube([800*scl, 1000*scl, (12)*scl], center=True)
-                r = translate([(lcd_w-80)*scl, 760*scl, 159*scl]).add(pcb)
+                r = translate([(lcd_w-400)*scl, 520*scl, 134*scl]).add(pcb)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog2.scad")
