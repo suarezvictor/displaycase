@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 
 test = True
 single = True
@@ -37,7 +37,7 @@ scl = 0.1
 hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
 lcd_inset_top = 25
-lcd_inset_bot = 150
+lcd_inset_bot = 180
 lcd_gap = 3
 lcd_hinge_inner_rad=70
 lcd_hinge_inside_rad=70
@@ -55,7 +55,7 @@ boxtopoffs = 2
 boxinset = 55
 hinge_depth = 70
 hole_depth = hinge_depth
-boxlength = lcd_w + lcd_inset_top + lcd_inset_bot + lcd_d-20
+boxlength = lcd_w + lcd_inset_top + lcd_inset_bot 
 lidfront_offs = 10
 lcd_front_indent = 108
 
@@ -632,10 +632,9 @@ def lid_screwholes(scl, edge_inset):
 
     return u
 
-def screen_box(scl, ht, end=True):
+def screen_box(scl, ht, end=True, hingewall=False):
     u = union()
 
-    w = lcd_w+lcd_inset_top+lcd_inset_bot
     ld = lcd_d+hthick*2+lcd_gap*2
 
     walls = {T:hthick, L:80, R:hthick, F:-1, D:20}
@@ -649,16 +648,23 @@ def screen_box(scl, ht, end=True):
         curverads.update({ R|T: (65, 0),R|D: (hthick, 0),})
     else:
         walls[B] = -1
-        curverads.update({ R|T: (hthick, 65-hthick) })
-    b = hollowbox(scl, w, ht, ld, walls, curverads=curverads)
+        #curverads.update({ R|T: (hthick, 65-hthick) })
+        curverads.update({ R|T: (65, 0) })
+    b = hollowbox(scl, boxlength, ht, ld, walls, curverads=curverads)
     b = translate(v=[0, 0, -(lcd_d-20)*scl]).add(b)
     u += b
+
+    if hingewall:
+        w1 = lcd_w+lcd_inset_top+40
+        c = cube([(hthick)*scl, (ht)*scl, (ld)*scl])
+        c = translate(v=[(w1)*scl, 0, -30*scl]).add(c)
+        u += c
 
     return u
 
 def base_end(scl, ht):
     u = union()
-    w = lcd_w+lcd_inset_top+lcd_inset_bot-3
+    w = boxlength-3
 
     topcurve = 30
     walls = {T:hthick, L:hthick, R:hthick, F:-1, D:-1}
@@ -705,7 +711,7 @@ def screen_edge_complete(scl, ht):
 
 def screen_hinge(scl, ht):
     u = union()
-    b = screen_box(scl, ht, end=False)
+    b = screen_box(scl, ht, end=False, hingewall=False)
     u += b
 
     rad=35.0
@@ -718,7 +724,7 @@ def screen_hinge(scl, ht):
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
     c = shearedcube([(rad*2)*scl, ht*scl, (hinge_offs)*scl],
-                shear=[30*scl, 0, 0],
+                shear=[50*scl, 0, 0],
                 innershear=[-15*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
@@ -733,12 +739,34 @@ def screen_hinge(scl, ht):
     u -= t
 
     c = shearedcube([(rad*2-25)*scl, (ht*2)*scl, (2+hinge_offs)*scl],
-                shear=[35*scl, 0, 0],
-                innershear=[15*scl, 0, 0])
+                shear=[55*scl, 0, 0],
+                innershear=[35*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w-rad+10)*scl,-(ht+hthick)*scl,(30+hinge_offs)*scl]).add(c)
     u -= c
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(boxlength-80)*scl, (ht-3)*scl, -25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-3)*scl, (ht-3)*scl, 0*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-90)*scl, (ht-3)*scl, 140*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-131)*scl, (ht-3)*scl, 80*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (ht-3)*scl, -20*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(51)*scl, (ht-3)*scl, 60*scl]).add(h)
+        c += h
+        u += c
 
     return u
     
@@ -762,8 +790,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
-    #if part != 3:
-    #    return
+    if part != 2:
+        return
 
     c = color(colour)
     c.add(t)
