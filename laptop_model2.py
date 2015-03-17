@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 
 test = True
 single = True
@@ -662,6 +662,38 @@ def screen_box(scl, ht, end=True, hingewall=False):
 
     return u
 
+def base_end_hinge(scl, ht):
+    u = union()
+    w = boxlength-112
+
+    topcurve = 30
+    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B: -1}
+    curverads={
+                L|T: (hthick, 0),
+                L|D: (boxheight-hthick, 0),
+                R|T: (hthick, 0),
+                }
+    b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads)
+    b = translate(v=[0, 0, (55)*scl]).add(b)
+    u += b
+
+    c = shearedcube([(80)*scl, ht*scl, (hinge_offs)*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([0, 0, 180]).add(c)
+    c = rotate([180, 0, 0]).add(c)
+    c = rotate([0, 180, 0]).add(c)
+    c = translate(v=[(w-80)*scl,0*scl,(hinge_offs-5)*scl]).add(c)
+    u += c
+
+    rad=35.0 + 12
+    # add hinge
+    c = cube([rad*scl, (ht+2)*scl, rad*2*scl])
+    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2)*scl]).add(c)
+    u -= c
+
+    return u
+    
 def base_end(scl, ht):
     u = union()
     w = boxlength-3
@@ -790,8 +822,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
-    if part != 2:
-        return
+    #if part != 2:
+    #    return
 
     c = color(colour)
     c.add(t)
@@ -835,6 +867,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 3:
         se = base_end(scl, scrn_end_ht+lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
+        b.add(m)
+
+    base_adjust_ht = scrn_end_ht+lcd_end_ht
+    if part == 4:
+        se = base_end_hinge(scl, scrn_hinge_ht)
+        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
     c = color([0.2, 0.2, 0.2, 1.0])
