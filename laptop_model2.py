@@ -10,6 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
+add_internal_parts=False
 
 test = True
 single = True
@@ -677,13 +678,13 @@ def base_end_hinge(scl, ht):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
-    c = shearedcube([(80)*scl, ht*scl, (hinge_offs)*scl],
+    c = shearedcube([(40)*scl, ht*scl, (hinge_offs)*scl],
                 shear=[50*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
-    c = translate(v=[(w-80)*scl,0*scl,(hinge_offs-5)*scl]).add(c)
+    c = translate(v=[(w-48)*scl,0*scl,(hinge_offs-15)*scl]).add(c)
     u += c
 
     rad=35.0 + 12
@@ -732,6 +733,38 @@ def base_end(scl, ht):
     c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
+
+    return u
+    
+def base_back_top(scl, ht):
+    u = union()
+    back_top_width = 180
+    w = boxlength-back_top_width
+
+    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:hthick}
+    curverads={
+                L|T: (hthick, 0),
+                R|T: (40, 0),
+                }
+    b = hollowbox(scl, back_top_width, ht, 40, walls, curverads=curverads)
+    b = translate(v=[w*scl, 0, (55)*scl]).add(b)
+    u += b
+
+    return u
+    
+def base_back_bot(scl, ht):
+    u = union()
+    back_top_width = 180
+    w = boxlength-back_top_width
+
+    walls = {T:-1, L:-1, R:hthick, F:-1, D:hthick, B:hthick}
+    curverads={
+                R|D: (boxheight-40, 0),
+                }
+    b = hollowbox(scl, back_top_width, ht, boxheight-40,
+                    walls, curverads=curverads)
+    b = translate(v=[w*scl, 0, (55+40)*scl]).add(b)
+    u += b
 
     return u
     
@@ -815,6 +848,11 @@ def screen_adjust(b, scl, angle):
 
     b -= u
 
+    if add_internal_parts:
+        p = lcd_panel(scl, offs=3)
+        p = translate(v=[155.5*scl,61*scl,0]).add(p)
+        b += p
+
     return hinge_rotate(scl, b, angle)
 
 
@@ -875,6 +913,20 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
+    base_adjust_ht += scrn_hinge_ht
+
+    base_back_ht = (lcd_l + hthick*2) / 2 - base_adjust_ht
+
+    if part == 5:
+        se = base_back_top(scl, base_back_ht)
+        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        b.add(m)
+
+    if part == 6:
+        se = base_back_bot(scl, base_back_ht)
+        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        b.add(m)
+
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
     t.add(c)
@@ -888,7 +940,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [20]
 
     for i in range(rpt):
         for angle in angles:
@@ -907,7 +959,7 @@ if __name__ == '__main__':
                 p  = translate(v=[0, 210*scl,0]).add(p)
                 t.add(p)
 
-            if False:
+            if add_internal_parts:
                 card = import_stl(filename = "eoma68.stl")
                 r = rotate([90,180,180]).add(card)
                 r = translate([(lcd_w-250)*scl, 0*scl, 110*scl]).add(r)
