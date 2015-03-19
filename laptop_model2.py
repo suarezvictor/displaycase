@@ -59,6 +59,7 @@ hole_depth = hinge_depth
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot 
 lidfront_offs = 10
 lcd_front_indent = 108
+back_top_width = 150
 
 bdep = 325
 fdep = 300
@@ -736,9 +737,23 @@ def base_end(scl, ht):
 
     return u
     
+def base_front_top(scl, ht):
+    u = union()
+    front_top_width = 180
+
+    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:-1}
+    curverads={
+                L|T: (hthick, 0),
+                L|D: (boxheight-hthick, 0),
+                }
+    b = hollowbox(scl, front_top_width, ht, boxheight, walls, curverads=curverads)
+    b = translate(v=[0*scl, 0, (55)*scl]).add(b)
+    u += b
+
+    return u
+    
 def base_back_top(scl, ht):
     u = union()
-    back_top_width = 180
     w = boxlength-back_top_width
 
     walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:hthick}
@@ -754,7 +769,6 @@ def base_back_top(scl, ht):
     
 def base_back_bot(scl, ht):
     u = union()
-    back_top_width = 180
     w = boxlength-back_top_width
 
     walls = {T:-1, L:-1, R:hthick, F:-1, D:hthick, B:hthick}
@@ -927,6 +941,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
+    if part == 7:
+        se = base_front_top(scl, base_back_ht)
+        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        b.add(m)
+
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
     t.add(c)
@@ -940,7 +959,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [20]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
