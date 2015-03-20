@@ -59,7 +59,7 @@ hole_depth = hinge_depth
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot 
 lidfront_offs = 10
 lcd_front_indent = 108
-back_top_width = 150
+back_top_width = 170
 
 bdep = 325
 fdep = 300
@@ -344,11 +344,10 @@ def base_end_hinge(scl, ht):
     walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B: -1}
     curverads={
                 L|T: (hthick, 0),
-                L|D: (boxheight-hthick, 0),
                 R|T: (hthick, 0),
                 }
-    b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads)
-    b = translate(v=[0, 0, (55)*scl]).add(b)
+    b = hollowbox(scl, back_top_width-112, ht, boxheight-hthick, walls, curverads=curverads)
+    b = translate(v=[(boxlength-back_top_width)*scl, 0, (55)*scl]).add(b)
     u += b
 
     c = shearedcube([(40)*scl, ht*scl, (hinge_offs)*scl],
@@ -614,8 +613,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
 
     if part == 7:
-        se = base_front_top(scl, base_back_ht)
-        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        se = base_front_top(scl, base_back_ht+scrn_hinge_ht)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
     c = color([0.2, 0.2, 0.2, 1.0])
