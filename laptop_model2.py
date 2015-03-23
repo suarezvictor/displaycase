@@ -392,6 +392,14 @@ def base_end(scl, ht):
     t = hinge_translate(scl).add(c)
     u += t
 
+    # block up hole
+    c = cube([(ht)*scl, (rad-10)*scl, (28)*scl])
+    c = rotate([0, 0, 90]).add(c)
+    c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[-(rad-12)*scl,0*scl,0*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
     # hollow hinge out
     c = cylinder(r=(rad-10)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
@@ -400,7 +408,7 @@ def base_end(scl, ht):
     u -= t
 
     # cable access
-    c = cube([(ht)*scl, (rad+1)*scl, (rad+hthick)*scl])
+    c = cube([(ht)*scl, (rad+20)*scl, (rad+hthick)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -653,7 +661,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
