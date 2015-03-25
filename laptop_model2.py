@@ -346,22 +346,23 @@ def base_end_hinge(scl, ht):
                 L|T: (hthick, 0),
                 R|T: (hthick, 0),
                 }
-    b = hollowbox(scl, back_top_width-112, ht, boxheight-hthick, walls, curverads=curverads)
+    b = hollowbox(scl, back_top_width-112, ht, boxheight, walls,
+                  curverads=curverads)
     b = translate(v=[(boxlength-back_top_width)*scl, 0, (55)*scl]).add(b)
     u += b
 
-    c = shearedcube([(40)*scl, ht*scl, (hinge_offs)*scl],
-                shear=[50*scl, 0, 0],
+    c = shearedcube([(45.5)*scl, ht*scl, (boxheight-5)*scl],
+                shear=[68*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
-    c = translate(v=[(w-48)*scl,0*scl,(hinge_offs-15)*scl]).add(c)
+    c = translate(v=[(w-48)*scl,0*scl,(hinge_offs-10)*scl]).add(c)
     u += c
 
     rad=35.0 + 12
     # add hinge
-    c = cube([rad*scl, (ht+2)*scl, rad*2*scl])
+    c = cube([rad*scl, (ht+2)*scl, boxheight*2*scl])
     c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2)*scl]).add(c)
     u -= c
 
@@ -568,8 +569,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
-    #if part != 2:
-    #    return
+    if part != 4 and part != -1:
+        return
 
     c = color(colour)
     c.add(t)
@@ -617,6 +618,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     if part == 4:
+        # NOTE: this is part of part 4...
         se = base_end_hinge(scl, scrn_hinge_ht)
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
@@ -631,7 +633,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
-    if part == 6:
+    if part == 4:
+        # NOTE: ... here's the other bit
         se = base_back_bot(scl, base_back_ht)
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
@@ -661,7 +664,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [120]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
