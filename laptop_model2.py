@@ -417,6 +417,22 @@ def base_end(scl, ht):
 
     return u
     
+def base_front_bottom(scl, ht):
+    u = union()
+    front_top_width = 180
+
+    woffs = (boxheight-hthick)
+    walls = {T:-1, L:-1, R:-1, F:hthick, D:hthick, B:hthick}
+    curverads={
+                #L|T: (hthick, 0),
+                #L|D: (boxheight-hthick, 0),
+                }
+    b = hollowbox(scl, front_top_width-(woffs), ht, boxheight-40, walls, curverads=curverads)
+    b = translate(v=[woffs*scl, 0, (boxheight-5)*scl]).add(b)
+    u += b
+
+    return u
+    
 def base_front_top(scl, ht):
     u = union()
     front_top_width = 180
@@ -569,8 +585,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 0 and part != 1:
     #    return
-    if part != 4 and part != -1:
-        return
+    #if part != 4 and part != -1:
+    #    return
 
     c = color(colour)
     c.add(t)
@@ -639,6 +655,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
+    if part == 6:
+        se = base_front_bottom(scl, (lcd_l-centre_ht)/2)
+        m = translate(v=[0, (hthick)*scl,0]).add(se)
+        b.add(m)
+
     if part == 7:
         se = base_front_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
@@ -664,7 +685,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
