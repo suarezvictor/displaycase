@@ -50,7 +50,7 @@ lcd_end_offs = 20
 lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
-boxheight = 110
+boxheight = 120
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
 boxinset = 55
@@ -428,7 +428,7 @@ def base_front_bottom(scl, ht):
                 #L|D: (boxheight-hthick, 0),
                 }
     b = hollowbox(scl, front_top_width-(woffs), ht, boxheight-40, walls, curverads=curverads)
-    b = translate(v=[woffs*scl, 0, (boxheight-5)*scl]).add(b)
+    b = translate(v=[woffs*scl, 0, (95)*scl]).add(b)
     u += b
 
     return u
@@ -688,7 +688,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [160]
 
     for i in range(rpt):
         for angle in angles:
@@ -713,7 +713,7 @@ if __name__ == '__main__':
                 r = rotate([90,180,180]).add(card)
                 r = translate([(lcd_w-250)*scl, 0*scl, (drop_ht+110)*scl]).add(r)
                 t.add(r)
-                kbd = cube([600*scl, (lcd_l-60)*scl, (60)*scl], center=True)
+                kbd = cube([600*scl, (lcd_l-100)*scl, (60)*scl], center=True)
                 r = translate([(lcd_w-300)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
                 t.add(r)
                 pcb = cube([800*scl, 1000*scl, (12)*scl], center=True)
