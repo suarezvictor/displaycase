@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = True
 single = True
@@ -50,7 +50,7 @@ lcd_end_offs = 20
 lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
-boxheight = 100
+boxheight = 110
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
 boxinset = 55
@@ -309,23 +309,23 @@ def lid_screwholes(scl, edge_inset):
 def screen_box(scl, ht, end=True, hingewall=False):
     u = union()
 
-    ld = lcd_d+hthick*2+lcd_gap*2
+    ld = lcd_d+hthick+5.4
 
-    walls = {T:hthick, L:80, R:hthick, F:-1, D:20}
+    walls = {T:hthick, L:80, R:hthick, F:-1, D:115}
     curverads={
-                L|T: (65, 0),
+                L|T: (ld-hthick, 0),
                 L|D: (hthick, 0),
                 
                 }
     if end:
         walls[B] = hthick
-        curverads.update({ R|T: (65, 0),R|D: (hthick, 0),})
+        curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
     else:
         walls[B] = -1
         #curverads.update({ R|T: (hthick, 65-hthick) })
-        curverads.update({ R|T: (65, 0) })
+        curverads.update({ R|T: (ld-hthick, 0) })
     b = hollowbox(scl, boxlength, ht, ld, walls, curverads=curverads)
-    b = translate(v=[0, 0, -(lcd_d-20)*scl]).add(b)
+    b = translate(v=[0, 0, -(lcd_d-30)*scl]).add(b)
     u += b
 
     if hingewall:
@@ -373,7 +373,7 @@ def base_end(scl, ht):
     w = boxlength-3
 
     topcurve = 30
-    walls = {T:hthick, L:hthick, R:hthick, F:-1, D:-1}
+    walls = {T:hthick, L:hthick, R:hthick, F:-1, D:hthick}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-hthick, 0),
@@ -562,20 +562,22 @@ def screen_hinge(scl, ht):
     
 
 def screen_adjust(b, scl, angle):
+
+    lcd_ht = 10.0
     u = union()
     p = lcd_panel(scl, offs=3)
-    p = translate(v=[155.5*scl,61*scl,0]).add(p)
+    p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
     u += p
 
     p = lcd_view_area(scl, offs=3)
-    p = translate(v=[155.5*scl,61*scl,lcd_doff*scl]).add(p)
+    p = translate(v=[155.5*scl,61*scl,(lcd_doff+lcd_ht)*scl]).add(p)
     u += p
 
     b -= u
 
     if add_internal_parts:
         p = lcd_panel(scl, offs=3)
-        p = translate(v=[155.5*scl,61*scl,0]).add(p)
+        p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
         b += p
 
     return hinge_rotate(scl, b, angle)
@@ -655,9 +657,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
         b.add(m)
 
+    adj = scrn_end_ht+lcd_end_ht
     if part == 6:
-        se = base_front_bottom(scl, (lcd_l-centre_ht)/2)
-        m = translate(v=[0, (hthick)*scl,0]).add(se)
+        se = base_front_bottom(scl, (lcd_l-centre_ht)/2-adj+hthick)
+        m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
 
     if part == 7:
@@ -685,7 +688,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
@@ -706,11 +709,15 @@ if __name__ == '__main__':
 
             if add_internal_parts:
                 card = import_stl(filename = "eoma68.stl")
+                drop_ht=20.0
                 r = rotate([90,180,180]).add(card)
-                r = translate([(lcd_w-250)*scl, 0*scl, 110*scl]).add(r)
+                r = translate([(lcd_w-250)*scl, 0*scl, (drop_ht+110)*scl]).add(r)
+                t.add(r)
+                kbd = cube([600*scl, (lcd_l-60)*scl, (60)*scl], center=True)
+                r = translate([(lcd_w-300)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
                 t.add(r)
                 pcb = cube([800*scl, 1000*scl, (12)*scl], center=True)
-                r = translate([(lcd_w-400)*scl, 520*scl, 134*scl]).add(pcb)
+                r = translate([(lcd_w-400)*scl, 520*scl, (drop_ht+134)*scl]).add(pcb)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog2.scad")
