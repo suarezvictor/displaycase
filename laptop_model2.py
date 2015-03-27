@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = True
 single = True
@@ -376,12 +376,17 @@ def base_end(scl, ht):
     walls = {T:hthick, L:hthick, R:hthick, F:-1, D:hthick}
     curverads={
                 L|T: (hthick, 0),
-                L|D: (boxheight-hthick, 0),
+                L|D: (boxheight-40, 0),
                 R|T: (40, 0),
                 R|D: (boxheight-40, 0),
                 }
+    scalecurve = {
+                L|D: [0, 150],
+                R|D: [0, 150]
+            }
     walls[B] = hthick
-    b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads)
+    b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
+                                                scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
@@ -440,9 +445,14 @@ def base_front_top(scl, ht):
     walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:-1}
     curverads={
                 L|T: (hthick, 0),
-                L|D: (boxheight-hthick, 0),
+                L|D: (boxheight-40, 0),
                 }
-    b = hollowbox(scl, front_top_width, ht, boxheight, walls, curverads=curverads)
+    scalecurve = {
+                L|D: [0, 150],
+                R|D: [0, 150]
+            }
+    b = hollowbox(scl, front_top_width, ht, boxheight, walls,
+            curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[0*scl, 0, (55)*scl]).add(b)
     u += b
 
@@ -471,8 +481,11 @@ def base_back_bot(scl, ht):
     curverads={
                 R|D: (boxheight-40, 0),
                 }
+    scalecurve = {
+                R|D: [0, 150]
+            }
     b = hollowbox(scl, back_top_width, ht, boxheight-40,
-                    walls, curverads=curverads)
+                    walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, (55+40)*scl]).add(b)
     u += b
 
@@ -486,8 +499,11 @@ def base_mid(scl, ht):
     curverads={
                 R|D: (boxheight-40, 0),
                 }
+    scalecurve = {
+                R|D: [0, 150]
+            }
     b = hollowbox(scl, w, ht, boxheight-40,
-                    walls, curverads=curverads)
+                    walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[(boxheight-hthick)*scl, 0, (55+40)*scl]).add(b)
     u += b
 
@@ -589,6 +605,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 4 and part != -1:
     #    return
+    #if part != 3:
+        #return
 
     c = color(colour)
     c.add(t)
@@ -688,7 +706,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [160]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
