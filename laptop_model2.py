@@ -473,7 +473,7 @@ def base_back_top(scl, ht):
 
     return u
     
-def base_back_bot(scl, ht):
+def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
@@ -488,6 +488,13 @@ def base_back_bot(scl, ht):
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, (55+40)*scl]).add(b)
     u += b
+
+    rad=35.0 + 12
+    # add hinge
+    w = boxlength-112
+    c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
+    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2)*scl]).add(c)
+    u -= c
 
     return u
     
@@ -653,12 +660,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
 
     base_adjust_ht = scrn_end_ht+lcd_end_ht
-    if part == 4:
-        # NOTE: this is part of part 4...
-        se = base_end_hinge(scl, scrn_hinge_ht)
-        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
-        b.add(m)
-
     base_adjust_ht += scrn_hinge_ht
 
     centre_ht = 90
@@ -671,8 +672,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part == 4:
         # NOTE: ... here's the other bit
-        se = base_back_bot(scl, base_back_ht)
-        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
     adj = scrn_end_ht+lcd_end_ht
@@ -706,7 +707,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [90]
 
     for i in range(rpt):
         for angle in angles:
