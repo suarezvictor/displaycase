@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = True
 single = True
@@ -37,7 +37,7 @@ lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
 bwid = 17 # 24
-lcd_inset_top = 25
+lcd_inset_top = 40
 lcd_inset_bot = 180
 lcd_gap = 3
 lcd_hinge_inner_rad=70
@@ -107,7 +107,7 @@ def lcd_panel(scl, offs=0):
     c = cube(size=[(w+offs*2)*scl,(h+offs*2)*scl,(d+offs*2)*scl])
     c = rotate([00, 0, 0 ]).add(c)
     r.add(c)
-    t = translate(v=[(-93-offs)*scl, (-40-offs)*scl, (lcd_doff+29.5-d-offs)*scl])
+    t = translate(v=[(-78-offs)*scl, (-40-offs)*scl, (lcd_doff+29.5-d-offs)*scl])
     t.add(r)
     a.add(t)
 
@@ -707,7 +707,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [90]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
