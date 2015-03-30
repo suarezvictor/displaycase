@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = True
 single = True
@@ -76,7 +76,7 @@ pdept =  130
 hinge_offs = 70
 
 def hinge_translate(scl):
-    return translate(v=[+(+lcd_inset_bot+lcd_w-25)*scl,
+    return translate(v=[+(+lcd_inset_bot+lcd_w-50+lcd_inset_top)*scl,
                        0,
                         (78-lcd_d+hinge_offs)*scl])
 
@@ -317,6 +317,10 @@ def screen_box(scl, ht, end=True, hingewall=False):
                 L|D: (hthick, 0),
                 
                 }
+    scalecurve = {
+                L|T: [0, 80],
+                R|T: [0, 80]
+            }
     if end:
         walls[B] = hthick
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
@@ -324,7 +328,8 @@ def screen_box(scl, ht, end=True, hingewall=False):
         walls[B] = -1
         #curverads.update({ R|T: (hthick, 65-hthick) })
         curverads.update({ R|T: (ld-hthick, 0) })
-    b = hollowbox(scl, boxlength, ht, ld, walls, curverads=curverads)
+    b = hollowbox(scl, boxlength, ht, ld, walls,
+                    curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[0, 0, -(lcd_d-30)*scl]).add(b)
     u += b
 
@@ -458,7 +463,7 @@ def base_front_top(scl, ht):
 
     return u
     
-def base_back_top(scl, ht):
+def base_back_top(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
@@ -470,6 +475,15 @@ def base_back_top(scl, ht):
     b = hollowbox(scl, back_top_width, ht, 40, walls, curverads=curverads)
     b = translate(v=[w*scl, 0, (55)*scl]).add(b)
     u += b
+
+    c = shearedcube([(100*2)*scl, (scrn_hinge_ht+1)*scl, (hinge_offs)*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[-15*scl, 0, 0])
+    c = rotate([180, 0, 0]).add(c)
+    c = rotate([0, 0, 180]).add(c)
+    #c = rotate([180, 0, 0]).add(c)
+    c = translate(v=[(w+282)*scl,-1*scl,(30+hinge_offs)*scl]).add(c)
+    u -= c
 
     return u
     
@@ -614,6 +628,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 3:
         #return
+    if part == 3:
+        return
 
     c = color(colour)
     c.add(t)
@@ -666,8 +682,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
 
     if part == 5:
-        se = base_back_top(scl, base_back_ht+centre_ht/2)
-        m = translate(v=[0, base_adjust_ht*scl,0]).add(se)
+        se = base_back_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2,
+                                scrn_hinge_ht)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
     if part == 4:
@@ -707,7 +724,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
