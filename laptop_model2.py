@@ -434,7 +434,7 @@ def base_end(scl, ht):
     u -= t
 
     # cable access
-    c = cube([(ht)*scl, (rad+20)*scl, (rad+hthick)*scl])
+    c = cube([(ht)*scl, (rad+80)*scl, (rad+hthick)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
     t = hinge_translate(scl).add(c)
