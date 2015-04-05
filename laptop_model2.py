@@ -412,6 +412,20 @@ def base_end(scl, ht):
     t = hinge_translate(scl).add(c)
     u += t
 
+    # add bits for screws through to base front
+    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(150)*scl,(0)*scl,(boxheight-hthick+4)*scl]).add(c)
+    u += c
+
+    # add bits for screws through to base front
+    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(50)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    u += c
+
     # hollow hinge out
     c = cylinder(r=(rad-10)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
@@ -459,6 +473,20 @@ def base_front_top(scl, ht):
             curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[0*scl, 0, (55)*scl]).add(b)
     u += b
+
+    # add bits for screws through to base front
+    c = cube([(52)*scl, (52)*scl, (52)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(149)*scl,(0)*scl,(boxheight-hthick+3)*scl]).add(c)
+    u -= c
+
+    # add bits for screws through to base front
+    c = cube([(52)*scl, (52)*scl, (52)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(49)*scl,(0)*scl,(55+hthick)*scl]).add(c)
+    u -= c
 
     return u
     
@@ -623,8 +651,8 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    #if part != 0 and part != 1:
-    #    return
+    if part != 7 and part != 3:
+        return
     #if part != 4 and part != -1:
     #    return
     #if part != 3:
