@@ -440,6 +440,20 @@ def base_end(scl, ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
+    # add bits for screws through to base back
+    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(boxlength-back_top_width+hthick)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    u += c
+
+    c = cube([(ht)*scl, (104)*scl, (30)*scl])
+    c = rotate([0, 0, 90]).add(c)
+    c = rotate([0, 10, 0]).add(c)
+    c = translate(v=[-6*scl,hthick*scl,17*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
     return u
     
 def base_front_bottom(scl, ht):
@@ -494,7 +508,7 @@ def base_back_top(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
-    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:hthick}
+    walls = {T:hthick, L:-1, R:-1, F:-1, D:-1, B:hthick}
     curverads={
                 L|T: (hthick, 0),
                 R|T: (40, 0),
@@ -651,7 +665,7 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 7 and part != 3:
+    if part != 7 and part != 3 and part != -4 and part != -1:
         return
     #if part != 4 and part != -1:
     #    return
