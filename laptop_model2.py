@@ -60,6 +60,7 @@ boxlength = lcd_w + lcd_inset_top + lcd_inset_bot
 lidfront_offs = 10
 lcd_front_indent = 108
 back_top_width = 170
+front_top_width = 180
 
 bdep = 325
 fdep = 300
@@ -429,7 +430,6 @@ def base_end(scl, ht):
     
 def base_front_bottom(scl, ht):
     u = union()
-    front_top_width = 180
 
     woffs = (boxheight-hthick)
     walls = {T:-1, L:-1, R:-1, F:hthick, D:hthick, B:hthick}
@@ -445,9 +445,8 @@ def base_front_bottom(scl, ht):
     
 def base_front_top(scl, ht):
     u = union()
-    front_top_width = 180
 
-    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B:-1}
+    walls = {T:hthick, L:hthick, R:-1, F:-1, D:hthick, B:hthick}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -514,18 +513,20 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     
 def base_mid(scl, ht):
     u = union()
-    w = boxlength-(boxheight-hthick)
+    w = boxlength
 
     walls = {T:-1, L:-1, R:hthick, F:hthick, D:hthick, B:hthick}
     curverads={
                 R|D: (boxheight-40, 0),
+                L|D: (boxheight-40, 0),
                 }
     scalecurve = {
-                R|D: [0, 150]
+                R|D: [0, 150],
+                L|D: [0, 150],
             }
     b = hollowbox(scl, w, ht, boxheight-40,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(boxheight-hthick)*scl, 0, (55+40)*scl]).add(b)
+    b = translate(v=[(0)*scl, 0, (55+40)*scl]).add(b)
     u += b
 
     return u
@@ -628,8 +629,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 3:
         #return
-    if part == 3:
-        return
 
     c = color(colour)
     c.add(t)
@@ -678,7 +677,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
 
-    centre_ht = 90
+    centre_ht = hthick*2
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
 
     if part == 5:
@@ -694,13 +693,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
 
     adj = scrn_end_ht+lcd_end_ht
-    if part == 6:
-        se = base_front_bottom(scl, (lcd_l-centre_ht)/2-adj+hthick)
-        m = translate(v=[0, (adj)*scl,0]).add(se)
-        b.add(m)
+    #if part == 6:
+    #    se = base_front_bottom(scl, (lcd_l-centre_ht)/2-adj+hthick)
+    #    m = translate(v=[0, (adj)*scl,0]).add(se)
+    #    b.add(m)
 
     if part == 7:
-        se = base_front_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2)
+        se = base_front_top(scl, base_back_ht+scrn_hinge_ht)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
