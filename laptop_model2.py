@@ -442,10 +442,18 @@ def base_end(scl, ht):
 
     # add bits for screws through to base back
     c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
     c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u += c
+    c = cube([(50)*scl, (ht)*scl, (5)*scl])
+    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(54+hthick)*scl]).add(c)
+    u += c
+
+    if False:
+        # add screwhole
+        r = cylinder(r=lcdscrewrad*scl, h=(ht+hthick+2)*scl, segments=50)
+        c = rotate([90, 0, 0]).add(r)
+        c = translate(v=[(boxlength-back_top_width+25)*scl,(ht+hthick+1)*scl,(65+30)*scl]).add(c)
+        u -= c
 
     c = cube([(ht)*scl, (104)*scl, (30)*scl])
     c = rotate([0, 0, 90]).add(c)
@@ -687,7 +695,7 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 7 and part != -3 and part != 4 and part != -2:
+    if part != 7 and part != 3 and part != 4 and part != -2:
         return
     #if part != 4 and part != -1:
     #    return
