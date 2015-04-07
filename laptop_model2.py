@@ -489,17 +489,17 @@ def base_front_top(scl, ht):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(52)*scl, (52)*scl, (52)*scl])
+    c = cube([(52)*scl, (53)*scl, (52)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(149)*scl,(0)*scl,(boxheight-hthick+3)*scl]).add(c)
+    c = translate(v=[(149)*scl,(-1)*scl,(boxheight-hthick+3)*scl]).add(c)
     u -= c
 
     # add bits for screws through to base front
-    c = cube([(52)*scl, (52)*scl, (52)*scl])
+    c = cube([(52)*scl, (53)*scl, (52)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(49)*scl,(0)*scl,(55+hthick)*scl]).add(c)
+    c = translate(v=[(49)*scl,(-1)*scl,(55+hthick)*scl]).add(c)
     u -= c
 
     return u
