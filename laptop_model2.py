@@ -566,6 +566,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     c = translate(v=[(w+225)*scl,-1*scl,(30+hinge_offs)*scl]).add(c)
     u -= c
 
+    # add bits for screws through to base back
+    c = cube([(42)*scl, (53)*scl, (52)*scl])
+    #c = rotate([0, 0, 90]).add(c)
+    #c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(boxlength-back_top_width-1)*scl,(-1)*scl,(55+hthick)*scl]).add(c)
+    u -= c
+
     return u
     
 def base_mid(scl, ht):
