@@ -441,10 +441,10 @@ def base_end(scl, ht):
     u -= t
 
     # add bits for screws through to base back
-    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
+    c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width+hthick)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u += c
 
     c = cube([(ht)*scl, (104)*scl, (30)*scl])
@@ -510,7 +510,6 @@ def base_back_top(scl, ht, scrn_hinge_ht):
 
     walls = {T:hthick, L:-1, R:-1, F:-1, D:-1, B:hthick}
     curverads={
-                L|T: (hthick, 0),
                 R|T: (40, 0),
                 }
     b = hollowbox(scl, back_top_width, ht, 40, walls, curverads=curverads)
@@ -532,23 +531,39 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
-    walls = {T:-1, L:-1, R:hthick, F:-1, D:hthick, B:hthick}
+    walls = {T:hthick, L:-1, R:hthick, F:-1, D:hthick, B:hthick}
     curverads={
                 R|D: (boxheight-40, 0),
+                R|T: (40, 0),
                 }
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, ht, boxheight-40,
+    b = hollowbox(scl, back_top_width, ht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[w*scl, 0, (55+40)*scl]).add(b)
+    b = translate(v=[w*scl, 0, (55)*scl]).add(b)
     u += b
+
+    # fill in around hinge before cut-out
+
+    c = cube([120*scl, (scrn_hinge_ht+2)*scl, 40*scl])
+    c = translate(v=[(w+20)*scl,hthick*scl,(60)*scl]).add(c)
+    u += c
 
     rad=35.0 + 12
     # add hinge
     w = boxlength-112
     c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
-    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2)*scl]).add(c)
+    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2.5)*scl]).add(c)
+    u -= c
+
+    c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[-15*scl, 0, 0])
+    c = rotate([180, 0, 0]).add(c)
+    c = rotate([0, 0, 180]).add(c)
+    #c = rotate([180, 0, 0]).add(c)
+    c = translate(v=[(w+225)*scl,-1*scl,(30+hinge_offs)*scl]).add(c)
     u -= c
 
     return u
@@ -665,7 +680,7 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 7 and part != 3 and part != -4 and part != -1:
+    if part != 7 and part != -3 and part != 4 and part != -2:
         return
     #if part != 4 and part != -1:
     #    return
@@ -722,11 +737,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     centre_ht = hthick*2
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
 
-    if part == 5:
-        se = base_back_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2,
-                                scrn_hinge_ht)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
-        b.add(m)
+    #if part == 5:
+    #    se = base_back_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2,
+    #                            scrn_hinge_ht)
+    #    m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+    #    b.add(m)
 
     if part == 4:
         # NOTE: ... here's the other bit
