@@ -307,31 +307,36 @@ def lid_screwholes(scl, edge_inset):
 
     return u
 
-def screen_box(scl, ht, end=True, hingewall=False):
+def screen_box(scl, ht, end=True, hingewall=False, back=False):
     u = union()
 
     ld = lcd_d+hthick+5.4
 
     walls = {T:hthick, L:80, R:hthick, F:-1, D:115}
     curverads={
-                L|T: (ld-hthick, 0),
-                L|D: (hthick, 0),
-                
                 }
     scalecurve = {
                 L|T: [0, 80],
                 R|T: [0, 80]
             }
+    if not back:
+        curverads[L|T] = (ld-hthick, 0)
+        curverads[L|D] = (hthick, 0)
     if end:
         walls[B] = hthick
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
     else:
         walls[B] = -1
-        #curverads.update({ R|T: (hthick, 65-hthick) })
         curverads.update({ R|T: (ld-hthick, 0) })
-    b = hollowbox(scl, boxlength, ht, ld, walls,
+    if back:
+        slen = lcd_inset_bot - 30
+        offs = boxlength - slen
+    else:
+        slen = boxlength
+        offs = 0
+    b = hollowbox(scl, slen, ht, ld, walls,
                     curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[0, 0, -(lcd_d-30)*scl]).add(b)
+    b = translate(v=[offs*scl, 0, -(lcd_d-30)*scl]).add(b)
     u += b
 
     if hingewall:
@@ -609,6 +614,20 @@ def screen_end(scl, ht):
 def screen_edge_complete(scl, ht):
     return screen_box(scl, ht, end=False)
 
+def screen_back_edge(scl, ht):
+    b = screen_box(scl, ht, end=False, back=True)
+    # TODO: this is going to need some underside supports
+    # TODO: length of the cable run doesn't have to be this long
+    c = touch_arc(0, ht+2, 45,
+                        25, scl,
+                  angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[(lcd_w+70)*scl, (-1)*scl, (lcd_d-15)*scl]).add(c)
+    b -= c
+
+    return b
+
 def screen_hinge(scl, ht):
     u = union()
     b = screen_box(scl, ht, end=False, hingewall=False)
@@ -695,8 +714,8 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
-    if part != 7 and part != 3 and part != 4 and part != -2:
-        return
+    #if part != 7 and part != 3 and part != 4 and part != -2:
+    #    return
     #if part != 4 and part != -1:
     #    return
     #if part != 3:
@@ -764,11 +783,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
-    adj = scrn_end_ht+lcd_end_ht
-    #if part == 6:
-    #    se = base_front_bottom(scl, (lcd_l-centre_ht)/2-adj+hthick)
-    #    m = translate(v=[0, (adj)*scl,0]).add(se)
-    #    b.add(m)
+    adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
+    if part == 6:
+        se = screen_back_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
+        m = translate(v=[0, (adj)*scl,0]).add(se)
+        b.add(m)
+        b = screen_adjust(b, scl, angle)
+
 
     if part == 7:
         se = base_front_top(scl, base_back_ht+scrn_hinge_ht)
@@ -795,7 +816,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
