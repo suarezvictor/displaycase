@@ -569,6 +569,20 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
                     (hthick)*scl]).add(c)
     u -= c
 
+    # put in series of cutouts
+    step = 150
+    offs = 80
+    while offs < (ht-step):
+        c = touch_arc(0, (step-hthick), (boxheight-40-hthick),
+                            25, scl,
+                      angle=0)
+        c = rotate([90, 0, 0]).add(c)
+        c = rotate([0, 180, 0]).add(c)
+        c = resize([150*scl, 0, 0], False).add(c)
+        c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39)*scl]).add(c)
+        u -= c
+        offs += step
+        
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
