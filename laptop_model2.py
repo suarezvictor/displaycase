@@ -526,7 +526,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
-    walls = {T:hthick, L:-1, R:hthick, F:-1, D:hthick, B:hthick}
+    walls = {T:hthick, L:-1, R:hthick, F:40+hthick, D:hthick, B:hthick}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -573,14 +573,25 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     offs = 80
     step = (ht-40-offs) / 5 if test else 10
     while offs < (ht-step):
+        # cutout lower and upper arcs
+        c = touch_arc(0, (step-hthick), 40-hthick,
+                            25, scl,
+                      angle=0)
+        c = rotate([90, 0, 0]).add(c)
+        c = rotate([0, -90, 0]).add(c)
+        # XXX resize needed to do something odd with openscad (fixes a bug)
+        c = resize([(40-hthick)*scl, 0, 0], False).add(c)
+        c = translate(v=[(boxlength-41)*scl, (offs)*scl, (40)*scl]).add(c)
+        u -= c
         c = touch_arc(0, (step-hthick), (boxheight-40-hthick),
                             25, scl,
                       angle=0)
         c = rotate([90, 0, 0]).add(c)
         c = rotate([0, 180, 0]).add(c)
-        c = resize([150*scl, 0, 0], False).add(c)
-        c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39)*scl]).add(c)
+        c = resize([(150-hthick)*scl, 0, 0], False).add(c)
+        c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
         u -= c
+
         offs += step
         
     v = union()
