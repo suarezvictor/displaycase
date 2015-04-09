@@ -500,47 +500,27 @@ def base_front_top(scl, ht):
             }
     b = hollowbox(scl, front_top_width, ht, boxheight, walls,
             curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[0*scl, 0, (55)*scl]).add(b)
+    b = translate(v=[0*scl, 0, 0]).add(b)
     u += b
 
     # add bits for screws through to base front
     c = cube([(52)*scl, (53)*scl, (52)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(149)*scl,(-1)*scl,(boxheight-hthick+3)*scl]).add(c)
+    c = translate(v=[(149)*scl,(-1)*scl,(boxheight-hthick-52)*scl]).add(c)
     u -= c
 
     # add bits for screws through to base front
     c = cube([(52)*scl, (53)*scl, (52)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(49)*scl,(-1)*scl,(55+hthick)*scl]).add(c)
+    c = translate(v=[(49)*scl,(-1)*scl,(hthick)*scl]).add(c)
     u -= c
 
-    return u
-    
-def base_back_top(scl, ht, scrn_hinge_ht):
-    u = union()
-    w = boxlength-back_top_width
-
-    walls = {T:hthick, L:-1, R:-1, F:-1, D:-1, B:hthick}
-    curverads={
-                R|T: (40, 0),
-                }
-    b = hollowbox(scl, back_top_width, ht, 40, walls, curverads=curverads)
-    b = translate(v=[w*scl, 0, (55)*scl]).add(b)
-    u += b
-
-    c = shearedcube([(100*2)*scl, (scrn_hinge_ht+1)*scl, (hinge_offs)*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[-15*scl, 0, 0])
-    c = rotate([180, 0, 0]).add(c)
-    c = rotate([0, 0, 180]).add(c)
-    #c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w+282)*scl,-1*scl,(30+hinge_offs)*scl]).add(c)
-    u -= c
-
-    return u
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
     
 def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
@@ -556,13 +536,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
             }
     b = hollowbox(scl, back_top_width, ht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[w*scl, 0, (55)*scl]).add(b)
+    b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
 
     # fill in around hinge before cut-out
 
     c = cube([120*scl, (scrn_hinge_ht+2)*scl, 40*scl])
-    c = translate(v=[(w+20)*scl,hthick*scl,(60)*scl]).add(c)
+    c = translate(v=[(w+20)*scl,hthick*scl,(5)*scl]).add(c)
     u += c
 
     rad=35.0 + 12
@@ -578,17 +558,21 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
     #c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w+225)*scl,-1*scl,(30+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w+225)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
     # add bits for screws through to base back
     c = cube([(42)*scl, (53)*scl, (52)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width-1)*scl,(-1)*scl,(55+hthick)*scl]).add(c)
+    c = translate(v=[(boxlength-back_top_width-1)*scl,(-1)*scl,
+                    (hthick)*scl]).add(c)
     u -= c
 
-    return u
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
     
 def base_mid(scl, ht):
     u = union()
