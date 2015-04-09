@@ -22,10 +22,12 @@ if not test:
     lcd_la = lcd_l-98.0
     lcd_wa = lcd_w-129.9
     lcd_d = 50
+    lcd_cable_depth = 1000
 else:
     # HSD070PWW1
     lcd_l = 1612
     lcd_w = 1055
+    lcd_cable_depth = 500
     # HSD101PWW1
     #lcd_l = 2294.6
     #lcd_w = 1492.0
@@ -618,7 +620,7 @@ def screen_back_edge(scl, ht):
     b = screen_box(scl, ht, end=False, back=True)
     # TODO: this is going to need some underside supports
     # TODO: length of the cable run doesn't have to be this long
-    c = touch_arc(0, ht+2, 45,
+    c = touch_arc(0, lcd_cable_depth, 45,
                         25, scl,
                   angle=0)
     c = rotate([90, 0, 0]).add(c)
@@ -662,7 +664,13 @@ def screen_hinge(scl, ht):
                 innershear=[35*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w-rad+10)*scl,-(ht+hthick)*scl,(30+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w-rad+10)*scl,-(ht+hthick)*scl,
+                     (30+hinge_offs)*scl]).add(c)
+    u -= c
+
+    c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick)*scl])
+    c = translate(v=[(w-155)*scl,-(1)*scl,
+                     (-8)*scl]).add(c)
     u -= c
 
     if pin_parts_3d:
@@ -716,8 +724,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     #if part != 7 and part != 3 and part != 4 and part != -2:
     #    return
-    #if part != 4 and part != -1:
-    #    return
+    #if part != 2 and part != 5:
+        #return
     #if part != 3:
         #return
 
@@ -816,7 +824,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [120]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
