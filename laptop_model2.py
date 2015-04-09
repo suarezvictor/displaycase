@@ -549,7 +549,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # add hinge
     w = boxlength-112
     c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
-    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2.5)*scl]).add(c)
+    c = translate(v=[(w+25)*scl,-1*scl,(0)*scl]).add(c)
     u -= c
 
     c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
@@ -570,8 +570,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u -= c
 
     # put in series of cutouts
-    step = 150
     offs = 80
+    step = (ht-40-offs) / 5 if test else 10
     while offs < (ht-step):
         c = touch_arc(0, (step-hthick), (boxheight-40-hthick),
                             25, scl,
@@ -724,8 +724,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    #if part != 3:
-        #return
+    if part != 4:
+        return
 
     c = color(colour)
     c.add(t)
