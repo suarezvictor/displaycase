@@ -625,6 +625,7 @@ def base_mid(scl, ht):
 
     walls = {T:-1, L:-1, R:hthick, F:hthick, D:hthick, B:hthick}
     curverads={
+                T|R: (40, 0),
                 R|D: (boxheight-40, 0),
                 L|D: (boxheight-40, 0),
                 }
@@ -632,12 +633,18 @@ def base_mid(scl, ht):
                 R|D: [0, 150],
                 L|D: [0, 150],
             }
-    b = hollowbox(scl, w, ht, boxheight-40,
+    b = hollowbox(scl, w, ht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(0)*scl, 0, (55+40)*scl]).add(b)
     u += b
 
-    return u
+    b = cube([(w-169)*scl, (ht+2)*scl, 41*scl])
+    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
     
 def screen_end(scl, ht):
     return screen_box(scl, ht, end=True)
@@ -755,7 +762,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4:
+    if part != 4 and part != 8:
         return
 
     c = color(colour)
