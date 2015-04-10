@@ -619,6 +619,30 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     v.add(u)
     return v
     
+def base_back_joiner(scl, ht):
+    u = union()
+    w = boxlength
+
+    walls = {T:-1, L:60, R:-1, F:50, D:-1, B:50}
+    curverads={
+                B|L: (60, 0),
+                F|L: (60, 0),
+                }
+    scalecurve = {
+            }
+    b = hollowbox(scl, 70, ht, boxheight-40,
+                    walls, curverads=curverads, scalecurve=scalecurve)
+    u += b
+
+    b = cube([(90)*scl, (45)*scl, 55*scl], center=True)
+    b = translate(v=[(25)*scl, (ht/2)*scl, (boxheight-40)/2*scl]).add(b)
+    u -= b
+
+    v = union()
+    u = translate(v=[(boxlength-150)*scl, 0, (70)*scl]).add(u)
+    v.add(u)
+    return v
+    
 def base_mid(scl, ht):
     u = union()
     w = boxlength
@@ -762,7 +786,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != 8:
+    if part != 4 and part != 8 and part != 5:
         return
 
     c = color(colour)
@@ -834,7 +858,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-
     if part == 7:
         se = base_front_top(scl, base_back_ht+scrn_hinge_ht)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
@@ -845,6 +868,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 8:
         se = base_mid(scl, centre_ht)
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
+        b.add(m)
+
+    base_joiner_ht = 150
+
+    if part == 5:
+        se = base_back_joiner(scl, base_joiner_ht)
+        m = translate(v=[0,
+                        (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
+                         0]).add(se)
         b.add(m)
 
     c = color([0.2, 0.2, 0.2, 1.0])
