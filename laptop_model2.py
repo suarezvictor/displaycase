@@ -526,7 +526,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
-    walls = {T:hthick, L:-1, R:hthick, F:40+hthick, D:hthick, B:70}
+    walls = {T:hthick, L:-1, R:hthick, F:60+hthick, D:hthick, B:70}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -571,7 +571,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
 
     # put in series of cutouts
     offs = 80
-    step = (ht-40-offs) / 5 if test else 10
+    step = (ht-60-offs) / 5 if test else 10
     while offs < (ht-step):
         # add fill-ins
         c = cube([80*scl, hthick*scl, (boxheight-hthick+2)*scl])
