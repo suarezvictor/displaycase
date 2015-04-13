@@ -614,6 +614,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
 
         offs += step
         
+    # hole for back screw-support to poke through
+    # XXX height is magic constant
+    b = cube([(63)*scl, (62)*scl, (boxheight-38)*scl])
+    b = translate(v=[(w-39)*scl, (ht-61)*scl, (14)*scl]).add(b)
+    u -= b
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -625,12 +631,12 @@ def base_back_joiner(scl, ht):
 
     walls = {T:-1, L:60, R:-1, F:50, D:-1, B:50}
     curverads={
-                B|L: (60, 0),
-                F|L: (60, 0),
+                B|L: (10, 0),
+                F|L: (10, 0),
                 }
     scalecurve = {
             }
-    b = hollowbox(scl, 70, ht, boxheight-40,
+    b = hollowbox(scl, 60, ht, boxheight-40,
                     walls, curverads=curverads, scalecurve=scalecurve)
     u += b
 
@@ -638,8 +644,10 @@ def base_back_joiner(scl, ht):
     b = translate(v=[(25)*scl, (ht/2)*scl, (boxheight-40)/2*scl]).add(b)
     u -= b
 
+    u = rotate([0, 0, 180]).add(u)
+
     v = union()
-    u = translate(v=[(boxlength-150)*scl, 0, (70)*scl]).add(u)
+    u = translate(v=[(boxlength-150+60)*scl, (ht*scl), (70)*scl]).add(u)
     v.add(u)
     return v
     
