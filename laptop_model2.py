@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -645,6 +645,31 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
     u -= b
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(ht-20)*scl, (-3)*scl, -25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht-20)*scl, (-3)*scl, 140*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht/2)*scl, (-3)*scl, -5*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht/2)*scl, (-3)*scl, 120*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(-20)*scl, (-3)*scl, 35*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
+        c += h
+        c = rotate([0, 0, 90]).add(c)
+        c = translate([(w-58)*scl, (0)*scl, 0*scl]).add(c)
+        
+        u += c
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -826,7 +851,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != 5:
+    if part != 4 and part != -8 and part != -5:
         return
 
     c = color(colour)
