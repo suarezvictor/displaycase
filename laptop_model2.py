@@ -661,8 +661,15 @@ def base_mid(scl, ht):
                     walls, curverads=curverads, scalecurve=scalecurve)
     u += b
 
+    # top cutout makes shelf support for keyboard
     b = cube([(w-169)*scl, (ht+2)*scl, 41*scl])
     b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # hole for back screw-support to poke through
+    # XXX height is magic constant
+    b = cube([(62)*scl, (ht+2)*scl, (boxheight-38)*scl])
+    b = translate(v=[(w-151)*scl, -1*scl, (14)*scl]).add(b)
     u -= b
 
     v = union()
