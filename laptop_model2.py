@@ -139,6 +139,25 @@ def lcd_view_area(scl, offs=0):
 
     return a
 
+def chamfered_backbox_screwholes(scl, sht):
+    # chamfered screw holes in top of lid
+    c = union()
+    c.add(cylinder(r=topscrewrad*1.2*scl, r1=22*scl,
+                    h=12*scl,
+                    segments=50, center=True))
+    d = cylinder(r=topscrewrad*scl,
+                    h=(bwid+2.5+sht)*scl,
+                    segments=50, center=True)
+    d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
+    c.add(d)
+    d = cylinder(r=22*scl,
+                    h=(bwid+2.5+sht)*scl,
+                    segments=50, center=True)
+    d = translate(v=[0, 0, -20*scl]).add(d)
+    c.add(d)
+    c = rotate([180, 0, 0]).add(c)
+    return c
+
 def case_bolthole(scl, end):
     bht = lcd_hinge_inner_rad+boxtopoffs-20-lcd_d
     if end == 0:
@@ -620,6 +639,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-39)*scl, (ht-61)*scl, (14)*scl]).add(b)
     u -= b
 
+    # chamfered screw-hole through to joiner
+    s = chamfered_backbox_screwholes(scl, 20)
+    s = rotate([0, -90, 0]).add(s)
+    b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
+    u -= b
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -801,7 +826,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != 8 and part != 5:
+    if part != 4 and part != -8 and part != 5:
         return
 
     c = color(colour)
