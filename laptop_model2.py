@@ -446,9 +446,7 @@ def base_end(scl, ht):
     u += c
 
     # add bits for screws through to base front
-    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
+    c = base_end_bit(scl, ht, fwd=True)
     c = translate(v=[(50)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u += c
 
@@ -467,25 +465,9 @@ def base_end(scl, ht):
     u -= t
 
     # add bits for screws through to base back
-    c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
+    c = base_end_bit(scl, ht)
     c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u += c
-    c = cube([(50)*scl, (ht)*scl, (5)*scl])
-    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(54+hthick)*scl]).add(c)
-    u += c
-
-    if False:
-        # add screwhole
-        r = cylinder(r=lcdscrewrad*scl, h=(ht+hthick+2)*scl, segments=50)
-        c = rotate([90, 0, 0]).add(r)
-        c = translate(v=[(boxlength-back_top_width+25)*scl,(ht+hthick+1)*scl,(65+30)*scl]).add(c)
-        u -= c
-
-    # chamfered screw-hole through to joiner
-    s = chamfered_backbox_screwholes(scl, 20)
-    s = rotate([0, -90, 0]).add(s)
-    b = translate(v=[(w-150)*scl, (ht+25)*scl, (93)*scl]).add(s)
-    u -= b
 
     # weird angled cutout
     c = cube([(ht)*scl, (118)*scl, (30)*scl])
@@ -497,6 +479,26 @@ def base_end(scl, ht):
 
     return u
     
+def base_end_bit(scl, ht, fwd=False):
+    u = union()
+    # add bits for screws through to base back
+    c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
+    u += c
+    c = cube([(40)*scl, (ht)*scl, (5)*scl])
+    c = translate(v=[0*scl,(0)*scl,(-2)*scl]).add(c)
+    u += c
+
+    # chamfered screw-hole through to joiner
+    s = chamfered_backbox_screwholes(scl, 20)
+    s = rotate([0, -90, 0]).add(s)
+    if fwd:
+        s = rotate([0, 0, 180]).add(s)
+        s = translate(v=[(25)*scl, (0)*scl, (0)*scl]).add(s)
+    b = translate(v=[(8)*scl, (ht+25)*scl, (25)*scl]).add(s)
+    u -= b
+
+    return u
+
 def base_front_bottom(scl, ht):
     u = union()
 
