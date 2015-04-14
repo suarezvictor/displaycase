@@ -150,7 +150,7 @@ def chamfered_backbox_screwholes(scl, sht):
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
     c.add(d)
-    d = cylinder(r=22*scl,
+    d = cylinder(r=20*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
     d = translate(v=[0, 0, -20*scl]).add(d)
@@ -460,7 +460,7 @@ def base_end(scl, ht):
     u -= t
 
     # cable access
-    c = cube([(ht)*scl, (rad+80)*scl, (rad+hthick)*scl])
+    c = cube([(ht)*scl, (rad+80)*scl, (rad)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -481,10 +481,17 @@ def base_end(scl, ht):
         c = translate(v=[(boxlength-back_top_width+25)*scl,(ht+hthick+1)*scl,(65+30)*scl]).add(c)
         u -= c
 
-    c = cube([(ht)*scl, (104)*scl, (30)*scl])
+    # chamfered screw-hole through to joiner
+    s = chamfered_backbox_screwholes(scl, 20)
+    s = rotate([0, -90, 0]).add(s)
+    b = translate(v=[(w-150)*scl, (ht+25)*scl, (93)*scl]).add(s)
+    u -= b
+
+    # weird angled cutout
+    c = cube([(ht)*scl, (118)*scl, (30)*scl])
     c = rotate([0, 0, 90]).add(c)
-    c = rotate([0, 10, 0]).add(c)
-    c = translate(v=[-6*scl,hthick*scl,17*scl]).add(c)
+    c = rotate([0, 14, 0]).add(c)
+    c = translate(v=[3*scl,hthick*scl,7*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -852,7 +859,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != -5:
+    if part != -4 and part != -8 and part != -5 and part != 3:
         return
 
     c = color(colour)
