@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -589,19 +589,20 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u -= c
 
     # put in series of cutouts
-    offs = 80
+    fthick = 8
+    offs = 80-hthick+fthick
     step = (ht-60-offs) / 5 if test else 10
     while offs < (ht-step):
         # add fill-ins
-        c = cube([80*scl, hthick*scl, (boxheight-hthick+2)*scl])
-        c = translate(v=[(w-58)*scl, (offs-hthick)*scl, (1)*scl]).add(c)
+        c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
+        c = translate(v=[(w-58)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
         u += c
 
-        c = cube([135*scl, hthick*scl, (42)*scl])
-        c = translate(v=[(w-58)*scl, (offs-hthick)*scl, (1)*scl]).add(c)
+        c = cube([135*scl, fthick*scl, (42)*scl])
+        c = translate(v=[(w-58)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
         u += c
 
-        c = touch_arc(0, (step-hthick), 40-hthick,
+        c = touch_arc(0, (step-fthick), 40-hthick,
                             25, scl,
                       angle=0)
         c = rotate([90, 0, 0]).add(c)
@@ -612,7 +613,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         u -= c
 
         # cutout lower and upper arcs
-        c = touch_arc(0, (step-hthick), 40-hthick,
+        c = touch_arc(0, (step-fthick), 40-hthick,
                             25, scl,
                       angle=0)
         c = rotate([90, 0, 0]).add(c)
@@ -622,7 +623,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         c = translate(v=[(boxlength-41)*scl, (offs)*scl, (40)*scl]).add(c)
         u -= c
 
-        c = touch_arc(0, (step-hthick), (boxheight-40-hthick),
+        c = touch_arc(0, (step-fthick), (boxheight-40-hthick),
                             25, scl,
                       angle=0)
         c = rotate([90, 0, 0]).add(c)
