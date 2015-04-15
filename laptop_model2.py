@@ -431,7 +431,7 @@ def base_end(scl, ht):
     u += t
 
     # block up hole
-    c = cube([(ht)*scl, (rad-10)*scl, (28)*scl])
+    c = cube([(ht)*scl, (rad-10)*scl, (48)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = translate(v=[-(rad-12)*scl,0*scl,0*scl]).add(c)
@@ -439,9 +439,7 @@ def base_end(scl, ht):
     u += t
 
     # add bits for screws through to base front
-    c = cube([(50)*scl, (50+ht)*scl, (50)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
+    c = base_end_bit(scl, ht, fwd=True, below=True)
     c = translate(v=[(150)*scl,(0)*scl,(boxheight-hthick+4)*scl]).add(c)
     u += c
 
@@ -479,13 +477,15 @@ def base_end(scl, ht):
 
     return u
     
-def base_end_bit(scl, ht, fwd=False):
+def base_end_bit(scl, ht, fwd=False, below=False):
     u = union()
     # add bits for screws through to base back
     c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
     u += c
     c = cube([(40)*scl, (ht)*scl, (5)*scl])
     c = translate(v=[0*scl,(0)*scl,(-2)*scl]).add(c)
+    if below:
+        c = translate(v=[0*scl,(0)*scl,(50)*scl]).add(c)
     u += c
 
     # chamfered screw-hole through to joiner
