@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -159,14 +159,14 @@ def chamfered_backbox_screwholes(scl, sht):
     return c
 
 def case_bolthole(scl, end):
-    bht = lcd_hinge_inner_rad+boxtopoffs-20-lcd_d
+    bht = lcd_hinge_inner_rad+boxtopoffs-10-lcd_d
     if end == 0:
-        return translate([(29.0+140-lcd_d-lcd_inset_top+6)*scl, 0*scl, bht*scl])
+        return translate([(120)*scl, 0*scl, bht*scl])
     elif end == 1:
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
-        return translate([(lcd_w+lcd_inset_bot-95)*scl, 0*scl,
-                            (-lcd_d+135+boxtopoffs-boxheight)*scl])
+        return translate([(lcd_w+lcd_inset_bot-100)*scl, 0*scl,
+                            (-lcd_d+150+boxtopoffs-boxheight)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2.0+30)*scl, 0*scl, bht*scl])
 
@@ -430,8 +430,17 @@ def base_end(scl, ht):
     t = hinge_translate(scl).add(c)
     u += t
 
+    c = touch_arc(0, (ht+1), (boxheight-40-hthick),
+                        25, scl,
+                  angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 180, 0]).add(c)
+    c = resize([(150-hthick)*scl, 0, 0], False).add(c)
+    c = translate(v=[(lcd_w+66)*scl, (hthick)*scl, (boxheight-25)*scl]).add(c)
+    u -= c
+
     # block up hole
-    c = cube([(ht)*scl, (rad-10)*scl, (48)*scl])
+    c = cube([(ht)*scl, (40)*scl, (85)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = translate(v=[-(rad-12)*scl,0*scl,0*scl]).add(c)
@@ -439,13 +448,8 @@ def base_end(scl, ht):
     u += t
 
     # add bits for screws through to base front
-    c = base_end_bit(scl, ht, fwd=True, below=True)
-    c = translate(v=[(150)*scl,(0)*scl,(boxheight-hthick+4)*scl]).add(c)
-    u += c
-
-    # add bits for screws through to base front
     c = base_end_bit(scl, ht, fwd=True)
-    c = translate(v=[(50)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u += c
 
     # hollow hinge out
@@ -463,8 +467,12 @@ def base_end(scl, ht):
     u -= t
 
     # add bits for screws through to base back
-    c = base_end_bit(scl, ht)
-    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    v = union()
+    c = cube([(60)*scl, (ht)*scl, (40)*scl])
+    v.add(c)
+    c = cube([(60)*scl, (50)*scl, (60)*scl])
+    v.add(c)
+    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(v)
     u += c
 
     # weird angled cutout
@@ -473,7 +481,13 @@ def base_end(scl, ht):
     c = rotate([0, 14, 0]).add(c)
     c = translate(v=[3*scl,hthick*scl,7*scl]).add(c)
     t = hinge_translate(scl).add(c)
+    #u -= t
+
+    # screw holes in box
+    t = box_screwholes(scl, hthick, holes=[0, 2])
+    t = translate(v=[0, 0, boxheight*scl]).add(t)
     u -= t
+
 
     return u
     
@@ -495,7 +509,7 @@ def base_end_bit(scl, ht, fwd=False, below=False):
         s = rotate([0, 0, 180]).add(s)
         s = translate(v=[(25)*scl, (0)*scl, (0)*scl]).add(s)
     b = translate(v=[(8)*scl, (ht+25)*scl, (25)*scl]).add(s)
-    u -= b
+    #u -= b
 
     return u
 
