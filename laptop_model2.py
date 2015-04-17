@@ -531,7 +531,7 @@ def base_front_bottom(scl, ht):
 def base_front_top(scl, ht):
     u = union()
 
-    walls = {T:hthick, L:hthick, R:-1, F:68, D:hthick, B:80}
+    walls = {T:hthick, L:hthick, R:-1, F:68, D:hthick, B:75}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -896,7 +896,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != -5 and part != 3 and part != 7:
+    if part != -4 and part != -8 and part != -5 and part != -3 and part != 7:
         return
 
     c = color(colour)
