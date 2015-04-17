@@ -531,7 +531,7 @@ def base_front_bottom(scl, ht):
 def base_front_top(scl, ht):
     u = union()
 
-    walls = {T:hthick, L:hthick, R:-1, F:-1, D:hthick, B:hthick}
+    walls = {T:hthick, L:hthick, R:-1, F:68, D:hthick, B:80}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -546,18 +546,42 @@ def base_front_top(scl, ht):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(52)*scl, (53)*scl, (52)*scl])
+    c = cube([(42)*scl, (53)*scl, (53)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(149)*scl,(-1)*scl,(boxheight-hthick-52)*scl]).add(c)
+    c = translate(v=[(19)*scl,(-1)*scl,(hthick)*scl]).add(c)
     u -= c
 
-    # add bits for screws through to base front
-    c = cube([(52)*scl, (53)*scl, (52)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(49)*scl,(-1)*scl,(hthick)*scl]).add(c)
-    u -= c
+    # put in series of cutouts
+    fthick = 8
+    offs = 80-hthick+fthick
+    step = (ht-60-offs) / 5 if test else 10
+    while offs < (ht-step):
+        # add fill-ins
+        c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
+        c = translate(v=[(100)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
+        u += c
+
+        c = cube([(front_top_width-hthick)*scl, fthick*scl, (42)*scl])
+        c = translate(v=[(hthick)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
+        u += c
+
+        c = touch_arc(0, (step-fthick), (boxheight-40-hthick),
+                            25, scl,
+                      angle=0)
+        c = rotate([90, 0, 0]).add(c)
+        c = rotate([0, 180, 0]).add(c)
+        c = rotate([0, 0, 180]).add(c)
+        c = resize([(151-hthick)*scl, 0, 0], False).add(c)
+        c = translate(v=[(151)*scl, (offs+step-fthick)*scl, (39.5)*scl]).add(c)
+        u -= c
+
+        offs += step
+        
+    # screw holes in box
+    t = box_screwholes(scl, hthick, holes=[0], h=120)
+    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    u -= t
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -602,7 +626,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     #c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w+225)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
-
 
     # put in series of cutouts
     fthick = 8
