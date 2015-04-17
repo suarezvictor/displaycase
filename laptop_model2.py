@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -603,13 +603,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     c = translate(v=[(w+225)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
-    # add bits for screws through to base back
-    c = cube([(42)*scl, (53)*scl, (52)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width-1)*scl,(-1)*scl,
-                    (hthick)*scl]).add(c)
-    u -= c
 
     # put in series of cutouts
     fthick = 8
@@ -662,6 +655,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = cube([(63)*scl, (62)*scl, (boxheight-38)*scl])
     b = translate(v=[(w-39)*scl, (ht-61)*scl, (14)*scl]).add(b)
     u -= b
+
+    # screw holes in box
+    t = box_screwholes(scl, hthick, holes=[2], h=120)
+    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    u -= t
 
     # chamfered screw-hole through to joiner
     s = chamfered_backbox_screwholes(scl, 20)
@@ -875,7 +873,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != 3:
+    if part != 4 and part != -8 and part != -5 and part != 3 and part != 7:
         return
 
     c = color(colour)
