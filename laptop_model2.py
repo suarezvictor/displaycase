@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -582,6 +582,31 @@ def base_front_top(scl, ht):
     t = box_screwholes(scl, hthick, holes=[0], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(ht)*scl, (-3)*scl, -15*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht)*scl, (-3)*scl, 130*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht/2)*scl, (-3)*scl, -5*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht/2)*scl, (-3)*scl, 120*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, -15*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, 130*scl]).add(h)
+        c += h
+        c = rotate([0, 0, 90]).add(c)
+        c = translate([(front_top_width-6)*scl, (0)*scl, 0*scl]).add(c)
+        
+        u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
