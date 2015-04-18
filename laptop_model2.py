@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -23,6 +23,9 @@ if not test:
     lcd_wa = lcd_w-129.9
     lcd_d = 50
     lcd_cable_depth = 1000
+    kbd_d = 60
+    kbd_l = lcd_l-100
+    kbd_w = 600
 else:
     # HSD070PWW1
     lcd_l = 1612
@@ -34,6 +37,10 @@ else:
     lcd_la = lcd_l-104.8+40
     lcd_wa = lcd_w-113.0+40
     lcd_d = 50
+
+    kbd_d = 60
+    kbd_l = lcd_l-180
+    kbd_w = 600
 
 lcd_doff = 5
 scl = 0.1
@@ -589,6 +596,9 @@ def base_front_top(scl, ht):
         h = translate([(ht)*scl, (-3)*scl, -15*scl]).add(h)
         c += h
         h = pin(B0, scl)
+        h = translate([(ht+75)*scl, (-3)*scl, 55*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
         h = translate([(ht)*scl, (-3)*scl, 130*scl]).add(h)
         c += h
         h = pin(B0, scl)
@@ -602,6 +612,9 @@ def base_front_top(scl, ht):
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 130*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(-75)*scl, (-3)*scl, 55*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(front_top_width-6)*scl, (0)*scl, 0*scl]).add(c)
@@ -892,6 +905,31 @@ def screen_hinge(scl, ht):
 
     return u
     
+def back_kbd_corner(scl, ht):
+
+    u = union()
+    w = boxlength-back_top_width
+
+    b = hollowbox(scl, 200, hthick, 80,
+                {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
+                curverads={ T|F: (hthick, 0)})
+    b = translate(v=[(w-200)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
+    #b = cube([(400)*scl, (hthick+2)*scl, 31*scl])
+    #b = translate(v=[(w-kbd_w-hthick*2-1)*scl, -1*scl, (40)*scl]).add(b)
+    #u -= b
+
+    b = hollowbox(scl, hthick, ht, 80,
+                {T:-1, L:hthick, R:-1, F:-1, D:-1, B:-1},
+                curverads={ T|L: (hthick, 0)})
+    b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
+    v = union()
+    u = translate(v=[0, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
 
 def screen_adjust(b, scl, angle):
 
@@ -921,7 +959,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != -3 and part != 7:
+    if part != 4 and part != 8 and part != 5 and part != 3 and part != 7 \
+        and part != 9:
         return
 
     c = color(colour)
@@ -983,6 +1022,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 4:
         # NOTE: ... here's the other bit
         se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        b.add(m)
+
+    if part == 9:
+        se = back_kbd_corner(scl, 200)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
@@ -1052,8 +1096,8 @@ if __name__ == '__main__':
                 r = rotate([90,180,180]).add(card)
                 r = translate([(lcd_w-250)*scl, 0*scl, (drop_ht+110)*scl]).add(r)
                 t.add(r)
-                kbd = cube([600*scl, (lcd_l-100)*scl, (60)*scl], center=True)
-                r = translate([(lcd_w-300)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
+                kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
+                r = translate([(lcd_w-265)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
                 t.add(r)
                 pcb = cube([800*scl, 1000*scl, (12)*scl], center=True)
                 r = translate([(lcd_w-400)*scl, 520*scl, (drop_ht+134)*scl]).add(pcb)
