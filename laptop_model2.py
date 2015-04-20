@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -506,14 +506,14 @@ def base_end(scl, ht):
 def holed_support(scl, ht, sht=40):
     u = union()
     # add bits for screws through to base back
-    c = cube([(55)*scl, (ht)*scl, (55)*scl])
+    c = cube([(70)*scl, (ht)*scl, (55)*scl])
     u += c
 
     d = cylinder(r=topscrewrad*scl,
                     h=(sht)*scl,
                     segments=50, center=True)
     d = rotate([-90, 0, 0]).add(d)
-    d = translate(v=[55/2*scl, (ht-sht/2+0.5)*scl, (55/2+5)*scl]).add(d)
+    d = translate(v=[70/2*scl, (ht-sht/2+0.5)*scl, (55/2+5)*scl]).add(d)
     u -= d
 
     return u
@@ -740,7 +740,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
-    t = translate(v=[(w+17)*scl, (139)*scl, (5)*scl]).add(t)
+    t = translate(v=[(w+17)*scl, (121)*scl, (5)*scl]).add(t)
     u += t
     
     # screw holes in box
@@ -752,6 +752,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     s = chamfered_backbox_screwholes(scl, 20)
     s = rotate([0, -90, 0]).add(s)
     b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
+    u -= b
+
+    # lower screw hole for keyboard corner joiner
+    s = cylinder(r=topscrewrad*scl,
+                    h=(60)*scl,
+                    segments=50, center=True)
+    s = rotate([0, -90, 0]).add(s)
+    b = translate(v=[(w-30)*scl, (50)*scl, (68)*scl]).add(s)
     u -= b
 
     if pin_parts_3d:
@@ -932,7 +940,7 @@ def screen_hinge(scl, ht):
     return u
     
 def indented_screwhole(scl, u, x, y, z, rot=False):
-    s = shearedcube(size=[50*scl, 67*scl, (36-hthick)*scl],
+    s = shearedcube(size=[58*scl, 67*scl, (36-hthick)*scl],
                     shear=[0, 0*scl, 0],
                     innershear=[0, -20*scl, 0],
                     center=True)
@@ -957,20 +965,26 @@ def back_kbd_corner(scl, ht):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 200, hthick, 80,
+    b = hollowbox(scl, 200, hthick, 90,
                 {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-200)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = hollowbox(scl, hthick, ht, 80,
+    b = hollowbox(scl, hthick, ht, 90,
                 {T:-1, L:hthick, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    u = indented_screwhole(scl, u, (w-106), 0, 37)
-    u = indented_screwhole(scl, u, (w), 166, 37, True)
+    u = indented_screwhole(scl, u, (w-98), 0, 37)
+    u = indented_screwhole(scl, u, (w), 156, 37, True)
+    s = chamfered_backbox_screwholes(scl, 20)
+    s = rotate([90, 0, 0]).add(s)
+    s = rotate([0, 0, 180]).add(s)
+    s = rotate([0, 0, 90]).add(s)
+    s = translate(v=[(w-10)*scl, (50)*scl, (68)*scl]).add(s)
+    u -= s
 
     if pin_parts_3d:
         c = union()
@@ -1021,7 +1035,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
+    if part != 4 and part != -8 and part != -5 and part != 3 and part != -7 \
         and part != 9:
         return
 
