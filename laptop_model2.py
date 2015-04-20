@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -740,7 +740,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
-    t = translate(v=[(w+17)*scl, (121)*scl, (5)*scl]).add(t)
+    t = translate(v=[(w+16)*scl, (121)*scl, (5)*scl]).add(t)
     u += t
     
     # screw holes in box
@@ -978,7 +978,7 @@ def back_kbd_corner(scl, ht):
     u += b
 
     u = indented_screwhole(scl, u, (w-98), 0, 37)
-    u = indented_screwhole(scl, u, (w), 156, 37, True)
+    u = indented_screwhole(scl, u, (w-1), 156, 37, True)
     s = chamfered_backbox_screwholes(scl, 20)
     s = rotate([90, 0, 0]).add(s)
     s = rotate([0, 0, 180]).add(s)
@@ -989,16 +989,16 @@ def back_kbd_corner(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, -15*scl]).add(h)
+        h = translate([(ht)*scl, (-3)*scl, 10*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, -15*scl]).add(h)
+        h = translate([(0)*scl, (-3)*scl, -10*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(ht)*scl, (-3)*scl, -210*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
-        c = translate([(w-200)*scl, (0)*scl, 80*scl]).add(c)
+        c = translate([(w-200)*scl, (0)*scl, 90*scl]).add(c)
         
         u += c
 
@@ -1035,7 +1035,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != -5 and part != 3 and part != -7 \
+    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
         and part != 9:
         return
 
