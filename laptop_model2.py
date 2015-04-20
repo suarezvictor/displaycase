@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -972,6 +972,22 @@ def back_kbd_corner(scl, ht):
     u = indented_screwhole(scl, u, (w-106), 0, 37)
     u = indented_screwhole(scl, u, (w), 166, 37, True)
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(ht)*scl, (-3)*scl, -15*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, -15*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht)*scl, (-3)*scl, -210*scl]).add(h)
+        c += h
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([(w-200)*scl, (0)*scl, 80*scl]).add(c)
+        
+        u += c
+
     v = union()
     u = translate(v=[0, 0, (55)*scl]).add(u)
     v.add(u)
@@ -1005,7 +1021,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != 3 and part != -7 \
+    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
         and part != 9:
         return
 
