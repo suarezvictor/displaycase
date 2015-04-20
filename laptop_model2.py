@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -742,6 +742,19 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     t = rotate([0, 0, 90]).add(t)
     t = translate(v=[(w+16)*scl, (121)*scl, (5)*scl]).add(t)
     u += t
+    if pin_parts_3d:
+        b = cube([(32)*scl, (7)*scl, (30)*scl], center=True)
+        b = translate(v=[(w-42)*scl, (121)*scl, (42)*scl]).add(b)
+        u += b
+        b = cube([(32)*scl, (40)*scl, (7)*scl], center=True)
+        b = translate(v=[(w-42)*scl, (138)*scl, (60)*scl]).add(b)
+        u += b
+        s = cylinder(r=(topscrewrad+2)*scl,
+                        h=(25)*scl,
+                        segments=50, center=True)
+        s = rotate([0, -90, 0]).add(s)
+        s = translate(v=[(w-46)*scl, (156)*scl, (37)*scl]).add(s)
+        u += s
     
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[2], h=120)
@@ -764,6 +777,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     s = rotate([0, -90, 0]).add(s)
     b = translate(v=[(w-30)*scl, (50)*scl, (68)*scl]).add(s)
     u -= b
+    if pin_parts_3d:
+        s = cylinder(r=(topscrewrad+2)*scl,
+                        h=(10)*scl,
+                        segments=50, center=True)
+        s = rotate([0, -90, 0]).add(s)
+        b = translate(v=[(w-30-23)*scl, (50)*scl, (68)*scl]).add(s)
+        u += b
 
     if pin_parts_3d:
         c = union()
@@ -780,7 +800,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         h = translate([(ht/2)*scl, (-3)*scl, 120*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(-20)*scl, (-3)*scl, 35*scl]).add(h)
+        h = translate([(-30)*scl, (-3)*scl, 35*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
@@ -1043,7 +1063,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 2 and part != 5:
         #return
     if part != 4 and part != -8 and part != -5 and part != -3 and part != -7 \
-        and part != 9:
+        and part != -9:
         return
 
     c = color(colour)
