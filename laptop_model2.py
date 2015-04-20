@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -755,6 +755,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u -= b
 
     # lower screw hole for keyboard corner joiner
+    b = cube([(12)*scl, (54)*scl, (48)*scl], center=True)
+    b = translate(v=[(w-49-6)*scl, (50)*scl, (68)*scl]).add(b)
+    u -= b
     s = cylinder(r=topscrewrad*scl,
                     h=(60)*scl,
                     segments=50, center=True)
@@ -977,6 +980,10 @@ def back_kbd_corner(scl, ht):
     b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
+    b = cube([(10)*scl, (50)*scl, (44)*scl], center=True)
+    b = translate(v=[(w+9-6)*scl, (50)*scl, (68)*scl]).add(b)
+    u += b
+
     u = indented_screwhole(scl, u, (w-98), 0, 37)
     u = indented_screwhole(scl, u, (w-1), 156, 37, True)
     s = chamfered_backbox_screwholes(scl, 20)
@@ -1035,7 +1042,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
+    if part != 4 and part != -8 and part != -5 and part != -3 and part != -7 \
         and part != 9:
         return
 
