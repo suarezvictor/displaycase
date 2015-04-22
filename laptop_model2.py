@@ -510,11 +510,11 @@ def holed_support(scl, ht, sht=40, inverse=False):
         c = cube([(70)*scl, (ht)*scl, (60)*scl])
         u += c
 
-    d = cylinder(r=topscrewrad*1.2*scl, r1=26*scl,
-                    h=15*scl,
+    d = cylinder(r=topscrewrad*1.2*scl, r1=29*scl,
+                    h=17*scl,
                     segments=50, center=True)
     d = rotate([90, 0, 0]).add(d)
-    d = translate(v=[70/2*scl, (ht-15/2+0.5)*scl, (55/2+5)*scl]).add(d)
+    d = translate(v=[70/2*scl, (ht-17/2+0.5)*scl, (55/2+5)*scl]).add(d)
     if inverse:
         u += d
     else:
@@ -760,7 +760,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # lower screw hole for keyboard corner joiner
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, 90]).add(t)
-    b = translate(v=[(w-8)*scl, (10)*scl, (37)*scl]).add(t)
+    b = translate(v=[(w-8)*scl, (10)*scl, (35)*scl]).add(t)
     u -= b
 
     # screw holes in box
@@ -952,11 +952,11 @@ def screen_hinge(scl, ht):
     return u
     
 def indented_screwhole(scl, u, x, y, z, rot=False):
-    d = cylinder(r=topscrewrad*1.2*scl, r1=26*scl,
-                    h=15*scl,
+    d = cylinder(r=topscrewrad*1.2*scl, r1=28*scl,
+                    h=17*scl,
                     segments=50, center=True)
     d = rotate([90, 0, 0]).add(d)
-    s = translate(v=[(0)*scl, (-7)*scl, (0)*scl]).add(d)
+    s = translate(v=[(0)*scl, (-9)*scl, (0)*scl]).add(d)
     if rot:
         s = rotate([0, 0, 90]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
@@ -990,7 +990,7 @@ def back_kbd_corner(scl, ht):
 
     u = indented_screwhole(scl, u, (w-98), 0, 37)
     u = indented_screwhole(scl, u, (w-1), 156, 37, True)
-    u = indented_screwhole(scl, u, (w-1), 45, 68, True)
+    u = indented_screwhole(scl, u, (w-1), 45, 67, True)
 
     if pin_parts_3d:
         c = union()
