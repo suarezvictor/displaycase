@@ -995,13 +995,22 @@ def back_kbd_corner(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, 10*scl]).add(h)
+        h = translate([(ht-38)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, -10*scl]).add(h)
+        h = translate([(ht+30)*scl, (-3)*scl, -43*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, -210*scl]).add(h)
+        h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, -43*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht-45)*scl, (-3)*scl, -210*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht+33)*scl, (-3)*scl, -210*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = translate([(w-200)*scl, (0)*scl, 95*scl]).add(c)
