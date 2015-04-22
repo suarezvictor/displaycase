@@ -988,7 +988,7 @@ def back_kbd_corner(scl, ht):
     b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    u = indented_screwhole(scl, u, (w-98), 0, 37)
+    u = indented_screwhole(scl, u, (w-98), 1, 37)
     u = indented_screwhole(scl, u, (w-1), 156, 37, True)
     u = indented_screwhole(scl, u, (w-1), 45, 67, True)
 
