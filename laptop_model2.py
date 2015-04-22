@@ -1056,8 +1056,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
-        and part != 9:
+    if part != -4 and part != -8 and part != -5 and part != 3 and part != -7 \
+        and part != -9:
         return
 
     c = color(colour)
