@@ -491,7 +491,7 @@ def base_end(scl, ht):
     #u -= t
 
     # add support for keyboard corner
-    t = holed_support(scl, ht-25)
+    t = holed_support(scl, ht)
     t = translate(v=[(w-300)*scl, 0, (60)*scl]).add(t)
     u += t
     
@@ -503,18 +503,32 @@ def base_end(scl, ht):
 
     return u
     
-def holed_support(scl, ht, sht=40):
+def holed_support(scl, ht, sht=40, inverse=False):
     u = union()
-    # add bits for screws through to base back
-    c = cube([(70)*scl, (ht)*scl, (55)*scl])
-    u += c
+    if not inverse:
+        # add bits for screws through to base back
+        c = cube([(70)*scl, (ht)*scl, (60)*scl])
+        u += c
+
+    d = cylinder(r=topscrewrad*1.2*scl, r1=26*scl,
+                    h=15*scl,
+                    segments=50, center=True)
+    d = rotate([90, 0, 0]).add(d)
+    d = translate(v=[70/2*scl, (ht-15/2+0.5)*scl, (55/2+5)*scl]).add(d)
+    if inverse:
+        u += d
+    else:
+        u -= d
 
     d = cylinder(r=topscrewrad*scl,
                     h=(sht)*scl,
                     segments=50, center=True)
     d = rotate([-90, 0, 0]).add(d)
     d = translate(v=[70/2*scl, (ht-sht/2+0.5)*scl, (55/2+5)*scl]).add(d)
-    u -= d
+    if inverse:
+        u += d
+    else:
+        u -= d
 
     return u
 
@@ -740,22 +754,15 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
-    t = translate(v=[(w+16)*scl, (121)*scl, (5)*scl]).add(t)
+    t = translate(v=[(w-8)*scl, (121)*scl, (5)*scl]).add(t)
     u += t
-    if pin_parts_3d:
-        b = cube([(32)*scl, (7)*scl, (30)*scl], center=True)
-        b = translate(v=[(w-42)*scl, (121)*scl, (42)*scl]).add(b)
-        u += b
-        b = cube([(32)*scl, (40)*scl, (7)*scl], center=True)
-        b = translate(v=[(w-42)*scl, (138)*scl, (60)*scl]).add(b)
-        u += b
-        s = cylinder(r=(topscrewrad+2)*scl,
-                        h=(25)*scl,
-                        segments=50, center=True)
-        s = rotate([0, -90, 0]).add(s)
-        s = translate(v=[(w-46)*scl, (156)*scl, (37)*scl]).add(s)
-        u += s
     
+    # lower screw hole for keyboard corner joiner
+    t = holed_support(scl, 50, inverse=True)
+    t = rotate([0, 0, 90]).add(t)
+    b = translate(v=[(w-8)*scl, (10)*scl, (37)*scl]).add(t)
+    u -= b
+
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[2], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
@@ -766,24 +773,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     s = rotate([0, -90, 0]).add(s)
     b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
     u -= b
-
-    # lower screw hole for keyboard corner joiner
-    b = cube([(12)*scl, (54)*scl, (48)*scl], center=True)
-    b = translate(v=[(w-49-6)*scl, (50)*scl, (68)*scl]).add(b)
-    u -= b
-    s = cylinder(r=topscrewrad*scl,
-                    h=(60)*scl,
-                    segments=50, center=True)
-    s = rotate([0, -90, 0]).add(s)
-    b = translate(v=[(w-30)*scl, (50)*scl, (68)*scl]).add(s)
-    u -= b
-    if pin_parts_3d:
-        s = cylinder(r=(topscrewrad+2)*scl,
-                        h=(10)*scl,
-                        segments=50, center=True)
-        s = rotate([0, -90, 0]).add(s)
-        b = translate(v=[(w-30-23)*scl, (50)*scl, (68)*scl]).add(s)
-        u += b
 
     if pin_parts_3d:
         c = union()
@@ -963,18 +952,17 @@ def screen_hinge(scl, ht):
     return u
     
 def indented_screwhole(scl, u, x, y, z, rot=False):
-    s = shearedcube(size=[58*scl, 67*scl, (36-hthick)*scl],
-                    shear=[0, 0*scl, 0],
-                    innershear=[0, -20*scl, 0],
-                    center=True)
-    s = translate(v=[(0)*scl, (9)*scl, (-6-hthick/2)*scl]).add(s)
-    s = rotate([90, 0, 0]).add(s)
-    s = rotate([0, 0, 180]).add(s)
+    d = cylinder(r=topscrewrad*1.2*scl, r1=26*scl,
+                    h=15*scl,
+                    segments=50, center=True)
+    d = rotate([90, 0, 0]).add(d)
+    s = translate(v=[(0)*scl, (-7)*scl, (0)*scl]).add(d)
     if rot:
         s = rotate([0, 0, 90]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u += s
-    s = chamfered_backbox_screwholes(scl, 20)
+    s = chamfered_backbox_screwholes(scl, 16)
+    s = translate(v=[(0)*scl, (0)*scl, (3)*scl]).add(s)
     s = rotate([90, 0, 0]).add(s)
     s = rotate([0, 0, 180]).add(s)
     if rot:
@@ -988,30 +976,21 @@ def back_kbd_corner(scl, ht):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 200, hthick, 90,
+    b = hollowbox(scl, 200, hthick, 95,
                 {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-200)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = hollowbox(scl, hthick, ht, 90,
+    b = hollowbox(scl, hthick, ht, 95,
                 {T:-1, L:hthick, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = cube([(10)*scl, (50)*scl, (44)*scl], center=True)
-    b = translate(v=[(w+9-6)*scl, (50)*scl, (68)*scl]).add(b)
-    u += b
-
     u = indented_screwhole(scl, u, (w-98), 0, 37)
     u = indented_screwhole(scl, u, (w-1), 156, 37, True)
-    s = chamfered_backbox_screwholes(scl, 20)
-    s = rotate([90, 0, 0]).add(s)
-    s = rotate([0, 0, 180]).add(s)
-    s = rotate([0, 0, 90]).add(s)
-    s = translate(v=[(w-10)*scl, (50)*scl, (68)*scl]).add(s)
-    u -= s
+    u = indented_screwhole(scl, u, (w-1), 45, 68, True)
 
     if pin_parts_3d:
         c = union()
@@ -1025,7 +1004,7 @@ def back_kbd_corner(scl, ht):
         h = translate([(ht)*scl, (-3)*scl, -210*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
-        c = translate([(w-200)*scl, (0)*scl, 90*scl]).add(c)
+        c = translate([(w-200)*scl, (0)*scl, 95*scl]).add(c)
         
         u += c
 
@@ -1062,8 +1041,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != -5 and part != -3 and part != -7 \
-        and part != -9:
+    if part != -4 and part != -8 and part != -5 and part != -3 and part != -7 \
+        and part != 9:
         return
 
     c = color(colour)
