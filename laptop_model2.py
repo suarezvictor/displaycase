@@ -181,7 +181,7 @@ def lid_bolthole(scl, end=True):
     if end:
         return translate([(-lcd_inset_top+58)*scl, 0*scl, (16+lcd_doff)*scl])
     else:
-        return translate([(100+lcd_w)*scl, 0*scl, (16+lcd_doff)*scl])
+        return translate([(168+lcd_w)*scl, 0*scl, (12+lcd_doff)*scl])
 
 def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
@@ -471,7 +471,7 @@ def base_end(scl, ht):
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
     t = hinge_translate(scl).add(c)
-    u -= t
+    #u -= t
 
     # add bits for screws through to base back
     v = union()
@@ -821,19 +821,31 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         h = translate([(ht-20)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
         h = pin(B0, scl)
+        h = translate([(ht+30)*scl, (-3)*scl, 55*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
         h = translate([(ht-20)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2)*scl, (-3)*scl, -5*scl]).add(h)
+        h = translate([(ht/2-38)*scl, (-3)*scl, -5*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2)*scl, (-3)*scl, 120*scl]).add(h)
+        h = translate([(ht/2+38)*scl, (-3)*scl, -5*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(-30)*scl, (-3)*scl, 35*scl]).add(h)
+        h = translate([(ht/2-38)*scl, (-3)*scl, 120*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht/2+38)*scl, (-3)*scl, 120*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(-30)*scl, (-3)*scl, 62*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58)*scl, (0)*scl, 0*scl]).add(c)
@@ -927,7 +939,7 @@ def screen_back_edge(scl, ht):
 
 def screen_hinge(scl, ht):
     u = union()
-    b = screen_box(scl, ht, end=False, hingewall=False)
+    b = screen_box(scl, ht, end=False, back=True, hingewall=False)
     u += b
 
     rad=35.0
@@ -948,18 +960,24 @@ def screen_hinge(scl, ht):
     u += c
 
     # hollow hinge out
-    c = cylinder(r=(rad-10)*scl, h=(ht+51)*scl, segments=50)
+    c = cylinder(r=(rad-12)*scl, h=(ht+51)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-40*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
-    c = shearedcube([(rad*2-25)*scl, (ht*2)*scl, (2+hinge_offs)*scl],
-                shear=[55*scl, 0, 0],
-                innershear=[35*scl, 0, 0])
+    # bolt-hole
+    c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    u -= t
+
+    c = shearedcube([(rad*2-32)*scl, (ht*2)*scl, (30+hinge_offs)*scl],
+                shear=[70*scl, 0, 0],
+                innershear=[46*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w-rad+10)*scl,-(ht+hthick)*scl,
+    c = translate(v=[(w-rad+8)*scl,-(ht+hthick)*scl,
                      (30+hinge_offs)*scl]).add(c)
     u -= c
 
@@ -981,12 +999,6 @@ def screen_hinge(scl, ht):
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength-131)*scl, (ht-3)*scl, 80*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(0)*scl, (ht-3)*scl, -20*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(51)*scl, (ht-3)*scl, 60*scl]).add(h)
         c += h
         u += c
 
@@ -1097,7 +1109,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -5 and part != 3 and part != -7 \
+    if part != -4 and part != -8 and part != 2 and part != -6 \
+        and part != -3 and part != -7 \
         and part != -9:
         return
 
