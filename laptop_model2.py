@@ -479,7 +479,8 @@ def base_end(scl, ht):
     v.add(c)
     c = cube([(60)*scl, (50)*scl, (60)*scl])
     v.add(c)
-    c = translate(v=[(boxlength-back_top_width)*scl,(0)*scl,(56+hthick)*scl]).add(v)
+    c = translate(v=[(boxlength-back_top_width)*scl,
+                      (0)*scl, (56+hthick)*scl]).add(v)
     u += c
 
     # weird angled cutout
@@ -500,6 +501,46 @@ def base_end(scl, ht):
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     u -= t
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(75)*scl, (0)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(150)*scl, (0)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(120)*scl, (0)*scl, 195*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(45)*scl, (0)*scl, 195*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, 120*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(w-120)*scl, (0)*scl, 40*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w)*scl, (0)*scl, 50*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w)*scl, (0)*scl, 125*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-120)*scl, (0)*scl, 185*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-45)*scl, (0)*scl, 185*scl]).add(h)
+        c += h
+
+        c = translate([(0)*scl, (3)*scl, 0*scl]).add(c)
+        
+        u += c
 
     return u
     
