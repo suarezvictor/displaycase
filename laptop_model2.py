@@ -535,10 +535,10 @@ def holed_support(scl, ht, sht=40, inverse=False):
 def base_end_bit(scl, ht, fwd=False, below=False):
     u = union()
     # add bits for screws through to base back
-    c = cube([(40)*scl, (50+ht)*scl, (50)*scl])
+    c = cube([(40)*scl, (22+ht)*scl, (50)*scl])
     u += c
-    c = cube([(40)*scl, (ht)*scl, (5)*scl])
-    c = translate(v=[0*scl,(0)*scl,(-2)*scl]).add(c)
+    c = cube([(60)*scl, (ht)*scl, (35)*scl])
+    c = translate(v=[-15*scl,(0)*scl,(-2)*scl]).add(c)
     if below:
         c = translate(v=[0*scl,(0)*scl,(50)*scl]).add(c)
     u += c
