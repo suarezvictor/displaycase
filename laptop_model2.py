@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -544,18 +544,18 @@ def base_end(scl, ht):
 
     return u
     
-def holed_support(scl, ht, sht=40, inverse=False):
+def holed_support(scl, ht, sht=50, inverse=False):
     u = union()
     if not inverse:
         # add bits for screws through to base back
         c = cube([(70)*scl, (ht)*scl, (60)*scl])
         u += c
 
-    d = cylinder(r=topscrewrad*1.2*scl, r1=29*scl,
-                    h=17*scl,
+    d = cylinder(r=topscrewrad*1.2*scl, r1=30*scl,
+                    h=19*scl,
                     segments=50, center=True)
     d = rotate([90, 0, 0]).add(d)
-    d = translate(v=[70/2*scl, (ht-17/2+0.5)*scl, (55/2+5)*scl]).add(d)
+    d = translate(v=[70/2*scl, (ht-19/2+0.5)*scl, (55/2+5)*scl]).add(d)
     if inverse:
         u += d
     else:
@@ -1109,7 +1109,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != 2 and part != -6 \
+    if part != 4 and part != -8 and part != -2 and part != -6 \
         and part != -3 and part != -7 \
         and part != -9:
         return
