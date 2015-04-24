@@ -166,7 +166,7 @@ def chamfered_backbox_screwholes(scl, sht):
     return c
 
 def case_bolthole(scl, end):
-    bht = lcd_hinge_inner_rad+boxtopoffs-10-lcd_d
+    bht = lcd_hinge_inner_rad+boxtopoffs-30-lcd_d
     if end == 0:
         return translate([(120)*scl, 0*scl, bht*scl])
     elif end == 1:
@@ -447,10 +447,10 @@ def base_end(scl, ht):
     u -= c
 
     # block up hole
-    c = cube([(ht)*scl, (40)*scl, (85)*scl])
+    c = cube([(ht)*scl, (50)*scl, (85)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[-(rad-12)*scl,0*scl,0*scl]).add(c)
+    c = translate(v=[-(rad-12)*scl,0*scl,10*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -465,13 +465,6 @@ def base_end(scl, ht):
     c = translate(v=[0*scl,hthick*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-
-    # cable access
-    c = cube([(ht)*scl, (rad+80)*scl, (rad)*scl])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[0*scl,hthick*scl,-hthick*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    #u -= t
 
     # add bits for screws through to base back
     v = union()
@@ -493,9 +486,21 @@ def base_end(scl, ht):
 
     # add support for keyboard corner
     t = holed_support(scl, ht)
-    t = translate(v=[(w-300)*scl, 0, (60)*scl]).add(t)
+    t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(t)
     u += t
     
+    # add bits for case bolthole at front
+    c = cube([(60)*scl, (ht)*scl, (60)*scl])
+    c = translate(v=[(90)*scl,
+                      (0)*scl, (68+hthick)*scl]).add(c)
+    u += c
+
+    # annoying bug in hollowbox, bridge across curve and straight
+    c = cube([(1)*scl, (ht)*scl, (hthick)*scl])
+    c = translate(v=[(149.5)*scl,
+                      (0)*scl, (boxheight+55-hthick)*scl]).add(c)
+    u += c
+
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0, 2])
     t = translate(v=[0, 0, boxheight*scl]).add(t)
@@ -1029,19 +1034,19 @@ def back_kbd_corner(scl, ht):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 200, hthick, 95,
+    b = hollowbox(scl, 200, hthick, boxheight-hthick,
                 {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-200)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = hollowbox(scl, hthick, ht, 95,
+    b = hollowbox(scl, hthick, ht, boxheight-hthick,
                 {T:-1, L:hthick, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    u = indented_screwhole(scl, u, (w-98), 1, 37)
+    u = indented_screwhole(scl, u, (w-98), 1, 39)
     u = indented_screwhole(scl, u, (w-1), 156, 37, True)
     u = indented_screwhole(scl, u, (w-1), 45, 67, True)
 
@@ -1072,7 +1077,7 @@ def back_kbd_corner(scl, ht):
         h = translate([(ht+33)*scl, (-3)*scl, -210*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
-        c = translate([(w-200)*scl, (0)*scl, 95*scl]).add(c)
+        c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
         
         u += c
 
@@ -1109,9 +1114,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != 4 and part != -8 and part != -2 and part != -6 \
-        and part != -3 and part != -7 \
-        and part != -9:
+    if part != -4 and part != -8 and part != -2 and part != -6 \
+        and part != 3 and part != -7 \
+        and part != 9:
         return
 
     c = color(colour)
