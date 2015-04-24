@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -959,6 +959,22 @@ def screen_edge_complete(scl, ht):
     t = lid_bolthole(scl, end=False).add(c)
     u -= t
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(boxlength-62)*scl, (ht-3)*scl, -45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength+15)*scl, (ht-3)*scl, 3*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-18)*scl, (ht-3)*scl, 80*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-95)*scl, (ht-3)*scl, 80*scl]).add(h)
+        c += h
+        u += c
+
     return u
 
 def screen_back_edge(scl, ht):
@@ -970,6 +986,7 @@ def screen_back_edge(scl, ht):
                   angle=0)
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
+    c = resize([(60)*scl, 0, 0], False).add(c)
     c = translate(v=[(lcd_w+70)*scl, (-1)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
@@ -984,13 +1001,26 @@ def screen_back_edge(scl, ht):
     c = translate(v=[(-45)*scl, (40)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
-    c = cylinder(r=25.0*scl, h=20*scl, center=True, segments=6)
+    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
     b -= t
 
+    if pin_parts_3d:
+        c = union()
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+80)*scl, (0)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+80)*scl, (50)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+80)*scl, (250)*scl, -12*scl]).add(h)
+        c += h
+
+        b += c
 
     return b
 
@@ -1167,7 +1197,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #if part != 2 and part != 5:
         #return
     if part != -4 and part != -8 and part != -2 and part != 6 \
-        and part != -3 and part != -7 and part != 1\
+        and part != -3 and part != -7 and part != -1\
         and part != -9 and part != 0.1:
         return
 
