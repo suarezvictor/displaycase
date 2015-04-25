@@ -991,13 +991,13 @@ def screen_back_edge(scl, ht):
     b -= c
 
     # bolt-hole
-    c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
+    c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
 
     # slot to fit a nut into
-    c = cube([100*scl, 20*scl, 43*scl], center=True)
+    c = cube([100*scl, 20*scl, 46*scl], center=True)
     c = translate(v=[(-45)*scl, (40)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
