@@ -179,7 +179,7 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+58)*scl, 0*scl, (16+lcd_doff)*scl])
+        return translate([(-lcd_inset_top+78)*scl, 0*scl, (12+lcd_doff)*scl])
     else:
         return translate([(168+lcd_w)*scl, 0*scl, (12+lcd_doff)*scl])
 
@@ -940,10 +940,11 @@ def screen_end(scl, ht, lcd_end_ht):
     u += b
 
     # bolt-hole
-    c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    t = lid_bolthole(scl, end=False).add(c)
-    u -= t
+    for end in [True, False]:
+        c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
+        c = rotate([0, 90, 90]).add(c)
+        t = lid_bolthole(scl, end=end).add(c)
+        u -= t
 
     b = screen_edge_complete(scl, lcd_end_ht)
     b = translate(v=[0, ht*scl,0]).add(b)
