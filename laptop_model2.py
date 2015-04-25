@@ -934,7 +934,7 @@ def base_mid(scl, ht):
     v.add(u)
     return v
     
-def screen_end(scl, ht):
+def screen_end(scl, ht, lcd_end_ht):
     u = union()
     b = screen_box(scl, ht, end=True)
     u += b
@@ -944,6 +944,45 @@ def screen_end(scl, ht):
     c = rotate([0, 90, 90]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     u -= t
+
+    b = screen_edge_complete(scl, lcd_end_ht)
+    b = translate(v=[0, ht*scl,0]).add(b)
+
+    u += b
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(boxlength-62)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength+15)*scl, (3)*scl, 3*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-18)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-95)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(62)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(-15)*scl, (3)*scl, 3*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(62)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(boxlength/2)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+
+        u += c
 
     return u
 
@@ -958,22 +997,6 @@ def screen_edge_complete(scl, ht):
     c = rotate([0, 90, 90]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     u -= t
-
-    if pin_parts_3d:
-        c = union()
-        h = pin(B0, scl)
-        h = translate([(boxlength-62)*scl, (ht-3)*scl, -45*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(boxlength+15)*scl, (ht-3)*scl, 3*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(boxlength-18)*scl, (ht-3)*scl, 80*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(boxlength-95)*scl, (ht-3)*scl, 80*scl]).add(h)
-        c += h
-        u += c
 
     return u
 
@@ -1196,9 +1219,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -2 and part != 6 \
-        and part != -3 and part != -7 and part != -1\
-        and part != -9 and part != 0.1:
+    if part != -4 and part != -8 and part != -2 and part != -6 \
+        and part != -3 and part != -7 and part != 1\
+        and part != -9 and part != 0.0:
         return
 
     c = color(colour)
@@ -1212,22 +1235,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     scrn_hinge_ht = 60
 
     if part == 0:
-        se = screen_end(scl, scrn_end_ht)
+        se = screen_end(scl, scrn_end_ht, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
     lid_adjust_ht += scrn_end_ht
-
-    if part == 1:
-        se = screen_edge_complete(scl, lcd_end_ht)
-        m = translate(v=[0, 0*scl,0]).add(se)
-        b.add(m)
-
-        b = translate(v=[0, lid_adjust_ht*scl,0]).add(b)
-        b = screen_adjust(b, scl, angle)
-
     lid_adjust_ht += lcd_end_ht
 
     if part == 2:
