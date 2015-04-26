@@ -179,7 +179,7 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+78)*scl, 0*scl, (12+lcd_doff)*scl])
+        return translate([(-lcd_inset_top+88)*scl, 0*scl, (12+lcd_doff)*scl])
     else:
         return translate([(168+lcd_w)*scl, 0*scl, (12+lcd_doff)*scl])
 
@@ -335,7 +335,7 @@ def lid_screwholes(scl, edge_inset):
 
     return u
 
-def screen_box(scl, ht, end=True, hingewall=False, back=False):
+def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     u = union()
 
     ld = lcd_d+hthick+5.4
@@ -353,12 +353,15 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False):
     if end:
         walls[B] = hthick
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
-    else:
+    elif not front:
         walls[B] = -1
         curverads.update({ R|T: (ld-hthick, 0) })
     if back:
         slen = lcd_inset_bot - 30
         offs = boxlength - slen
+    elif front:
+        slen = 85
+        offs = 0
     else:
         slen = boxlength
         offs = 0
@@ -1001,6 +1004,51 @@ def screen_edge_complete(scl, ht):
 
     return u
 
+def screen_front_edge(scl, ht):
+    b = screen_box(scl, ht, end=False, front=True)
+    c = touch_arc(0, ht-hthick-65, 45,
+                        25, scl,
+                  angle=0)
+    c = rotate([-90, 0, 0]).add(c)
+    c = rotate([0, -90, 0]).add(c)
+    c = resize([(60)*scl, 0, 0], False).add(c)
+    c = translate(v=[(76)*scl, (ht-hthick)*scl, (lcd_d-15)*scl]).add(c)
+    b -= c
+
+    # bolt-hole
+    c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    b -= t
+
+    # slot to fit a nut into
+    c = cube([100*scl, 20*scl, 46*scl], center=True)
+    c = translate(v=[(45)*scl, (40)*scl, (0)*scl]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    b -= t
+    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
+    b -= t
+
+    if pin_parts_3d:
+        c = union()
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(50)*scl, (100)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(50)*scl, (ht/2)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(50)*scl, (ht-100)*scl, -12*scl]).add(h)
+        c += h
+
+        b += c
+
+    return b
+
 def screen_back_edge(scl, ht):
     b = screen_box(scl, ht, end=False, back=True)
     # TODO: this is going to need some underside supports
@@ -1220,9 +1268,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     #    return
     #if part != 2 and part != 5:
         #return
-    if part != -4 and part != -8 and part != -2 and part != -6 \
+    if part != -4 and part != -8 and part != 2 and part != 6 \
         and part != -3 and part != -7 and part != 1\
-        and part != -9 and part != 0.0:
+        and part != -9 and part != 0.0 and part != 10:
         return
 
     c = color(colour)
@@ -1266,12 +1314,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     centre_ht = hthick*2
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
 
-    #if part == 5:
-    #    se = base_back_top(scl, base_back_ht+scrn_hinge_ht+centre_ht/2,
-    #                            scrn_hinge_ht)
-    #    m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
-    #    b.add(m)
-
     if part == 4:
         # NOTE: ... here's the other bit
         se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht)
@@ -1282,6 +1324,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         se = back_kbd_corner(scl, 200)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
+
+    adj = scrn_end_ht
+    if part == 10:
+        se = screen_front_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
+        m = translate(v=[0, (adj)*scl,0]).add(se)
+        b.add(m)
+        b = screen_adjust(b, scl, angle)
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == 6:
