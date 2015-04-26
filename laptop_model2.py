@@ -937,6 +937,55 @@ def base_mid(scl, ht):
     v.add(u)
     return v
     
+def screen_mid(scl, ht):
+    u = union()
+    b = screen_box(scl, ht, end=False)
+    u += b
+
+    # cutouts for connectors
+    d = cube([(25)*scl, (ht+2)*scl, (30)*scl])
+    c = translate(v=[20*scl, (-1)*scl, (8)*scl]).add(d)
+    u -= c
+    c = translate(v=[55*scl, (-1)*scl, (0)*scl]).add(d)
+    u -= c
+    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (0)*scl]).add(d)
+    u -= c
+    c = translate(v=[(lcd_w+160)*scl, (-1)*scl, (0)*scl]).add(d)
+    u -= c
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(boxlength-62)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength+15)*scl, (3)*scl, 3*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-18)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(boxlength-95)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(62)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(-15)*scl, (3)*scl, 3*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(30)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
+        c += h
+
+        u += c
+
+    return u
+
 def screen_end(scl, ht, lcd_end_ht):
     u = union()
     b = screen_box(scl, ht, end=True)
@@ -1006,13 +1055,13 @@ def screen_edge_complete(scl, ht):
 
 def screen_front_edge(scl, ht):
     b = screen_box(scl, ht, end=False, front=True)
-    c = touch_arc(0, ht-hthick-65, 45,
+    c = touch_arc(0, ht-105, 45,
                         25, scl,
                   angle=0)
     c = rotate([-90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = resize([(60)*scl, 0, 0], False).add(c)
-    c = translate(v=[(76)*scl, (ht-hthick)*scl, (lcd_d-15)*scl]).add(c)
+    c = translate(v=[(76)*scl, (ht-40)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
     # bolt-hole
@@ -1032,6 +1081,21 @@ def screen_front_edge(scl, ht):
     t = lid_bolthole(scl, end=True).add(c)
     t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
     b -= t
+
+    # matching screen mid (front)
+    d = shearedcube([(23)*scl, (12)*scl, (28)*scl],
+            shear=[0, -8*scl, 0],
+            innershear=[0, 0*scl, 0])
+    c = translate(v=[21*scl, (ht-1)*scl, (9)*scl]).add(d)
+    b += c
+
+    # cutout for locking part
+    d = cube([(25)*scl, (50)*scl, (30)*scl])
+    c = translate(v=[55*scl, (ht-35)*scl, (0)*scl]).add(d)
+    b -= c
+    d = cube([(45)*scl, (20)*scl, (30)*scl])
+    c = translate(v=[40*scl, (ht-35)*scl, (0)*scl]).add(d)
+    b -= c
 
     if pin_parts_3d:
         c = union()
@@ -1080,6 +1144,21 @@ def screen_back_edge(scl, ht):
     t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
     b -= t
 
+    # matching screen mid (back)
+    d = shearedcube([(28)*scl, (12)*scl, (28)*scl],
+            shear=[0, -8*scl, 0],
+            innershear=[0, 0*scl, 0])
+    c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (1)*scl]).add(d)
+    b += c
+    # cutout for locking part
+    d = cube([(25)*scl, (50)*scl, (30)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
+    b -= c
+    d = cube([(45)*scl, (20)*scl, (30)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
+    b -= c
+
+
     if pin_parts_3d:
         c = union()
         h = cube([25*scl, 6*scl, 55*scl])
@@ -1090,6 +1169,9 @@ def screen_back_edge(scl, ht):
         c += h
         h = cube([25*scl, 6*scl, 55*scl])
         h = translate([(lcd_w+80)*scl, (250)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+70)*scl, (ht-6)*scl, -12*scl]).add(h)
         c += h
 
         b += c
@@ -1270,7 +1352,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         #return
     if part != -4 and part != -8 and part != 2 and part != 6 \
         and part != -3 and part != -7 and part != 1\
-        and part != -9 and part != 0.0 and part != 10:
+        and part != -9 and part != 0.0 and part != 10 \
+        and part != 11:
+        return
+
+    if part != 6:
         return
 
     c = color(colour)
@@ -1350,6 +1436,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         se = base_mid(scl, centre_ht)
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
         b.add(m)
+
+    if part == 11:
+        se = screen_mid(scl, centre_ht)
+        m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
+        b.add(m)
+        b = screen_adjust(b, scl, angle)
 
     base_joiner_ht = 150
 
