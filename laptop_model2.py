@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -179,7 +179,7 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+88)*scl, 0*scl, (12+lcd_doff)*scl])
+        return translate([(-lcd_inset_top+92)*scl, 0*scl, (12+lcd_doff)*scl])
     else:
         return translate([(168+lcd_w)*scl, 0*scl, (12+lcd_doff)*scl])
 
@@ -991,6 +991,12 @@ def screen_end(scl, ht, lcd_end_ht):
     b = screen_box(scl, ht, end=True)
     u += b
 
+    c = cylinder(r=26*scl, h=(20)*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0, ht*scl,0]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    u += t
+
     # bolt-hole
     for end in [True, False]:
         c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
@@ -1002,23 +1008,11 @@ def screen_end(scl, ht, lcd_end_ht):
     b = translate(v=[0, ht*scl,0]).add(b)
     u += b
 
-    # lock-in cutout to screen_hinge part
-    d = shearedcube([32*scl, 11*scl, 10*scl],
-            shear=[0,0*scl,0],
-            innershear=[0,-9*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = rotate([180, 0, 0]).add(d)
-    c = translate(v=[(0)*scl, (11)*scl, (10)*scl]).add(c)
+    # lock-in to screen_hinge part
+    d = cube([45*scl, 20*scl, 37*scl])
     c = translate(v=[(lcd_w+79)*scl, (ht+lcd_end_ht-10)*scl,
-                (lcd_d-hthick-3.6-5)*scl]).add(c)
-    u -= c
-    d = shearedcube([32*scl, 11*scl, 10*scl],
-            shear=[0,0*scl,0],
-            innershear=[0,-9*scl,0])
-    d = rotate([0, 0, 180]).add(d)
-    d = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(d)
-    c = translate(v=[(lcd_w+69)*scl, (ht+lcd_end_ht-10)*scl, (-16)*scl]).add(d)
-    u -= c
+                (hthick-3.6-16)*scl]).add(d)
+    u += c
 
     if pin_parts_3d:
         c = union()
@@ -1081,6 +1075,12 @@ def screen_front_edge(scl, ht):
     c = translate(v=[(76)*scl, (ht-40)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
+    c = cylinder(r=27*scl, h=(20)*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0, 3*scl,0]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    b -= t
+
     # bolt-hole
     c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
@@ -1124,6 +1124,13 @@ def screen_front_edge(scl, ht):
         c += h
         h = cube([25*scl, 6*scl, 55*scl])
         h = translate([(50)*scl, (ht-100)*scl, -12*scl]).add(h)
+        c += h
+
+        h = cube([7*scl, 25*scl, 56*scl])
+        h = translate([(50)*scl, (-24)*scl, -9*scl]).add(h)
+        c += h
+        h = cube([7*scl, 25*scl, 56*scl])
+        h = translate([(67)*scl, (-24)*scl, -9*scl]).add(h)
         c += h
 
         b += c
@@ -1256,19 +1263,6 @@ def screen_hinge(scl, ht):
     c = translate(v=[(w-155)*scl,-(1)*scl,
                      (-8)*scl]).add(c)
     u -= c
-
-    # lock-in to screen_end part
-    d = shearedcube([25*scl, 11*scl, 9*scl],
-            shear=[0,0*scl,0],
-            innershear=[0,-8*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(25)*scl, (12)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+70)*scl, (-9)*scl, (-16)*scl]).add(c)
-    u += c
-    c = rotate([180, 0, 0]).add(d)
-    c = translate(v=[(0)*scl, (12)*scl, (9)*scl]).add(c)
-    c = translate(v=[(lcd_w+80)*scl, (-9)*scl, (lcd_d-hthick-2.6-5)*scl]).add(c)
-    u += c
 
     # lock-in cutout to screen_hinge part
     d = shearedcube([32*scl, 13*scl, 11*scl],
@@ -1413,7 +1407,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != 6 and part != 2 and part != 0.0:
+    if part != -6 and part != -2 and part != 0.0 and part != -10:
         return
 
     c = color(colour)
