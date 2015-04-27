@@ -1066,13 +1066,13 @@ def screen_edge_complete(scl, ht):
 
 def screen_front_edge(scl, ht):
     b = screen_box(scl, ht, end=False, front=True)
-    c = touch_arc(0, ht-105, 45,
+    c = touch_arc(0, ht-115, 45,
                         25, scl,
                   angle=0)
     c = rotate([-90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = resize([(60)*scl, 0, 0], False).add(c)
-    c = translate(v=[(76)*scl, (ht-40)*scl, (lcd_d-15)*scl]).add(c)
+    c = translate(v=[(76)*scl, (ht-55)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
     c = cylinder(r=27*scl, h=(20)*scl, center=True, segments=6)
@@ -1124,6 +1124,9 @@ def screen_front_edge(scl, ht):
         c += h
         h = cube([25*scl, 6*scl, 55*scl])
         h = translate([(50)*scl, (ht-100)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(50)*scl, (ht-6)*scl, -12*scl]).add(h)
         c += h
 
         h = cube([7*scl, 25*scl, 56*scl])
@@ -1407,7 +1410,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.0 and part != -10:
+    if part != -6 and part != -2 and part != 0.1 and part != 10:
         return
 
     c = color(colour)
