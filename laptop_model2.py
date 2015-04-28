@@ -959,7 +959,7 @@ def screen_mid(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(boxlength-62)*scl, (3)*scl, -45*scl]).add(h)
+        h = translate([(boxlength-62)*scl, (3)*scl, -60*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength+15)*scl, (3)*scl, 3*scl]).add(h)
@@ -972,13 +972,13 @@ def screen_mid(scl, ht):
         c += h
 
         h = pin(B0, scl)
-        h = translate([(62)*scl, (3)*scl, -45*scl]).add(h)
+        h = translate([(47)*scl, (3)*scl, -60*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(-15)*scl, (3)*scl, 3*scl]).add(h)
+        h = translate([(-30)*scl, (3)*scl, 8*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(30)*scl, (3)*scl, 80*scl]).add(h)
+        h = translate([(30)*scl, (3)*scl, 85*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -1437,8 +1437,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.0 and part != -10 \
-        and part != -11:
+    if part != -6 and part != -2 and part != 0.1 and part != -10 \
+        and part != 11:
         return
 
     c = color(colour)
