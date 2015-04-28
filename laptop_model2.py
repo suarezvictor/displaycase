@@ -1068,7 +1068,15 @@ def screen_edge_complete(scl, ht):
     return u
 
 def screen_front_edge(scl, ht):
+    # main box
     b = screen_box(scl, ht, end=False, front=True)
+
+    # ok, remove just a tiny bit from the lcd edge, for two reasons:
+    # (1) so that 3d printing works (too much overhang)
+    # (2) so that the centre (wooden) laminate has something to hook onto
+    # TODO
+
+    # remove interior
     c = touch_arc(0, ht-155, 45,
                         25, scl,
                   angle=0)
@@ -1422,8 +1430,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.1 and part != -10 \
-        and part != 11:
+    if part != -6 and part != -2 and part != 0.1 and part != 10 \
+        and part != -11:
         return
 
     c = color(colour)
