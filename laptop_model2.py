@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -181,9 +181,9 @@ def case_bolthole(scl, end):
 
 def lid_bolthole(scl, end=True):
     if end:
-        return translate([(-lcd_inset_top+92)*scl, 0*scl, (12+lcd_doff)*scl])
+        return translate([(-lcd_inset_top+89)*scl, 0*scl, (7+lcd_doff)*scl])
     else:
-        return translate([(168+lcd_w)*scl, 0*scl, (12+lcd_doff)*scl])
+        return translate([(168+lcd_w)*scl, 0*scl, (7+lcd_doff)*scl])
 
 def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
@@ -362,7 +362,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         slen = lcd_inset_bot - 30
         offs = boxlength - slen
     elif front:
-        slen = 85
+        slen = 90
         offs = 0
     else:
         slen = boxlength
@@ -994,7 +994,7 @@ def screen_end(scl, ht, lcd_end_ht):
     b = screen_box(scl, ht, end=True)
     u += b
 
-    c = cylinder(r=26*scl, h=(20)*scl, center=True, segments=6)
+    c = cylinder(r=28.5*scl, h=(20)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0, ht*scl,0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
@@ -1074,7 +1074,11 @@ def screen_front_edge(scl, ht):
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    # TODO
+    d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-23*scl, 0*scl, 0])
+    c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
+    b -= c
 
     # remove interior
     c = touch_arc(0, ht-155, 45,
@@ -1101,7 +1105,7 @@ def screen_front_edge(scl, ht):
 
         offs += step
         
-    c = cylinder(r=27*scl, h=(24)*scl, center=True, segments=6)
+    c = cylinder(r=29.5*scl, h=(24)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0, 3*scl,0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
@@ -1149,11 +1153,14 @@ def screen_front_edge(scl, ht):
         h = translate([(50)*scl, (ht-37)*scl, -12*scl]).add(h)
         c += h
 
-        h = cube([7*scl, 25*scl, 56*scl])
-        h = translate([(50)*scl, (-24)*scl, -9*scl]).add(h)
+        h = cube([7*scl, 25*scl, 65*scl])
+        h = translate([(45)*scl, (-24)*scl, -18*scl]).add(h)
         c += h
-        h = cube([7*scl, 25*scl, 56*scl])
-        h = translate([(67)*scl, (-24)*scl, -9*scl]).add(h)
+        h = cube([7*scl, 25*scl, 52*scl])
+        h = translate([(67)*scl, (-24)*scl, -5*scl]).add(h)
+        c += h
+        h = cube([7*scl, 25*scl, 52*scl])
+        h = translate([(22)*scl, (-24)*scl, -5*scl]).add(h)
         c += h
 
         b += c
@@ -1430,8 +1437,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != 6 and part != -2 and part != 0.1 and part != 10 \
-        and part != 11:
+    if part != -6 and part != -2 and part != 0.0 and part != -10 \
+        and part != -11:
         return
 
     c = color(colour)
