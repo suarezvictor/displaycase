@@ -71,6 +71,8 @@ lcd_front_indent = 108
 back_top_width = 170
 front_top_width = 180
 
+centre_ht = hthick*2
+
 bdep = 325
 fdep = 300
 ethdep = 160
@@ -1066,67 +1068,76 @@ def screen_edge_complete(scl, ht):
 
 def screen_front_edge(scl, ht):
     b = screen_box(scl, ht, end=False, front=True)
-    c = touch_arc(0, ht-115, 45,
+    c = touch_arc(0, ht-155, 45,
                         25, scl,
                   angle=0)
     c = rotate([-90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = resize([(60)*scl, 0, 0], False).add(c)
-    c = translate(v=[(76)*scl, (ht-55)*scl, (lcd_d-15)*scl]).add(c)
+    c = translate(v=[(76)*scl, (ht-65)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
-    c = cylinder(r=27*scl, h=(20)*scl, center=True, segments=6)
+    fthick = 6
+    offs = 70-hthick+fthick
+    step = (ht-160-offs) / 8 if test else 16
+    while offs < (ht-step):
+        c = touch_arc(0, fthick, 45,
+                            25, scl,
+                      angle=0)
+        c = rotate([-90, 0, 0]).add(c)
+        c = rotate([0, -90, 0]).add(c)
+        c = resize([(60)*scl, 0, 0], False).add(c)
+        c = translate(v=[(76)*scl, (offs+step-fthick)*scl, (lcd_d-15)*scl]).add(c)
+        b += c
+
+        offs += step
+        
+    c = cylinder(r=27*scl, h=(24)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0, 3*scl,0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
     b -= t
 
     # bolt-hole
-    c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
+    c = cylinder(r=lcdscrewrad*scl, h=(140)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
     b -= t
 
     # slot to fit a nut into
     c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(45)*scl, (40)*scl, (0)*scl]).add(c)
+    c = translate(v=[(45)*scl, (60)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
     b -= t
     c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
-    t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
+    t = translate(v=[(0)*scl, (60)*scl, (0)*scl]).add(t)
     b -= t
 
     # matching screen mid (front)
-    d = shearedcube([(23)*scl, (12)*scl, (28)*scl],
-            shear=[0, -8*scl, 0],
+    d = shearedcube([(23)*scl, (centre_ht/2+1)*scl, (28)*scl],
+            shear=[0, -6*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[21*scl, (ht-1)*scl, (9)*scl]).add(d)
     b += c
 
     # cutout for locking part
-    d = cube([(25)*scl, (50)*scl, (30)*scl])
-    c = translate(v=[55*scl, (ht-35)*scl, (0)*scl]).add(d)
+    d = cube([(25)*scl, (50)*scl, (35)*scl])
+    c = translate(v=[55*scl, (ht-50)*scl, (0)*scl]).add(d)
     b -= c
-    d = cube([(45)*scl, (20)*scl, (30)*scl])
-    c = translate(v=[40*scl, (ht-35)*scl, (0)*scl]).add(d)
+    d = cube([(55)*scl, (30)*scl, (35)*scl])
+    c = translate(v=[30*scl, (ht-50)*scl, (0)*scl]).add(d)
     b -= c
 
     if pin_parts_3d:
         c = union()
         h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(50)*scl, (100)*scl, -12*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(50)*scl, (ht/2)*scl, -12*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(50)*scl, (ht-100)*scl, -12*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 55*scl])
         h = translate([(50)*scl, (ht-6)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(50)*scl, (ht-37)*scl, -12*scl]).add(h)
         c += h
 
         h = cube([7*scl, 25*scl, 56*scl])
@@ -1451,7 +1462,6 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
 
-    centre_ht = hthick*2
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
 
     if part == 4:
