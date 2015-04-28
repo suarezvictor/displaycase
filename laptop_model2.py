@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -71,7 +71,7 @@ lcd_front_indent = 108
 back_top_width = 170
 front_top_width = 180
 
-centre_ht = hthick*2
+centre_ht = 30
 
 bdep = 325
 fdep = 300
@@ -340,7 +340,7 @@ def lid_screwholes(scl, edge_inset):
 def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     u = union()
 
-    ld = lcd_d+hthick+5.4
+    ld = lcd_d+hthick+5.4+9
 
     walls = {T:hthick, L:80, R:hthick, F:-1, D:115}
     curverads={
@@ -369,7 +369,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         offs = 0
     b = hollowbox(scl, slen, ht, ld, walls,
                     curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[offs*scl, 0, -(lcd_d-30)*scl]).add(b)
+    b = translate(v=[offs*scl, 0, -(lcd_d-21)*scl]).add(b)
     u += b
 
     if hingewall:
@@ -945,15 +945,15 @@ def screen_mid(scl, ht):
     u += b
 
     # cutouts for connectors
-    d = cube([(25)*scl, (ht+2)*scl, (30)*scl])
-    c = translate(v=[20*scl, (-1)*scl, (8)*scl]).add(d)
+    d = cube([(28)*scl, (ht+4)*scl, (35)*scl])
+    c = translate(v=[18*scl, (-2)*scl, (5)*scl]).add(d)
     u -= c
-    c = translate(v=[(lcd_w+160)*scl, (-1)*scl, (0)*scl]).add(d)
+    c = translate(v=[(lcd_w+160)*scl, (-2)*scl, (-5)*scl]).add(d)
     u -= c
-    d = cube([(25)*scl, (ht+2)*scl, (35)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (0)*scl]).add(d)
+    d = cube([(25)*scl, (ht+2)*scl, (40)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-8)*scl]).add(d)
     u -= c
-    c = translate(v=[55*scl, (-1)*scl, (0)*scl]).add(d)
+    c = translate(v=[55*scl, (-1)*scl, (-8)*scl]).add(d)
     u -= c
 
     if pin_parts_3d:
@@ -1126,18 +1126,18 @@ def screen_front_edge(scl, ht):
     b -= t
 
     # matching screen mid (front)
-    d = shearedcube([(23)*scl, (centre_ht/2+1)*scl, (28)*scl],
-            shear=[0, -6*scl, 0],
+    d = shearedcube([(24)*scl, (centre_ht/2+2)*scl, (31)*scl],
+            shear=[0, -12*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[21*scl, (ht-1)*scl, (9)*scl]).add(d)
+    c = translate(v=[20*scl, (ht-1)*scl, (7)*scl]).add(d)
     b += c
 
     # cutout for locking part
-    d = cube([(25)*scl, (50)*scl, (35)*scl])
-    c = translate(v=[55*scl, (ht-50)*scl, (0)*scl]).add(d)
+    d = cube([(25)*scl, (55)*scl, (40)*scl])
+    c = translate(v=[55*scl, (ht-50)*scl, (-8)*scl]).add(d)
     b -= c
-    d = cube([(55)*scl, (30)*scl, (35)*scl])
-    c = translate(v=[30*scl, (ht-50)*scl, (0)*scl]).add(d)
+    d = cube([(55)*scl, (30)*scl, (40)*scl])
+    c = translate(v=[30*scl, (ht-50)*scl, (-8)*scl]).add(d)
     b -= c
 
     if pin_parts_3d:
@@ -1192,18 +1192,18 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # matching screen mid (back)
-    d = shearedcube([(28)*scl, (12)*scl, (28)*scl],
-            shear=[0, -8*scl, 0],
+    d = shearedcube([(26)*scl, ((centre_ht/2+2))*scl, (31)*scl],
+            shear=[0, -12*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (1)*scl]).add(d)
+    c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
     b += c
 
     # cutout for locking part
-    d = cube([(25)*scl, (50)*scl, (35)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
+    d = cube([(25)*scl, (50)*scl, (40)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (ht-45)*scl, (-8)*scl]).add(d)
     b -= c
-    d = cube([(45)*scl, (20)*scl, (35)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
+    d = cube([(45)*scl, (30)*scl, (40)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (ht-45)*scl, (-8)*scl]).add(d)
     b -= c
 
     # lock-in to screen_hinge part
@@ -1430,8 +1430,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.1 and part != 10 \
-        and part != -11:
+    if part != 6 and part != -2 and part != 0.1 and part != 10 \
+        and part != 11:
         return
 
     c = color(colour)
