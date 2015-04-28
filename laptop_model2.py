@@ -948,11 +948,12 @@ def screen_mid(scl, ht):
     d = cube([(25)*scl, (ht+2)*scl, (30)*scl])
     c = translate(v=[20*scl, (-1)*scl, (8)*scl]).add(d)
     u -= c
-    c = translate(v=[55*scl, (-1)*scl, (0)*scl]).add(d)
+    c = translate(v=[(lcd_w+160)*scl, (-1)*scl, (0)*scl]).add(d)
     u -= c
+    d = cube([(25)*scl, (ht+2)*scl, (35)*scl])
     c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (0)*scl]).add(d)
     u -= c
-    c = translate(v=[(lcd_w+160)*scl, (-1)*scl, (0)*scl]).add(d)
+    c = translate(v=[55*scl, (-1)*scl, (0)*scl]).add(d)
     u -= c
 
     if pin_parts_3d:
@@ -1190,10 +1191,10 @@ def screen_back_edge(scl, ht):
     b += c
 
     # cutout for locking part
-    d = cube([(25)*scl, (50)*scl, (30)*scl])
+    d = cube([(25)*scl, (50)*scl, (35)*scl])
     c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
     b -= c
-    d = cube([(45)*scl, (20)*scl, (30)*scl])
+    d = cube([(45)*scl, (20)*scl, (35)*scl])
     c = translate(v=[(lcd_w+75)*scl, (ht-35)*scl, (0)*scl]).add(d)
     b -= c
 
@@ -1421,7 +1422,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.1 and part != 10:
+    if part != -6 and part != -2 and part != 0.1 and part != -10 \
+        and part != 11:
         return
 
     c = color(colour)
