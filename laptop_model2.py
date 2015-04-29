@@ -1311,16 +1311,16 @@ def screen_hinge(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(boxlength-80)*scl, (ht-3)*scl, -25*scl]).add(h)
+        h = translate([(boxlength-70)*scl, (ht-3)*scl, -55*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(boxlength-3)*scl, (ht-3)*scl, 0*scl]).add(h)
+        h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength-90)*scl, (ht-3)*scl, 140*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(boxlength-131)*scl, (ht-3)*scl, 80*scl]).add(h)
+        h = translate([(boxlength-131)*scl, (ht-3)*scl, 90*scl]).add(h)
         c += h
         u += c
 
@@ -1437,8 +1437,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != -2 and part != 0.1 and part != -10 \
-        and part != 11:
+    if part != -6 and part != 2 and part != 0.1 and part != -10 \
+        and part != -11:
         return
 
     c = color(colour)
