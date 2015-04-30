@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -1174,20 +1174,33 @@ def screen_back_edge(scl, ht):
     # (2) so that the centre (wooden) laminate has something to hook onto
     d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-23*scl, 0*scl, 0])
+            innershear=[-35*scl, 0*scl, 0])
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+57)*scl, (ht+1)*scl, (-39)*scl]).add(d)
+    c = translate(v=[(lcd_w+52)*scl, (ht+10)*scl, (-37)*scl]).add(d)
     b -= c
 
     # TODO: this is going to need some underside supports
     # TODO: length of the cable run doesn't have to be this long
-    c = touch_arc(0, lcd_cable_depth, 45,
-                        25, scl,
-                  angle=0)
-    c = rotate([90, 0, 0]).add(c)
-    c = rotate([0, -90, 0]).add(c)
-    c = resize([(60)*scl, 0, 0], False).add(c)
-    c = translate(v=[(lcd_w+70)*scl, (-1)*scl, (lcd_d-15)*scl]).add(c)
+    fthick = 8
+    offs = 80-hthick+fthick
+    step = (ht-160-offs) / 8 if test else 20
+    while offs < (ht-step-55):
+        c = touch_arc(0, step-fthick, 50,
+                            25, scl,
+                      angle=0)
+        c = rotate([90, 0, 0]).add(c)
+        c = rotate([0, -90, 0]).add(c)
+        c = resize([(70)*scl, 0, 0], False).add(c)
+        c = translate(v=[(lcd_w+140)*scl, (offs)*scl, (lcd_d-15)*scl]).add(c)
+        b -= c
+        c = cube([100*scl, (step-fthick)*scl, 50*scl])
+        c = translate(v=[(lcd_w+41)*scl, (offs)*scl, (lcd_d-15-50)*scl]).add(c)
+        b -= c
+        offs += step
+    c = hollowbox(scl, 100, (ht-80), 43,
+                {T:50, L:40, R:30, F:1, D:18, B:1},
+                curverads={ T|R: (40, 0)})
+    c = translate(v=[(lcd_w+15)*scl, (-1)*scl, (lcd_d-15-43)*scl]).add(c)
     b -= c
 
     # bolt-hole
@@ -1238,23 +1251,23 @@ def screen_back_edge(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (0)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (0)*scl, -18*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (50)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (50)*scl, -18*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (ht/2)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (ht/2-20)*scl, -18*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (ht/4)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (ht/4-10)*scl, -18*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (420)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (420)*scl, -18*scl]).add(h)
         c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (ht-6)*scl, -12*scl]).add(h)
+        h = cube([25*scl, 6*scl, 60*scl])
+        h = translate([(lcd_w+80)*scl, (ht-6)*scl, -18*scl]).add(h)
         c += h
 
         b += c
@@ -1456,7 +1469,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != 11:
         return
 
-    if part != -6 and part != 2 and part != 0.1 and part != -10 \
+    if part != 6 and part != -2 and part != 0.1 and part != -10 \
         and part != -11:
         return
 
