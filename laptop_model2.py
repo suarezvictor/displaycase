@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -1169,6 +1169,16 @@ def screen_front_edge(scl, ht):
 
 def screen_back_edge(scl, ht):
     b = screen_box(scl, ht, end=False, back=True)
+    # ok, remove just a tiny bit from the lcd edge, for two reasons:
+    # (1) so that 3d printing works (too much overhang)
+    # (2) so that the centre (wooden) laminate has something to hook onto
+    d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-23*scl, 0*scl, 0])
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(lcd_w+57)*scl, (ht+1)*scl, (-39)*scl]).add(d)
+    b -= c
+
     # TODO: this is going to need some underside supports
     # TODO: length of the cable run doesn't have to be this long
     c = touch_arc(0, lcd_cable_depth, 45,
@@ -1206,24 +1216,24 @@ def screen_back_edge(scl, ht):
     b += c
 
     # cutout for locking part
-    d = cube([(25)*scl, (50)*scl, (40)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-45)*scl, (-8)*scl]).add(d)
+    d = cube([(25)*scl, (55)*scl, (40)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (ht-50)*scl, (-8)*scl]).add(d)
     b -= c
     d = cube([(45)*scl, (30)*scl, (40)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-45)*scl, (-8)*scl]).add(d)
+    c = translate(v=[(lcd_w+75)*scl, (ht-50)*scl, (-8)*scl]).add(d)
     b -= c
 
     # lock-in to screen_hinge part
-    d = shearedcube([30*scl, 10*scl, 9*scl],
+    d = shearedcube([30*scl, 15*scl, 9*scl],
             shear=[0,-9*scl,0],
             innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(30)*scl, (10)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+80)*scl, (-9)*scl, (lcd_d-hthick-3.6)*scl]).add(c)
+    c = translate(v=[(lcd_w+90)*scl, (-6)*scl, (lcd_d-hthick-9.6)*scl]).add(c)
     b += c
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(30)*scl, (10)*scl, (-6)*scl]).add(c)
-    c = translate(v=[(lcd_w+70)*scl, (-9)*scl, (-14)*scl]).add(c)
+    c = translate(v=[(lcd_w+80)*scl, (-6)*scl, (-12)*scl]).add(c)
     b += c
 
     if pin_parts_3d:
@@ -1235,10 +1245,16 @@ def screen_back_edge(scl, ht):
         h = translate([(lcd_w+80)*scl, (50)*scl, -12*scl]).add(h)
         c += h
         h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+80)*scl, (250)*scl, -12*scl]).add(h)
+        h = translate([(lcd_w+80)*scl, (ht/2)*scl, -12*scl]).add(h)
         c += h
         h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(lcd_w+70)*scl, (ht-6)*scl, -12*scl]).add(h)
+        h = translate([(lcd_w+80)*scl, (ht/4)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+80)*scl, (420)*scl, -12*scl]).add(h)
+        c += h
+        h = cube([25*scl, 6*scl, 55*scl])
+        h = translate([(lcd_w+80)*scl, (ht-6)*scl, -12*scl]).add(h)
         c += h
 
         b += c
@@ -1295,17 +1311,20 @@ def screen_hinge(scl, ht):
     u -= c
 
     # lock-in cutout to screen_hinge part
-    d = shearedcube([32*scl, 13*scl, 11*scl],
+    d = shearedcube([42*scl, 13*scl, 11*scl],
             shear=[0,-11*scl,0],
             innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl,
-                    (lcd_d-hthick-4.6)*scl]).add(c)
+    c = translate(v=[(lcd_w+89)*scl, (ht-10)*scl,
+                    (lcd_d-hthick-8.6)*scl]).add(c)
     u -= c
+    d = shearedcube([42*scl, 14*scl, 11*scl],
+            shear=[0,11*scl,0],
+            innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(32)*scl, (12)*scl, (-6)*scl]).add(c)
-    c = translate(v=[(lcd_w+69)*scl, (ht-10)*scl, (-15)*scl]).add(c)
+    c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
     u -= c
 
     if pin_parts_3d:
