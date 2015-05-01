@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -159,10 +159,10 @@ def chamfered_backbox_screwholes(scl, sht):
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
     c.add(d)
-    d = cylinder(r=20*scl,
+    d = cylinder(r=23*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
-    d = translate(v=[0, 0, (-2.5-(bwid+2.5+sht)/2)*scl]).add(d)
+    d = translate(v=[0, 0, (-5.8-(bwid+2.5+sht)/2)*scl]).add(d)
     c.add(d)
     c = rotate([180, 0, 0]).add(c)
     return c
@@ -636,8 +636,6 @@ def base_front_top(scl, ht):
 
     # add bits for screws through to base front
     c = cube([(46)*scl, (27)*scl, (57)*scl])
-    #c = rotate([0, 0, 90]).add(c)
-    #c = rotate([0, -90, 0]).add(c)
     c = translate(v=[(17)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
     u -= c
 
@@ -1504,9 +1502,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    #if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
-    #    return
-    if part != 4:
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
         return
 
     c = color(colour)
