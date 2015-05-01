@@ -162,7 +162,7 @@ def chamfered_backbox_screwholes(scl, sht):
     d = cylinder(r=20*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
-    d = translate(v=[0, 0, -20*scl]).add(d)
+    d = translate(v=[0, 0, (-2.5-(bwid+2.5+sht)/2)*scl]).add(d)
     c.add(d)
     c = rotate([180, 0, 0]).add(c)
     return c
@@ -672,6 +672,17 @@ def base_front_top(scl, ht):
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
+    # remove bit for front joiner to fit into.  screws come from top
+    b = cube([(72)*scl, (160)*scl, (40)*scl])
+    b = translate(v=[(95)*scl, (ht-80+centre_ht/2)*scl, (60)*scl]).add(b)
+    u -= b
+
+    # XXX temporary!
+    s = chamfered_backbox_screwholes(scl, 50)
+    s = rotate([-180, 0, 0]).add(s)
+    b = translate(v=[(135)*scl, (ht-35)*scl, (+45)*scl]).add(s)
+    u -= b
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -922,7 +933,7 @@ def base_mid(scl, ht):
     # hole for front screw-support to poke through
     # XXX height is magic constant
     b = cube([(72)*scl, (ht+2)*scl, (40)*scl])
-    b = translate(v=[(95)*scl, -1*scl, (55)*scl]).add(b)
+    b = translate(v=[(95)*scl, -1*scl, (60)*scl]).add(b)
     u -= b
 
     v = union()
@@ -1469,6 +1480,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
+        return
+    if part != 7:
         return
 
     c = color(colour)
