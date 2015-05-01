@@ -898,6 +898,24 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     v.add(u)
     return v
     
+def front_mid_joiner(scl, ht):
+    u = union()
+    w = boxlength
+
+    b = cube([(62)*scl, (ht)*scl, 32*scl], center=True)
+    u += b
+
+    b = cylinder(r=screwrad*1.2/2*scl, h=(50)*scl, center=True, segments=50)
+    c = translate(v=[4*scl, -50*scl,0]).add(b)
+    u -= c
+    c = translate(v=[4*scl, 50*scl,0]).add(b)
+    u -= c
+
+    v = union()
+    u = translate(v=[(131)*scl, (ht/2*scl), (136)*scl]).add(u)
+    v.add(u)
+    return v
+    
 def base_back_joiner(scl, ht):
     u = union()
     w = boxlength
@@ -1502,7 +1520,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+        and part != 12:
+        return
+    if part != 12:
         return
 
     c = color(colour)
@@ -1596,6 +1617,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
                         (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
                          0]).add(se)
         b.add(m)
+
+    if part == 12:
+        se = front_mid_joiner(scl, base_joiner_ht)
+        m = translate(v=[0, 
+                        (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
+                         0]).add(se)
+        b.add(m)
+        b = screen_adjust(b, scl, angle)
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
