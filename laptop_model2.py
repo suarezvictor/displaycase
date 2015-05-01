@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -71,7 +71,7 @@ lcd_front_indent = 108
 back_top_width = 170
 front_top_width = 180
 
-centre_ht = 30
+centre_ht = 30.0
 
 bdep = 325
 fdep = 300
@@ -617,21 +617,6 @@ def base_end_bit(scl, ht, fwd=False, below=False):
 
     return u
 
-def base_front_bottom(scl, ht):
-    u = union()
-
-    woffs = (boxheight-hthick)
-    walls = {T:-1, L:-1, R:-1, F:hthick, D:hthick, B:hthick}
-    curverads={
-                #L|T: (hthick, 0),
-                #L|D: (boxheight-hthick, 0),
-                }
-    b = hollowbox(scl, front_top_width-(woffs), ht, boxheight-40, walls, curverads=curverads)
-    b = translate(v=[woffs*scl, 0, (95)*scl]).add(b)
-    u += b
-
-    return u
-    
 def base_front_top(scl, ht):
     u = union()
 
@@ -650,10 +635,10 @@ def base_front_top(scl, ht):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(42)*scl, (53)*scl, (53)*scl])
+    c = cube([(46)*scl, (27)*scl, (57)*scl])
     #c = rotate([0, 0, 90]).add(c)
     #c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[(19)*scl,(-1)*scl,(hthick)*scl]).add(c)
+    c = translate(v=[(17)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
@@ -909,7 +894,7 @@ def base_mid(scl, ht):
     u = union()
     w = boxlength
 
-    walls = {T:-1, L:-1, R:hthick, F:hthick, D:hthick, B:hthick}
+    walls = {T:-1, L:-1, R:hthick, F:centre_ht/2, D:hthick, B:centre_ht/2}
     curverads={
                 T|R: (40, 0),
                 R|D: (boxheight-40, 0),
@@ -932,6 +917,12 @@ def base_mid(scl, ht):
     # XXX height is magic constant
     b = cube([(62)*scl, (ht+2)*scl, (boxheight-38)*scl])
     b = translate(v=[(w-151)*scl, -1*scl, (14)*scl]).add(b)
+    u -= b
+
+    # hole for front screw-support to poke through
+    # XXX height is magic constant
+    b = cube([(72)*scl, (ht+2)*scl, (40)*scl])
+    b = translate(v=[(95)*scl, -1*scl, (55)*scl]).add(b)
     u -= b
 
     v = union()
@@ -1174,9 +1165,9 @@ def screen_back_edge(scl, ht):
     # (2) so that the centre (wooden) laminate has something to hook onto
     d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-35*scl, 0*scl, 0])
+            innershear=[-43*scl, 0*scl, 0])
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+52)*scl, (ht+10)*scl, (-37)*scl]).add(d)
+    c = translate(v=[(lcd_w+54)*scl, (ht+10)*scl, (-37)*scl]).add(d)
     b -= c
 
     # TODO: this is going to need some underside supports
@@ -1197,10 +1188,10 @@ def screen_back_edge(scl, ht):
         c = translate(v=[(lcd_w+41)*scl, (offs)*scl, (lcd_d-15-50)*scl]).add(c)
         b -= c
         offs += step
-    c = hollowbox(scl, 100, (ht-80), 43,
+    c = hollowbox(scl, 100, (ht-80), 50,
                 {T:50, L:40, R:30, F:1, D:18, B:1},
-                curverads={ T|R: (40, 0)})
-    c = translate(v=[(lcd_w+15)*scl, (-1)*scl, (lcd_d-15-43)*scl]).add(c)
+                curverads={ T|R: (35, 0)})
+    c = translate(v=[(lcd_w+20)*scl, (-1)*scl, (lcd_d-15-46)*scl]).add(c)
     b -= c
 
     # bolt-hole
@@ -1247,6 +1238,9 @@ def screen_back_edge(scl, ht):
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(30)*scl, (10)*scl, (-6)*scl]).add(c)
     c = translate(v=[(lcd_w+80)*scl, (-6)*scl, (-12)*scl]).add(c)
+    b += c
+    d = cube([30*scl, 8*scl, 15*scl])
+    c = translate(v=[(lcd_w+90)*scl, (0)*scl, (lcd_d-hthick-9.6)*scl]).add(d)
     b += c
 
     if pin_parts_3d:
@@ -1459,6 +1453,7 @@ def screen_adjust(b, scl, angle):
 
 def create_laptop(t, scl, mirror, colour, part, angle):
 
+    """
     #if part != 7 and part != 3 and part != 4 and part != -2:
     #    return
     #if part != 2 and part != 5:
@@ -1471,6 +1466,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     if part != 6 and part != -2 and part != 0.1 and part != -10 \
         and part != -11:
+        return
+    """
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
         return
 
     c = color(colour)
