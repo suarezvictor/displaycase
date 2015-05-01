@@ -828,16 +828,31 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-8)*scl, (10)*scl, (35)*scl]).add(t)
     u -= b
 
-    # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[2], h=120)
-    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
-    u -= t
-
     # chamfered screw-hole through to joiner
     s = chamfered_backbox_screwholes(scl, 20)
     s = rotate([0, -90, 0]).add(s)
     b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
     u -= b
+
+    # slot to fit a nut into
+    c = cube([70*scl, 50*scl, 80*scl], center=True)
+    c = translate(v=[(lcd_w+85)*scl, (100)*scl, (45)*scl]).add(c)
+    u += c
+    c = cube([100*scl, 20*scl, 46*scl], center=True)
+    c = translate(v=[(-50)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    t = case_bolthole(scl, 2).add(c)
+    u -= t
+    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    t = case_bolthole(scl, 2).add(c)
+    t = translate(v=[(0)*scl, (85)*scl, (boxheight-55)*scl]).add(t)
+    u -= t
+
+    # screw holes in box
+    t = box_screwholes(scl, hthick, holes=[2], h=120)
+    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    u -= t
 
     if pin_parts_3d:
         c = union()
@@ -875,6 +890,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         c = translate([(w-58)*scl, (0)*scl, 0*scl]).add(c)
         
         u += c
+
+        h = cube([70*scl, 6*scl, 25*scl])
+        h = translate([(lcd_w+65)*scl, (ht-6)*scl, 45*scl]).add(h)
+        u += h
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -1485,9 +1504,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
-        return
-    if part != 7:
+    #if part != 7 and part != 3 and part != 4 and part != 5 and part != 8:
+    #    return
+    if part != 4:
         return
 
     c = color(colour)
