@@ -927,18 +927,26 @@ def base_back_joiner(scl, ht):
                 }
     scalecurve = {
             }
-    b = hollowbox(scl, 60, ht, boxheight-40,
+    b = hollowbox(scl, 56, ht, boxheight-44,
                     walls, curverads=curverads, scalecurve=scalecurve)
+    b = translate(v=[(-56/2)*scl, (-ht/2)*scl, -(boxheight-44)/2*scl]).add(b)
     u += b
 
-    b = cube([(90)*scl, (45)*scl, 55*scl], center=True)
-    b = translate(v=[(25)*scl, (ht/2)*scl, (boxheight-40)/2*scl]).add(b)
+    b = cube([(90)*scl, (45)*scl, 45*scl], center=True)
     u -= b
+
+    b = cylinder(r=screwrad*1.2/2*scl, h=(50)*scl, center=True, segments=50)
+    b = rotate([0, 90, 0]).add(b)
+    c = translate(v=[4*scl, -50*scl,0]).add(b)
+    u -= c
+    c = translate(v=[4*scl, 50*scl,0]).add(b)
+    u -= c
 
     u = rotate([0, 0, 180]).add(u)
 
     v = union()
-    u = translate(v=[(boxlength-150+60)*scl, (ht*scl), (70)*scl]).add(u)
+    u = translate(v=[(boxlength-150+58)*scl, (ht*scl), (72)*scl]).add(u)
+    u = translate(v=[(27)*scl, -(ht/2)*scl, (boxheight-44)/2*scl]).add(u)
     v.add(u)
     return v
     
@@ -1523,8 +1531,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12:
         return
-    if part != 12:
-        return
+    #if part != 8:
+        #return
 
     c = color(colour)
     c.add(t)
