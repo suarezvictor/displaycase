@@ -44,7 +44,8 @@ else:
 
     tpanel_w = 250
     tpanel_b_w = tpanel_w+50
-    tpanel_l = 400
+    tpanel_l = 200
+    tpanel_l_b = tpanel_l + 150
     tpanel_h = 40
 
 lcd_doff = 5
@@ -643,6 +644,32 @@ def base_front_fillin(scl, ht):
     u += c
     return u
 
+def tpanel_mid(scl, ht):
+    u = union()
+
+    walls = {T:40, L:hthick, R:hthick, F:20, D:-1, B:20}
+    curverads={
+                L|T: (hthick, 0),
+                R|T: (hthick, 0),
+                }
+    # hthick is thickness of bamboo laminate
+    b = hollowbox(scl, tpanel_l_b, ht, boxheight-hthick, walls,
+            curverads=curverads)
+    u += b
+
+    c = cube([tpanel_l*scl, tpanel_w*scl, (42)*scl])
+    c = translate(v=[(100)*scl, ((ht-tpanel_w)/2)*scl, (-1)*scl]).add(c)
+    u -= c
+
+    c = cube([181*scl, (ht+2)*scl, (150)*scl])
+    c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
+    u -= c
+
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return u
+
 def base_front_top(scl, ht):
     u = union()
 
@@ -693,8 +720,8 @@ def base_front_top(scl, ht):
     u += c
 
     # and support wall
-    c = cube([30*scl, (tpanel_b_w/2)*scl, (boxheight-40)*scl])
-    c = translate(v=[(150)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
+    c = cube([175*scl, (tpanel_b_w/2)*scl, (20)*scl])
+    c = translate(v=[(5)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
     u += c
 
     # screw holes in box
@@ -702,11 +729,12 @@ def base_front_top(scl, ht):
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
-    # remove bit for front joiner to fit into.  screws come from top
-    b = cylinder(r=screwrad*scl, h=(200)*scl, center=True, segments=50)
-    b = rotate([90, 0, 0]).add(b)
-    b = translate(v=[(110)*scl, (ht)*scl, (70)*scl]).add(b)
-    u -= b
+    if False:
+        # remove bit for front joiner to fit into.  screws come from top
+        b = cylinder(r=screwrad*scl, h=(200)*scl, center=True, segments=50)
+        b = rotate([90, 0, 0]).add(b)
+        b = translate(v=[(110)*scl, (ht)*scl, (70)*scl]).add(b)
+        u -= b
 
     if False:
         # XXX temporary!
@@ -716,8 +744,8 @@ def base_front_top(scl, ht):
         u -= b
 
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (ht-tpanel_l/2)*scl, (-1)*scl]).add(c)
+    c = cube([(tpanel_b_w+1)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
+    c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50+1)*scl, (-1)*scl]).add(c)
     u -= c
 
     if True:
@@ -1678,11 +1706,19 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_joiner_ht = 150
 
     if part == 5:
-        se = base_back_joiner(scl, base_joiner_ht)
-        m = translate(v=[0,
-                        (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
+        se = tpanel_mid(scl, tpanel_b_w+100)
+        m = translate(v=[0, 
+                        (base_adjust_ht + centre_ht/2 - (tpanel_b_w+100)/2)*scl,
                          0]).add(se)
         b.add(m)
+        #b = screen_adjust(b, scl, angle)
+
+    #if part == 5:
+    #    se = base_back_joiner(scl, base_joiner_ht)
+    #    m = translate(v=[0,
+    #                    (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
+    #                     0]).add(se)
+    #    b.add(m)
 
     if part == 12:
         se = front_mid_joiner(scl, base_joiner_ht)
