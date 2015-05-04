@@ -42,6 +42,11 @@ else:
     kbd_l = lcd_l-180
     kbd_w = 600
 
+    tpanel_w = 250
+    tpanel_b_w = tpanel_w+50
+    tpanel_l = 400
+    tpanel_h = 40
+
 lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
@@ -617,10 +622,31 @@ def base_end_bit(scl, ht, fwd=False, below=False):
 
     return u
 
+def base_front_arc(scl, ht):
+    c = touch_arc(0, ht, (boxheight-40-hthick),
+                        25, scl,
+                  angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 180, 0]).add(c)
+    c = rotate([0, 0, 180]).add(c)
+    c = resize([(151-hthick)*scl, 0, 0], False).add(c)
+    return c
+
+def base_front_fillin(scl, ht):
+    u = union()
+    c = cube([80*scl, ht*scl, (boxheight-hthick+2)*scl])
+    c = translate(v=[(100)*scl, (0)*scl, (1)*scl]).add(c)
+    u += c
+
+    c = cube([(front_top_width-hthick)*scl, ht*scl, (42)*scl])
+    c = translate(v=[(hthick)*scl, (0)*scl, (1)*scl]).add(c)
+    u += c
+    return u
+
 def base_front_top(scl, ht):
     u = union()
 
-    walls = {T:hthick, L:hthick, R:-1, F:68, D:hthick, B:75}
+    walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:75}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -642,44 +668,70 @@ def base_front_top(scl, ht):
     # put in series of cutouts
     fthick = 8
     offs = 80-hthick+fthick
-    step = (ht-60-offs) / 5 if test else 10
-    while offs < (ht-step):
+    step = (ht-tpanel_b_w/2-60-offs) / 4 if test else 10
+    while offs < (ht-step-tpanel_b_w/2):
         # add fill-ins
-        c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
-        c = translate(v=[(100)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
+        c = base_front_fillin(scl, fthick)
+        c = translate(v=[(0)*scl, (offs-fthick)*scl, (0)*scl]).add(c)
         u += c
 
-        c = cube([(front_top_width-hthick)*scl, fthick*scl, (42)*scl])
-        c = translate(v=[(hthick)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
-        u += c
-
-        c = touch_arc(0, (step-fthick), (boxheight-40-hthick),
-                            25, scl,
-                      angle=0)
-        c = rotate([90, 0, 0]).add(c)
-        c = rotate([0, 180, 0]).add(c)
-        c = rotate([0, 0, 180]).add(c)
-        c = resize([(151-hthick)*scl, 0, 0], False).add(c)
+        # remove curve arc
+        c = base_front_arc(scl, step-fthick)
         c = translate(v=[(151)*scl, (offs+step-fthick)*scl, (39.5)*scl]).add(c)
         u -= c
 
         offs += step
         
+    # remove bit more from base
+    c = base_front_arc(scl, tpanel_b_w/2-40)
+    c = translate(v=[(151)*scl, (ht-80)*scl, (39.5)*scl]).add(c)
+    u -= c
+
+    # add fillin for touchpanel
+    c = base_front_fillin(scl, 20)
+    c = translate(v=[(0)*scl, (ht-tpanel_b_w/2-70)*scl, (0)*scl]).add(c)
+    u += c
+
+    # and support wall
+    c = cube([30*scl, (tpanel_b_w/2)*scl, (boxheight-40)*scl])
+    c = translate(v=[(150)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
+    u += c
+
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
     # remove bit for front joiner to fit into.  screws come from top
-    b = cube([(72)*scl, (160)*scl, (40)*scl])
-    b = translate(v=[(95)*scl, (ht-80+centre_ht/2)*scl, (60)*scl]).add(b)
+    b = cylinder(r=screwrad*scl, h=(200)*scl, center=True, segments=50)
+    b = rotate([90, 0, 0]).add(b)
+    b = translate(v=[(110)*scl, (ht)*scl, (70)*scl]).add(b)
     u -= b
 
-    # XXX temporary!
-    s = chamfered_backbox_screwholes(scl, 50)
-    s = rotate([-180, 0, 0]).add(s)
-    b = translate(v=[(135)*scl, (ht-35)*scl, (+45)*scl]).add(s)
-    u -= b
+    if False:
+        # XXX temporary!
+        s = chamfered_backbox_screwholes(scl, 50)
+        s = rotate([-180, 0, 0]).add(s)
+        b = translate(v=[(135)*scl, (ht-35)*scl, (+45)*scl]).add(s)
+        u -= b
+
+    # remove bit for touchpanel
+    c = cube([(tpanel_b_w)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
+    c = translate(v=[(-1)*scl, (ht-tpanel_l/2)*scl, (-1)*scl]).add(c)
+    u -= c
+
+    if True:
+        # dovetail cuts to fit base_mid
+        # XXX height is magic constant
+        b = shearedcube([(30)*scl, (centre_ht/2+4)*scl, (33)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-6*scl, 0*scl, 0])
+        b = rotate([0, -90, 0]).add(b)
+        c = translate(v=[(181)*scl, (ht-centre_ht/2-3)*scl, (58)*scl]).add(b)
+        u -= c
+        b = rotate([180, 0, 0]).add(b)
+        b = translate(v=[(181)*scl, (ht+1)*scl, (102)*scl]).add(b)
+        u -= b
 
     if pin_parts_3d:
         c = union()
@@ -927,9 +979,9 @@ def base_back_joiner(scl, ht):
                 }
     scalecurve = {
             }
-    b = hollowbox(scl, 56, ht, boxheight-44,
+    b = hollowbox(scl, 54, ht, boxheight-46,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(-56/2)*scl, (-ht/2)*scl, -(boxheight-44)/2*scl]).add(b)
+    b = translate(v=[(-52/2)*scl, (-ht/2)*scl, -(boxheight-46)/2*scl]).add(b)
     u += b
 
     b = cube([(90)*scl, (45)*scl, 45*scl], center=True)
@@ -945,27 +997,26 @@ def base_back_joiner(scl, ht):
     u = rotate([0, 0, 180]).add(u)
 
     v = union()
-    u = translate(v=[(boxlength-150+58)*scl, (ht*scl), (72)*scl]).add(u)
-    u = translate(v=[(27)*scl, -(ht/2)*scl, (boxheight-44)/2*scl]).add(u)
+    u = translate(v=[(boxlength-150+56)*scl, (ht*scl), (72)*scl]).add(u)
+    u = translate(v=[(-26)*scl, -(ht/2)*scl, (boxheight-44)/2*scl]).add(u)
     v.add(u)
     return v
     
 def base_mid(scl, ht):
     u = union()
-    w = boxlength
+    w = boxlength-150
 
     walls = {T:-1, L:-1, R:hthick, F:centre_ht/2, D:hthick, B:centre_ht/2}
     curverads={
                 T|R: (40, 0),
                 R|D: (boxheight-40, 0),
-                L|D: (boxheight-40, 0),
                 }
     scalecurve = {
                 R|D: [0, 150],
-                L|D: [0, 150],
             }
     b = hollowbox(scl, w, ht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
+    b = translate(v=[(150)*scl, 0*scl, 0*scl]).add(b)
     u += b
 
     # top cutout makes shelf support for keyboard
@@ -979,10 +1030,16 @@ def base_mid(scl, ht):
     b = translate(v=[(w-151)*scl, -1*scl, (14)*scl]).add(b)
     u -= b
 
-    # hole for front screw-support to poke through
+    # dovetail cuts to fit into front base
     # XXX height is magic constant
-    b = cube([(72)*scl, (ht+2)*scl, (40)*scl])
-    b = translate(v=[(95)*scl, -1*scl, (60)*scl]).add(b)
+    b = shearedcube([(50)*scl, (ht+2)*scl, (31)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-6*scl, 0*scl, 0])
+    b = rotate([0, 90, 0]).add(b)
+    b = translate(v=[(149)*scl, -1*scl, (55)*scl]).add(b)
+    u -= b
+    b = rotate([180, 0, 0]).add(b)
+    b = translate(v=[(0)*scl, (ht+2)*scl, (160)*scl]).add(b)
     u -= b
 
     v = union()
@@ -1529,9 +1586,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12:
+        and part != -12:
         return
-    #if part != 8:
+    #if part != 5:
         #return
 
     c = color(colour)
@@ -1573,6 +1630,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_adjust_ht += scrn_hinge_ht
 
     base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
+    base_front_ht = (lcd_l + hthick*2) / 2 - base_adjust_ht
 
     if part == 4:
         # NOTE: ... here's the other bit
@@ -1600,7 +1658,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b = screen_adjust(b, scl, angle)
 
     if part == 7:
-        se = base_front_top(scl, base_back_ht+scrn_hinge_ht)
+        se = base_front_top(scl, base_front_ht+scrn_hinge_ht)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
