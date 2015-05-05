@@ -657,13 +657,54 @@ def tpanel_mid(scl, ht):
             curverads=curverads)
     u += b
 
+    # front cut-out matching base_front_top
     c = cube([tpanel_l*scl, tpanel_w*scl, (42)*scl])
     c = translate(v=[(100)*scl, ((ht-tpanel_w)/2)*scl, (-1)*scl]).add(c)
     u -= c
 
+    # inner cut-out for actual touchpanel
+    # XXX TODO: add curved edges (use a hollowbox as the cutout)
     c = cube([181*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
     u -= c
+
+    # support for base_mid
+    c = cube([50*scl, (70)*scl, (boxheight-hthick*2)*scl])
+    c = translate(v=[(tpanel_l_b-50)*scl, (ht/2-70./2)*scl,
+                (hthick)*scl]).add(c)
+    u += c
+    c = cube([70*scl, (centre_ht+4)*scl, (boxheight)*scl])
+    c = translate(v=[(tpanel_l_b-60)*scl, (ht/2-(centre_ht+4.)/2)*scl,
+                (58)*scl]).add(c)
+    u -= c
+
+    # wings for screw-holes to fit with front base
+    d = shearedcube([(50)*scl, (30)*scl, (86)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-40*scl, 0*scl, 0])
+    d = rotate([0, -90, 0]).add(d)
+    d = rotate([0, 0, -90]).add(d)
+    c = translate(v=[(180)*scl, (-85)*scl, (58)*scl]).add(d)
+    u += c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(180+30)*scl, (ht+85)*scl, (58)*scl]).add(d)
+    u += c
+
+    # matches screw-hole in front base
+    u = indented_screwhole(scl, u, (182), -50, 80, -90)
+    u = indented_screwhole(scl, u, (182), ht+50, 80, -90)
+
+    # screw-holes into front base
+    s = chamfered_backbox_screwholes(scl, 50)
+    s = rotate([-180, 0, 0]).add(s)
+    b = translate(v=[(135)*scl, (ht-40)*scl, (+20)*scl]).add(s)
+    u -= b
+    b = translate(v=[(135)*scl, (40)*scl, (+20)*scl]).add(s)
+    u -= b
+    b = translate(v=[(55)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
+    u -= b
+    b = translate(v=[(55)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
+    u -= b
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -732,7 +773,7 @@ def base_front_top(scl, ht):
     # add support for tpanel_mid
     t = holed_support(scl, 50)
     t = rotate([0, 0, -90]).add(t)
-    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-65)*scl, (50)*scl]).add(t)
+    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-65)*scl, (48)*scl]).add(t)
     u += t
     
     if False:
@@ -1075,6 +1116,11 @@ def base_mid(scl, ht):
     b = rotate([180, 0, 0]).add(b)
     b = translate(v=[(0)*scl, (ht+2)*scl, (160)*scl]).add(b)
     u -= b
+
+    c = cube([54*scl, (centre_ht+4)*scl, (60)*scl])
+    c = translate(v=[(tpanel_l_b-52)*scl, (ht/2-(centre_ht+4.)/2)*scl,
+                (0)*scl]).add(c)
+    u -= c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -1503,22 +1549,20 @@ def screen_hinge(scl, ht):
 
     return u
     
-def indented_screwhole(scl, u, x, y, z, rot=False):
+def indented_screwhole(scl, u, x, y, z, rot=0):
     d = cylinder(r=topscrewrad*1.2*scl, r1=28*scl,
                     h=17*scl,
                     segments=50, center=True)
     d = rotate([90, 0, 0]).add(d)
     s = translate(v=[(0)*scl, (-9)*scl, (0)*scl]).add(d)
-    if rot:
-        s = rotate([0, 0, 90]).add(s)
+    s = rotate([0, 0, rot]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u += s
     s = chamfered_backbox_screwholes(scl, 16)
     s = translate(v=[(0)*scl, (0)*scl, (3)*scl]).add(s)
     s = rotate([90, 0, 0]).add(s)
     s = rotate([0, 0, 180]).add(s)
-    if rot:
-        s = rotate([0, 0, 90]).add(s)
+    s = rotate([0, 0, rot]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u -= s
     return u
@@ -1541,8 +1585,8 @@ def back_kbd_corner(scl, ht):
     u += b
 
     u = indented_screwhole(scl, u, (w-98), 1, 39)
-    u = indented_screwhole(scl, u, (w-1), 156, 37, True)
-    u = indented_screwhole(scl, u, (w-1), 45, 67, True)
+    u = indented_screwhole(scl, u, (w-1), 156, 37, 90)
+    u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
 
     if pin_parts_3d:
         c = union()
@@ -1619,11 +1663,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+    if part != 7 and part != 3 and part != -4 and part != 5 and part != 8 \
         and part != -12:
         return
-    #if part != 5:
-        #return
+    if part != 5:
+        return
 
     c = color(colour)
     c.add(t)
