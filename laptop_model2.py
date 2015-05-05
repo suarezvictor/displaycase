@@ -729,6 +729,12 @@ def base_front_top(scl, ht):
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
+    # add support for tpanel_mid
+    t = holed_support(scl, 50)
+    t = rotate([0, 0, -90]).add(t)
+    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-65)*scl, (50)*scl]).add(t)
+    u += t
+    
     if False:
         # remove bit for front joiner to fit into.  screws come from top
         b = cylinder(r=screwrad*scl, h=(200)*scl, center=True, segments=50)
