@@ -756,8 +756,8 @@ def base_front_top(scl, ht):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(46)*scl, (27)*scl, (57)*scl])
-    c = translate(v=[(17)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
+    c = cube([(48)*scl, (32)*scl, (57)*scl])
+    c = translate(v=[(16)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
@@ -1696,7 +1696,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != -4 and part != 5 and part != 8 \
         and part != -12:
         return
-    if part != 5:
+    if part != 7:
         return
 
     c = color(colour)
