@@ -1153,7 +1153,7 @@ def base_mid(scl, ht):
     b = translate(v=[(149)*scl, -1*scl, (55)*scl]).add(b)
     u -= b
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(0)*scl, (ht+2)*scl, (160)*scl]).add(b)
+    b = translate(v=[(0)*scl, (ht)*scl, (160)*scl]).add(b)
     u -= b
 
     c = cube([54*scl, (centre_ht+4)*scl, (60)*scl])
@@ -1705,7 +1705,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != -4 and part != 5 and part != 8 \
         and part != -12:
         return
-    if part != 7 and part != -5:
+    if part != 8 and part != -5:
         return
 
     c = color(colour)
