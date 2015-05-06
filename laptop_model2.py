@@ -788,13 +788,22 @@ def base_front_top(scl, ht):
     u += c
 
     # and support wall
-    c = cube([175*scl, (tpanel_b_w/2)*scl, (20)*scl])
-    c = translate(v=[(5)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
+    c = cube([169*scl, (tpanel_b_w/2)*scl, (30)*scl])
+    c = translate(v=[(11)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
     u += c
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    u -= t
+
+    # screw holes in top for touchpanel
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(55)*scl, (ht-50)*scl, (50)*scl]).add(d)
+    u -= t
+    t = translate(v=[(135)*scl, (ht-160)*scl, (50)*scl]).add(d)
     u -= t
 
     # add support for tpanel_mid
@@ -841,13 +850,13 @@ def base_front_top(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, -15*scl]).add(h)
+        h = translate([(ht)*scl, (-3)*scl, 10*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht+75)*scl, (-3)*scl, 55*scl]).add(h)
+        h = translate([(ht+75)*scl, (-3)*scl, 80*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, 130*scl]).add(h)
+        h = translate([(ht)*scl, (-3)*scl, 150*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(ht/2-38)*scl, (-3)*scl, -5*scl]).add(h)
@@ -1696,7 +1705,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != -4 and part != 5 and part != 8 \
         and part != -12:
         return
-    if part != 7:
+    if part != 7 and part != -5:
         return
 
     c = color(colour)
