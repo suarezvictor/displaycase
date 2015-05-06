@@ -679,20 +679,20 @@ def tpanel_mid(scl, ht):
     u -= c
 
     # wings for screw-holes to fit with front base
-    d = shearedcube([(50)*scl, (30)*scl, (86)*scl],
+    d = shearedcube([(60)*scl, (40)*scl, (86)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-40*scl, 0*scl, 0])
+            innershear=[-32*scl, 0*scl, 0])
     d = rotate([0, -90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(180)*scl, (-85)*scl, (58)*scl]).add(d)
+    c = translate(v=[(180)*scl, (-85)*scl, (48)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(180+30)*scl, (ht+85)*scl, (58)*scl]).add(d)
+    c = translate(v=[(180+40)*scl, (ht+85)*scl, (48)*scl]).add(d)
     u += c
 
     # matches screw-hole in front base
-    u = indented_screwhole(scl, u, (182), -50, 80, -90)
-    u = indented_screwhole(scl, u, (182), ht+50, 80, -90)
+    u = indented_screwhole(scl, u, (182), -40, 75, -90)
+    u = indented_screwhole(scl, u, (182), ht+40, 75, -90)
 
     # screw-holes into front base
     s = chamfered_backbox_screwholes(scl, 50)
@@ -771,10 +771,13 @@ def base_front_top(scl, ht):
     u -= t
 
     # add support for tpanel_mid
-    t = holed_support(scl, 50)
-    t = rotate([0, 0, -90]).add(t)
-    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-65)*scl, (48)*scl]).add(t)
+    b = cube([(60)*scl, (62)*scl, (70)*scl])
+    t = translate(v=[(120)*scl, (ht-tpanel_b_w/2-130)*scl, (40)*scl]).add(b)
     u += t
+    t = holed_support(scl, 50, inverse=True)
+    t = rotate([0, 0, -90]).add(t)
+    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-55)*scl, (43)*scl]).add(t)
+    u -= t
     
     if False:
         # remove bit for front joiner to fit into.  screws come from top
