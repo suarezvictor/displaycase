@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -705,6 +705,33 @@ def tpanel_mid(scl, ht):
     u -= b
     b = translate(v=[(55)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
     u -= b
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, -ht*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b)*scl, (0)*scl, -ht*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([(0)*scl, (0)*scl, 3*scl]).add(c)
+
+        h = cube([6*scl, 55*scl, 50*scl])
+        h = translate([(197)*scl, (ht+30)*scl, 0*scl]).add(h)
+        c += h
+        h = cube([6*scl, 55*scl, 50*scl])
+        h = translate([(197)*scl, (-85)*scl, 0*scl]).add(h)
+        c += h
+
+        u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
