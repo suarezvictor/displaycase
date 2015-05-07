@@ -1161,6 +1161,20 @@ def base_mid(scl, ht):
                 (0)*scl]).add(c)
     u -= c
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(195)*scl, (3)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(195)*scl, (3)*scl, 120*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(118)*scl, (3)*scl, 80*scl]).add(h)
+        c += h
+        
+        u += c
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
