@@ -1134,14 +1134,14 @@ def base_mid(scl, ht):
     u += b
 
     # top cutout makes shelf support for keyboard
-    b = cube([(w-169)*scl, (ht+2)*scl, 41*scl])
+    b = cube([(w-19)*scl, (ht+2)*scl, 41*scl])
     b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
-    b = cube([(62)*scl, (ht+2)*scl, (boxheight-38)*scl])
-    b = translate(v=[(w-151)*scl, -1*scl, (14)*scl]).add(b)
+    b = cube([(63)*scl, (ht+2)*scl, (boxheight-38)*scl])
+    b = translate(v=[(w-01)*scl, -1*scl, (14)*scl]).add(b)
     u -= b
 
     # dovetail cuts to fit into front base
@@ -1719,8 +1719,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != -4 and part != 5 and part != 8 \
-        and part != -12:
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+        and part != 12:
         return
     if part != 8 and part != -5:
         return
