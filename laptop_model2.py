@@ -1172,6 +1172,9 @@ def base_mid(scl, ht):
         h = pin(B0, scl)
         h = translate([(118)*scl, (3)*scl, 80*scl]).add(h)
         c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b-25)*scl, (3)*scl, 40*scl]).add(h)
+        c += h
         
         u += c
 
