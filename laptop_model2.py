@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -706,6 +706,19 @@ def tpanel_mid(scl, ht):
     b = translate(v=[(55)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
     u -= b
 
+    # cut-out and matching protrusion to fit front kbd
+    w = tpanel_b_w + 50
+    l = 0
+    b = cube([(44)*scl, (22)*scl, (23)*scl])
+    b = translate(v=[(w-62)*scl, (l-1)*scl, (boxheight-hthick-22)*scl]).add(b)
+    u -= b
+    b = shearedcube([(36)*scl, (19)*scl, (20)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, -6*scl, 0])
+    b = rotate([-90, 0, 0]).add(b)
+    b = translate(v=[(w-103)*scl, (l-19)*scl, (boxheight-hthick)*scl]).add(b)
+    u += b
+    
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1605,7 +1618,7 @@ def screen_hinge(scl, ht):
 
     return u
     
-def indented_screwhole(scl, u, x, y, z, rot=0):
+def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     d = cylinder(r=topscrewrad*1.2*scl, r1=28*scl,
                     h=17*scl,
                     segments=50, center=True)
@@ -1614,7 +1627,7 @@ def indented_screwhole(scl, u, x, y, z, rot=0):
     s = rotate([0, 0, rot]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u += s
-    s = chamfered_backbox_screwholes(scl, 16)
+    s = chamfered_backbox_screwholes(scl, depth)
     s = translate(v=[(0)*scl, (0)*scl, (3)*scl]).add(s)
     s = rotate([90, 0, 0]).add(s)
     s = rotate([0, 0, 180]).add(s)
@@ -1622,6 +1635,60 @@ def indented_screwhole(scl, u, x, y, z, rot=0):
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u -= s
     return u
+
+def front_kbd_tray(scl, ht):
+
+    u = union()
+    w = tpanel_l_b-180
+    l = ht-tpanel_b_w/2-50+hthick
+
+    b = hollowbox(scl, w, l, boxheight-hthick,
+                {T:-1, L:hthick, R:hthick, F:hthick, D:-1, B:hthick*2},
+                curverads={ T|R: (hthick, 0)})
+    b = translate(v=[(0)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
+    # surround touchpanel wing
+    b = cube([(42+hthick)*scl, (88+hthick+60)*scl, (boxheight-hthick)*scl])
+    b = translate(v=[(0)*scl, (l-88-60-hthick)*scl, (0)*scl]).add(b)
+    u += b
+
+    # cutout for touchpanel wing
+    b = cube([(43)*scl, (89)*scl, (boxheight)*scl])
+    b = translate(v=[(-1)*scl, (l-88)*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # cutouts for bamboo panel
+    b = cube([(w-hthick+1)*scl, (2+l)*scl, (hthick+1)*scl])
+    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+    b = cube([(w+2)*scl, (hthick)*scl, (hthick+1)*scl])
+    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # screwholes into front base
+    u = indented_screwhole(scl, u, 0, l-125, 67, -90, 40)
+    u = indented_screwhole(scl, u, 0, 50, 67, -90, 40)
+
+    # cut-out and matching protrusion to fit tpanel_mid
+    b = cube([(40)*scl, (21)*scl, (20)*scl])
+    b = translate(v=[(w-60)*scl, (l-1)*scl, (boxheight-hthick-20)*scl]).add(b)
+    u += b
+    b = cube([(40)*scl, (21)*scl, (21)*scl])
+    b = translate(v=[(w-105)*scl, (l-20)*scl, (boxheight-hthick-20)*scl]).add(b)
+    #u -= b
+    
+    b = shearedcube([(40)*scl, (22)*scl, (20)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, -6*scl, 0])
+    b = rotate([-90, 0, 0]).add(b)
+    b = translate(v=[(w-105)*scl, (l-19)*scl, (boxheight-hthick+1)*scl]).add(b)
+    u -= b
+
+    v = union()
+    u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
 
 def back_kbd_corner(scl, ht):
 
@@ -1720,10 +1787,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12:
+        and part != 12 and part != 13:
         return
-    if part != 8 and part != -5:
-        return
+    #if part != 8 and part != -5:
+    #    return
 
     c = color(colour)
     c.add(t)
@@ -1794,6 +1861,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        b.add(m)
+
+    if part == 13:
+        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
 
     base_adjust_ht += base_back_ht
