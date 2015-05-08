@@ -1648,6 +1648,14 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(0)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
+    # extra bit for kbd corner support
+    b = hollowbox(scl, 200+hthick, hthick, boxheight-hthick,
+                {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
+                curverads={ T|F: (hthick, 0)})
+    b = translate(v=[(w-hthick)*scl, (hthick)*scl, (0)*scl]).add(b)
+    u += b
+    u = indented_screwhole(scl, u, (w+120), 1+hthick, 39)
+
     # surround touchpanel wing
     b = cube([(42+hthick)*scl, (88+hthick+60)*scl, (boxheight-hthick)*scl])
     b = translate(v=[(0)*scl, (l-88-60-hthick)*scl, (0)*scl]).add(b)
