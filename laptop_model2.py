@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -508,8 +508,18 @@ def base_end(scl, ht):
     #u -= t
 
     # add support for keyboard corner
-    t = holed_support(scl, ht)
-    t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(t)
+    h = holed_support(scl, ht)
+    t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
+    u += t
+    h = holed_support(scl, ht, dep=boxheight-hthick)
+    t = translate(v=[(tpanel_l_b+85)*scl, 0, (62)*scl]).add(h)
+    u += t
+    
+    # front keyboard tray indentation support
+    c = cube([(25)*scl, (ht-hthick-2)*scl, (boxheight-2)*scl])
+    t = translate(v=[(tpanel_l_b-25)*scl, 0, (55+1)*scl]).add(c)
+    u += t
+    t = translate(v=[(190)*scl, 0, (55+1)*scl]).add(c)
     u += t
     
     # add bits for case bolthole at front
@@ -572,11 +582,11 @@ def base_end(scl, ht):
 
     return u
     
-def holed_support(scl, ht, sht=50, inverse=False):
+def holed_support(scl, ht, sht=50, dep=60, inverse=False):
     u = union()
     if not inverse:
         # add bits for screws through to base back
-        c = cube([(70)*scl, (ht)*scl, (60)*scl])
+        c = cube([(70)*scl, (ht)*scl, (dep)*scl])
         u += c
 
     d = cylinder(r=topscrewrad*1.2*scl, r1=30*scl,
@@ -1699,13 +1709,15 @@ def front_kbd_tray(scl, ht):
     while offs < (l):
         # add fill-ins
         c = union()
-        b = cube([(90)*scl, (step-25)*scl, (boxheight)*scl])
-        b = translate(v=[(-1)*scl, (offs)*scl, (50)*scl]).add(b)
+        b = cube([(hthick+2)*scl, (step-25)*scl, (boxheight-89)*scl])
+        b = translate(v=[(-1)*scl, (offs)*scl, (45)*scl]).add(b)
         c += b
         r=(step-25.0)*scl/2
         b = cylinder(r=r, h=(hthick+2)*scl, segments=100)
         b = rotate([0, 90, 0]).add(b)
-        b = translate(v=[(-1)*scl, (offs)*scl+r, (50)*scl]).add(b)
+        b = translate(v=[(-1)*scl, (offs)*scl+r, (45)*scl]).add(b)
+        c += b
+        b = translate(v=[(0)*scl, (0)*scl, (30)*scl]).add(b)
         c += b
         if offs != 25 and offs < (l-80-step):
             u -= c
@@ -1817,10 +1829,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13:
+        and part != 12 and part != 13 and part != 9:
         return
-    #if part != 8 and part != -5:
-    #    return
+    if part != 13 and part != -9:
+        return
 
     c = color(colour)
     c.add(t)
