@@ -1726,6 +1726,38 @@ def front_kbd_tray(scl, ht):
 
         offs += step
         
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+200)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+200)*scl, (-3)*scl, -50*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([w*scl, (-3)*scl, -l*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([45*scl, (-3)*scl, (-l-32)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([45*scl, (-3)*scl, (45-l)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([-32*scl, (-3)*scl, (115-l)*scl]).add(h)
+        c += h
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
+        
+        u += c
+
     
     v = union()
     u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
