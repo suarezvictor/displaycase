@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -1753,7 +1753,7 @@ def front_kbd_tray(scl, ht):
         h = translate([45*scl, (-3)*scl, (45-l)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([-32*scl, (-3)*scl, (115-l)*scl]).add(h)
+        h = translate([-32*scl, (-3)*scl, (65-l)*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
@@ -1865,8 +1865,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    #if part != 13 and part != -9:
-        #return
+    if part != 13 and part != -9:
+        return
 
     c = color(colour)
     c.add(t)
