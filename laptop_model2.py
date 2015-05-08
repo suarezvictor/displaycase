@@ -1685,6 +1685,28 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(w-105)*scl, (l-19)*scl, (boxheight-hthick+1)*scl]).add(b)
     u -= b
 
+    # funny cutouts (reduce plastic usage, screw access points as well)
+    offs = 25
+    step = (l-150-offs) / 5 if test else 10
+    while offs < (l):
+        # add fill-ins
+        c = union()
+        b = cube([(90)*scl, (step-25)*scl, (boxheight)*scl])
+        b = translate(v=[(-1)*scl, (offs)*scl, (50)*scl]).add(b)
+        c += b
+        r=(step-25.0)*scl/2
+        b = cylinder(r=r, h=(hthick+2)*scl, segments=100)
+        b = rotate([0, 90, 0]).add(b)
+        b = translate(v=[(-1)*scl, (offs)*scl+r, (50)*scl]).add(b)
+        c += b
+        if offs != 25 and offs < (l-80-step):
+            u -= c
+        c = translate(v=[(w-hthick)*scl, 0, (00)*scl]).add(c)
+        u -= c
+
+        offs += step
+        
+    
     v = union()
     u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
     v.add(u)
