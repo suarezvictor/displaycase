@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -1667,13 +1667,13 @@ def front_kbd_tray(scl, ht):
     u = indented_screwhole(scl, u, (w+120), 1+hthick, 39)
 
     # surround touchpanel wing
-    b = cube([(42+hthick)*scl, (88+hthick+60)*scl, (boxheight-hthick)*scl])
-    b = translate(v=[(0)*scl, (l-88-60-hthick)*scl, (0)*scl]).add(b)
+    b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(-hthick)*scl, (l-88-24)*scl, (hthick)*scl]).add(b)
     u += b
 
     # cutout for touchpanel wing
-    b = cube([(43)*scl, (89)*scl, (boxheight)*scl])
-    b = translate(v=[(-1)*scl, (l-88)*scl, (-1)*scl]).add(b)
+    b = cube([(43+hthick)*scl, (89)*scl, (boxheight)*scl])
+    b = translate(v=[(-1-hthick)*scl, (l-88)*scl, (-1)*scl]).add(b)
     u -= b
 
     # cutouts for bamboo panel
@@ -1684,8 +1684,7 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
-    # screwholes into front base
-    u = indented_screwhole(scl, u, 1, l-125, 67, -90, 40)
+    # screwhole into front base
     u = indented_screwhole(scl, u, 1, 50, 67, -90, 40)
 
     # cut-out and matching protrusion to fit tpanel_mid
@@ -1694,7 +1693,7 @@ def front_kbd_tray(scl, ht):
     u += b
     b = cube([(40)*scl, (21)*scl, (21)*scl])
     b = translate(v=[(w-105)*scl, (l-20)*scl, (boxheight-hthick-20)*scl]).add(b)
-    #u -= b
+    u -= b
     
     b = shearedcube([(40)*scl, (22)*scl, (20)*scl],
                 shear=[0*scl, 0*scl, 0],
@@ -1705,24 +1704,27 @@ def front_kbd_tray(scl, ht):
 
     # funny cutouts (reduce plastic usage, screw access points as well)
     offs = 25
-    step = (l-150-offs) / 5 if test else 10
-    while offs < (l):
-        # add fill-ins
-        c = union()
-        b = cube([(hthick+2)*scl, (step-25)*scl, (boxheight-89)*scl])
-        b = translate(v=[(-1)*scl, (offs)*scl, (45)*scl]).add(b)
-        c += b
-        r=(step-25.0)*scl/2
-        b = cylinder(r=r, h=(hthick+2)*scl, segments=100)
-        b = rotate([0, 90, 0]).add(b)
-        b = translate(v=[(-1)*scl, (offs)*scl+r, (45)*scl]).add(b)
-        c += b
-        b = translate(v=[(0)*scl, (0)*scl, (30)*scl]).add(b)
-        c += b
-        if offs != 25 and offs < (l-80-step):
-            u -= c
-        c = translate(v=[(w-hthick)*scl, 0, (00)*scl]).add(c)
-        u -= c
+    step = (l-160-offs) / 5 if test else 10
+
+    c = union()
+    b = cube([(70)*scl, (step-25)*scl, (boxheight-94)*scl])
+    b = translate(v=[(-1)*scl, (0)*scl, (20)*scl]).add(b)
+    c += b
+    r=(step-25.0)*scl/2
+    b = cylinder(r=r, h=70*scl, segments=100)
+    b = rotate([0, 90, 0]).add(b)
+    b = translate(v=[(-1)*scl, r, (20)*scl]).add(b)
+    c += b
+    # add fill-ins
+    b = translate(v=[(0)*scl, (0)*scl, (25)*scl]).add(b)
+    c += b
+
+    while offs < (l-20):
+        d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
+        if offs != 25:
+            u -= d
+        d = translate(v=[(w-hthick)*scl, (offs)*scl, (25)*scl]).add(c)
+        u -= d
 
         offs += step
         
@@ -1863,8 +1865,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 13 and part != -9:
-        return
+    #if part != 13 and part != -9:
+        #return
 
     c = color(colour)
     c.add(t)
