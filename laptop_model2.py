@@ -1685,8 +1685,8 @@ def front_kbd_tray(scl, ht):
     u -= b
 
     # screwholes into front base
-    u = indented_screwhole(scl, u, 0, l-125, 67, -90, 40)
-    u = indented_screwhole(scl, u, 0, 50, 67, -90, 40)
+    u = indented_screwhole(scl, u, 1, l-125, 67, -90, 40)
+    u = indented_screwhole(scl, u, 1, 50, 67, -90, 40)
 
     # cut-out and matching protrusion to fit tpanel_mid
     b = cube([(40)*scl, (21)*scl, (20)*scl])
