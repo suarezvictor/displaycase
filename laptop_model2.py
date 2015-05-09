@@ -1653,6 +1653,14 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     return u
 
 def front_kbd_tray(scl, ht):
+    """
+    this part basically locks into place (relies on surrounding parts)
+    rather than acts as structural support, with the exception of
+    the base_end and front_base screws, which help stabilise both
+    those two parts.
+
+    the bamboo panels basically rest on this part, internally.
+    """
 
     u = union()
     w = tpanel_l_b-180
