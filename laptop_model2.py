@@ -174,14 +174,14 @@ def chamfered_backbox_screwholes(scl, sht):
     return c
 
 def case_bolthole(scl, end):
-    bht = lcd_hinge_inner_rad+boxtopoffs-30-lcd_d
+    bht = (-lcd_d+150+boxtopoffs-boxheight)
     if end == 0:
         return translate([(120)*scl, 0*scl, bht*scl])
     elif end == 1:
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
         return translate([(lcd_w+lcd_inset_bot-100)*scl, 0*scl,
-                            (-lcd_d+150+boxtopoffs-boxheight)*scl])
+                            bht*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2.0+30)*scl, 0*scl, bht*scl])
 
@@ -523,9 +523,9 @@ def base_end(scl, ht):
     u += t
     
     # add bits for case bolthole at front
-    c = cube([(60)*scl, (ht)*scl, (60)*scl])
-    c = translate(v=[(90)*scl,
-                      (0)*scl, (68+hthick)*scl]).add(c)
+    c = cube([(90)*scl, (ht)*scl, (70)*scl])
+    c = translate(v=[(60)*scl,
+                      (0)*scl, (52+hthick)*scl]).add(c)
     u += c
 
     # annoying bug in hollowbox, bridge across curve and straight
@@ -856,6 +856,12 @@ def base_front_top(scl, ht):
     c = cube([(tpanel_b_w+1)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
     c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50+1)*scl, (-1)*scl]).add(c)
     u -= c
+
+    # lower screw hole for keyboard corner joiner
+    t = holed_support(scl, 50, inverse=True)
+    t = rotate([0, 0, -90]).add(t)
+    b = translate(v=[(130)*scl, (73)*scl, (35)*scl]).add(t)
+    u -= b
 
     if True:
         # dovetail cuts to fit base_mid
@@ -1875,7 +1881,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9:
+        and part != 12 and part != -13 and part != 9:
         return
     #if part != 13 and part != -9:
         #return
