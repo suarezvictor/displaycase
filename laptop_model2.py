@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -1666,9 +1666,13 @@ def front_kbd_tray(scl, ht):
     u += b
     u = indented_screwhole(scl, u, (w+120), 1+hthick, 39)
 
-    # surround touchpanel wing
+    # surround touchpanel wing (locks into front base, too)
     b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
     b = translate(v=[(-hthick)*scl, (l-88-24)*scl, (hthick)*scl]).add(b)
+    u += b
+    # also locks into front base (far end)
+    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(-hthick)*scl, (91)*scl, (hthick)*scl]).add(b)
     u += b
 
     # cutout for touchpanel wing
@@ -1694,7 +1698,7 @@ def front_kbd_tray(scl, ht):
     b = cube([(40)*scl, (21)*scl, (21)*scl])
     b = translate(v=[(w-105)*scl, (l-20)*scl, (boxheight-hthick-20)*scl]).add(b)
     u -= b
-    
+
     b = shearedcube([(40)*scl, (22)*scl, (20)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, -6*scl, 0])
@@ -1702,8 +1706,16 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(w-105)*scl, (l-19)*scl, (boxheight-hthick+1)*scl]).add(b)
     u -= b
 
+    # add bamboo panel underside support
+    b = shearedcube([(10)*scl, (l)*scl, (10)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    #b = rotate([0, 0, 180]).add(b)
+    b = translate(v=[(w-hthick-8)*scl, (0)*scl, (hthick)*scl]).add(b)
+    u += b
+
     # funny cutouts (reduce plastic usage, screw access points as well)
-    offs = 25
+    offs = 32
     step = (l-160-offs) / 5 if test else 10
 
     c = union()
@@ -1719,9 +1731,9 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(0)*scl, (0)*scl, (25)*scl]).add(b)
     c += b
 
-    while offs < (l-20):
+    while offs < (l-25):
         d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
-        if offs != 25:
+        if offs != 32:
             u -= d
         d = translate(v=[(w-hthick)*scl, (offs)*scl, (25)*scl]).add(c)
         u -= d
@@ -1865,8 +1877,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 13 and part != -9:
-        return
+    #if part != 13 and part != -9:
+        #return
 
     c = color(colour)
     c.add(t)
