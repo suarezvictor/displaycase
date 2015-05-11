@@ -440,7 +440,7 @@ def base_end(scl, ht):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
-    rad=35.0 + 12
+    rad=35.0 + 15
     # add hinge
     c = cylinder(r=rad*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
@@ -1290,6 +1290,14 @@ def screen_end(scl, ht, lcd_end_ht):
                 (hthick-3.6-16)*scl]).add(d)
     u += c
 
+    rad=54.0
+    # remove hinge
+    c = cylinder(r=rad*scl, h=(ht+lcd_end_ht+2)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,-1*scl,0]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1888,12 +1896,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
+    """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != -13 and part != 9:
         return
-    #if part != 13 and part != -9:
-        #return
-
+    if part != -7 and part != 3:
+        return
+    """
+    if part != 3 and part != 0:
+        return
     c = color(colour)
     c.add(t)
 
