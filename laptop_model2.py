@@ -1736,6 +1736,12 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(w-hthick-8)*scl, (0)*scl, (hthick)*scl]).add(b)
     u += b
 
+    # XXX ok this needs to match the cutouts
+    b = cube([(w)*scl, (hthick)*scl, (boxheight-hthick*2)*scl])
+    offs = 95 if test else 90
+    b = translate(v=[(0)*scl, (l-offs)/2.0*scl, (hthick)*scl]).add(b)
+    u += b
+
     # funny cutouts (reduce plastic usage, screw access points as well)
     offs = 32
     step = (l-160-offs) / 5 if test else 10
@@ -1896,15 +1902,15 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != -13 and part != 9:
+        and part != 12 and part != 13 and part != 9:
         return
-    if part != -7 and part != 3:
-        return
+    ###if part != -7 and part != 3:
+      ###  return
     """
     if part != 3 and part != 0:
         return
+    """
     c = color(colour)
     c.add(t)
 
