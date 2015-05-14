@@ -680,8 +680,10 @@ def tpanel_mid(scl, ht):
     u -= c
 
     # lengthways support (keeps tpanel from bending)
-    c = cube([30*scl, ht*scl, (40)*scl])
-    c = translate(v=[(70)*scl, 0*scl, (38)*scl]).add(c)
+    c = shearedcube([33*scl, ht*scl, (40)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[15*scl, 0*scl, 0])
+    c = translate(v=[(63)*scl, 0*scl, (38)*scl]).add(c)
     u += c
 
     # support for base_mid
@@ -717,9 +719,9 @@ def tpanel_mid(scl, ht):
     u -= b
     b = translate(v=[(135)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(45)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(45)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
     u -= b
 
     # cut-out and matching protrusion to fit front kbd
@@ -790,8 +792,10 @@ def base_front_top(scl, ht):
     u -= c
 
     # tpanel cutout
-    c = cube([34*scl, (tpanel_b_w+50+3)*scl, (43)*scl])
-    c = translate(v=[(68)*scl, (ht-(tpanel_b_w/2+50))*scl, (38)*scl]).add(c)
+    c = shearedcube([40*scl, (tpanel_b_w+50+3)*scl, (43)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[15*scl, 0*scl, 0])
+    c = translate(v=[(60)*scl, (ht-(tpanel_b_w/2+50))*scl, (38)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
@@ -835,7 +839,7 @@ def base_front_top(scl, ht):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(45)*scl, (ht-50)*scl, (50)*scl]).add(d)
+    t = translate(v=[(40)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
     t = translate(v=[(135)*scl, (ht-160)*scl, (50)*scl]).add(d)
     u -= t
@@ -1955,7 +1959,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -8 and part != 7:
+    if part != 5 and part != 7:
         return
     """
     if part != 3 and part != 0:
