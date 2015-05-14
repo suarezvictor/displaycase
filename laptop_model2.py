@@ -679,6 +679,11 @@ def tpanel_mid(scl, ht):
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
     u -= c
 
+    # lengthways support (keeps tpanel from bending)
+    c = cube([30*scl, ht*scl, (40)*scl])
+    c = translate(v=[(70)*scl, 0*scl, (38)*scl]).add(c)
+    u += c
+
     # support for base_mid
     c = cube([50*scl, (70)*scl, (boxheight-hthick*2)*scl])
     c = translate(v=[(tpanel_l_b-50)*scl, (ht/2-70./2)*scl,
@@ -712,9 +717,9 @@ def tpanel_mid(scl, ht):
     u -= b
     b = translate(v=[(135)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(55)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(45)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(55)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(45)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
     u -= b
 
     # cut-out and matching protrusion to fit front kbd
@@ -784,6 +789,11 @@ def base_front_top(scl, ht):
     c = translate(v=[(16)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
     u -= c
 
+    # tpanel cutout
+    c = cube([34*scl, (tpanel_b_w+50+3)*scl, (43)*scl])
+    c = translate(v=[(68)*scl, (ht-(tpanel_b_w/2+50))*scl, (38)*scl]).add(c)
+    u -= c
+
     # put in series of cutouts
     fthick = 8
     offs = 80-hthick+fthick
@@ -804,7 +814,7 @@ def base_front_top(scl, ht):
     # remove bit more from base
     c = base_front_arc(scl, tpanel_b_w/2-40)
     c = translate(v=[(151)*scl, (ht-80)*scl, (39.5)*scl]).add(c)
-    u -= c
+    #u -= c
 
     # add fillin for touchpanel
     c = base_front_fillin(scl, 20)
@@ -812,8 +822,8 @@ def base_front_top(scl, ht):
     u += c
 
     # and support wall
-    c = cube([169*scl, (tpanel_b_w/2)*scl, (30)*scl])
-    c = translate(v=[(11)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
+    c = cube([30*scl, (tpanel_b_w/2)*scl, (boxheight-50)*scl])
+    c = translate(v=[(150)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
     u += c
 
     # screw holes in box
@@ -825,7 +835,7 @@ def base_front_top(scl, ht):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(55)*scl, (ht-50)*scl, (50)*scl]).add(d)
+    t = translate(v=[(45)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
     t = translate(v=[(135)*scl, (ht-160)*scl, (50)*scl]).add(d)
     u -= t
@@ -847,8 +857,8 @@ def base_front_top(scl, ht):
         u -= b
 
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w+1)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50+1)*scl, (-1)*scl]).add(c)
+    c = cube([(tpanel_b_w+1)*scl, (tpanel_l+2)*scl, (tpanel_h+1)*scl])
+    c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50-1)*scl, (-1)*scl]).add(c)
     u -= c
 
     # lower screw hole for keyboard corner joiner
@@ -1055,6 +1065,15 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-20)*scl, (ht-30)*scl, (60)*scl]).add(s)
     u -= b
 
+    # add lock-in to base_mid
+    c = shearedcube([(20)*scl, (35)*scl, (15)*scl],
+                shear=[0, 10*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w+79)*scl,(ht-46)*scl,(52)*scl]).add(c)
+    u += c
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1213,6 +1232,13 @@ def base_mid(scl, ht):
     u -= t
     t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-35)*scl]).add(d)
     u -= t
+
+    # locking cut-out for back_box_base
+    c = cube([(50)*scl, (20)*scl, 25*scl])
+    b = translate(v=[(w+70)*scl, -61*scl, (50)*scl]).add(c)
+    u -= b
+    b = translate(v=[(w+70)*scl, (ht+41)*scl, (50)*scl]).add(c)
+    u -= b
 
     if pin_parts_3d:
         c = union()
@@ -1929,7 +1955,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 8 and part != -4:
+    if part != -8 and part != 7:
         return
     """
     if part != 3 and part != 0:
