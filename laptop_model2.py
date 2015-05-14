@@ -78,6 +78,7 @@ back_top_width = 170
 front_top_width = 180
 
 centre_ht = 30.0
+base_centre_ht = 140.0
 
 bdep = 325
 fdep = 300
@@ -922,7 +923,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u = union()
     w = boxlength-back_top_width
 
-    walls = {T:hthick, L:-1, R:hthick, F:60+hthick, D:hthick, B:70}
+    walls = {T:hthick, L:-1, R:hthick, F:97+hthick+base_centre_ht/2,
+                                        D:hthick, B:70}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -930,7 +932,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, ht, boxheight,
+    b = hollowbox(scl, back_top_width, ht+base_centre_ht/2, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
@@ -960,7 +962,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # put in series of cutouts
     fthick = 8
     offs = 80-hthick+fthick
-    step = (ht-60-offs) / 5 if test else 10
+    step = (ht-100-offs) / 4 if test else 10
     while offs < (ht-step):
         # add fill-ins
         c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
@@ -1003,12 +1005,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
 
         offs += step
         
-    # hole for back screw-support to poke through
-    # XXX height is magic constant
-    b = cube([(63)*scl, (62)*scl, (boxheight-38)*scl])
-    b = translate(v=[(w-39)*scl, (ht-61)*scl, (14)*scl]).add(b)
-    u -= b
-
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
@@ -1025,7 +1021,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     s = chamfered_backbox_screwholes(scl, 20)
     s = rotate([0, -90, 0]).add(s)
     b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
-    u -= b
+    #u -= b
 
     # slot to fit a nut into
     c = cube([70*scl, 50*scl, 80*scl], center=True)
@@ -1046,6 +1042,17 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     t = box_screwholes(scl, hthick, holes=[2], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
+
+    # fit base_mid
+    b = cube([(188)*scl, (62)*scl, (42)*scl])
+    b = translate(v=[(w-61)*scl, (ht-61)*scl, (boxheight-41)*scl]).add(b)
+    u -= b
+    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
+    b = translate(v=[(w-61+86)*scl, (ht-61)*scl, (40)*scl]).add(b)
+    u -= b
+    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
+    b = translate(v=[(w-61)*scl, (ht)*scl, (40)*scl]).add(b)
+    u -= b
 
     if pin_parts_3d:
         c = union()
@@ -1149,28 +1156,36 @@ def base_mid(scl, ht):
     u = union()
     w = boxlength-150
 
-    walls = {T:-1, L:-1, R:hthick, F:centre_ht/2, D:hthick, B:centre_ht/2}
+    walls = {T:-1, L:-1, R:hthick, F:hthick, D:8, B:hthick}
     curverads={
-                T|R: (40, 0),
                 R|D: (boxheight-40, 0),
                 }
     scalecurve = {
                 R|D: [0, 150],
             }
-    b = hollowbox(scl, w, ht, boxheight,
+    b = hollowbox(scl, w, ht, boxheight-40,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(150)*scl, 0*scl, 0*scl]).add(b)
+    b = translate(v=[(150)*scl, 0*scl, 40*scl]).add(b)
+    u += b
+
+    walls[F] = 60
+    walls[B] = 60
+    b = hollowbox(scl, 170, ht+120, boxheight-40,
+                    walls, curverads=curverads, scalecurve=scalecurve)
+    b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
     u += b
 
     # top cutout makes shelf support for keyboard
     b = cube([(w-19)*scl, (ht+2)*scl, 41*scl])
     b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
+    #u -= b
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
-    b = cube([(63)*scl, (ht+2)*scl, (boxheight-38)*scl])
-    b = translate(v=[(w-01)*scl, -1*scl, (14)*scl]).add(b)
+    b = cube([(86)*scl, (61)*scl, (41)*scl])
+    b = translate(v=[(w-31)*scl, -(61)*scl, (39)*scl]).add(b)
+    u -= b
+    b = translate(v=[(0)*scl, (ht+61)*scl, (0)*scl]).add(b)
     u -= b
 
     # dovetail cuts to fit into front base
@@ -1905,8 +1920,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    ###if part != -7 and part != 3:
-      ###  return
+    if part != -8 and part != 4:
+        return
     """
     if part != 3 and part != 0:
         return
@@ -1949,12 +1964,12 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
 
-    base_back_ht = (lcd_l + hthick*2 - centre_ht) / 2 - base_adjust_ht
+    base_back_ht = (lcd_l + hthick*2 - base_centre_ht) / 2 - base_adjust_ht
     base_front_ht = (lcd_l + hthick*2) / 2 - base_adjust_ht
 
     if part == 4:
         # NOTE: ... here's the other bit
-        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht)
+        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
@@ -1990,7 +2005,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     base_adjust_ht += base_back_ht
 
     if part == 8:
-        se = base_mid(scl, centre_ht)
+        se = base_mid(scl, base_centre_ht)
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
         b.add(m)
 
@@ -2005,7 +2020,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 5:
         se = tpanel_mid(scl, tpanel_b_w+100)
         m = translate(v=[0, 
-                        (base_adjust_ht + centre_ht/2 - (tpanel_b_w+100)/2)*scl,
+                        (base_adjust_ht + base_centre_ht/2 - (tpanel_b_w+100)/2)*scl,
                          0]).add(se)
         b.add(m)
         #b = screen_adjust(b, scl, angle)
