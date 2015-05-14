@@ -655,6 +655,17 @@ def base_front_fillin(scl, ht):
     u += c
     return u
 
+def base_mid_cutout(u, scl, ht, offs):
+    c = cube([50*scl, (hthick*3+4)*scl, (boxheight-hthick*2)*scl])
+    c = translate(v=[(tpanel_l_b-50)*scl, (offs+ht/2-(hthick*3+4)/2)*scl,
+                (hthick)*scl]).add(c)
+    u += c
+    c = cube([70*scl, (hthick+4)*scl, (boxheight)*scl])
+    c = translate(v=[(tpanel_l_b-60)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
+                (58)*scl]).add(c)
+    u -= c
+    return u
+
 def tpanel_mid(scl, ht):
     u = union()
 
@@ -687,14 +698,8 @@ def tpanel_mid(scl, ht):
     u += c
 
     # support for base_mid
-    c = cube([50*scl, (70)*scl, (boxheight-hthick*2)*scl])
-    c = translate(v=[(tpanel_l_b-50)*scl, (ht/2-70./2)*scl,
-                (hthick)*scl]).add(c)
-    u += c
-    c = cube([70*scl, (centre_ht+4)*scl, (boxheight)*scl])
-    c = translate(v=[(tpanel_l_b-60)*scl, (ht/2-(centre_ht+4.)/2)*scl,
-                (58)*scl]).add(c)
-    u -= c
+    u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
+    u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
 
     # wings for screw-holes to fit with front base
     d = shearedcube([(60)*scl, (40)*scl, (86)*scl],
@@ -872,16 +877,18 @@ def base_front_top(scl, ht):
     u -= b
 
     if True:
+        offs = base_centre_ht / 2.0
         # dovetail cuts to fit base_mid
         # XXX height is magic constant
-        b = shearedcube([(30)*scl, (centre_ht/2+4)*scl, (33)*scl],
+        b = shearedcube([(40)*scl, (16)*scl, (33)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[-6*scl, 0*scl, 0])
+                innershear=[10*scl, 0*scl, 0])
         b = rotate([0, -90, 0]).add(b)
-        c = translate(v=[(181)*scl, (ht-centre_ht/2-3)*scl, (58)*scl]).add(b)
+        c = translate(v=[(181)*scl, (ht-offs-2)*scl,
+                                        (48)*scl]).add(b)
         u -= c
         b = rotate([180, 0, 0]).add(b)
-        b = translate(v=[(181)*scl, (ht+1)*scl, (102)*scl]).add(b)
+        b = translate(v=[(181)*scl, (ht-offs+14)*scl, (112)*scl]).add(b)
         u -= b
 
     if pin_parts_3d:
@@ -1211,16 +1218,16 @@ def base_mid(scl, ht):
     # XXX height is magic constant
     b = shearedcube([(50)*scl, (ht+2)*scl, (31)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-6*scl, 0*scl, 0])
+            innershear=[10*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
-    b = translate(v=[(149)*scl, -1*scl, (55)*scl]).add(b)
+    b = translate(v=[(149)*scl, -1*scl, (65)*scl]).add(b)
     u -= b
     b = rotate([180, 0, 0]).add(b)
     b = translate(v=[(0)*scl, (ht)*scl, (160)*scl]).add(b)
     u -= b
 
-    c = cube([54*scl, (centre_ht+4)*scl, (60)*scl])
-    c = translate(v=[(tpanel_l_b-52)*scl, (ht/2-(centre_ht+4.)/2)*scl,
+    c = cube([54*scl, (base_centre_ht+4)*scl, (60)*scl])
+    c = translate(v=[(tpanel_l_b-52)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
@@ -1959,7 +1966,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 5 and part != 7:
+    if part != 5 and part != 8:
         return
     """
     if part != 3 and part != 0:
