@@ -846,13 +846,6 @@ def base_front_top(scl, ht):
         b = translate(v=[(110)*scl, (ht)*scl, (70)*scl]).add(b)
         u -= b
 
-    if False:
-        # XXX temporary!
-        s = chamfered_backbox_screwholes(scl, 50)
-        s = rotate([-180, 0, 0]).add(s)
-        b = translate(v=[(135)*scl, (ht-35)*scl, (+45)*scl]).add(s)
-        u -= b
-
     # remove bit for touchpanel
     c = cube([(tpanel_b_w+1)*scl, tpanel_l*scl, (tpanel_h+1)*scl])
     c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50+1)*scl, (-1)*scl]).add(c)
@@ -1054,6 +1047,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-61)*scl, (ht)*scl, (40)*scl]).add(b)
     u -= b
 
+    # screw-holes into base_mid
+    s = chamfered_backbox_screwholes(scl, 50)
+    s = rotate([-180, 0, 0]).add(s)
+    b = translate(v=[(w+55)*scl, (ht+30)*scl, (20)*scl]).add(s)
+    u -= b
+    b = translate(v=[(w-20)*scl, (ht-30)*scl, (60)*scl]).add(s)
+    u -= b
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1175,11 +1176,6 @@ def base_mid(scl, ht):
     b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
     u += b
 
-    # top cutout makes shelf support for keyboard
-    b = cube([(w-19)*scl, (ht+2)*scl, 41*scl])
-    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
-    #u -= b
-
     # hole for back screw-support to poke through
     # XXX height is magic constant
     b = cube([(86)*scl, (61)*scl, (41)*scl])
@@ -1204,6 +1200,19 @@ def base_mid(scl, ht):
     c = translate(v=[(tpanel_l_b-52)*scl, (ht/2-(centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
+
+    # screw holes in top for back_box_base
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(w+93)*scl, (30)*scl, (50)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+93)*scl, (ht-30)*scl, (50)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-35)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-35)*scl]).add(d)
+    u -= t
 
     if pin_parts_3d:
         c = union()
@@ -1920,7 +1929,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -8 and part != 4:
+    if part != 8 and part != -4:
         return
     """
     if part != 3 and part != 0:
