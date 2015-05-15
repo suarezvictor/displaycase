@@ -1285,7 +1285,7 @@ def base_mid(scl, ht):
     offs = tpanel_l_b+40
     step = (w-160-offs) / 8 if test else 16
     while offs < (w-step):
-        d = cube([fthick*scl, 150*scl, (boxheight-39-hthick)*scl])
+        d = cube([fthick*scl, 150*scl, (boxheight-39-2)*scl])
         c = rotate([0, 0, -30]).add(d)
         c = translate(v=[(offs)*scl, (hthick/2)*scl, (40)*scl]).add(c)
         u += c
