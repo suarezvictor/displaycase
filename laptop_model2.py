@@ -1345,15 +1345,15 @@ def base_mid(scl, ht):
         h = translate([(tpanel_l_b+25)*scl, (-77)*scl, 65*scl]).add(h)
         c += h
 
-        step = (ht+120-6) / 6.0
+        step = (ht+120-6) / 7.0
         offs = -60
         while offs < ht+60:
-            h = cube([145*scl, 6*scl, (boxheight-40)*scl])
+            h = cube([145*scl, 7*scl, (boxheight-40)*scl])
             h = translate([w*scl, (offs)*scl, 40*scl]).add(h)
             c += h
             offs += step
 
-        h = cube([91*scl, (ht+122)*scl, 95*scl])
+        h = cube([91*scl, (ht+124)*scl, 95*scl])
         h = translate([(w-1)*scl, (-61)*scl, 0*scl]).add(h)
         c -= h
         h = cube([20*scl, (ht+120)*scl, 6*scl])
