@@ -660,7 +660,7 @@ def base_mid_cutout(u, scl, ht, offs):
     c = translate(v=[(tpanel_l_b-50)*scl, (offs+ht/2-(hthick*3+4)/2)*scl,
                 (hthick)*scl]).add(c)
     u += c
-    c = cube([70*scl, (hthick+4)*scl, (boxheight)*scl])
+    c = cube([90*scl, (hthick+4)*scl, (boxheight)*scl])
     c = translate(v=[(tpanel_l_b-60)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
                 (58)*scl]).add(c)
     u -= c
@@ -695,6 +695,11 @@ def tpanel_mid(scl, ht):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[15*scl, 0*scl, 0])
     c = translate(v=[(63)*scl, 0*scl, (38)*scl]).add(c)
+    u += c
+
+    c = cube([37*scl, (ht)*scl, (37)*scl])
+    c = rotate([0, -45, 0]).add(c)
+    c = translate(v=[(tpanel_l_b-6)*scl, 0*scl, (47)*scl]).add(c)
     u += c
 
     # support for base_mid
@@ -1199,12 +1204,36 @@ def base_mid(scl, ht):
     b = translate(v=[(150)*scl, 0*scl, 40*scl]).add(b)
     u += b
 
+    # couple of wings on the side for back base to screw into
     walls[F] = 60
     walls[B] = 60
     b = hollowbox(scl, 170, ht+120, boxheight-40,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
     u += b
+
+    # end wall for tpanel_mid to lock into
+    v = union()
+    # wings for screw-holes to fit with front base
+    d = shearedcube([(35)*scl, (40)*scl, (96)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-32*scl, 0*scl, 0])
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([0, 0, 90]).add(d)
+    c = translate(v=[(tpanel_l_b+40)*scl, (-95)*scl, (75)*scl]).add(d)
+    v += c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(tpanel_l_b)*scl, (ht+95)*scl, (75)*scl]).add(d)
+    v += c
+    c = cube([40*scl, (base_centre_ht)*scl, (boxheight-42-hthick)*scl])
+    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(c)
+    v += c
+    c = cube([40*scl, (base_centre_ht+200)*scl, (40)*scl])
+    c = rotate([0, -45, 0]).add(c)
+    c = translate(v=[(tpanel_l_b-6)*scl, (-100)*scl, (45)*scl]).add(c)
+    v -= c
+
+    u += v
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
