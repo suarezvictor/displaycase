@@ -664,12 +664,16 @@ def base_mid_cutout(u, scl, ht, offs):
     c = translate(v=[(tpanel_l_b-60)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
                 (58)*scl]).add(c)
     u -= c
+    c = cube([90*scl, (hthick+4)*scl, (boxheight)*scl])
+    c = translate(v=[(tpanel_l_b)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
+                (28)*scl]).add(c)
+    u -= c
     return u
 
 def tpanel_mid(scl, ht):
     u = union()
 
-    walls = {T:40, L:hthick, R:hthick, F:20, D:-1, B:20}
+    walls = {T:40, L:hthick, R:33, F:20, D:-1, B:20}
     curverads={
                 L|T: (hthick, 0),
                 R|T: (hthick, 0),
@@ -2060,7 +2064,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -5 and part != 8:
+    if part != 5 and part != -8:
         return
     """
     if part != 3 and part != 0:
