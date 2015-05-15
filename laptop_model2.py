@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -1280,6 +1280,28 @@ def base_mid(scl, ht):
     b = translate(v=[(w+70)*scl, (ht+41)*scl, (50)*scl]).add(c)
     u -= b
 
+    # diagonal cross-walls for internal stiffness
+    fthick = 6
+    offs = tpanel_l_b+40
+    step = (w-160-offs) / 8 if test else 16
+    while offs < (w-step):
+        d = cube([fthick*scl, 150*scl, (boxheight-39-hthick)*scl])
+        c = rotate([0, 0, -30]).add(d)
+        c = translate(v=[(offs)*scl, (hthick/2)*scl, (40)*scl]).add(c)
+        u += c
+        c = rotate([0, 0, 30]).add(d)
+        c = translate(v=[(offs+75)*scl, (hthick/2)*scl, (40)*scl]).add(c)
+        print step
+        u += c
+
+        offs += step
+
+    # fill in end for diagonals to mesh to
+    c = cube([(40)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
+    c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
+    u += c
+    
+        
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1995,7 +2017,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 5 and part != 8:
+    if part != -5 and part != 8:
         return
     """
     if part != 3 and part != 0:
