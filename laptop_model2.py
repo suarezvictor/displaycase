@@ -1305,16 +1305,59 @@ def base_mid(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(160)*scl, (3)*scl, 45*scl]).add(h)
+        h = translate([(225)*scl, (0)*scl, 5*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(160)*scl, (3)*scl, 120*scl]).add(h)
+        h = translate([(160)*scl, (0)*scl, -ht/2*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(118)*scl, (3)*scl, 80*scl]).add(h)
+        h = translate([(225)*scl, (0)*scl, -(ht+5)*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(w-50)*scl, (0)*scl, -(ht+15)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(tpanel_l_b-25)*scl, (3)*scl, 40*scl]).add(h)
+        h = translate([(w-50)*scl, (0)*scl, (15)*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(w+177)*scl, (0)*scl, -(ht+45)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+177)*scl, (0)*scl, (45)*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b+65)*scl, (0)*scl, 32*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b+65)*scl, (0)*scl, -(ht+32)*scl]).add(h)
+        c += h
+        
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([(0)*scl, (0)*scl, (boxheight-3)*scl]).add(c)
+
+        h = cube([6*scl, 55*scl, 50*scl])
+        h = translate([(tpanel_l_b+25)*scl, (ht+22)*scl, 65*scl]).add(h)
+        c += h
+        h = cube([6*scl, 55*scl, 50*scl])
+        h = translate([(tpanel_l_b+25)*scl, (-77)*scl, 65*scl]).add(h)
+        c += h
+
+        step = (ht+120-6) / 6.0
+        offs = -60
+        while offs < ht+60:
+            h = cube([145*scl, 6*scl, (boxheight-40)*scl])
+            h = translate([w*scl, (offs)*scl, 40*scl]).add(h)
+            c += h
+            offs += step
+
+        h = cube([91*scl, (ht+122)*scl, 95*scl])
+        h = translate([(w-1)*scl, (-61)*scl, 0*scl]).add(h)
+        c -= h
+        h = cube([20*scl, (ht+120)*scl, 6*scl])
+        h = translate([(w+125)*scl, (-60)*scl, (boxheight-6)*scl]).add(h)
         c += h
         
         u += c
