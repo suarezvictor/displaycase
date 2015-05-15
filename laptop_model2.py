@@ -1225,7 +1225,7 @@ def base_mid(scl, ht):
     d = rotate([0, 0, 180]).add(d)
     c = translate(v=[(tpanel_l_b)*scl, (ht+95)*scl, (75)*scl]).add(d)
     v += c
-    c = cube([40*scl, (base_centre_ht)*scl, (boxheight-42-hthick)*scl])
+    c = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(c)
     v += c
     c = cube([40*scl, (base_centre_ht+200)*scl, (40)*scl])
