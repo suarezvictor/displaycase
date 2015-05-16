@@ -786,7 +786,7 @@ def tpanel_mid(scl, ht):
 def base_front_top(scl, ht):
     u = union()
 
-    walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:75}
+    walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:105}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -814,8 +814,8 @@ def base_front_top(scl, ht):
 
     # put in series of cutouts
     fthick = 8
-    offs = 80-hthick+fthick
-    step = (ht-tpanel_b_w/2-60-offs) / 4 if test else 10
+    offs = 110-hthick+fthick
+    step = (ht-tpanel_b_w/2-60-offs) / 4.0 if test else 10.0
     while offs < (ht-step-tpanel_b_w/2):
         # add fill-ins
         c = base_front_fillin(scl, fthick)
@@ -847,6 +847,18 @@ def base_front_top(scl, ht):
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=120)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    u -= t
+
+    # add hexagonal bolt hole support for a nut to sit in
+    c = cube([100*scl, 20*scl, 46*scl], center=True)
+    c = translate(v=[(50)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    t = case_bolthole(scl, 0).add(c)
+    u -= t
+    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    t = case_bolthole(scl, 0).add(c)
+    t = translate(v=[(0)*scl, (85)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # screw holes in top for touchpanel
@@ -1086,7 +1098,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     u -= b
 
     # add lock-in to base_mid
-    c = shearedcube([(20)*scl, (35)*scl, (15)*scl],
+    c = shearedcube([(20)*scl, (35)*scl, (16)*scl],
                 shear=[0, 10*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 90]).add(c)
@@ -2064,7 +2076,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 5 and part != -8:
+    if part != 7 and part != -8:
         return
     """
     if part != 3 and part != 0:
