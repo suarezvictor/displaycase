@@ -1253,9 +1253,9 @@ def base_mid(scl, ht):
     # chamfered screw hole through to base_front
     s = chamfered_backbox_screwholes(scl, 50)
     s = rotate([0, 90, 0]).add(s)
-    t = translate(v=[(195)*scl, (-30)*scl, (73)*scl]).add(s)
+    t = translate(v=[(200)*scl, (-30)*scl, (73)*scl]).add(s)
     u -= t
-    t = translate(v=[(195)*scl, (base_centre_ht+30)*scl, (73)*scl]).add(s)
+    t = translate(v=[(200)*scl, (base_centre_ht+30)*scl, (73)*scl]).add(s)
     u -= t
 
     # hole for back screw-support to poke through
@@ -2089,7 +2089,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -8 and part != 5 and part != 7:
+    if part != 8 and part != -5 and part != -7:
         return
     """
     if part != 3 and part != 0:
