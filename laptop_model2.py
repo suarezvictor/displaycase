@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = True
@@ -1334,13 +1334,19 @@ def base_mid(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(225)*scl, (0)*scl, 5*scl]).add(h)
+        h = translate([(225)*scl, (0)*scl, 10*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(160)*scl, (0)*scl, -(ht+10)*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(160)*scl, (0)*scl, -ht/2*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(225)*scl, (0)*scl, -(ht+5)*scl]).add(h)
+        h = translate([(160)*scl, (0)*scl, 10*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(225)*scl, (0)*scl, -(ht+10)*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -1367,11 +1373,15 @@ def base_mid(scl, ht):
         c = rotate([90, 0, 0]).add(c)
         c = translate([(0)*scl, (0)*scl, (boxheight-3)*scl]).add(c)
 
-        h = cube([6*scl, 55*scl, 50*scl])
-        h = translate([(tpanel_l_b+25)*scl, (ht+22)*scl, 65*scl]).add(h)
+        h = cube([6*scl, 56*scl, 25*scl])
+        h = translate([(180)*scl, (ht-1)*scl, 95*scl]).add(h)
         c += h
-        h = cube([6*scl, 55*scl, 50*scl])
-        h = translate([(tpanel_l_b+25)*scl, (-77)*scl, 65*scl]).add(h)
+        h = translate([(33)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+        h = cube([6*scl, 56*scl, 25*scl])
+        h = translate([(180+0)*scl, (-55)*scl, 95*scl]).add(h)
+        c += h
+        h = translate([(33)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         step = (ht+120-6) / 7.0
