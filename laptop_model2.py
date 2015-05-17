@@ -815,7 +815,7 @@ def base_front_top(scl, ht):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(108)*scl, (ht+(tpanel_b_w/2-50))*scl, (38)*scl]).add(c)
+    c = translate(v=[(108)*scl, (ht+(tpanel_b_w/2+3))*scl, (38)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
