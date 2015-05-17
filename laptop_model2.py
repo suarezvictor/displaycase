@@ -815,7 +815,7 @@ def base_front_top(scl, ht):
     # put in series of cutouts
     fthick = 8
     offs = 110-hthick+fthick
-    step = (ht-tpanel_b_w/2-60-offs) / 4.0 if test else 10.0
+    step = (ht-tpanel_b_w/2-75-offs) / 4.0 if test else 10.0
     while offs < (ht-step-tpanel_b_w/2):
         # add fill-ins
         c = base_front_fillin(scl, fthick)
