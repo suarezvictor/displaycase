@@ -900,15 +900,15 @@ def base_front_top(scl, ht):
         offs = base_centre_ht / 2.0
         # dovetail cuts to fit base_mid
         # XXX height is magic constant
-        b = shearedcube([(40)*scl, (16)*scl, (33)*scl],
+        b = shearedcube([(40)*scl, (20)*scl, (33)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[10*scl, 0*scl, 0])
         b = rotate([0, -90, 0]).add(b)
-        c = translate(v=[(181)*scl, (ht-offs-2)*scl,
+        c = translate(v=[(181)*scl, (ht-offs-4)*scl,
                                         (48)*scl]).add(b)
         u -= c
         b = rotate([180, 0, 0]).add(b)
-        b = translate(v=[(181)*scl, (ht-offs+14)*scl, (112)*scl]).add(b)
+        b = translate(v=[(181)*scl, (ht-offs+16)*scl, (112)*scl]).add(b)
         u -= b
 
     if pin_parts_3d:
