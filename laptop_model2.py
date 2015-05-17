@@ -875,6 +875,9 @@ def base_front_top(scl, ht):
     u -= t
     t = translate(v=[(135)*scl, (ht-160)*scl, (50)*scl]).add(d)
     u -= t
+    t = rotate([0, 90, 0]).add(d)
+    t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, (73)*scl]).add(t)
+    u -= t
 
     # add support for tpanel_mid
     b = cube([(60)*scl, (62)*scl, (70)*scl])
@@ -1230,25 +1233,30 @@ def base_mid(scl, ht):
     # end wall for tpanel_mid to lock into
     v = union()
     # wings for screw-holes to fit with front base
-    d = shearedcube([(35)*scl, (40)*scl, (96)*scl],
+    d = shearedcube([(50)*scl, (40)*scl, (76)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-32*scl, 0*scl, 0])
+            innershear=[-25*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 90]).add(d)
-    c = translate(v=[(tpanel_l_b+40)*scl, (-95)*scl, (75)*scl]).add(d)
+    c = translate(v=[(180+40)*scl, (-75)*scl, (90)*scl]).add(d)
     v += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(tpanel_l_b)*scl, (ht+95)*scl, (75)*scl]).add(d)
+    c = translate(v=[(180)*scl, (ht+75)*scl, (90)*scl]).add(d)
     v += c
-    c = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
-    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(c)
+    d = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
+    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(d)
     v += c
-    c = cube([40*scl, (base_centre_ht+200)*scl, (40)*scl])
-    c = rotate([0, -45, 0]).add(c)
-    c = translate(v=[(tpanel_l_b-6)*scl, (-100)*scl, (45)*scl]).add(c)
-    v -= c
-
+    c = translate(v=[(180)*scl, (0)*scl, (40)*scl]).add(d)
+    v += c
     u += v
+
+    # chamfered screw hole through to base_front
+    s = chamfered_backbox_screwholes(scl, 50)
+    s = rotate([0, 90, 0]).add(s)
+    t = translate(v=[(195)*scl, (-30)*scl, (73)*scl]).add(s)
+    u -= t
+    t = translate(v=[(195)*scl, (base_centre_ht+30)*scl, (73)*scl]).add(s)
+    u -= t
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
@@ -2075,7 +2083,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 4 and part != -8:
+    if part != 8 and part != -5 and part != 7:
         return
     """
     if part != 3 and part != 0:
