@@ -1081,8 +1081,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = cube([(188)*scl, (62)*scl, (42)*scl])
     b = translate(v=[(w-61)*scl, (ht-61)*scl, (boxheight-41)*scl]).add(b)
     u -= b
-    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
-    b = translate(v=[(w-61+86)*scl, (ht-61)*scl, (40)*scl]).add(b)
+    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight+50)*scl])
+    b = translate(v=[(w-61+77)*scl, (ht-61)*scl, (40)*scl]).add(b)
     u -= b
     b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
     b = translate(v=[(w-61)*scl, (ht)*scl, (40)*scl]).add(b)
@@ -2075,7 +2075,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 7 and part != -8:
+    if part != 4 and part != -8:
         return
     """
     if part != 3 and part != 0:
