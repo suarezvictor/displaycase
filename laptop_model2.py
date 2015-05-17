@@ -673,7 +673,7 @@ def base_mid_cutout(u, scl, ht, offs):
 def tpanel_mid(scl, ht):
     u = union()
 
-    walls = {T:40, L:hthick, R:33, F:20, D:-1, B:20}
+    walls = {T:40, L:hthick, R:20, F:20, D:-1, B:20}
     curverads={
                 L|T: (hthick, 0),
                 R|T: (hthick, 0),
@@ -701,14 +701,14 @@ def tpanel_mid(scl, ht):
     c = translate(v=[(63)*scl, 0*scl, (38)*scl]).add(c)
     u += c
 
-    c = cube([37*scl, (ht)*scl, (37)*scl])
-    c = rotate([0, -45, 0]).add(c)
-    c = translate(v=[(tpanel_l_b-6)*scl, 0*scl, (47)*scl]).add(c)
-    u += c
-
     # support for base_mid
     u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
     u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
+
+    # cutout for base-mid cross-hatching
+    c = cube([70*scl, (base_centre_ht)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-60)*scl, (ht/2-base_centre_ht/2)*scl, (60)*scl]).add(c)
+    u -= c
 
     # wings for screw-holes to fit with front base
     d = shearedcube([(60)*scl, (40)*scl, (86)*scl],
@@ -1307,17 +1307,23 @@ def base_mid(scl, ht):
     fthick = 6
     offs = tpanel_l_b+40
     step = (w-160-offs) / 8 if test else 16
+    steps = []
     while offs < (w-step):
-        d = cube([fthick*scl, 150*scl, (boxheight-39-2)*scl])
+        steps.append((offs, boxheight-39-2))
+        offs += step
+
+    steps.append((210, boxheight-39-2))
+    steps.append((280, boxheight-59-2))
+
+    for (offs, ch) in steps:
+        hoff = (boxheight-39-2) - ch
+        d = cube([fthick*scl, 150*scl, ch*scl])
         c = rotate([0, 0, -30]).add(d)
-        c = translate(v=[(offs)*scl, (hthick/2)*scl, (40)*scl]).add(c)
+        c = translate(v=[(offs)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
         u += c
         c = rotate([0, 0, 30]).add(d)
-        c = translate(v=[(offs+75)*scl, (hthick/2)*scl, (40)*scl]).add(c)
-        print step
+        c = translate(v=[(offs+75)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
         u += c
-
-        offs += step
 
     # fill in end for diagonals to mesh to
     c = cube([(40)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
@@ -2083,7 +2089,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 8 and part != -5 and part != 7:
+    if part != -8 and part != 5 and part != 7:
         return
     """
     if part != 3 and part != 0:
