@@ -590,8 +590,8 @@ def holed_support(scl, ht, sht=50, dep=60, inverse=False):
         c = cube([(70)*scl, (ht)*scl, (dep)*scl])
         u += c
 
-    d = cylinder(r=topscrewrad*1.2*scl, r1=30*scl,
-                    h=19*scl,
+    d = cylinder(r=topscrewrad*1.2*scl, r1=33*scl,
+                    h=21*scl,
                     segments=50, center=True)
     d = rotate([90, 0, 0]).add(d)
     d = translate(v=[70/2*scl, (ht-19/2+0.5)*scl, (55/2+5)*scl]).add(d)
@@ -2098,7 +2098,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 8 and part != -5 and part != -7:
+    if part != -8 and part != -5 and part != 7:
         return
     """
     if part != 3 and part != 0:
