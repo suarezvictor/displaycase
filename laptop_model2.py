@@ -1111,13 +1111,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(ht-20)*scl, (-3)*scl, -25*scl]).add(h)
+        h = translate([(ht+25)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht+30)*scl, (-3)*scl, 55*scl]).add(h)
+        h = translate([(ht+25)*scl, (-3)*scl, 65*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht-20)*scl, (-3)*scl, 140*scl]).add(h)
+        h = translate([(ht-30)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(ht/2-38)*scl, (-3)*scl, -5*scl]).add(h)
@@ -1144,10 +1144,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
         c = translate([(w-58)*scl, (0)*scl, 0*scl]).add(c)
         
         u += c
-
-        h = cube([70*scl, 6*scl, 25*scl])
-        h = translate([(lcd_w+65)*scl, (ht-6)*scl, 45*scl]).add(h)
-        u += h
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -2098,7 +2094,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -8 and part != -5 and part != 7:
+    if part != -8 and part != -5 and part != -7 and part != 4:
         return
     """
     if part != 3 and part != 0:
