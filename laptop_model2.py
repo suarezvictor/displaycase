@@ -1330,23 +1330,22 @@ def base_mid(scl, ht):
     c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     
-        
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(225)*scl, (0)*scl, 10*scl]).add(h)
+        h = translate([(265)*scl, (0)*scl, 10*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(160)*scl, (0)*scl, -(ht+10)*scl]).add(h)
+        h = translate([(185)*scl, (0)*scl, -(ht+10)*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(160)*scl, (0)*scl, -ht/2*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(160)*scl, (0)*scl, 10*scl]).add(h)
+        h = translate([(185)*scl, (0)*scl, 10*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(225)*scl, (0)*scl, -(ht+10)*scl]).add(h)
+        h = translate([(265)*scl, (0)*scl, -(ht+10)*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -1376,12 +1375,12 @@ def base_mid(scl, ht):
         h = cube([6*scl, 56*scl, 25*scl])
         h = translate([(180)*scl, (ht-1)*scl, 95*scl]).add(h)
         c += h
-        h = translate([(33)*scl, (0)*scl, 0*scl]).add(h)
+        h = translate([(34)*scl, (0)*scl, 0*scl]).add(h)
         c += h
         h = cube([6*scl, 56*scl, 25*scl])
         h = translate([(180+0)*scl, (-55)*scl, 95*scl]).add(h)
         c += h
-        h = translate([(33)*scl, (0)*scl, 0*scl]).add(h)
+        h = translate([(34)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         step = (ht+120-6) / 7.0
