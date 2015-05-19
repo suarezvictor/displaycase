@@ -439,7 +439,7 @@ def base_end(scl, ht):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    u += b
+    #u += b
 
     rad=35.0 + 15
     # add hinge
@@ -509,10 +509,10 @@ def base_end(scl, ht):
     #u -= t
 
     # add support for keyboard corner
-    h = holed_support(scl, ht)
+    h = holed_support(scl, ht-hthick-1)
     t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
     u += t
-    h = holed_support(scl, ht, dep=boxheight-hthick)
+    h = holed_support(scl, ht-hthick-1, dep=boxheight-hthick)
     t = translate(v=[(tpanel_l_b+85)*scl, 0, (62)*scl]).add(h)
     u += t
     
@@ -1858,18 +1858,22 @@ def front_kbd_tray(scl, ht):
     l = ht-tpanel_b_w/2-50+hthick
 
     b = hollowbox(scl, w, l, boxheight-hthick,
-                {T:-1, L:hthick, R:hthick, F:hthick, D:-1, B:hthick*2},
+                {T:-1, L:15, R:hthick, F:hthick, D:-1, B:hthick*2},
                 curverads={ T|R: (hthick, 0)})
     b = translate(v=[(0)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
     # extra bit for kbd corner support
-    b = hollowbox(scl, 200+hthick, hthick, boxheight-hthick,
-                {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
+    b = hollowbox(scl, 200+hthick, 20+hthick, boxheight-hthick,
+                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-hthick)*scl, (hthick)*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-hthick)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
-    u = indented_screwhole(scl, u, (w+120), 1+hthick, 39)
+    b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    u = indented_screwhole(scl, u, (w+120), 6, 39)
 
     # surround touchpanel wing (locks into front base, too)
     b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
@@ -1994,19 +1998,22 @@ def back_kbd_corner(scl, ht):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 200, hthick, boxheight-hthick,
-                {T:-1, L:-1, R:-1, F:hthick, D:-1, B:-1},
+    b = hollowbox(scl, 200, 20+hthick, boxheight-hthick,
+                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-200)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-200)*scl, -hthick*scl, (0)*scl]).add(b)
     u += b
 
-    b = hollowbox(scl, hthick, ht, boxheight-hthick,
-                {T:-1, L:hthick, R:-1, F:-1, D:-1, B:-1},
+    b = hollowbox(scl, 20, ht, boxheight-hthick,
+                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-hthick)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+    b = cube([(200+50)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = translate(v=[(w-201)*scl, (-hthick-1)*scl, (-1)*scl]).add(b)
+    u -= b
 
-    u = indented_screwhole(scl, u, (w-98), 1, 39)
+    u = indented_screwhole(scl, u, (w-98), -hthick+6, 39)
     u = indented_screwhole(scl, u, (w-1), 156, 37, 90)
     u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
 
@@ -2088,7 +2095,9 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != 8 and part != 5 and part != 7 and part != 4:
+    #if part != 8 and part != 5 and part != 7 and part != 4:
+        #return
+    if part != -3 and part != 13 and part != 9:
         return
     """
     if part != 3 and part != 0:
