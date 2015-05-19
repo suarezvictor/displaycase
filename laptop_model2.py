@@ -1045,7 +1045,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
-    t = translate(v=[(w-8)*scl, (121)*scl, (5)*scl]).add(t)
+    t = translate(v=[(w-8)*scl, (197)*scl, (5)*scl]).add(t)
     u += t
     
     # lower screw hole for keyboard corner joiner
@@ -2014,7 +2014,7 @@ def back_kbd_corner(scl, ht):
     u -= b
 
     u = indented_screwhole(scl, u, (w-98), -hthick+6, 39)
-    u = indented_screwhole(scl, u, (w-1), 156, 37, 90)
+    u = indented_screwhole(scl, u, (w-1), 232, 37, 90)
     u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
 
     if pin_parts_3d:
@@ -2097,7 +2097,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != -3 and part != 13 and part != 9:
+    if part != -3 and part != 13 and part != 9 and part != 4:
         return
     """
     if part != 3 and part != 0:
@@ -2151,7 +2151,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         b.add(m)
 
     if part == 9:
-        se = back_kbd_corner(scl, 200)
+        se = back_kbd_corner(scl, 275)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
