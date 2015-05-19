@@ -439,7 +439,7 @@ def base_end(scl, ht):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    #u += b
+    u += b
 
     rad=35.0 + 15
     # add hinge
