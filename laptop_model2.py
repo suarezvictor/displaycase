@@ -9,7 +9,7 @@ from copy import deepcopy
 from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -1054,12 +1054,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     b = translate(v=[(w-8)*scl, (10)*scl, (35)*scl]).add(t)
     u -= b
 
-    # chamfered screw-hole through to joiner
-    s = chamfered_backbox_screwholes(scl, 20)
-    s = rotate([0, -90, 0]).add(s)
-    b = translate(v=[(w-55)*scl, (ht-35)*scl, (14+40)*scl]).add(s)
-    #u -= b
-
     # slot to fit a nut into
     c = cube([70*scl, 50*scl, 80*scl], center=True)
     c = translate(v=[(lcd_w+85)*scl, (100)*scl, (45)*scl]).add(c)
@@ -1096,7 +1090,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     s = rotate([-180, 0, 0]).add(s)
     b = translate(v=[(w+55)*scl, (ht+30)*scl, (20)*scl]).add(s)
     u -= b
-    b = translate(v=[(w-20)*scl, (ht-30)*scl, (60)*scl]).add(s)
+    b = translate(v=[(w-20)*scl, (ht-30)*scl, (45)*scl]).add(s)
     u -= b
 
     # add lock-in to base_mid
@@ -1281,15 +1275,15 @@ def base_mid(scl, ht):
 
     # screw holes in top for back_box_base
     d = cylinder(r=topscrewrad*scl,
-                    h=(55)*scl,
+                    h=(65)*scl,
                     segments=50, center=True)
     t = translate(v=[(w+93)*scl, (30)*scl, (50)*scl]).add(d)
     u -= t
     t = translate(v=[(w+93)*scl, (ht-30)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-35)*scl]).add(d)
+    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-40)*scl]).add(d)
     u -= t
-    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-35)*scl]).add(d)
+    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-40)*scl]).add(d)
     u -= t
 
     # locking cut-out for back_box_base
@@ -2094,7 +2088,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9:
         return
-    if part != -8 and part != -5 and part != -7 and part != 4:
+    if part != 8 and part != 5 and part != 7 and part != 4:
         return
     """
     if part != 3 and part != 0:
