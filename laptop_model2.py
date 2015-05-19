@@ -155,10 +155,10 @@ def lcd_view_area(scl, offs=0):
 
     return a
 
-def chamfered_backbox_screwholes(scl, sht):
+def chamfered_backbox_screwholes(scl, sht, r1=22):
     # chamfered screw holes in top of lid
     c = union()
-    c.add(cylinder(r=topscrewrad*1.2*scl, r1=22*scl,
+    c.add(cylinder(r=topscrewrad*1.2*scl, r1=r1*scl,
                     h=12*scl,
                     segments=50, center=True))
     d = cylinder(r=topscrewrad*scl,
@@ -166,7 +166,7 @@ def chamfered_backbox_screwholes(scl, sht):
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
     c.add(d)
-    d = cylinder(r=23*scl,
+    d = cylinder(r=(r1+1)*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
     d = translate(v=[0, 0, (-5.8-(bwid+2.5+sht)/2)*scl]).add(d)
@@ -462,9 +462,9 @@ def base_end(scl, ht):
     v = union()
     c = cube([(60)*scl, (ht)*scl, (40)*scl])
     v.add(c)
-    c = cube([(60)*scl, (50)*scl, (60)*scl])
+    c = cube([(70)*scl, (50)*scl, (68)*scl])
     v.add(c)
-    c = translate(v=[(boxlength-back_top_width)*scl,
+    c = translate(v=[(boxlength-back_top_width-5)*scl,
                       (0)*scl, (56+hthick)*scl]).add(v)
     u += c
 
@@ -507,6 +507,13 @@ def base_end(scl, ht):
     t = box_screwholes(scl, hthick, holes=[0, 2])
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     u -= t
+
+    s = chamfered_backbox_screwholes(scl, 20, 25)
+    s = rotate([90, 0, 0]).add(s)
+    s = translate(v=[0, 30*scl, boxheight*scl]).add(s)
+    for hole in [0,2]:
+        t = case_bolthole(scl, hole).add(s)
+        u -= t
 
     if pin_parts_3d:
         c = union()
