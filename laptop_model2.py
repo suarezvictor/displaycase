@@ -462,7 +462,11 @@ def base_end(scl, ht):
     v = union()
     c = cube([(60)*scl, (ht)*scl, (40)*scl])
     v.add(c)
-    c = cube([(70)*scl, (50)*scl, (68)*scl])
+    c = cylinder(r=40*scl, h=50*scl, segments=6, center=True)
+    c = rotate([0, 0, 90]).add(c)
+    c = rotate([90, 0, 0]).add(c)
+    #c = rotate([0, -20, 0]).add(c)
+    c = translate(v=[35*scl, (25)*scl, (35)*scl]).add(c)
     v.add(c)
     c = translate(v=[(boxlength-back_top_width-5)*scl,
                       (0)*scl, (56+hthick)*scl]).add(v)
@@ -2072,7 +2076,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != 3 and part != 13 and part != 9 and part != 4:
+    if part != 3 and part != -13 and part != -9 and part != -4:
         return
     """
     if part != 3 and part != 0:
