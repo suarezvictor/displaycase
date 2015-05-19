@@ -387,38 +387,6 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
 
     return u
 
-def base_end_hinge(scl, ht):
-    u = union()
-    w = boxlength-112
-
-    topcurve = 30
-    walls = {T:hthick, L:hthick, R:-1, F:-1, D:-1, B: -1}
-    curverads={
-                L|T: (hthick, 0),
-                R|T: (hthick, 0),
-                }
-    b = hollowbox(scl, back_top_width-112, ht, boxheight, walls,
-                  curverads=curverads)
-    b = translate(v=[(boxlength-back_top_width)*scl, 0, (55)*scl]).add(b)
-    u += b
-
-    c = shearedcube([(45.5)*scl, ht*scl, (boxheight-5)*scl],
-                shear=[68*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([0, 0, 180]).add(c)
-    c = rotate([180, 0, 0]).add(c)
-    c = rotate([0, 180, 0]).add(c)
-    c = translate(v=[(w-48)*scl,0*scl,(hinge_offs-10)*scl]).add(c)
-    u += c
-
-    rad=35.0 + 12
-    # add hinge
-    c = cube([rad*scl, (ht+2)*scl, boxheight*2*scl])
-    c = translate(v=[(w+25)*scl,-1*scl,(boxheight/2)*scl]).add(c)
-    u -= c
-
-    return u
-    
 def base_end(scl, ht):
     u = union()
     w = boxlength-3
@@ -2097,7 +2065,7 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != -3 and part != 13 and part != 9 and part != 4:
+    if part != 3 and part != 13 and part != 9 and part != 4:
         return
     """
     if part != 3 and part != 0:
