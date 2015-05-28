@@ -2104,7 +2104,7 @@ def pcb1(scl):
     t.add(r)
 
     v = union()
-    t = translate([(260)*scl, 0*scl, (150)*scl]).add(t)
+    t = translate([(390)*scl, 0*scl, (150)*scl]).add(t)
     v.add(t)
     return t
 
@@ -2310,7 +2310,7 @@ if __name__ == '__main__':
 
             if add_internal_parts:
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
-                r = translate([(lcd_w-kbd_w+600-265)*scl, lcd_l/2*scl,
+                r = translate([(lcd_w-kbd_w+610)*scl, lcd_l/2*scl,
                                 (62)*scl]).add(kbd)
                 t.add(r)
 
