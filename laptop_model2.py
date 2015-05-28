@@ -403,7 +403,7 @@ def base_end(scl, ht):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    walls[B] = hthick
+    walls[B] = hthick # -1
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
@@ -2049,7 +2049,7 @@ def screen_adjust(b, scl, angle):
     if add_internal_parts:
         p = lcd_panel(scl, offs=3)
         p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
-        b += p
+        #b += p
 
     return hinge_rotate(scl, b, angle)
 
@@ -2071,13 +2071,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != -8 \
         and part != 12 and part != 13 and part != 9:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != 3 and part != -13 and part != -9 and part != -4:
-        return
+    #if part != 3 and part != -13 and part != -9 and part != -4:
+    #    return
     """
     if part != 3 and part != 0:
         return
@@ -2232,13 +2232,15 @@ if __name__ == '__main__':
                 card = import_stl(filename = "eoma68.stl")
                 drop_ht=20.0
                 r = rotate([90,180,180]).add(card)
-                r = translate([(lcd_w-250)*scl, 0*scl, (drop_ht+110)*scl]).add(r)
+                r = translate([(180+570)*scl, 0*scl,
+                            (drop_ht+85)*scl]).add(r)
                 t.add(r)
+
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
                 r = translate([(lcd_w-265)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
                 t.add(r)
-                pcb = cube([800*scl, 1000*scl, (12)*scl], center=True)
-                r = translate([(lcd_w-400)*scl, 520*scl, (drop_ht+134)*scl]).add(pcb)
+                pcb = cube([800*scl, 300*scl, (12)*scl])
+                r = translate([(180+30)*scl, 720*scl, (drop_ht+104)*scl]).add(pcb)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog2.scad")
