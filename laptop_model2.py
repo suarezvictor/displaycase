@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = True
 single = True
@@ -403,7 +403,7 @@ def base_end(scl, ht):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    walls[B] = hthick # -1
+    walls[B] = -1 # hthick
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
@@ -1922,7 +1922,7 @@ def front_kbd_tray(scl, ht):
     b = translate(v=[(-1)*scl, r, (20)*scl]).add(b)
     c += b
     # add fill-ins
-    b = translate(v=[(0)*scl, (0)*scl, (25)*scl]).add(b)
+    b = translate(v=[(0)*scl, (0)*scl, (boxheight-120+25)*scl]).add(b)
     c += b
 
     while offs < (l-25):
@@ -2032,6 +2032,25 @@ def back_kbd_corner(scl, ht):
     v.add(u)
     return v
 
+def pcb1(scl):
+
+    t = union()
+
+    card = import_stl(filename = "eoma68.stl")
+    drop_ht=20.0
+    r = rotate([90,180,180]).add(card)
+    r = translate([(180+570)*scl, 0*scl,
+                (drop_ht+112)*scl]).add(r)
+    t.add(r)
+
+    t.add(r)
+    pcb = cube([800*scl, 1000*scl, (12)*scl])
+    r = translate([(180+30)*scl, 15*scl,
+                (drop_ht+130)*scl]).add(pcb)
+    t.add(r)
+
+    return t
+
 def screen_adjust(b, scl, angle):
 
     lcd_ht = 10.0
@@ -2071,8 +2090,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != -8 \
-        and part != 12 and part != 13 and part != 9:
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+        and part != 12 and part != 13 and part != 9 and part != 14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
@@ -2122,6 +2141,10 @@ def create_laptop(t, scl, mirror, colour, part, angle):
 
     base_back_ht = (lcd_l + hthick*2 - base_centre_ht) / 2 - base_adjust_ht
     base_front_ht = (lcd_l + hthick*2) / 2 - base_adjust_ht
+
+    if part == 14:
+        se = pcb1(scl)
+        b.add(se)
 
     if part == 4:
         # NOTE: ... here's the other bit
@@ -2229,18 +2252,9 @@ if __name__ == '__main__':
                 t.add(p)
 
             if add_internal_parts:
-                card = import_stl(filename = "eoma68.stl")
-                drop_ht=20.0
-                r = rotate([90,180,180]).add(card)
-                r = translate([(180+570)*scl, 0*scl,
-                            (drop_ht+85)*scl]).add(r)
-                t.add(r)
-
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
-                r = translate([(lcd_w-265)*scl, lcd_l/2*scl, (drop_ht+47)*scl]).add(kbd)
-                t.add(r)
-                pcb = cube([800*scl, 300*scl, (12)*scl])
-                r = translate([(180+30)*scl, 720*scl, (drop_ht+104)*scl]).add(pcb)
+                r = translate([(lcd_w-265)*scl, lcd_l/2*scl,
+                                (67)*scl]).add(kbd)
                 t.add(r)
 
             scad_render_to_file(t, "laptop_prog2.scad")
