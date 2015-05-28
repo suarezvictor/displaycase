@@ -2046,13 +2046,13 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1630*scl, 1150*scl, (12)*scl])
+    b = cube([1520*scl, 1150*scl, (12)*scl])
     pcb += b
-    b = cube([401*scl, 1100*scl, (14)*scl])
-    b = translate([(-1)*scl, 295*scl, -1*scl]).add(b)
+    b = cube([391*scl, 1200*scl, (30)*scl])
+    b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
-    b = cube([901*scl, 1100*scl, (14)*scl])
-    b = translate([(1400)*scl, 195*scl, -1*scl]).add(b)
+    b = cube([901*scl, 1100*scl, (30)*scl])
+    b = translate([(1300)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
@@ -2066,32 +2066,33 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    r = translate([(460)*scl, 0*scl,
+    cpu_offs = 420
+    r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
 
     # EOMA68 CPU Card 
     card = import_stl(filename = "eoma68.stl")
     r = rotate([90,180,180]).add(card)
-    r = translate([(1060)*scl, 0*scl,
+    r = translate([(600+cpu_offs)*scl, 0*scl,
                 (-19)*scl]).add(r)
     t.add(r)
 
     # DC Jack
     j = cube([80*scl, 93*scl, (52)*scl])
-    r = translate([(1520)*scl, 0*scl,
+    r = translate([(1150)*scl, 0*scl,
                 (-52)*scl]).add(j)
     t.add(r)
 
     # Micro SD
     j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(1319)*scl, 0*scl,
+    r = translate([(1369)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
     # Headphone jack
     j = cube([60*scl, 93*scl, (52)*scl])
-    r = translate([(1220)*scl, 0*scl,
+    r = translate([(1270)*scl, 0*scl,
                 (-52)*scl]).add(j)
     t.add(r)
 
@@ -2103,7 +2104,7 @@ def pcb1(scl):
     t.add(r)
 
     v = union()
-    t = translate([(180)*scl, 0*scl, (150)*scl]).add(t)
+    t = translate([(260)*scl, 0*scl, (150)*scl]).add(t)
     v.add(t)
     return t
 
@@ -2146,11 +2147,11 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != -13 and part != 9 and part != 14:
+        and part != 12 and part != 13 and part != 9 and part != 14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != 3 and part != -13 and part != -9 and part != -4 and \
+    if part != 3 and part != -13 and part != 9 and part != -4 and \
         part != 14:
         return
     """
@@ -2318,7 +2319,7 @@ if __name__ == '__main__':
                 p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
                 b += p
 
-                t.add(hinge_rotate(scl, b, angle))
+                #t.add(hinge_rotate(scl, b, angle))
 
 
             scad_render_to_file(t, "laptop_prog2.scad")
