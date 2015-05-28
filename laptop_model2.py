@@ -10,9 +10,9 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
-test = True
+test = False
 single = True
 
 
@@ -26,6 +26,13 @@ if not test:
     kbd_d = 60
     kbd_l = lcd_l-100
     kbd_w = 600
+
+    tpanel_w = 250
+    tpanel_b_w = tpanel_w+50
+    tpanel_l = 200
+    tpanel_l_b = tpanel_l + 150
+    tpanel_h = 40
+
 else:
     # HSD070PWW1
     lcd_l = 1612
@@ -2036,19 +2043,67 @@ def pcb1(scl):
 
     t = union()
 
+    # PCB
+    pcb = union()
+    b = cube([1630*scl, 1150*scl, (12)*scl])
+    pcb += b
+    b = cube([401*scl, 1100*scl, (14)*scl])
+    b = translate([(-1)*scl, 295*scl, -1*scl]).add(b)
+    pcb -= b
+    b = cube([901*scl, 1100*scl, (14)*scl])
+    b = translate([(1400)*scl, 195*scl, -1*scl]).add(b)
+    pcb -= b
+
+    r = translate([(30)*scl, 15*scl, 0]).add(pcb)
+    t.add(r)
+
+    s = union()
+    b = cube([700*scl, 986*scl, (58)*scl])
+    s += b
+    b = cube([540*scl, 861*scl, (60)*scl])
+    b = translate([(110)*scl, -1*scl,
+                (-1)*scl]).add(b)
+    s -= b
+
+    r = translate([(460)*scl, 0*scl,
+                (-58)*scl]).add(s)
+    t.add(r)
+
+    # EOMA68 CPU Card 
     card = import_stl(filename = "eoma68.stl")
-    drop_ht=20.0
     r = rotate([90,180,180]).add(card)
-    r = translate([(180+570)*scl, 0*scl,
-                (drop_ht+112)*scl]).add(r)
+    r = translate([(1060)*scl, 0*scl,
+                (-19)*scl]).add(r)
     t.add(r)
 
-    t.add(r)
-    pcb = cube([800*scl, 1000*scl, (12)*scl])
-    r = translate([(180+30)*scl, 15*scl,
-                (drop_ht+130)*scl]).add(pcb)
+    # DC Jack
+    j = cube([80*scl, 93*scl, (52)*scl])
+    r = translate([(1520)*scl, 0*scl,
+                (-52)*scl]).add(j)
     t.add(r)
 
+    # Micro SD
+    j = cube([160.7*scl, 151.1*scl, (18)*scl])
+    r = translate([(1319)*scl, 0*scl,
+                (-18)*scl]).add(j)
+    t.add(r)
+
+    # Headphone jack
+    j = cube([60*scl, 93*scl, (52)*scl])
+    r = translate([(1220)*scl, 0*scl,
+                (-52)*scl]).add(j)
+    t.add(r)
+
+    # USB x 2
+    u = cube([132*scl, 137*scl, (69)*scl])
+    r = translate([(75)*scl, 0*scl, (-69)*scl]).add(u)
+    t.add(r)
+    r = translate([(260)*scl, 0*scl, (-69)*scl]).add(u)
+    t.add(r)
+
+    v = union()
+    t = translate([(180)*scl, 0*scl, (150)*scl]).add(t)
+    v.add(t)
     return t
 
 def screen_adjust(b, scl, angle):
@@ -2091,12 +2146,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != 14:
+        and part != 12 and part != -13 and part != 9 and part != 14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    #if part != 3 and part != -13 and part != -9 and part != -4:
-    #    return
+    if part != 3 and part != -13 and part != -9 and part != -4 and \
+        part != 14:
+        return
     """
     if part != 3 and part != 0:
         return
