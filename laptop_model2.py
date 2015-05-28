@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -24,8 +24,8 @@ if not test:
     lcd_d = 50
     lcd_cable_depth = 1000
     kbd_d = 60
-    kbd_l = lcd_l-100
-    kbd_w = 600
+    kbd_l = 3390.0
+    kbd_w = 1170.0
 
     tpanel_w = 250
     tpanel_b_w = tpanel_w+50
@@ -55,6 +55,7 @@ else:
     tpanel_l_b = tpanel_l + 150
     tpanel_h = 40
 
+lcd_ht = 10.0
 lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
@@ -2108,7 +2109,6 @@ def pcb1(scl):
 
 def screen_adjust(b, scl, angle):
 
-    lcd_ht = 10.0
     u = union()
     p = lcd_panel(scl, offs=3)
     p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
@@ -2123,7 +2123,7 @@ def screen_adjust(b, scl, angle):
     if add_internal_parts:
         p = lcd_panel(scl, offs=3)
         p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
-        #b += p
+        b += p
 
     return hinge_rotate(scl, b, angle)
 
@@ -2309,9 +2309,17 @@ if __name__ == '__main__':
 
             if add_internal_parts:
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
-                r = translate([(lcd_w-265)*scl, lcd_l/2*scl,
-                                (67)*scl]).add(kbd)
+                r = translate([(lcd_w-kbd_w+600-265)*scl, lcd_l/2*scl,
+                                (62)*scl]).add(kbd)
                 t.add(r)
+
+                b = union()
+                p = lcd_panel(scl, offs=3)
+                p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
+                b += p
+
+                t.add(hinge_rotate(scl, b, angle))
+
 
             scad_render_to_file(t, "laptop_prog2.scad")
             f = open("laptop_model2.scad", "w")
