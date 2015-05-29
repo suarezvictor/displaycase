@@ -12,7 +12,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=False
 add_internal_parts=True
 
-test = False
+test = True
 single = True
 
 
@@ -1841,7 +1841,7 @@ def front_kbd_tray(scl, ht):
     """
 
     u = union()
-    w = tpanel_l_b-180
+    w = lcd_w-kbd_w-158
     l = ht-tpanel_b_w/2-50+hthick
 
     b = hollowbox(scl, w, l, boxheight-hthick,
@@ -1985,10 +1985,10 @@ def back_kbd_corner(scl, ht):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 200, 20+hthick, boxheight-hthick,
+    b = hollowbox(scl, 150, 20+hthick, boxheight-hthick,
                 {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-200)*scl, -hthick*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-150)*scl, -hthick*scl, (0)*scl]).add(b)
     u += b
 
     b = hollowbox(scl, 20, ht, boxheight-hthick,
@@ -2046,14 +2046,14 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1520*scl, 1150*scl, (12)*scl])
+    b = cube([1460*scl, 1150*scl, (12)*scl])
     pcb += b
-    b = cube([391*scl, 1200*scl, (30)*scl])
+    b = cube([491*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([901*scl, 1100*scl, (30)*scl])
     b = translate([(1300)*scl, 245*scl, -10*scl]).add(b)
-    pcb -= b
+    #pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
     t.add(r)
@@ -2066,7 +2066,7 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    cpu_offs = 420
+    cpu_offs = 770
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -2078,21 +2078,23 @@ def pcb1(scl):
                 (-19)*scl]).add(r)
     t.add(r)
 
-    # DC Jack
-    j = cube([80*scl, 93*scl, (52)*scl])
-    r = translate([(1150)*scl, 0*scl,
-                (-52)*scl]).add(j)
-    t.add(r)
+    if False:
+        # XXX DC Jack to move onto pcb2, on other side, with PMIC and charger
+        # DC Jack
+        j = cube([80*scl, 93*scl, (52)*scl])
+        r = translate([(870)*scl, 0*scl,
+                    (-52)*scl]).add(j)
+        t.add(r)
 
     # Micro SD
     j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(1369)*scl, 0*scl,
+    r = translate([(440)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
     # Headphone jack
     j = cube([60*scl, 93*scl, (52)*scl])
-    r = translate([(1270)*scl, 0*scl,
+    r = translate([(670)*scl, 0*scl,
                 (-52)*scl]).add(j)
     t.add(r)
 
@@ -2104,7 +2106,7 @@ def pcb1(scl):
     t.add(r)
 
     v = union()
-    t = translate([(390)*scl, 0*scl, (150)*scl]).add(t)
+    t = translate([(510)*scl, 0*scl, (150)*scl]).add(t)
     v.add(t)
     return t
 
@@ -2151,13 +2153,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    """
     if part != 3 and part != 13 and part != 9 and part != -4 and \
         part != 14:
         return
     """
     if part != 13 and part != 0:
         return
+    """
     c = color(colour)
     c.add(t)
 
@@ -2310,7 +2312,7 @@ if __name__ == '__main__':
 
             if add_internal_parts:
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
-                r = translate([(lcd_w-kbd_w+610)*scl, lcd_l/2*scl,
+                r = translate([(lcd_w-kbd_w/2+25)*scl, lcd_l/2*scl,
                                 (62)*scl]).add(kbd)
                 t.add(r)
 
