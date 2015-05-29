@@ -1918,7 +1918,7 @@ def front_kbd_tray(scl, ht):
 
     # funny cutouts (reduce plastic usage, screw access points as well)
     offs = 32
-    step = (l-160-offs) / 5 if test else 10
+    step = (l-160-offs) / (5 if test else 19)
 
     c = union()
     b = cube([(70)*scl, (step-25)*scl, (boxheight-94)*scl])
@@ -2151,13 +2151,13 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != 3 and part != -13 and part != 9 and part != -4 and \
+    """
+    if part != 3 and part != 13 and part != 9 and part != -4 and \
         part != 14:
         return
     """
-    if part != 3 and part != 0:
+    if part != 13 and part != 0:
         return
-    """
     c = color(colour)
     c.add(t)
 
