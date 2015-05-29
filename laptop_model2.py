@@ -2130,8 +2130,12 @@ def screen_adjust(b, scl, angle):
 
     return hinge_rotate(scl, b, angle)
 
+def mirror_part(se, scl, offs):
+    m = mirror([0, 0, 1]).add(se)
+    m = rotate([0, 0, 180]).add(m)
+    return translate(v=[0, offs*scl,0]).add(m)
 
-def create_laptop(t, scl, mirror, colour, part, angle):
+def create_laptop(t, scl, colour, part, angle):
 
     """
     #if part != 7 and part != 3 and part != 4 and part != -2:
@@ -2149,14 +2153,14 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != 14:
+        and part != 12 and part != 13 and part != 9 and part != -14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    if part != 3 and part != 13 and part != 9 and part != -4 and \
+    """
+    if part != 3 and part != 13 and part != 9 and part != 4 and \
         part != 14:
         return
-    """
     if part != 13 and part != 0:
         return
     """
@@ -2164,6 +2168,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     c.add(t)
 
     b = union()
+
+    total_width = lcd_l  + hthick*2
 
     lid_adjust_ht = 0
     base_adjust_ht = 0
@@ -2194,6 +2200,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         se = base_end(scl, scrn_end_ht+lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
+        m = mirror_part(se, scl, total_width)
+        b.add(m)
 
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
@@ -2209,6 +2217,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
         # NOTE: ... here's the other bit
         se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        b.add(m)
+        m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
     if part == 9:
@@ -2233,6 +2243,8 @@ def create_laptop(t, scl, mirror, colour, part, angle):
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        b.add(m)
+        m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
     if part == 13:
@@ -2291,14 +2303,14 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
             t = union()
             c = [0.3, 0.5, 0.8, 0.5]
             for i in range(17):
-                create_laptop(t, scl, 1.0, c, part=i, angle=angle)
+                create_laptop(t, scl, c, part=i, angle=angle)
             t = color(c).add(t)
 
             if False: # add inner parts for reference
