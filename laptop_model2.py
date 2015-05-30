@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = True
 single = True
@@ -58,6 +58,8 @@ else:
     tpanel_h = 40
 
     lcd_indent = 61
+
+total_width = lcd_l  + 40
 
 lcd_ht = 10.0
 lcd_doff = 5
@@ -2157,8 +2159,8 @@ def create_laptop(t, scl, colour, part, angle):
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
     """
-    if part != 3 and part != 13 and part != 9 and part != 4 and \
-        part != 14:
+    if part != 3 and part != 7 and part != 9 and part != 4 and \
+        part != 8:
         return
     if part != 13 and part != 0:
         return
@@ -2169,8 +2171,6 @@ def create_laptop(t, scl, colour, part, angle):
     c.add(t)
 
     b = union()
-
-    total_width = lcd_l  + 40
 
     lid_adjust_ht = 0
     base_adjust_ht = 0
@@ -2210,8 +2210,8 @@ def create_laptop(t, scl, colour, part, angle):
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
 
-    base_back_ht = (lcd_l + hthick*4 - base_centre_ht) / 2 - base_adjust_ht
-    base_front_ht = (lcd_l + hthick*4) / 2 - base_adjust_ht
+    base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
+    base_front_ht = total_width / 2 - base_adjust_ht
 
     if part == 14:
         se = pcb1(scl)
@@ -2232,7 +2232,7 @@ def create_laptop(t, scl, colour, part, angle):
 
     adj = scrn_end_ht
     if part == 10:
-        se = screen_front_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
+        se = screen_front_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
         m = mirror_part(se, scl, total_width-adj)
@@ -2241,7 +2241,7 @@ def create_laptop(t, scl, colour, part, angle):
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == 6:
-        se = screen_back_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
+        se = screen_back_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
         m = mirror_part(se, scl, total_width-adj)
@@ -2269,7 +2269,7 @@ def create_laptop(t, scl, colour, part, angle):
 
     if part == 11:
         se = screen_mid(scl, centre_ht)
-        m = translate(v=[0, (base_adjust_ht+base_centre_ht/2-centre_ht/2)*scl,0]).add(se)
+        m = translate(v=[0, (total_width/2-centre_ht/2)*scl,0]).add(se)
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
@@ -2290,13 +2290,12 @@ def create_laptop(t, scl, colour, part, angle):
     #                     0]).add(se)
     #    b.add(m)
 
-    if part == 12:
-        se = front_mid_joiner(scl, base_joiner_ht)
-        m = translate(v=[0, 
-                        (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
-                         0]).add(se)
-        b.add(m)
-        b = screen_adjust(b, scl, angle)
+    #if part == 12:
+    #    se = front_mid_joiner(scl, base_joiner_ht)
+    #    m = translate(v=[0, 
+    #                    (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
+    #                     0]).add(se)
+    #    b.add(m)
 
     c = color([0.2, 0.2, 0.2, 1.0])
     c.add(b)
@@ -2311,7 +2310,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [120]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
@@ -2332,7 +2331,7 @@ if __name__ == '__main__':
 
             if add_internal_parts:
                 kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
-                r = translate([(lcd_w-kbd_w/2+25)*scl, lcd_l/2*scl,
+                r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
                 t.add(r)
 
