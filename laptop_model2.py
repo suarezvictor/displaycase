@@ -33,6 +33,8 @@ if not test:
     tpanel_l_b = tpanel_l + 150
     tpanel_h = 40
 
+    lcd_indent = 61
+
 else:
     # HSD070PWW1
     lcd_l = 1612
@@ -54,6 +56,8 @@ else:
     tpanel_l = 200
     tpanel_l_b = tpanel_l + 150
     tpanel_h = 40
+
+    lcd_indent = 61
 
 lcd_ht = 10.0
 lcd_doff = 5
@@ -2123,11 +2127,6 @@ def screen_adjust(b, scl, angle):
 
     b -= u
 
-    if add_internal_parts:
-        p = lcd_panel(scl, offs=3)
-        p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
-        b += p
-
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
@@ -2152,9 +2151,9 @@ def create_laptop(t, scl, colour, part, angle):
         and part != -11:
         return
     """
-    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != -14:
-        return
+    #if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+    #    and part != 12 and part != 13 and part != 9 and part != -14:
+    #    return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
     """
@@ -2164,12 +2163,14 @@ def create_laptop(t, scl, colour, part, angle):
     if part != 13 and part != 0:
         return
     """
+    if part == 14:
+        return
     c = color(colour)
     c.add(t)
 
     b = union()
 
-    total_width = lcd_l  + hthick*2
+    total_width = lcd_l  + 40
 
     lid_adjust_ht = 0
     base_adjust_ht = 0
@@ -2180,6 +2181,8 @@ def create_laptop(t, scl, colour, part, angle):
         se = screen_end(scl, scrn_end_ht, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
+        m = mirror_part(se, scl, total_width)
+        b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
@@ -2188,10 +2191,11 @@ def create_laptop(t, scl, colour, part, angle):
 
     if part == 2:
         se = screen_hinge(scl, scrn_hinge_ht)
-        m = translate(v=[0, 0*scl,0]).add(se)
+        m = translate(v=[0, lid_adjust_ht*scl,0]).add(se)
+        b.add(m)
+        m = mirror_part(se, scl, total_width-lid_adjust_ht)
         b.add(m)
 
-        b = translate(v=[0, lid_adjust_ht*scl,0]).add(b)
         b = screen_adjust(b, scl, angle)
 
     lid_adjust_ht += scrn_hinge_ht
@@ -2206,8 +2210,8 @@ def create_laptop(t, scl, colour, part, angle):
     base_adjust_ht = scrn_end_ht+lcd_end_ht
     base_adjust_ht += scrn_hinge_ht
 
-    base_back_ht = (lcd_l + hthick*2 - base_centre_ht) / 2 - base_adjust_ht
-    base_front_ht = (lcd_l + hthick*2) / 2 - base_adjust_ht
+    base_back_ht = (lcd_l + hthick*4 - base_centre_ht) / 2 - base_adjust_ht
+    base_front_ht = (lcd_l + hthick*4) / 2 - base_adjust_ht
 
     if part == 14:
         se = pcb1(scl)
@@ -2231,12 +2235,16 @@ def create_laptop(t, scl, colour, part, angle):
         se = screen_front_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
+        m = mirror_part(se, scl, total_width-adj)
+        b.add(m)
         b = screen_adjust(b, scl, angle)
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == 6:
         se = screen_back_edge(scl, (lcd_l-centre_ht)/2-adj+hthick)
         m = translate(v=[0, (adj)*scl,0]).add(se)
+        b.add(m)
+        m = mirror_part(se, scl, total_width-adj)
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
@@ -2261,7 +2269,7 @@ def create_laptop(t, scl, colour, part, angle):
 
     if part == 11:
         se = screen_mid(scl, centre_ht)
-        m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
+        m = translate(v=[0, (base_adjust_ht+base_centre_ht/2-centre_ht/2)*scl,0]).add(se)
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
@@ -2330,10 +2338,10 @@ if __name__ == '__main__':
 
                 b = union()
                 p = lcd_panel(scl, offs=3)
-                p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
+                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht)*scl]).add(p)
                 b += p
 
-                #t.add(hinge_rotate(scl, b, angle))
+                t.add(hinge_rotate(scl, b, angle))
 
 
             scad_render_to_file(t, "laptop_prog2.scad")
