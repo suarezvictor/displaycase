@@ -12,7 +12,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=False
 add_internal_parts=False
 
-test = True
+test = False
 single = True
 
 
@@ -27,9 +27,9 @@ if not test:
     kbd_l = 3390.0
     kbd_w = 1170.0
 
-    tpanel_w = 250
+    tpanel_w = 950
     tpanel_b_w = tpanel_w+50
-    tpanel_l = 200
+    tpanel_l = 670
     tpanel_l_b = tpanel_l + 150
     tpanel_h = 40
 
@@ -814,7 +814,7 @@ def base_front_top(scl, ht):
     # put in series of cutouts
     fthick = 8
     offs = 110-hthick+fthick
-    step = (ht-tpanel_b_w/2-75-offs) / 4.0 if test else 10.0
+    step = (ht-tpanel_b_w/2-75-offs) / (4.0 if test else 15.0)
     while offs < (ht-step-tpanel_b_w/2):
         # add fill-ins
         c = base_front_fillin(scl, fthick)
@@ -992,7 +992,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     # put in series of cutouts
     fthick = 8
     offs = 80-hthick+fthick
-    step = (ht-100-offs) / 4 if test else 10
+    step = (ht-100-offs) / (4.0 if test else 15.0)
     while offs < (ht-step):
         # add fill-ins
         c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
@@ -1289,7 +1289,7 @@ def base_mid(scl, ht):
     # diagonal cross-walls for internal stiffness
     fthick = 6
     offs = tpanel_l_b+40
-    step = (w-160-offs) / 8 if test else 16
+    step = (w-160-offs) / (8.0 if test else 16.0)
     steps = []
     while offs < (w-step):
         steps.append((offs, boxheight-39-2))
@@ -1549,7 +1549,7 @@ def screen_front_edge(scl, ht):
 
     fthick = 6
     offs = 70-hthick+fthick
-    step = (ht-160-offs) / 8 if test else 16
+    step = (ht-160-offs) / (8.0 if test else 16.0)
     while offs < (ht-step):
         c = touch_arc(0, fthick, 45,
                             25, scl,
@@ -1640,7 +1640,7 @@ def screen_back_edge(scl, ht):
     # TODO: length of the cable run doesn't have to be this long
     fthick = 8
     offs = 80-hthick+fthick
-    step = (ht-160-offs) / 8 if test else 20
+    step = (ht-160-offs) / (8.0 if test else 20.0)
     while offs < (ht-step-55):
         c = touch_arc(0, step-fthick, 50,
                             25, scl,
@@ -2132,6 +2132,8 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
+    if True:
+        return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
     return translate(v=[0, offs*scl,0]).add(m)
@@ -2153,9 +2155,9 @@ def create_laptop(t, scl, colour, part, angle):
         and part != -11:
         return
     """
-    #if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-    #    and part != 12 and part != 13 and part != 9 and part != -14:
-    #    return
+    if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
+        and part != 12 and part != 13 and part != 9 and part != -14:
+        return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
     """
