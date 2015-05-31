@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -27,10 +27,10 @@ if not test:
     kbd_l = 3390.0
     kbd_w = 1170.0
 
-    tpanel_w = 950
+    tpanel_w = 950.0
     tpanel_b_w = tpanel_w+50
-    tpanel_l = 670
-    tpanel_l_b = tpanel_l + 150
+    tpanel_l = 670.0
+    tpanel_l_b = tpanel_l + 150 + 130
     tpanel_h = 40
 
     lcd_indent = 61
@@ -2156,7 +2156,7 @@ def create_laptop(t, scl, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != -14:
+        and part != 12 and part != 13 and part != 9 and part != 14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
@@ -2166,9 +2166,9 @@ def create_laptop(t, scl, colour, part, angle):
         return
     if part != 13 and part != 0:
         return
-    """
     if part == 14:
         return
+    """
     c = color(colour)
     c.add(t)
 
@@ -2303,6 +2303,24 @@ def create_laptop(t, scl, colour, part, angle):
     c.add(b)
     t.add(c)
 
+def kbd_part(scl):
+    u = union()
+    b = cube([kbd_w*scl, kbd_l*scl, (20.0)*scl], center=True)
+    b  = translate(v=[0, 0, ((kbd_d-20)/2.0)*scl]).add(b)
+    u.add(b)
+    b = cube([(kbd_w-20)*scl, (kbd_l-20)*scl, (kbd_d)*scl], center=True)
+    #b  = translate(v=[0, 0, (kbd_d/2-1.0)*scl]).add(b)
+    u.add(b)
+    b = cube([(90)*scl, (1140)*scl, (kbd_d)*scl])
+    b  = translate(v=[(-kbd_w/2-70)*scl, (kbd_l/2-1150)*scl,
+                       (-kbd_d/2)*scl]).add(b)
+    u.add(b)
+    b = cube([(80)*scl, (1160)*scl, (20.0)*scl])
+    b  = translate(v=[(-kbd_w/2-80)*scl, (kbd_l/2-1160)*scl,
+                       ((kbd_d/2-20))*scl]).add(b)
+    u.add(b)
+    return u
+
 if __name__ == '__main__':
 
     animate = False
@@ -2312,7 +2330,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
@@ -2332,7 +2350,7 @@ if __name__ == '__main__':
                 t.add(p)
 
             if add_internal_parts:
-                kbd = cube([kbd_w*scl, kbd_l*scl, (kbd_d)*scl], center=True)
+                kbd = kbd_part(scl)
                 r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
                 t.add(r)
