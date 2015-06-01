@@ -514,6 +514,9 @@ def base_end(scl, ht):
     u += t
     t = translate(v=[(190)*scl, 0, (55+1)*scl]).add(c)
     u += t
+    # between usb ports
+    t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
+    u += t
     
     # end pcb marker, also supports bamboo panels top and bottom
     c = cube([(30)*scl, (ht)*scl, (boxheight-2)*scl])
