@@ -65,6 +65,7 @@ lcd_ht = 10.0
 lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
+pcbthick = 12
 bwid = 17 # 24
 lcd_inset_top = 40
 lcd_inset_bot = 180
@@ -1842,7 +1843,116 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
-def front_kbd_tray(scl, ht):
+def front_kbd_corner(scl, ht):
+    """
+    """
+
+    u = union()
+    w = lcd_w-kbd_w-158
+    l = ht-tpanel_b_w/2-50+hthick
+    h = boxheight - hthick - pcbthick - 2
+
+    b = hollowbox(scl, 25, l, h,
+                {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
+                curverads={ T|R: (hthick, 0)})
+    b = translate(v=[(w-25)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
+    # extra bit for kbd corner support
+    b = hollowbox(scl, 200+hthick, 20+hthick, h,
+                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
+                curverads={ T|F: (hthick, 0)})
+    b = translate(v=[(w-hthick)*scl, (0)*scl, (0)*scl]).add(b)
+    u += b
+    b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # surround touchpanel wing (locks into front base, too)
+    b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(-hthick)*scl, (l-88-24)*scl, (hthick)*scl]).add(b)
+    u += b
+    # also locks into front base (far end)
+    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(-hthick)*scl, (91)*scl, (hthick)*scl]).add(b)
+    u += b
+
+    # cutouts for bamboo panel
+    b = cube([(25)*scl, (2+l)*scl, (hthick+1)*scl])
+    b = translate(v=[(w-25-hthick)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+    b = cube([(202)*scl, (hthick)*scl, (hthick+1)*scl])
+    b = translate(v=[(w-1)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # lock-in to tpanel
+    b = cube([(50)*scl, (50)*scl, (h-50)*scl])
+    b = translate(v=[(w-50)*scl, (l-20)*scl, (50)*scl]).add(b)
+    u += b
+
+    # funny cutouts (reduce plastic usage, screw access points as well)
+    offs = 32
+    step = (l-160-offs) / (5 if test else 12)
+
+    c = union()
+    b = cube([(70)*scl, (step-25)*scl, (boxheight-114)*scl])
+    b = translate(v=[(-1)*scl, (0)*scl, (30)*scl]).add(b)
+    c += b
+    r=(step-25.0)*scl/2
+    b = cylinder(r=r, h=70*scl, segments=100)
+    b = rotate([0, 90, 0]).add(b)
+    b = translate(v=[(-1)*scl, r, (30)*scl]).add(b)
+    c += b
+    # add fill-ins
+    b = translate(v=[(0)*scl, (0)*scl, (boxheight-140+25)*scl]).add(b)
+    c += b
+
+    while offs < (l-25):
+        d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
+        d = translate(v=[(w-25)*scl, (offs)*scl, (25)*scl]).add(c)
+        u -= d
+
+        offs += step
+        
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+200)*scl, (-3)*scl, 25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+200)*scl, (-3)*scl, -50*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([w*scl, (-3)*scl, -l*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([45*scl, (-3)*scl, (-l-32)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([45*scl, (-3)*scl, (45-l)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([-32*scl, (-3)*scl, (65-l)*scl]).add(h)
+        c += h
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
+        
+        u += c
+
+    
+    v = union()
+    u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
+
+def front_kbd_tray2(scl, ht):
     """
     this part basically locks into place (relies on surrounding parts)
     rather than acts as structural support, with the exception of
@@ -2100,7 +2210,7 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(440)*scl, 0*scl,
+    r = translate([(450)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
@@ -2138,7 +2248,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
+    if True:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2267,7 +2377,7 @@ def create_laptop(t, scl, colour, part, angle):
         b.add(m)
 
     if part == 13:
-        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset)
+        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht+tpanel_offset)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
 
