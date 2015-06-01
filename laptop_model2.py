@@ -30,7 +30,7 @@ if not test:
     tpanel_w = 950.0
     tpanel_b_w = tpanel_w+50
     tpanel_l = 670.0
-    tpanel_l_b = tpanel_l + 150 + 130
+    tpanel_l_b = tpanel_l + 150 + 132
     tpanel_h = 40
 
     lcd_indent = 61
@@ -506,11 +506,21 @@ def base_end(scl, ht):
     t = translate(v=[(280)*scl, 0, (62)*scl]).add(h)
     u += t
     
-    # front keyboard tray indentation support
+    # front keyboard tray indentation support, surrounds microsd
     c = cube([(25)*scl, (ht-hthick-2)*scl, (boxheight-2)*scl])
     t = translate(v=[(tpanel_l_b-25)*scl, 0, (55+1)*scl]).add(c)
     u += t
+    t = translate(v=[(tpanel_l_b+180)*scl, 0, (55+1)*scl]).add(c)
+    u += t
     t = translate(v=[(190)*scl, 0, (55+1)*scl]).add(c)
+    u += t
+    
+    # end pcb marker, also supports bamboo panels top and bottom
+    c = cube([(30)*scl, (ht)*scl, (boxheight-2)*scl])
+    t = translate(v=[(505)*scl, 0, (55+1)*scl]).add(c)
+    u += t
+    c = cube([(30)*scl, (ht+20)*scl, (boxheight-hthick*2)*scl])
+    t = translate(v=[(505)*scl, 0, (55+hthick)*scl]).add(c)
     u += t
     
     # add bits for case bolthole at front
@@ -738,14 +748,18 @@ def tpanel_mid(scl, ht, ht_offset):
     # cut-out and matching protrusion to fit front kbd
     w = tpanel_b_w + 50
     l = 0
-    b = cube([(44)*scl, (22)*scl, (23)*scl])
-    b = translate(v=[(w-62)*scl, (l-1)*scl, (boxheight-hthick-22)*scl]).add(b)
+    b = cube([(100)*scl, (32)*scl, (23)*scl])
+    b = translate(v=[(w-150)*scl, (l-1)*scl, (48)*scl]).add(b)
     u -= b
-    b = shearedcube([(36)*scl, (19)*scl, (20)*scl],
+    b = shearedcube([(36)*scl, (22)*scl, (20)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[0*scl, -6*scl, 0])
+                innershear=[0*scl, -10*scl, 0])
     b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-103)*scl, (l-19)*scl, (boxheight-hthick)*scl]).add(b)
+    b = translate(v=[(w-140)*scl, (l-19)*scl, (48)*scl]).add(b)
+    u += b
+    # half-way point support for top front bamboo panel
+    b = cube([(50)*scl, (28)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(w)/2*scl, (l-8)*scl, (hthick)*scl]).add(b)
     u += b
     
     if pin_parts_3d:
@@ -1905,6 +1919,14 @@ def front_kbd_corner(scl, ht):
 
         offs += step
         
+    b = shearedcube([(36)*scl, (26)*scl, (22)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, -11*scl, 0])
+    b = rotate([-90, 0, 0]).add(b)
+    b = translate(v=[(w-30)*scl, (l-21)*scl, (50)*scl]).add(b)
+    u -= b
+    
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -2051,6 +2073,7 @@ def back_kbd_corner(scl, ht):
 
     u = indented_screwhole(scl, u, (w-98), -hthick+6, 39)
     u = indented_screwhole(scl, u, (w-1), 232, 37, 90)
+
     u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
 
     if pin_parts_3d:
@@ -2201,7 +2224,8 @@ def create_laptop(t, scl, colour, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    if part != 14 and part != 3 and part != 7 and part != 4 and part != 12:
+    if part != 14 and part != 3 and part != 7 and part != 4 and part != 12 \
+        and part != 13 and part != 5:
         return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
