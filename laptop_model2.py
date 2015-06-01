@@ -1868,15 +1868,6 @@ def front_kbd_corner(scl, ht):
     b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
-    # surround touchpanel wing (locks into front base, too)
-    b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(-hthick)*scl, (l-88-24)*scl, (hthick)*scl]).add(b)
-    u += b
-    # also locks into front base (far end)
-    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(-hthick)*scl, (91)*scl, (hthick)*scl]).add(b)
-    u += b
-
     # cutouts for bamboo panel
     b = cube([(25)*scl, (2+l)*scl, (hthick+1)*scl])
     b = translate(v=[(w-25-hthick)*scl, -1*scl, (-1)*scl]).add(b)
