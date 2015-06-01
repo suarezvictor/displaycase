@@ -701,7 +701,7 @@ def tpanel_mid(scl, ht, ht_offset):
     #u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
     #u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
 
-    # cutout for base-mid cross-hatching
+    # cutout for underside of panel (reduce plastic usage)
     c = cube([tpanel_l_b*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(250)*scl, (-1)*scl, (60)*scl]).add(c)
     u -= c
@@ -2058,14 +2058,14 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1460*scl, 1150*scl, (12)*scl])
+    b = cube([1460*scl, 1200*scl, (12)*scl])
     pcb += b
-    b = cube([491*scl, 1200*scl, (30)*scl])
+    b = cube([381*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1300)*scl, 245*scl, -10*scl]).add(b)
-    #pcb -= b
+    b = translate([(1350)*scl, 440*scl, -10*scl]).add(b)
+    pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
     t.add(r)
@@ -2078,7 +2078,7 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    cpu_offs = 770
+    cpu_offs = 670
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -2106,7 +2106,7 @@ def pcb1(scl):
 
     # Headphone jack
     j = cube([60*scl, 93*scl, (52)*scl])
-    r = translate([(670)*scl, 0*scl,
+    r = translate([(1400)*scl, 0*scl,
                 (-52)*scl]).add(j)
     t.add(r)
 
@@ -2162,14 +2162,14 @@ def create_laptop(t, scl, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != -14:
+        and part != 12 and part != 13 and part != 9 and part != 14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
+    """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
         part != 8 and part != 5:
         return
-    """
     if part != 13 and part != 0:
         return
     if part == 14:
@@ -2256,7 +2256,7 @@ def create_laptop(t, scl, colour, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-    tpanel_offset = -100
+    tpanel_offset = -140
 
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -2267,7 +2267,7 @@ def create_laptop(t, scl, colour, part, angle):
         b.add(m)
 
     if part == 13:
-        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht)
+        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
 
