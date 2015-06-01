@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -75,6 +75,9 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 50 
 lcd_end_offs = 20
+
+# XXX should really be calculated from lcd width, scrn width etc.
+base_end_ht = 100
 
 lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
@@ -663,7 +666,7 @@ def base_mid_cutout(u, scl, ht, offs):
     u -= c
     return u
 
-def tpanel_mid(scl, ht):
+def tpanel_mid(scl, ht, ht_offset):
     u = union()
 
     walls = {T:40, L:hthick, R:20, F:20, D:-1, B:20}
@@ -695,12 +698,12 @@ def tpanel_mid(scl, ht):
     u += c
 
     # support for base_mid
-    u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
-    u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
+    #u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
+    #u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
 
     # cutout for base-mid cross-hatching
-    c = cube([70*scl, (base_centre_ht)*scl, (150)*scl])
-    c = translate(v=[(tpanel_l_b-60)*scl, (ht/2-base_centre_ht/2)*scl, (60)*scl]).add(c)
+    c = cube([tpanel_l_b*scl, (ht+2)*scl, (150)*scl])
+    c = translate(v=[(250)*scl, (-1)*scl, (60)*scl]).add(c)
     u -= c
 
     # wings for screw-holes to fit with front base
@@ -726,9 +729,9 @@ def tpanel_mid(scl, ht):
     u -= b
     b = translate(v=[(135)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(40)*scl, (ht/2-50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2-50-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(40)*scl, (ht/2+50)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2+50-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
 
     # cut-out and matching protrusion to fit front kbd
@@ -776,9 +779,10 @@ def tpanel_mid(scl, ht):
     v.add(u)
     return u
 
-def base_front_top(scl, ht):
+def base_front_top(scl, ht, ht_offset):
     u = union()
 
+    tpanel_ht = ht+ht_offset
     walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:105}
     curverads={
                 L|T: (hthick, 0),
@@ -802,20 +806,22 @@ def base_front_top(scl, ht):
     c = shearedcube([40*scl, (tpanel_b_w+50+3)*scl, (43)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[15*scl, 0*scl, 0])
-    c = translate(v=[(60)*scl, (ht-(tpanel_b_w/2+50))*scl, (38)*scl]).add(c)
+    c = translate(v=[(60)*scl, (tpanel_ht-(tpanel_b_w/2+50))*scl,
+                                (38)*scl]).add(c)
     u -= c
     c = shearedcube([32*scl, (tpanel_b_w+50+3)*scl, (43)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(108)*scl, (ht+(tpanel_b_w/2+3))*scl, (38)*scl]).add(c)
+    c = translate(v=[(108)*scl, (tpanel_ht+(tpanel_b_w/2+3))*scl,
+                        (38)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
     fthick = 8
     offs = 110-hthick+fthick
-    step = (ht-tpanel_b_w/2-75-offs) / (4.0 if test else 15.0)
-    while offs < (ht-step-tpanel_b_w/2):
+    step = (tpanel_ht-tpanel_b_w/2-75-offs) / (4.0 if test else 15.0)
+    while offs < (tpanel_ht-step-tpanel_b_w/2-20):
         # add fill-ins
         c = base_front_fillin(scl, fthick)
         c = translate(v=[(0)*scl, (offs-fthick)*scl, (0)*scl]).add(c)
@@ -830,17 +836,17 @@ def base_front_top(scl, ht):
         
     # remove bit more from base
     c = base_front_arc(scl, tpanel_b_w/2-40)
-    c = translate(v=[(151)*scl, (ht-80)*scl, (39.5)*scl]).add(c)
+    c = translate(v=[(151)*scl, (tpanel_ht-80)*scl, (39.5)*scl]).add(c)
     #u -= c
 
     # add fillin for touchpanel
     c = base_front_fillin(scl, 20)
-    c = translate(v=[(0)*scl, (ht-tpanel_b_w/2-70)*scl, (0)*scl]).add(c)
+    c = translate(v=[(0)*scl, (tpanel_ht-tpanel_b_w/2-70)*scl, (0)*scl]).add(c)
     u += c
 
     # and support wall
     c = cube([30*scl, (tpanel_b_w/2)*scl, (boxheight-50)*scl])
-    c = translate(v=[(150)*scl, (ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
+    c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
     u += c
 
     # screw holes in box
@@ -874,16 +880,16 @@ def base_front_top(scl, ht):
 
     # add support for tpanel_mid
     b = cube([(60)*scl, (62)*scl, (70)*scl])
-    t = translate(v=[(120)*scl, (ht-tpanel_b_w/2-130)*scl, (40)*scl]).add(b)
+    t = translate(v=[(120)*scl, (tpanel_ht-tpanel_b_w/2-130)*scl, (40)*scl]).add(b)
     u += t
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, -90]).add(t)
-    t = translate(v=[(130)*scl, (ht-tpanel_b_w/2-55)*scl, (43)*scl]).add(t)
+    t = translate(v=[(130)*scl, (tpanel_ht-tpanel_b_w/2-55)*scl, (43)*scl]).add(t)
     u -= t
     
     # remove bit for touchpanel
     c = cube([(tpanel_b_w+1)*scl, (tpanel_l+2)*scl, (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (ht-tpanel_b_w/2-50-1)*scl, (-1)*scl]).add(c)
+    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-50-1)*scl, (-1)*scl]).add(c)
     u -= c
 
     # lower screw hole for keyboard corner joiner
@@ -2132,7 +2138,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2156,14 +2162,14 @@ def create_laptop(t, scl, colour, part, angle):
         return
     """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
-        and part != 12 and part != 13 and part != 9 and part != 14:
+        and part != 12 and part != 13 and part != 9 and part != -14:
         return
     #if part != 8 and part != 5 and part != 7 and part != 4:
         #return
-    """
-    if part != 3 and part != 7 and part != 9 and part != 4 and \
-        part != 8:
+    if part != 3 and part != 7 and part != -9 and part != -4 and \
+        part != 8 and part != 5:
         return
+    """
     if part != 13 and part != 0:
         return
     if part == 14:
@@ -2203,13 +2209,13 @@ def create_laptop(t, scl, colour, part, angle):
     lid_adjust_ht += scrn_hinge_ht
 
     if part == 3:
-        se = base_end(scl, scrn_end_ht+lcd_end_ht)
+        se = base_end(scl, base_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
         m = mirror_part(se, scl, total_width)
         b.add(m)
 
-    base_adjust_ht = scrn_end_ht+lcd_end_ht
+    base_adjust_ht = base_end_ht
     base_adjust_ht += scrn_hinge_ht
 
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
@@ -2250,10 +2256,13 @@ def create_laptop(t, scl, colour, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
+    tpanel_offset = -100
+
     if part == 7:
-        se = base_front_top(scl, base_front_ht+scrn_hinge_ht)
+        se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
+        se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
@@ -2278,9 +2287,10 @@ def create_laptop(t, scl, colour, part, angle):
     base_joiner_ht = 150
 
     if part == 5:
-        se = tpanel_mid(scl, tpanel_b_w+100)
+        se = tpanel_mid(scl, tpanel_b_w+100, tpanel_offset)
         m = translate(v=[0, 
-                        (base_adjust_ht + base_centre_ht/2 - (tpanel_b_w+100)/2)*scl,
+                        (base_adjust_ht + tpanel_offset + base_centre_ht/2 -
+                            (tpanel_b_w+100)/2)*scl,
                          0]).add(se)
         b.add(m)
         #b = screen_adjust(b, scl, angle)
