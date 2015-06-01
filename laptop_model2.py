@@ -1943,7 +1943,7 @@ def front_kbd_corner(scl, ht):
     v.add(u)
     return v
 
-def front_kbd_tray2(scl, ht):
+def front_kbd_tray(scl, ht):
     """
     this part basically locks into place (relies on surrounding parts)
     rather than acts as structural support, with the exception of
@@ -1955,39 +1955,30 @@ def front_kbd_tray2(scl, ht):
 
     u = union()
     w = lcd_w-kbd_w-158
-    l = ht-tpanel_b_w/2-50+hthick
+    l = ht
 
-    b = hollowbox(scl, w, l, boxheight-hthick,
-                {T:-1, L:15, R:hthick, F:hthick, D:-1, B:hthick*2},
+    b = hollowbox(scl, 20, l, boxheight-hthick-2,
+                {T:-1, L:-1, R:20, F:-1, D:-1, B:-1},
                 curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(0)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(0)*scl, 0*scl, (1)*scl]).add(b)
     u += b
 
     # extra bit for kbd corner support
-    b = hollowbox(scl, 200+hthick, 20+hthick, boxheight-hthick,
-                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
+    b = hollowbox(scl, 200+hthick, 20+hthick, boxheight-hthick-2,
+                {T:-1, L:-1, R:-1, F:-1, D:-1, B:15+hthick},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-hthick)*scl, (0)*scl, (0)*scl]).add(b)
+    b = translate(v=[(0)*scl, (0)*scl, (1)*scl]).add(b)
     u += b
     b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
     b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
-    u = indented_screwhole(scl, u, (w+120), 6, 39)
+    u = indented_screwhole(scl, u, (135), 6, 39)
 
-    # surround touchpanel wing (locks into front base, too)
-    b = cube([(42+hthick*2)*scl, (88+24)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(-hthick)*scl, (l-88-24)*scl, (hthick)*scl]).add(b)
-    u += b
     # also locks into front base (far end)
-    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(-hthick)*scl, (91)*scl, (hthick)*scl]).add(b)
+    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2-2)*scl])
+    b = translate(v=[(-hthick)*scl, (ht-12)*scl, (hthick+1)*scl]).add(b)
     u += b
-
-    # cutout for touchpanel wing
-    b = cube([(43+hthick)*scl, (89)*scl, (boxheight)*scl])
-    b = translate(v=[(-1-hthick)*scl, (l-88)*scl, (-1)*scl]).add(b)
-    u -= b
 
     # cutouts for bamboo panel
     b = cube([(w-hthick+1)*scl, (2+l)*scl, (hthick+1)*scl])
@@ -2000,61 +1991,6 @@ def front_kbd_tray2(scl, ht):
     # screwhole into front base
     u = indented_screwhole(scl, u, 1, 50, 67, -90, 40)
 
-    # cut-out and matching protrusion to fit tpanel_mid
-    b = cube([(40)*scl, (21)*scl, (20)*scl])
-    b = translate(v=[(w-60)*scl, (l-1)*scl, (boxheight-hthick-20)*scl]).add(b)
-    u += b
-    b = cube([(40)*scl, (21)*scl, (21)*scl])
-    b = translate(v=[(w-105)*scl, (l-20)*scl, (boxheight-hthick-20)*scl]).add(b)
-    u -= b
-
-    b = shearedcube([(40)*scl, (22)*scl, (20)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[0*scl, -6*scl, 0])
-    b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-105)*scl, (l-19)*scl, (boxheight-hthick+1)*scl]).add(b)
-    u -= b
-
-    # add bamboo panel underside support
-    b = shearedcube([(10)*scl, (l)*scl, (10)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
-    #b = rotate([0, 0, 180]).add(b)
-    b = translate(v=[(w-hthick-8)*scl, (0)*scl, (hthick)*scl]).add(b)
-    u += b
-
-    # XXX ok this needs to match the cutouts
-    b = cube([(w)*scl, (hthick)*scl, (boxheight-hthick*2)*scl])
-    offs = 95 if test else 90
-    b = translate(v=[(0)*scl, (l-offs)/2.0*scl, (hthick)*scl]).add(b)
-    u += b
-
-    # funny cutouts (reduce plastic usage, screw access points as well)
-    offs = 32
-    step = (l-160-offs) / (5 if test else 19)
-
-    c = union()
-    b = cube([(70)*scl, (step-25)*scl, (boxheight-94)*scl])
-    b = translate(v=[(-1)*scl, (0)*scl, (20)*scl]).add(b)
-    c += b
-    r=(step-25.0)*scl/2
-    b = cylinder(r=r, h=70*scl, segments=100)
-    b = rotate([0, 90, 0]).add(b)
-    b = translate(v=[(-1)*scl, r, (20)*scl]).add(b)
-    c += b
-    # add fill-ins
-    b = translate(v=[(0)*scl, (0)*scl, (boxheight-120+25)*scl]).add(b)
-    c += b
-
-    while offs < (l-25):
-        d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
-        if offs != 32:
-            u -= d
-        d = translate(v=[(w-hthick)*scl, (offs)*scl, (25)*scl]).add(c)
-        u -= d
-
-        offs += step
-        
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -2265,7 +2201,7 @@ def create_laptop(t, scl, colour, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    if part != 14 and part != 3 and part != 7 and part != 4:
+    if part != 14 and part != 3 and part != 7 and part != 4 and part != 12:
         return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
@@ -2365,6 +2301,11 @@ def create_laptop(t, scl, colour, part, angle):
         b.add(m)
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
+        b.add(m)
+
+    if part == 12:
+        se = front_kbd_tray(scl, 200)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
 
     if part == 13:
