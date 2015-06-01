@@ -503,7 +503,7 @@ def base_end(scl, ht):
     t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
     u += t
     h = holed_support(scl, ht-hthick-1, dep=boxheight-hthick)
-    t = translate(v=[(tpanel_l_b+85)*scl, 0, (62)*scl]).add(h)
+    t = translate(v=[(280)*scl, 0, (62)*scl]).add(h)
     u += t
     
     # front keyboard tray indentation support
@@ -2261,12 +2261,12 @@ def create_laptop(t, scl, colour, part, angle):
     if part != 6 and part != -2 and part != 0.1 and part != -10 \
         and part != -11:
         return
-    """
     if part != 7 and part != 3 and part != 4 and part != 5 and part != 8 \
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
-    #if part != 8 and part != 5 and part != 7 and part != 4:
-        #return
+    """
+    if part != 14 and part != 3 and part != 7 and part != 4:
+        return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
         part != 8 and part != 5:
