@@ -1017,7 +1017,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
     fthick = 8
     offs = 80-hthick+fthick
     step = (ht-100-offs) / (4.0 if test else 15.0)
-    while offs < (ht-step):
+    while offs < (ht-step-10):
         # add fill-ins
         c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
         c = translate(v=[(w-58)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
