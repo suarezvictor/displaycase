@@ -2201,13 +2201,13 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
     return translate(v=[0, offs*scl,0]).add(m)
 
-def create_laptop(t, scl, colour, part, angle):
+def create_laptop(t, scl, part, angle):
 
     """
     #if part != 7 and part != 3 and part != 4 and part != -2:
@@ -2227,9 +2227,9 @@ def create_laptop(t, scl, colour, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
-        and part != -13 and part != 5:
-        return
+    #if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
+        #and part != -13 and part != 5:
+        #return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
         part != 8 and part != 5:
@@ -2239,9 +2239,6 @@ def create_laptop(t, scl, colour, part, angle):
     if part == 14:
         return
     """
-    c = color(colour)
-    c.add(t)
-
     b = union()
 
     lid_adjust_ht = 0
@@ -2378,9 +2375,7 @@ def create_laptop(t, scl, colour, part, angle):
     #                     0]).add(se)
     #    b.add(m)
 
-    c = color([0.2, 0.2, 0.2, 1.0])
-    c.add(b)
-    t.add(c)
+    t.add(b)
 
 def kbd_part(scl):
     
@@ -2447,36 +2442,42 @@ if __name__ == '__main__':
 
     for i in range(rpt):
         for angle in angles:
-            t = union()
-            c = [0.3, 0.5, 0.8, 0.5]
+            u = union()
             for i in range(17):
-                create_laptop(t, scl, c, part=i, angle=angle)
-            t = color(c).add(t)
-
-            if False: # add inner parts for reference
-                p = lcd_panel(scl)
-                p = translate(v=[155.5*scl,61*scl,0]).add(p)
-                p = hinge_rotate(scl, p, angle)
-                t.add(p)
-                p = ethernet(scl)
-                p  = translate(v=[0, 210*scl,0]).add(p)
-                t.add(p)
+                t = union()
+                create_laptop(t, scl, part=i, angle=angle)
+                r = union().add(t)
+                if i == 14: # pcb1
+                    c = [0.8, 0.3, 0.8, 0.5]
+                else:
+                    c = [0.3, 0.5, 0.8, 0.5]
+                c = color(c)
+                c.add(r)
+                u.add(c)
 
             if add_internal_parts:
                 kbd = kbd_part(scl)
                 r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
-                t.add(r)
+                c = [0.3, 0.8, 0.5, 0.2]
+                r = union().add(r)
+                c = color(c)
+                c.add(r)
+                u.add(c)
 
                 b = union()
                 p = lcd_panel(scl, offs=3)
                 p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht)*scl]).add(p)
                 b += p
 
-                t.add(hinge_rotate(scl, b, angle))
+                r = hinge_rotate(scl, b, angle)
+                c = [0.8, 0.3, 0.3, 0.2]
+                c = color(c)
+                c.add(r)
+                u.add(c)
 
 
-            scad_render_to_file(t, "laptop_prog2.scad")
+            scad_render_to_file(u, "laptop_prog2.scad")
             f = open("laptop_model2.scad", "w")
             f.write("""include<laptop_prog2.scad>;
             """)
