@@ -761,7 +761,7 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[(w-140)*scl, (l-19)*scl, (48)*scl]).add(b)
     u += b
     # half-way point support for top front bamboo panel
-    b = cube([(50)*scl, (28)*scl, (boxheight-hthick*2)*scl])
+    b = cube([(100)*scl, (28)*scl, (boxheight-hthick*2)*scl])
     b = translate(v=[(w)/2*scl, (l-8)*scl, (hthick)*scl]).add(b)
     u += b
     
