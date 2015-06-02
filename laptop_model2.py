@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -2227,8 +2227,8 @@ def create_laptop(t, scl, colour, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    if part != 14 and part != 3 and part != 7 and part != 4 and part != 12 \
-        and part != 13 and part != 5:
+    if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
+        and part != -13 and part != 5:
         return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
@@ -2383,22 +2383,56 @@ def create_laptop(t, scl, colour, part, angle):
     t.add(c)
 
 def kbd_part(scl):
+    
     u = union()
-    b = cube([kbd_w*scl, kbd_l*scl, (20.0)*scl], center=True)
-    b  = translate(v=[0, 0, ((kbd_d-20)/2.0)*scl]).add(b)
+
+    # make the keyboard look vaguely like the real thing, keys indented
+    # (represented as a single block), tray 2mm high then small cut-outs
+    # at various points
+
+    b = cube([kbd_w*scl, kbd_l*scl, (20.0)*scl])
+    b  = translate(v=[0, 0, ((-20))*scl]).add(b)
     u.add(b)
-    b = cube([(kbd_w-20)*scl, (kbd_l-20)*scl, (kbd_d)*scl], center=True)
-    #b  = translate(v=[0, 0, (kbd_d/2-1.0)*scl]).add(b)
+    b = cube([(kbd_w-20)*scl, (kbd_l-20)*scl, (kbd_d)*scl])
+    b  = translate(v=[0, 0, (-kbd_d)*scl]).add(b)
     u.add(b)
     b = cube([(90)*scl, (1140)*scl, (kbd_d)*scl])
-    b  = translate(v=[(-kbd_w/2-70)*scl, (kbd_l/2-1150)*scl,
-                       (-kbd_d/2)*scl]).add(b)
+    b  = translate(v=[(-70)*scl, (kbd_l-1150)*scl,
+                       (-kbd_d)*scl]).add(b)
     u.add(b)
     b = cube([(80)*scl, (1160)*scl, (20.0)*scl])
-    b  = translate(v=[(-kbd_w/2-80)*scl, (kbd_l/2-1160)*scl,
-                       ((kbd_d/2-20))*scl]).add(b)
+    b  = translate(v=[(-80)*scl, (kbd_l-1160)*scl,
+                       ((-20))*scl]).add(b)
     u.add(b)
-    return u
+
+    # add series of small tabs at front
+    b = cube([(21)*scl, (90)*scl, (20.0)*scl])
+    b  = translate(v=[(-20)*scl, (100)*scl, (-20)*scl]).add(b)
+    u.add(b)
+    b = translate(v=[(0)*scl, (750)*scl, (0)*scl]).add(b)
+    u.add(b)
+    b = translate(v=[(0)*scl, (900)*scl, (0)*scl]).add(b)
+    u.add(b)
+    b = translate(v=[(-80)*scl, (690)*scl, (0)*scl]).add(b)
+    u.add(b)
+    b = translate(v=[(0)*scl, (745)*scl, (0)*scl]).add(b)
+    u.add(b)
+
+    # add series of cutouts at back
+    b = cube([(20)*scl, (100)*scl, (20.0)*scl])
+    b  = translate(v=[(kbd_w-19)*scl, (130)*scl, (-24)*scl]).add(b)
+    u -= b
+    b = translate(v=[(0)*scl, (900)*scl, (0)*scl]).add(b)
+    u -= b
+    b = translate(v=[(0)*scl, (1370)*scl, (0)*scl]).add(b)
+    u -= b
+    b = translate(v=[(0)*scl, (675)*scl, (0)*scl]).add(b)
+    u -= b
+
+    v = union()
+    u = translate(v=[-kbd_w/2*scl, -kbd_l/2*scl, kbd_d/2*scl]).add(u)
+    v.add(u)
+    return v
 
 if __name__ == '__main__':
 
