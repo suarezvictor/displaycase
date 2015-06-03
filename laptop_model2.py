@@ -739,9 +739,9 @@ def tpanel_mid(scl, ht, ht_offset):
     # screw-holes into front base
     s = chamfered_backbox_screwholes(scl, 50)
     s = rotate([-180, 0, 0]).add(s)
-    b = translate(v=[(135)*scl, (ht-40)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht-40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(135)*scl, (40)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
     b = translate(v=[(40)*scl, (ht/2-50-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
@@ -890,7 +890,7 @@ def base_front_top(scl, ht, ht_offset):
                     segments=50, center=True)
     t = translate(v=[(40)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(135)*scl, (ht-160)*scl, (50)*scl]).add(d)
+    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2-11)*scl, (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
     t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, (73)*scl]).add(t)
@@ -2201,7 +2201,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
+    if True:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2227,9 +2227,9 @@ def create_laptop(t, scl, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    #if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
-        #and part != -13 and part != 5:
-        #return
+    if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
+        and part != 13 and part != 5:
+        return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
         part != 8 and part != 5:
