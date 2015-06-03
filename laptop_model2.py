@@ -826,7 +826,7 @@ def base_front_top(scl, ht, ht_offset):
     c = shearedcube([60*scl, (tpanel_b_w+3)*scl, (43)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[15*scl, 0*scl, 0])
-    c = translate(v=[(60)*scl, (tpanel_ht-(tpanel_b_w/2+25))*scl,
+    c = translate(v=[(60)*scl, (tpanel_ht-(tpanel_b_w/2))*scl,
                                 (38)*scl]).add(c)
     u -= c
     c = shearedcube([32*scl, (tpanel_b_w+3)*scl, (43)*scl],
@@ -899,7 +899,7 @@ def base_front_top(scl, ht, ht_offset):
                     segments=50, center=True)
     t = translate(v=[(40)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+14)*scl, (50)*scl]).add(d)
+    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+40)*scl, (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
     t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, (73)*scl]).add(t)
@@ -916,7 +916,7 @@ def base_front_top(scl, ht, ht_offset):
     
     # remove bit for touchpanel
     c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl, (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-25-1)*scl, (-1)*scl]).add(c)
+    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl, (-1)*scl]).add(c)
     u -= c
 
     # lower screw hole for keyboard corner joiner
@@ -1875,7 +1875,7 @@ def front_kbd_corner(scl, ht):
 
     u = union()
     w = lcd_w-kbd_w-158
-    l = ht-tpanel_b_w/2-25+hthick
+    l = ht-tpanel_b_w/2+hthick
     h = boxheight - hthick - pcbthick - 2
 
     b = hollowbox(scl, 25, l, h,
@@ -2295,7 +2295,7 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-    tpanel_offset = -140
+    tpanel_offset = -120
 
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -2330,14 +2330,19 @@ def create_laptop(t, scl, part, angle):
 
     base_joiner_ht = 150
 
+    tpanel_ht = (base_adjust_ht + tpanel_offset + base_centre_ht/2 -
+                            (tpanel_b_w)/2)
     if part == 5:
-        se = tpanel_mid(scl, tpanel_b_w+50, tpanel_offset)
-        m = translate(v=[0, 
-                        (base_adjust_ht + tpanel_offset + base_centre_ht/2 -
-                            (tpanel_b_w+50)/2)*scl,
-                         0]).add(se)
+        se = tpanel_mid(scl, tpanel_b_w, tpanel_offset)
+        m = translate(v=[0, tpanel_ht*scl, 0]).add(se)
         b.add(m)
         #b = screen_adjust(b, scl, angle)
+
+    if part == 19:
+        se = pcb1_support(scl, centre_ht)
+        m = translate(v=[0, (total_width/2-centre_ht/2)*scl,0]).add(se)
+        b.add(m)
+        b = screen_adjust(b, scl, angle)
 
     #if part == 5:
     #    se = base_back_joiner(scl, base_joiner_ht)
