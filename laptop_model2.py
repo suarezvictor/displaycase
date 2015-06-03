@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -838,8 +838,15 @@ def base_front_top(scl, ht, ht_offset):
     # put in series of cutouts
     fthick = 8
     offs = 110-hthick+fthick
-    step = (tpanel_ht-tpanel_b_w/2-75-offs) / (4.0 if test else 15.0)
-    while offs < (tpanel_ht-step-tpanel_b_w/2-20):
+    if test:
+        num_steps = 4.0
+    else:
+        if ht_offset > 0:
+            num_steps = 22.0
+        else:
+            num_steps = 17.0
+    step = (tpanel_ht-tpanel_b_w/2-75-offs) / num_steps
+    while offs < (tpanel_ht-step-tpanel_b_w/2-30):
         # add fill-ins
         c = base_front_fillin(scl, fthick)
         c = translate(v=[(0)*scl, (offs-fthick)*scl, (0)*scl]).add(c)
@@ -863,7 +870,7 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # and support wall
-    c = cube([30*scl, (tpanel_b_w/2)*scl, (boxheight-50)*scl])
+    c = cube([30*scl, (tpanel_b_w/2-ht_offset)*scl, (boxheight-50)*scl])
     c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-60)*scl, (40)*scl]).add(c)
     u += c
 
@@ -906,7 +913,7 @@ def base_front_top(scl, ht, ht_offset):
     u -= t
     
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w+1)*scl, (tpanel_l+2)*scl, (tpanel_h+1)*scl])
+    c = cube([(tpanel_b_w+1)*scl, (tpanel_l+2-ht_offset)*scl, (tpanel_h+1)*scl])
     c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-50-1)*scl, (-1)*scl]).add(c)
     u -= c
 
@@ -2201,7 +2208,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2227,8 +2234,8 @@ def create_laptop(t, scl, part, angle):
         and part != 12 and part != 13 and part != 9 and part != 14:
         return
     """
-    if part != 14 and part != 3 and part != 7 and part != 4 and part != -12 \
-        and part != 13 and part != 5:
+    if part != -14 and part != -3 and part != 7 and part != -4 and part != -12 \
+        and part != -13 and part != -5:
         return
     """
     if part != 3 and part != 7 and part != -9 and part != -4 and \
