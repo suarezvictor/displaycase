@@ -821,7 +821,7 @@ def base_front_top(scl, ht, ht_offset):
     u -= c
 
     # tpanel cutout
-    c = shearedcube([40*scl, (tpanel_b_w+50+3)*scl, (43)*scl],
+    c = shearedcube([60*scl, (tpanel_b_w+50+3)*scl, (43)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[15*scl, 0*scl, 0])
     c = translate(v=[(60)*scl, (tpanel_ht-(tpanel_b_w/2+50))*scl,
@@ -831,7 +831,7 @@ def base_front_top(scl, ht, ht_offset):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(108)*scl, (tpanel_ht+(tpanel_b_w/2+3))*scl,
+    c = translate(v=[(148)*scl, (tpanel_ht+(tpanel_b_w/2+3))*scl,
                         (38)*scl]).add(c)
     u -= c
 
