@@ -682,6 +682,19 @@ def base_mid_cutout(u, scl, ht, offs):
     u -= c
     return u
 
+def pcb1_support(scl, ht, tpanel_offset):
+    u = union()
+    kbd_inset = 41
+    sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
+    c = cube([(boxlength - tpanel_l_b - 170)*scl, ht*scl, sdep*scl])
+    c = translate(v=[(tpanel_l_b)*scl, 0*scl, (kbd_inset)*scl]).add(c)
+    u += c
+
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
+    
 def tpanel_mid(scl, ht, ht_offset):
     u = union()
 
@@ -2338,11 +2351,13 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         #b = screen_adjust(b, scl, angle)
 
-    if part == 19:
-        se = pcb1_support(scl, centre_ht)
-        m = translate(v=[0, (total_width/2-centre_ht/2)*scl,0]).add(se)
+    if part == 17:
+        pcb1_support_ht = 40
+        se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
+        m = translate(v=[0,
+                         (tpanel_ht-pcb1_support_ht)*scl,
+                         0]).add(se)
         b.add(m)
-        b = screen_adjust(b, scl, angle)
 
     #if part == 5:
     #    se = base_back_joiner(scl, base_joiner_ht)
@@ -2427,7 +2442,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7, 4, 13, 5, 8]:
+            for i in [14, 7, 4, 13, 5, 8, 17]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
