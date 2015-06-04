@@ -686,8 +686,25 @@ def pcb1_support(scl, ht, tpanel_offset):
     u = union()
     kbd_inset = 41
     sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
-    c = cube([(boxlength - tpanel_l_b - 170)*scl, ht*scl, sdep*scl])
-    c = translate(v=[(tpanel_l_b)*scl, 0*scl, (kbd_inset)*scl]).add(c)
+
+    tpanel_box_l = 150
+    # main strut going from back base to tpanel
+    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
+                    ht*scl, sdep*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, 0*scl,
+                    (kbd_inset)*scl]).add(c)
+    u += c
+
+    # screw holder, done in 2 parts so that it's easier to calculate heights
+    # first part is flush with main strut
+    c = cube([(tpanel_box_l)*scl, 81*scl, sdep*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (ht-1)*scl,
+                (kbd_inset)*scl]).add(c)
+    u += c
+    # second part goes up to underside of tpanel
+    c = cube([(tpanel_box_l)*scl, 80*scl, 10*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (ht)*scl,
+                (tpanel_h+1)*scl]).add(c)
     u += c
 
     v = union()
@@ -761,6 +778,11 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[(40)*scl, (ht/2-50-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
     b = translate(v=[(40)*scl, (ht/2+50-ht_offset)*scl, (+20)*scl]).add(s)
+    u -= b
+    # and into pcb1_support
+    b = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (+20)*scl]).add(s)
+    u -= b
+    b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+20)*scl]).add(s)
     u -= b
 
     # cut-out and matching protrusion to fit front kbd
@@ -2442,7 +2464,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7, 4, 13, 5, 8, 17]:
+            for i in [14, 7*0, 4, 13*0, 5, 8, 17]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
