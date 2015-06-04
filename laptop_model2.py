@@ -707,6 +707,13 @@ def pcb1_support(scl, ht, tpanel_offset):
                 (tpanel_h+1)*scl]).add(c)
     u += c
 
+    # screw holes in top for touchpanel
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(tpanel_l_b-75)*scl, (40+ht)*scl, (50)*scl]).add(d)
+    u -= t
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
