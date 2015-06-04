@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -684,35 +684,54 @@ def base_mid_cutout(u, scl, ht, offs):
 
 def pcb1_support(scl, ht, tpanel_offset):
     u = union()
-    kbd_inset = 41
+    kbd_inset = 38.0
     sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
+    holder_ht = 80.0
 
     tpanel_box_l = 150
     # main strut going from back base to tpanel
-    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
-                    ht*scl, sdep*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, 0*scl,
+    c = cube([(boxlength - tpanel_l_b - 170+30)*scl,
+                    ht*scl, (boxheight-hthick-kbd_inset)*scl])
+    c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
     u += c
+    # secondary strut with pcb edge lock
+    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
+                    (holder_ht)*scl, (sdep-30)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                    (kbd_inset+30)*scl]).add(c)
+    u += c
 
-    # screw holder, done in 2 parts so that it's easier to calculate heights
+    # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
-    c = cube([(tpanel_box_l)*scl, 81*scl, sdep*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (ht-1)*scl,
+    c = cube([(tpanel_box_l)*scl, holder_ht*scl, sdep*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (kbd_inset)*scl]).add(c)
     u += c
     # second part goes up to underside of tpanel
-    c = cube([(tpanel_box_l)*scl, 80*scl, 10*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (ht)*scl,
+    c = cube([(tpanel_box_l)*scl, holder_ht*scl, 10*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (tpanel_h+1)*scl]).add(c)
+    u += c
+    # third part goes down to bamboo panel
+    c = cube([(tpanel_box_l-25)*scl, holder_ht*scl, 20*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                (boxheight-20-hthick)*scl]).add(c)
     u += c
 
     # screw holes in top for touchpanel
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(tpanel_l_b-75)*scl, (40+ht)*scl, (50)*scl]).add(d)
+    t = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (50)*scl]).add(d)
     u -= t
+
+    # cut-out for front kbd tray
+    w = tpanel_b_w 
+    l = 0
+    b = cube([(54)*scl, (13)*scl, (90)*scl])
+    b = translate(v=[(w-150)*scl, (l-1)*scl, (tpanel_h+18)*scl]).add(b)
+    u -= b
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -771,6 +790,20 @@ def tpanel_mid(scl, ht, ht_offset):
     c = translate(v=[(180+40)*scl, (ht+85)*scl, (48)*scl]).add(d)
     u += c
 
+    # cut-out to match pcb1_support
+    w = tpanel_b_w 
+    l = 0
+    c = cube([(160)*scl, (90)*scl, (20)*scl])
+    b = translate(v=[(w-260)*scl, (0)*scl, (tpanel_h-3)*scl]).add(c)
+    u += b
+    b = translate(v=[(w-260)*scl, (ht-90)*scl, (tpanel_h-3)*scl]).add(c)
+    u += b
+    c = cube([(160)*scl, (82)*scl, (93)*scl])
+    b = translate(v=[(w-250)*scl, (-1)*scl, (tpanel_h-3)*scl]).add(c)
+    u -= b
+    b = translate(v=[(w-250)*scl, (ht-82+1)*scl, (tpanel_h-3)*scl]).add(c)
+    u -= b
+
     # matches screw-hole in front base
     u = indented_screwhole(scl, u, (182), -40, 75, -90)
     u = indented_screwhole(scl, u, (182), ht+40, 75, -90)
@@ -792,21 +825,18 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+20)*scl]).add(s)
     u -= b
 
-    # cut-out and matching protrusion to fit front kbd
-    w = tpanel_b_w 
-    l = 0
-    b = cube([(100)*scl, (32)*scl, (23)*scl])
-    b = translate(v=[(w-200)*scl, (l-1)*scl, (48)*scl]).add(b)
-    u -= b
-    b = shearedcube([(36)*scl, (22)*scl, (20)*scl],
+    # protrusion to fit front kbd tray
+    b = shearedcube([(36)*scl, (13)*scl, (20)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, -10*scl, 0])
     b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-210)*scl, (l-19)*scl, (48)*scl]).add(b)
+    b = translate(v=[(w-135)*scl, (l-19)*scl, (34)*scl]).add(b)
     u += b
     # half-way point support for top front bamboo panel
-    b = cube([(100)*scl, (90)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(w)/2*scl, (l-8)*scl, (hthick)*scl]).add(b)
+    c = cube([(100)*scl, (90)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(w)/2*scl, (-8)*scl, (hthick)*scl]).add(c)
+    u += b
+    b = translate(v=[(w)/2*scl, (ht+8-90)*scl, (hthick)*scl]).add(c)
     u += b
     
     if pin_parts_3d:
@@ -1945,8 +1975,8 @@ def front_kbd_corner(scl, ht):
     u -= b
 
     # lock-in to tpanel
-    b = cube([(50)*scl, (50)*scl, (h-50)*scl])
-    b = translate(v=[(w-50)*scl, (l-20)*scl, (50)*scl]).add(b)
+    b = cube([(50)*scl, (30)*scl, (h-60)*scl])
+    b = translate(v=[(w-50)*scl, (l-20)*scl, (60)*scl]).add(b)
     u += b
 
     # funny cutouts (reduce plastic usage, screw access points as well)
@@ -1973,11 +2003,12 @@ def front_kbd_corner(scl, ht):
 
         offs += step
         
-    b = shearedcube([(36)*scl, (26)*scl, (22)*scl],
+    # cut-in to tpanel
+    b = shearedcube([(36)*scl, (16)*scl, (22)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, -11*scl, 0])
     b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-30)*scl, (l-21)*scl, (50)*scl]).add(b)
+    b = translate(v=[(w-30)*scl, (l-21)*scl, (35)*scl]).add(b)
     u -= b
     
 
@@ -2174,7 +2205,7 @@ def pcb1(scl):
     pcb = union()
     b = cube([1460*scl, 1200*scl, (12)*scl])
     pcb += b
-    b = cube([381*scl, 1200*scl, (30)*scl])
+    b = cube([391*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([901*scl, 1100*scl, (30)*scl])
@@ -2337,7 +2368,7 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-    tpanel_offset = -120
+    tpanel_offset = -125
 
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -2381,10 +2412,10 @@ def create_laptop(t, scl, part, angle):
         #b = screen_adjust(b, scl, angle)
 
     if part == 17:
-        pcb1_support_ht = 40
+        pcb1_support_ht = 30
         se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
-                         (tpanel_ht-pcb1_support_ht)*scl,
+                         (tpanel_ht)*scl,
                          0]).add(se)
         b.add(m)
 
@@ -2471,7 +2502,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7*0, 4, 13*0, 5, 8, 17]:
+            for i in [14, 7*0, 4, 13*1, 5, 8, 17]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
