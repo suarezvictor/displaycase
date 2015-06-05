@@ -697,9 +697,9 @@ def pcb1_support(scl, ht, tpanel_offset):
     u += c
     # secondary strut with pcb edge lock
     c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
-                    (holder_ht)*scl, (sdep-30)*scl])
+                    (holder_ht)*scl, (sdep-40)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                    (kbd_inset+30)*scl]).add(c)
+                    (kbd_inset+40)*scl]).add(c)
     u += c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
@@ -2530,7 +2530,7 @@ if __name__ == '__main__':
                 b += p
 
                 r = hinge_rotate(scl, b, angle)
-                c = [0.8, 0.3, 0.3, 0.2]
+                c = [0.8, 0.8, 0.2, 0.2]
                 c = color(c)
                 c.add(r)
                 u.add(c)
