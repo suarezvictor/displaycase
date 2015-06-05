@@ -1961,9 +1961,10 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
-def front_kbd_corner(scl, ht):
+def front_kbd_corner(scl, ht, offs):
     """
     TODO: L-piece, move micro-sd, have it go right into the corner
+    TODO: cut-out to slot into base_end (at top)
     """
 
     u = union()
@@ -1974,9 +1975,16 @@ def front_kbd_corner(scl, ht):
     b = hollowbox(scl, 25, l, h,
                 {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
                 curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(w-25)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-25+offs)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
+    if offs < 0:
+        b = hollowbox(scl, 25-offs, 130, h,
+                    {T:hthick, L:-offs-26, R:25, F:hthick, D:-1, B:hthick*2},
+                    curverads={ T|R: (hthick, 0)})
+        b = translate(v=[(w-25+offs)*scl, (l-130)*scl, (0)*scl]).add(b)
+        u += b
+    
     # extra bit for kbd corner support
     b = hollowbox(scl, 200+hthick, 20+hthick, h,
                 {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
@@ -2416,8 +2424,13 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == 13:
-        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht+tpanel_offset)
+        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht+tpanel_offset, 0)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
+        b.add(m)
+        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
+                                    -79)
+        m = mirror_part(se, scl,
+                            total_width-base_adjust_ht+scrn_hinge_ht+hthick)
         b.add(m)
 
     base_adjust_ht += base_back_ht
@@ -2451,6 +2464,17 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     t.add(b)
+
+def usb_wifi(scl):
+    u = union()
+    b = cube([250*scl, 670*scl, (70.0)*scl])
+    b  = translate(v=[0, 200*scl, (0)*scl]).add(b)
+    u.add(b)
+    b = cube([125*scl, 200*scl, (45.0)*scl])
+    b  = translate(v=[(125/2.)*scl, 0, (12.5)*scl]).add(b)
+    u.add(b)
+
+    return u
 
 def kbd_part(scl):
     
@@ -2519,7 +2543,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14*0, 7*0, 4*0, 13*1, 5, 8*0, 17*0, 3, 9]:
+            for i in [14*1, 7*1, 4*1, 13*1, 5, 8*1, 17*1, 3, 9]:
             #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
@@ -2533,6 +2557,15 @@ if __name__ == '__main__':
                 u.add(c)
 
             if add_internal_parts:
+                wifi = usb_wifi(scl)
+                r = translate([(525)*scl, 150*scl,
+                                (85)*scl]).add(wifi)
+                c = [0.2, 0.8, 0.8, 0.2]
+                r = union().add(r)
+                c = color(c)
+                c.add(r)
+                u.add(c)
+
                 kbd = kbd_part(scl)
                 r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
