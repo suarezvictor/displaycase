@@ -429,6 +429,20 @@ def base_end(scl, ht):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
+    # add top strut
+    c = union()
+    b = cube([lcd_w*scl, (ht-20)*scl, 35*scl])
+    b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
+    c += b
+    d = cube([52*scl, (ht)*scl, 37*scl])
+    b = translate(v=[(290)*scl, (-1)*scl, (54)*scl]).add(d)
+    c -= b
+    b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
+    c -= b
+
+    u += c
+
+    # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-305, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
@@ -2274,10 +2288,10 @@ def pcb1(scl):
     t.add(r)
 
     # USB x 2
-    u = cube([132*scl, 137*scl, (69)*scl])
-    r = translate([(75)*scl, 0*scl, (-69)*scl]).add(u)
+    u = cube([132*scl, 137*scl, (61.5)*scl])
+    r = translate([(75)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(260)*scl, 0*scl, (-69)*scl]).add(u)
+    r = translate([(260)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
 
     v = union()
@@ -2521,6 +2535,7 @@ if __name__ == '__main__':
             u = union()
             #for i in range(18):
             for i in [14, 7*1, 4, 13*1, 5, 8, 17, 3, 9]:
+            #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
