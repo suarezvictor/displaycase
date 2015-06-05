@@ -1943,6 +1943,7 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
 
 def front_kbd_corner(scl, ht):
     """
+    TODO: L-piece, move micro-sd, have it go right into the corner
     """
 
     u = union()
@@ -1964,6 +1965,17 @@ def front_kbd_corner(scl, ht):
     u += b
     b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
     b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
+
+    # floor L-piece, stabilise and allow sticking to PCB
+    b = cube([(26)*scl, (l)*scl, (hthick)*scl])
+    b = translate(v=[(w-1)*scl, 0*scl, (h-hthick)*scl]).add(b)
+    u += b
+
+    # cutouts for micro-sd
+    b = cube([(175)*scl, (120)*scl, (50)*scl])
+    b = translate(v=[(w)*scl, -1*scl,
+            (boxheight-hthick-pcbthick-25)*scl]).add(b)
     u -= b
 
     # cutouts for bamboo panel
@@ -2502,7 +2514,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7*0, 4, 13*1, 5, 8, 17]:
+            for i in [14, 7*1, 4, 13*1, 5, 8, 17, 3, 9]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
