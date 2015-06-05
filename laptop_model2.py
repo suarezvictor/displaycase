@@ -429,6 +429,12 @@ def base_end(scl, ht):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
+    b = hollowbox(scl, lcd_w-tpanel_l_b-305, ht+20, 35,
+                {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
+                curverads={ T|F: (hthick, 0)})
+    b = translate(v=[(lcd_w-kbd_w+225)*scl, (0)*scl, (55)*scl]).add(b)
+    u += b
+
     rad=35.0 + 15
     # add hinge
     c = cylinder(r=rad*scl, h=(ht)*scl, segments=50)
