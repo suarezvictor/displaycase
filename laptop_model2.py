@@ -2315,7 +2315,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2441,7 +2441,6 @@ def create_laptop(t, scl, part, angle):
         se = tpanel_mid(scl, tpanel_b_w, tpanel_offset)
         m = translate(v=[0, tpanel_ht*scl, 0]).add(se)
         b.add(m)
-        #b = screen_adjust(b, scl, angle)
 
     if part == 17:
         pcb1_support_ht = 30
@@ -2450,20 +2449,6 @@ def create_laptop(t, scl, part, angle):
                          (tpanel_ht)*scl,
                          0]).add(se)
         b.add(m)
-
-    #if part == 5:
-    #    se = base_back_joiner(scl, base_joiner_ht)
-    #    m = translate(v=[0,
-    #                    (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
-    #                     0]).add(se)
-    #    b.add(m)
-
-    #if part == 12:
-    #    se = front_mid_joiner(scl, base_joiner_ht)
-    #    m = translate(v=[0, 
-    #                    (base_adjust_ht + centre_ht/2 - base_joiner_ht/2)*scl,
-    #                     0]).add(se)
-    #    b.add(m)
 
     t.add(b)
 
@@ -2534,7 +2519,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7*1, 4, 13*1, 5, 8, 17, 3, 9]:
+            for i in [14*0, 7*0, 4*0, 13*1, 5, 8*0, 17*0, 3, 9]:
             #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
