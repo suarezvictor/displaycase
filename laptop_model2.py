@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -734,7 +734,7 @@ def pcb1_support(scl, ht, tpanel_offset):
                 (tpanel_h+1)*scl]).add(c)
     u += c
     # third part goes down to bamboo panel
-    c = cube([(tpanel_box_l-25)*scl, holder_ht*scl, 20*scl])
+    c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (boxheight-20-hthick)*scl]).add(c)
     u += c
@@ -748,9 +748,11 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     # cut-out for front kbd tray
     w = tpanel_b_w 
-    l = 0
-    b = cube([(54)*scl, (13)*scl, (90)*scl])
-    b = translate(v=[(w-150)*scl, (l-1)*scl, (tpanel_h+18)*scl]).add(b)
+    b = cube([(84)*scl, (63)*scl, (27)*scl])
+    b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
+    u -= b
+    b = cube([(40)*scl, (63)*scl, (37)*scl])
+    b = translate(v=[(w-193)*scl, (-1)*scl, (48)*scl]).add(b)
     u -= b
 
     v = union()
@@ -759,6 +761,11 @@ def pcb1_support(scl, ht, tpanel_offset):
     return v
     
 def tpanel_mid(scl, ht, ht_offset):
+    """
+    TODO:
+    * put screwhole down into base_mid
+    * remove some stuff on the back underside (near kbd)
+    """
     u = union()
 
     walls = {T:40, L:hthick, R:20, F:20, D:-1, B:20}
@@ -2015,9 +2022,22 @@ def front_kbd_corner(scl, ht, offs):
     u -= b
 
     # lock-in to tpanel
-    b = cube([(50)*scl, (30)*scl, (h-60)*scl])
-    b = translate(v=[(w-50)*scl, (l-20)*scl, (60)*scl]).add(b)
+    b = cube([(95)*scl, (30)*scl, (h-40)*scl])
+    b = translate(v=[(w-70)*scl, (l-30)*scl, (40)*scl]).add(b)
     u += b
+    b = cube([(80)*scl, (110)*scl, (h-70)*scl])
+    b = translate(v=[(w-100)*scl, (l-50)*scl, (70)*scl]).add(b)
+    u += b
+    b = cube([(36)*scl, (90)*scl, (40)*scl])
+    b = translate(v=[(w-93)*scl, (l-30)*scl, (50)*scl]).add(b)
+    u += b
+
+    # screw holes in top for touchpanel
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(w-75)*scl, (l+40)*scl, (60)*scl]).add(d)
+    u -= t
 
     # funny cutouts (reduce plastic usage, screw access points as well)
     offs = 32
@@ -2043,15 +2063,6 @@ def front_kbd_corner(scl, ht, offs):
 
         offs += step
         
-    # cut-in to tpanel
-    b = shearedcube([(36)*scl, (16)*scl, (22)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[0*scl, -11*scl, 0])
-    b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-30)*scl, (l-21)*scl, (35)*scl]).add(b)
-    u -= b
-    
-
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -2245,11 +2256,15 @@ def pcb1(scl):
     pcb = union()
     b = cube([1460*scl, 1200*scl, (12)*scl])
     pcb += b
+    b = cube([901*scl, 1100*scl, (30)*scl])
+    b = translate([(1350)*scl, 440*scl, -10*scl]).add(b)
+    pcb -= b
     b = cube([391*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
-    b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1350)*scl, 440*scl, -10*scl]).add(b)
+    # extra small cutout to fit pcb1_support at corner
+    b = cube([40*scl, 90*scl, (30)*scl])
+    b = translate([(380)*scl, (1200-55)*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
@@ -2543,7 +2558,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14*1, 7*1, 4*1, 13*1, 5, 8*1, 17*1, 3, 9]:
+            #for i in [14*0, 7*0, 4*0, 13*1, 5, 8*0, 17*1, 3*0, 9]:
+            for i in [14, 13, 17*1]:
             #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
