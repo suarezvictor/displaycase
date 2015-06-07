@@ -2036,7 +2036,7 @@ def front_kbd_corner(scl, ht, offs):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(w-75)*scl, (l+40)*scl, (60)*scl]).add(d)
+    t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
     u -= t
 
     # funny cutouts (reduce plastic usage, screw access points as well)
@@ -2056,7 +2056,7 @@ def front_kbd_corner(scl, ht, offs):
     b = translate(v=[(0)*scl, (0)*scl, (boxheight-140+25)*scl]).add(b)
     c += b
 
-    while offs < (l-25):
+    while offs < (l-25-step*2):
         d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
         d = translate(v=[(w-25)*scl, (offs)*scl, (25)*scl]).add(c)
         u -= d
