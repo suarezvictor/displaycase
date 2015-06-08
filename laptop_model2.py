@@ -1961,7 +1961,7 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
-def front_kbd_corner(scl, ht, offs):
+def front_kbd_corner(scl, ht, woffs):
     """
     TODO: L-piece, move micro-sd, have it go right into the corner
     TODO: cut-out to slot into base_end (at top)
@@ -1975,43 +1975,44 @@ def front_kbd_corner(scl, ht, offs):
     b = hollowbox(scl, 25, l, h,
                 {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
                 curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(w-25+offs)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-25+woffs)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    if offs < 0:
-        b = hollowbox(scl, 25-offs, 130, h,
-                    {T:hthick, L:-offs-26, R:25, F:hthick, D:-1, B:hthick*2},
+    if woffs < 0:
+        b = hollowbox(scl, 25-woffs, 130, h,
+                    {T:hthick, L:-woffs-26, R:25, F:hthick, D:-1, B:hthick*2},
                     curverads={ T|R: (hthick, 0)})
-        b = translate(v=[(w-25+offs)*scl, (l-130)*scl, (0)*scl]).add(b)
+        b = translate(v=[(w-25+woffs)*scl, (l-130)*scl, (0)*scl]).add(b)
         u += b
     
     # extra bit for kbd corner support
     b = hollowbox(scl, 200+hthick, 20+hthick, h,
                 {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-hthick)*scl, (0)*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = cube([(200+hthick+2+woffs)*scl, (hthick+1)*scl, (hthick+1)*scl])
     b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
     # floor L-piece, stabilise and allow sticking to PCB
     b = cube([(26)*scl, (l)*scl, (hthick)*scl])
-    b = translate(v=[(w-1)*scl, 0*scl, (h-hthick)*scl]).add(b)
+    b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
     u += b
 
-    # cutouts for micro-sd
-    b = cube([(175)*scl, (120)*scl, (50)*scl])
-    b = translate(v=[(w)*scl, -1*scl,
-            (boxheight-hthick-pcbthick-25)*scl]).add(b)
-    u -= b
+    if woffs > 0:
+        # cutouts for micro-sd
+        b = cube([(175)*scl, (120)*scl, (50)*scl])
+        b = translate(v=[(w)*scl, -1*scl,
+                (boxheight-hthick-pcbthick-25)*scl]).add(b)
+        u -= b
 
     # cutouts for bamboo panel
     b = cube([(25)*scl, (2+l)*scl, (hthick+1)*scl])
-    b = translate(v=[(w-25-hthick)*scl, -1*scl, (-1)*scl]).add(b)
+    b = translate(v=[(w-25-hthick+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
     b = cube([(202)*scl, (hthick)*scl, (hthick+1)*scl])
-    b = translate(v=[(w-1)*scl, -1*scl, (-1)*scl]).add(b)
+    b = translate(v=[(w-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
     # lock-in to tpanel
@@ -2033,9 +2034,16 @@ def front_kbd_corner(scl, ht, offs):
     u -= t
 
     # funny cutouts (reduce plastic usage, screw access points as well)
-    offs = 32
-    step = (l-160-offs) / (5 if test else 12)
+    offs = 32.0
+    if test:
+        count = 5
+    else:
+        if woffs < 0:
+            count = 16
+        else:
+            count = 12
 
+    step = (l-160-offs) / count
     c = union()
     b = cube([(70)*scl, (step-25)*scl, (boxheight-114)*scl])
     b = translate(v=[(-1)*scl, (0)*scl, (30)*scl]).add(b)
@@ -2050,8 +2058,8 @@ def front_kbd_corner(scl, ht, offs):
     c += b
 
     while offs < (l-25-step*2):
-        d = translate(v=[(0)*scl, (offs)*scl, (25)*scl]).add(c)
-        d = translate(v=[(w-25)*scl, (offs)*scl, (25)*scl]).add(c)
+        d = translate(v=[(woffs)*scl, (offs)*scl, (25)*scl]).add(c)
+        d = translate(v=[(w-25+woffs)*scl, (offs)*scl, (25)*scl]).add(c)
         u -= d
 
         offs += step
