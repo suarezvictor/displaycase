@@ -852,13 +852,6 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+20)*scl]).add(s)
     u -= b
 
-    # protrusion to fit front kbd tray
-    b = shearedcube([(36)*scl, (13)*scl, (20)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[0*scl, -10*scl, 0])
-    b = rotate([-90, 0, 0]).add(b)
-    b = translate(v=[(w-135)*scl, (l-19)*scl, (34)*scl]).add(b)
-    u += b
     # half-way point support for top front bamboo panel
     c = cube([(100)*scl, (90)*scl, (boxheight-hthick*2)*scl])
     b = translate(v=[(w)/2*scl, (-8)*scl, (hthick)*scl]).add(c)
@@ -2559,7 +2552,7 @@ if __name__ == '__main__':
             u = union()
             #for i in range(18):
             #for i in [14*0, 7*0, 4*0, 13*1, 5, 8*0, 17*1, 3*0, 9]:
-            for i in [14, 13, 17*1]:
+            for i in [14, 13, 17, 5]:
             #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
