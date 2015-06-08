@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -2559,8 +2559,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            #for i in [14*0, 7*0, 4*0, 13*1, 5, 8*0, 17*1, 3*0, 9]:
-            for i in [14, 13, 17, 5]:
+            for i in [14, 7, 4, 13, 5, 8, 17, 3, 9]:
+            #for i in [14, 13, 17, 5]:
             #for i in [3]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
@@ -2574,6 +2574,8 @@ if __name__ == '__main__':
                 u.add(c)
 
             if add_internal_parts:
+
+                # USB WIFI dongle
                 wifi = usb_wifi(scl)
                 r = translate([(525)*scl, 150*scl,
                                 (85)*scl]).add(wifi)
@@ -2583,6 +2585,7 @@ if __name__ == '__main__':
                 c.add(r)
                 u.add(c)
 
+                # Keyboard
                 kbd = kbd_part(scl)
                 r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
@@ -2592,6 +2595,7 @@ if __name__ == '__main__':
                 c.add(r)
                 u.add(c)
 
+                # LCD Panel
                 b = union()
                 p = lcd_panel(scl, offs=3)
                 p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht)*scl]).add(p)
@@ -2599,6 +2603,18 @@ if __name__ == '__main__':
 
                 r = hinge_rotate(scl, b, angle)
                 c = [0.8, 0.8, 0.2, 0.2]
+                c = color(c)
+                c.add(r)
+                u.add(c)
+
+                # Battery
+                b = union()
+                p = cube([1620*scl, 1360*scl, 65*scl])
+                p = translate(v=[500.0*scl, (lcd_l-1360-70)*scl,(97)*scl]).add(p)
+                b += p
+                r = b
+
+                c = [0.8, 0.2, 0.2, 0.2]
                 c = color(c)
                 c.add(r)
                 u.add(c)
