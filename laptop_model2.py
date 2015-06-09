@@ -16,10 +16,12 @@ test = False
 single = True
 
 TPANEL_MID = 5
+BASE_END = 3
 BASE_MID = 8
 FRONT_KBD_TRAY = 12
 FRONT_TRAY_CORNER = 13
 PCB1_SUPPORT = 17
+BATTERY_SUPPORT1 = 18
 
 if not test:
     lcd_l = 3598.0
@@ -707,6 +709,65 @@ def base_mid_cutout(u, scl, ht, offs):
     u -= c
     return u
 
+def battery_support1(scl, ht, tpanel_offset):
+    u = union()
+    kbd_inset = 38.0
+    sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
+    holder_ht = 80.0
+
+    tpanel_box_l = 150
+    # main strut going from back base to tpanel
+    c = cube([(boxlength - tpanel_l_b - 170+30)*scl,
+                    ht*scl, (boxheight-hthick-kbd_inset)*scl])
+    c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
+                    (kbd_inset)*scl]).add(c)
+    u += c
+    # secondary strut with pcb edge lock
+    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
+                    (holder_ht)*scl, (sdep-40)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                    (kbd_inset+40)*scl]).add(c)
+    u += c
+
+    if False:
+        # screw holder, done in 3 parts so that it's easier to calculate heights
+        # first part is flush with main strut
+        c = cube([(tpanel_box_l)*scl, holder_ht*scl, sdep*scl])
+        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                    (kbd_inset)*scl]).add(c)
+        u += c
+        # second part goes up to underside of tpanel
+        c = cube([(tpanel_box_l)*scl, holder_ht*scl, 10*scl])
+        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                    (tpanel_h+1)*scl]).add(c)
+        u += c
+        # third part goes down to bamboo panel
+        c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
+        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                    (boxheight-20-hthick)*scl]).add(c)
+        u += c
+
+        # screw holes in top for touchpanel
+        d = cylinder(r=topscrewrad*scl,
+                        h=(55)*scl,
+                        segments=50, center=True)
+        t = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (50)*scl]).add(d)
+        u -= t
+
+        # cut-out for front kbd tray
+        w = tpanel_b_w 
+        b = cube([(84)*scl, (63)*scl, (27)*scl])
+        b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
+        u -= b
+        b = cube([(40)*scl, (63)*scl, (37)*scl])
+        b = translate(v=[(w-193)*scl, (-1)*scl, (48)*scl]).add(b)
+        u -= b
+
+    v = union()
+    u = translate(v=[0*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
+    
 def pcb1_support(scl, ht, tpanel_offset):
     u = union()
     kbd_inset = 38.0
@@ -2387,7 +2448,7 @@ def create_laptop(t, scl, part, angle):
 
     lid_adjust_ht += scrn_hinge_ht
 
-    if part == 3:
+    if part == BASE_END:
         se = base_end(scl, base_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         b.add(m)
@@ -2482,16 +2543,16 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0, tpanel_ht*scl, 0]).add(se)
         b.add(m)
 
-    if part == PCB1_SUPPORT:
-        pcb1_support_ht = 30
-        se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
+    pcb1_support_ht = 30
+
+    if part == BATTERY_SUPPORT1:
+        se = battery_support1(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
                          (tpanel_ht+tpanel_b_w-80)*scl,
                          0]).add(se)
         b.add(m)
 
     if part == PCB1_SUPPORT:
-        pcb1_support_ht = 30
         se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
                          (tpanel_ht)*scl,
@@ -2577,11 +2638,14 @@ if __name__ == '__main__':
     for i in range(rpt):
         for angle in angles:
             u = union()
-            #for i in range(18):
-            #for i in [14, 7, 4, 13, 5, 8, PCB1_SUPPORT, 3, 9]:
-            for i in [FRONT_KBD_TRAY, TPANEL_MID, BASE_MID, PCB1_SUPPORT]:
-            #for i in [14, 13, 17, 5]:
-            #for i in [3]:
+            for i in [
+                        #BASE_END,
+                        FRONT_KBD_TRAY,
+                        TPANEL_MID,
+                        BASE_MID,
+                        PCB1_SUPPORT,
+                        BATTERY_SUPPORT1,
+                    ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
