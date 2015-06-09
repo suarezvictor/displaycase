@@ -15,6 +15,9 @@ add_internal_parts=True
 test = False
 single = True
 
+TPANEL_MID = 5
+BASE_MID = 8
+PCB1_SUPPORT = 17
 
 if not test:
     lcd_l = 3598.0
@@ -2457,7 +2460,7 @@ def create_laptop(t, scl, part, angle):
 
     base_adjust_ht += base_back_ht
 
-    if part == 8:
+    if part == BASE_MID:
         se = base_mid(scl, base_centre_ht)
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
         b.add(m)
@@ -2472,12 +2475,20 @@ def create_laptop(t, scl, part, angle):
 
     tpanel_ht = (base_adjust_ht + tpanel_offset + base_centre_ht/2 -
                             (tpanel_b_w)/2)
-    if part == 5:
+    if part == TPANEL_MID:
         se = tpanel_mid(scl, tpanel_b_w, tpanel_offset)
         m = translate(v=[0, tpanel_ht*scl, 0]).add(se)
         b.add(m)
 
-    if part == 17:
+    if part == PCB1_SUPPORT:
+        pcb1_support_ht = 30
+        se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
+        m = translate(v=[0,
+                         (tpanel_ht+tpanel_b_w-80)*scl,
+                         0]).add(se)
+        b.add(m)
+
+    if part == PCB1_SUPPORT:
         pcb1_support_ht = 30
         se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
@@ -2565,8 +2576,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            #for i in [14, 7, 4, 13, 5, 8, 17, 3, 9]:
-            for i in [13, 5, 17]:
+            #for i in [14, 7, 4, 13, 5, 8, PCB1_SUPPORT, 3, 9]:
+            for i in [13, TPANEL_MID, BASE_MID, PCB1_SUPPORT]:
             #for i in [14, 13, 17, 5]:
             #for i in [3]:
                 t = union()
