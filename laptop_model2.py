@@ -1970,7 +1970,10 @@ def front_kbd_corner(scl, ht, woffs):
     u = union()
     w = lcd_w-kbd_w-158
     l = ht-tpanel_b_w/2+hthick
-    h = boxheight - hthick - pcbthick - 2
+    if woffs < 0:
+        h = 40
+    else:
+        h = boxheight - hthick - pcbthick - 2
 
     b = hollowbox(scl, 25, l, h,
                 {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
@@ -1981,26 +1984,28 @@ def front_kbd_corner(scl, ht, woffs):
     if woffs < 0:
         b = hollowbox(scl, 25-woffs, 130, h,
                     {T:hthick, L:-woffs-26, R:25, F:hthick, D:-1, B:hthick*2},
-                    curverads={ T|R: (hthick, 0)})
+                    curverads={ T|R: (hthick, 0), T|B: (hthick, 0)})
         b = translate(v=[(w-25+woffs)*scl, (l-130)*scl, (0)*scl]).add(b)
         u += b
     
     # extra bit for kbd corner support
-    b = hollowbox(scl, 200+hthick, 20+hthick, h,
+    b = hollowbox(scl, 200+hthick-woffs, 20+hthick, h,
                 {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(200+hthick+2+woffs)*scl, (hthick+1)*scl, (hthick+1)*scl])
-    b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
+    b = cube([(200+hthick+2-woffs)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = translate(v=[(w-hthick-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
     # floor L-piece, stabilise and allow sticking to PCB
     b = cube([(26)*scl, (l)*scl, (hthick)*scl])
     b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
+    if woffs < 0:
+        b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    if woffs > 0:
+    if woffs >= 0:
         # cutouts for micro-sd
         b = cube([(175)*scl, (120)*scl, (50)*scl])
         b = translate(v=[(w)*scl, -1*scl,
@@ -2033,36 +2038,37 @@ def front_kbd_corner(scl, ht, woffs):
     t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
     u -= t
 
-    # funny cutouts (reduce plastic usage, screw access points as well)
-    offs = 32.0
-    if test:
-        count = 5
-    else:
-        if woffs < 0:
-            count = 16
+    if woffs >= 0:
+        # funny cutouts (reduce plastic usage, screw access points as well)
+        offs = 32.0
+        if test:
+            count = 5
         else:
-            count = 12
+            if woffs < 0:
+                count = 16
+            else:
+                count = 12
 
-    step = (l-160-offs) / count
-    c = union()
-    b = cube([(70)*scl, (step-25)*scl, (boxheight-114)*scl])
-    b = translate(v=[(-1)*scl, (0)*scl, (30)*scl]).add(b)
-    c += b
-    r=(step-25.0)*scl/2
-    b = cylinder(r=r, h=70*scl, segments=100)
-    b = rotate([0, 90, 0]).add(b)
-    b = translate(v=[(-1)*scl, r, (30)*scl]).add(b)
-    c += b
-    # add fill-ins
-    b = translate(v=[(0)*scl, (0)*scl, (boxheight-140+25)*scl]).add(b)
-    c += b
+        step = (l-160-offs) / count
+        c = union()
+        b = cube([(70)*scl, (step-25)*scl, (boxheight-114)*scl])
+        b = translate(v=[(-1)*scl, (0)*scl, (30)*scl]).add(b)
+        c += b
+        r=(step-25.0)*scl/2
+        b = cylinder(r=r, h=70*scl, segments=100)
+        b = rotate([0, 90, 0]).add(b)
+        b = translate(v=[(-1)*scl, r, (30)*scl]).add(b)
+        c += b
+        # add fill-ins
+        b = translate(v=[(0)*scl, (0)*scl, (boxheight-140+25)*scl]).add(b)
+        c += b
 
-    while offs < (l-25-step*2):
-        d = translate(v=[(woffs)*scl, (offs)*scl, (25)*scl]).add(c)
-        d = translate(v=[(w-25+woffs)*scl, (offs)*scl, (25)*scl]).add(c)
-        u -= d
+        while offs < (l-25-step*2):
+            d = translate(v=[(woffs)*scl, (offs)*scl, (25)*scl]).add(c)
+            d = translate(v=[(w-25+woffs)*scl, (offs)*scl, (25)*scl]).add(c)
+            u -= d
 
-        offs += step
+            offs += step
         
     if pin_parts_3d:
         c = union()
@@ -2424,7 +2430,7 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-    tpanel_offset = -125
+    tpanel_offset = -190
 
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -2559,7 +2565,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             #for i in range(18):
-            for i in [14, 7, 4, 13, 5, 8, 17, 3, 9]:
+            #for i in [14, 7, 4, 13, 5, 8, 17, 3, 9]:
+            for i in [13, 5, 17]:
             #for i in [14, 13, 17, 5]:
             #for i in [3]:
                 t = union()
