@@ -17,6 +17,8 @@ single = True
 
 TPANEL_MID = 5
 BASE_MID = 8
+FRONT_KBD_TRAY = 12
+FRONT_TRAY_CORNER = 13
 PCB1_SUPPORT = 17
 
 if not test:
@@ -1964,7 +1966,7 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
-def front_kbd_corner(scl, ht, woffs):
+def front_kbd_tray(scl, ht, woffs):
     """
     TODO: L-piece, move micro-sd, have it go right into the corner
     TODO: cut-out to slot into base_end (at top)
@@ -2111,7 +2113,7 @@ def front_kbd_corner(scl, ht, woffs):
     v.add(u)
     return v
 
-def front_kbd_tray(scl, ht):
+def front_tray_corner(scl, ht):
     """
     this part basically locks into place (relies on surrounding parts)
     rather than acts as structural support, with the exception of
@@ -2443,16 +2445,16 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
-    if part == 12:
-        se = front_kbd_tray(scl, 200)
+    if part == FRONT_TRAY_CORNER:
+        se = front_tray_corner(scl, 200)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
 
-    if part == 13:
-        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht+tpanel_offset, 0)
+    if part == FRONT_KBD_TRAY:
+        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset, 0)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
         b.add(m)
-        se = front_kbd_corner(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
+        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
                                     -79)
         m = mirror_part(se, scl,
                             total_width-base_adjust_ht+scrn_hinge_ht+hthick)
@@ -2577,7 +2579,7 @@ if __name__ == '__main__':
             u = union()
             #for i in range(18):
             #for i in [14, 7, 4, 13, 5, 8, PCB1_SUPPORT, 3, 9]:
-            for i in [13, TPANEL_MID, BASE_MID, PCB1_SUPPORT]:
+            for i in [FRONT_KBD_TRAY, TPANEL_MID, BASE_MID, PCB1_SUPPORT]:
             #for i in [14, 13, 17, 5]:
             #for i in [3]:
                 t = union()
