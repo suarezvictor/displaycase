@@ -722,46 +722,35 @@ def battery_support1(scl, ht, tpanel_offset):
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
     u += c
-    # secondary strut with pcb edge lock
-    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
-                    (holder_ht)*scl, (sdep-40)*scl])
+
+    # screw holder, done in 2 parts so that it's easier to calculate heights
+    # first part joins others together
+    c = cube([(70)*scl, holder_ht*scl, (boxheight-hthick-kbd_inset)*scl])
+    c = translate(v=[(tpanel_l_b-30)*scl, (0)*scl,
+                (kbd_inset)*scl]).add(c)
+    #u += c
+    # second part is flush with kbd holder
+    c = cube([(tpanel_box_l)*scl, holder_ht*scl, (sdep+15)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                    (kbd_inset+40)*scl]).add(c)
+                (22)*scl]).add(c)
     u += c
+    # third part goes down to bamboo panel
+    c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+                (boxheight-20-hthick)*scl]).add(c)
+    u += c
+    # finally a cut-out for the kbd tray slot
+    c = cube([(104)*scl, 70*scl, (20)*scl])
+    c = translate(v=[(19+tpanel_l_b-tpanel_box_l)*scl, (11)*scl,
+                (21)*scl]).add(c)
+    u -= c
 
-    if False:
-        # screw holder, done in 3 parts so that it's easier to calculate heights
-        # first part is flush with main strut
-        c = cube([(tpanel_box_l)*scl, holder_ht*scl, sdep*scl])
-        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                    (kbd_inset)*scl]).add(c)
-        u += c
-        # second part goes up to underside of tpanel
-        c = cube([(tpanel_box_l)*scl, holder_ht*scl, 10*scl])
-        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                    (tpanel_h+1)*scl]).add(c)
-        u += c
-        # third part goes down to bamboo panel
-        c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
-        c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                    (boxheight-20-hthick)*scl]).add(c)
-        u += c
-
-        # screw holes in top for touchpanel
-        d = cylinder(r=topscrewrad*scl,
-                        h=(55)*scl,
-                        segments=50, center=True)
-        t = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (50)*scl]).add(d)
-        u -= t
-
-        # cut-out for front kbd tray
-        w = tpanel_b_w 
-        b = cube([(84)*scl, (63)*scl, (27)*scl])
-        b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
-        u -= b
-        b = cube([(40)*scl, (63)*scl, (37)*scl])
-        b = translate(v=[(w-193)*scl, (-1)*scl, (48)*scl]).add(b)
-        u -= b
+    # screw holes in top for touchpanel
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (50)*scl]).add(d)
+    u -= t
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -897,6 +886,11 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[(w-250)*scl, (ht-82+1)*scl, (tpanel_h-3)*scl]).add(c)
     u -= b
 
+    # cut-out to match right kbd tray
+    c = cube([(104)*scl, (82)*scl, (93)*scl])
+    b = translate(v=[(w-229)*scl, (ht-82+1)*scl, (20)*scl]).add(c)
+    u -= b
+
     # matches screw-hole in front base
     u = indented_screwhole(scl, u, (182), -40, 75, -90)
     u = indented_screwhole(scl, u, (182), ht+40, 75, -90)
@@ -915,7 +909,7 @@ def tpanel_mid(scl, ht, ht_offset):
     # and into pcb1_support
     b = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+11)*scl]).add(s)
     u -= b
 
     # half-way point support for top front bamboo panel
@@ -2086,23 +2080,31 @@ def front_kbd_tray(scl, ht, woffs):
     b = translate(v=[(w-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
-    # lock-in to tpanel
-    b = cube([(95)*scl, (30)*scl, (h-40)*scl])
-    b = translate(v=[(w-70)*scl, (l-30)*scl, (40)*scl]).add(b)
-    u += b
-    b = cube([(80)*scl, (110)*scl, (h-70)*scl])
-    b = translate(v=[(w-100)*scl, (l-50)*scl, (70)*scl]).add(b)
-    u += b
-    b = cube([(36)*scl, (90)*scl, (40)*scl])
-    b = translate(v=[(w-93)*scl, (l-30)*scl, (50)*scl]).add(b)
-    u += b
-
     # screw holes in top for touchpanel
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
-    u -= t
+    if woffs >= 0:
+        # lock-in to tpanel
+        b = cube([(95)*scl, (30)*scl, (h-40)*scl])
+        b = translate(v=[(w-70)*scl, (l-30)*scl, (40)*scl]).add(b)
+        u += b
+        b = cube([(80)*scl, (110)*scl, (h-70)*scl])
+        b = translate(v=[(w-100)*scl, (l-50)*scl, (70)*scl]).add(b)
+        u += b
+        b = cube([(36)*scl, (90)*scl, (40)*scl])
+        b = translate(v=[(w-93)*scl, (l-30)*scl, (50)*scl]).add(b)
+        u += b
+
+        t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
+        u -= t
+    else:
+        b = cube([(100)*scl, (68)*scl, (18)*scl])
+        b = translate(v=[(w-129)*scl, (l-1)*scl, (22)*scl]).add(b)
+        u += b
+
+        t = translate(v=[(w-75)*scl, (l+40)*scl, (19)*scl]).add(d)
+        u -= t
 
     if woffs >= 0:
         # funny cutouts (reduce plastic usage, screw access points as well)
