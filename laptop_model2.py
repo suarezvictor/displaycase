@@ -10,12 +10,13 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
 
 TPANEL_MID = 5
+BASE_BACK = 4
 BASE_END = 3
 BASE_MID = 8
 FRONT_KBD_TRAY = 12
@@ -717,7 +718,7 @@ def battery_support1(scl, ht, tpanel_offset):
 
     tpanel_box_l = 150
     # main strut going from back base to tpanel
-    c = cube([(boxlength - tpanel_l_b - 170+30)*scl,
+    c = cube([(boxlength - tpanel_l_b - 170+30+18)*scl,
                     ht*scl, (boxheight-hthick-kbd_inset)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
@@ -765,7 +766,7 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     tpanel_box_l = 150
     # main strut going from back base to tpanel
-    c = cube([(boxlength - tpanel_l_b - 170+30)*scl,
+    c = cube([(boxlength - tpanel_l_b - 170+30+18)*scl,
                     ht*scl, (boxheight-hthick-kbd_inset)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
@@ -1134,7 +1135,7 @@ def base_front_top(scl, ht, ht_offset):
     v.add(u)
     return v
     
-def base_back_bot(scl, ht, scrn_hinge_ht):
+def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
 
@@ -1220,6 +1221,34 @@ def base_back_bot(scl, ht, scrn_hinge_ht):
 
         offs += step
         
+    # ok these are for the pcb1_support and battery_support1
+    # they extend all the way to the back (for injection molding)
+    offs = ht + toffs - tpanel_l_b/2 +10
+    if toffs < 0:
+        offs += 50
+    b = union()
+    c = touch_arc(0, (50), (boxheight-40-hthick),
+                        25, scl, angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 180, 0]).add(c)
+    c = resize([(150-hthick)*scl, 0, 0], False).add(c)
+    b += c
+    c = cube([60*scl, 50*scl, (boxheight-30)*scl])
+    c = translate(v=[-20*scl, (0)*scl, (-15)*scl]).add(c)
+    b += c
+    c = cube([168*scl, 50*scl, (16)*scl])
+    c = translate(v=[-20*scl, (0)*scl, (-15)*scl]).add(c)
+    b += c
+    b = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(b)
+
+    u += b
+
+    # ... cutout for the actual support, the rest was housing for the cutout
+    c = cube([30*scl, 37*scl, (boxheight-47)*scl])
+    c = translate(v=[-22*scl, (7)*scl, (-3)*scl]).add(c)
+    c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
+    u -= c
+
     # add support for keyboard corner
     t = holed_support(scl, 50)
     t = rotate([0, 0, 90]).add(t)
@@ -2463,15 +2492,20 @@ def create_laptop(t, scl, part, angle):
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
     base_front_ht = total_width / 2 - base_adjust_ht
 
+    tpanel_offset = -190
+
     if part == 14:
         se = pcb1(scl)
         b.add(se)
 
-    if part == 4:
+    if part == BASE_BACK:
         # NOTE: ... here's the other bit
-        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2)
+        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+                                tpanel_offset)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
+        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+                                -tpanel_offset)
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
@@ -2497,8 +2531,6 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-adj)
         b.add(m)
         b = screen_adjust(b, scl, angle)
-
-    tpanel_offset = -190
 
     if part == 7:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -2642,9 +2674,10 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        FRONT_KBD_TRAY,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #FRONT_KBD_TRAY,
+                        #TPANEL_MID,
+                        #BASE_MID,
+                        BASE_BACK,
                         PCB1_SUPPORT,
                         BATTERY_SUPPORT1,
                     ]:
