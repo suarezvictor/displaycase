@@ -658,7 +658,7 @@ def holed_support(scl, ht, sht=50, dep=60, inverse=False):
 def base_end_bit(scl, ht, fwd=False, below=False):
     u = union()
     # add bits for screws through to base back
-    c = cube([(115)*scl, (22+ht)*scl, (60)*scl])
+    c = cube([(115)*scl, (18+ht)*scl, (60)*scl])
     c = translate(v=[15*scl,(0)*scl,(5)*scl]).add(c)
     u += c
     c = cube([(60)*scl, (ht)*scl, (35)*scl])
@@ -975,8 +975,8 @@ def base_front_top(scl, ht, ht_offset):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(48)*scl, (32)*scl, (57)*scl])
-    c = translate(v=[(16)*scl,(-1)*scl,(hthick-3)*scl]).add(c)
+    c = cube([(120)*scl, (22)*scl, (64)*scl])
+    c = translate(v=[(32)*scl,(-1)*scl,(16)*scl]).add(c)
     u -= c
 
     # tpanel cutout
