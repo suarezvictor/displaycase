@@ -552,10 +552,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     
     # end pcb marker, also supports bamboo panels top and bottom
     c = cube([(30)*scl, (ht)*scl, (boxheight-2)*scl])
-    t = translate(v=[(505)*scl, 0, (55+1)*scl]).add(c)
+    t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
     u += t
     c = cube([(30)*scl, (ht+20)*scl, (boxheight-hthick*2)*scl])
-    t = translate(v=[(505)*scl, 0, (55+hthick)*scl]).add(c)
+    t = translate(v=[(540)*scl, 0, (55+hthick)*scl]).add(c)
     u += t
     
     # add bits for case bolthole at front
