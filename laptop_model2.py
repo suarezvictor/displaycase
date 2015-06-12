@@ -455,7 +455,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, lcd_w-tpanel_l_b-103+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl, (55)*scl]).add(b)
+    b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl,
+                    (55)*scl]).add(b)
     u += b
 
     rad=35.0 + 15
@@ -2673,6 +2674,7 @@ if __name__ == '__main__':
             for i in [
                         BASE_END,
                         FRONT_KBD_TRAY,
+                        FRONT_TRAY_CORNER,
                         PCB1,
                         #TPANEL_MID,
                         #BASE_MID,
