@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -2061,7 +2061,7 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
-def front_kbd_tray(scl, ht, woffs):
+def front_kbd_tray(scl, ht, woffs, hoffs):
     """
     TODO: L-piece, move micro-sd, have it go right into the corner
     TODO: cut-out to slot into base_end (at top)
@@ -2082,10 +2082,10 @@ def front_kbd_tray(scl, ht, woffs):
     u += b
 
     if woffs < 0:
-        b = hollowbox(scl, 25-woffs, 130, h,
+        b = hollowbox(scl, 25-woffs, hoffs+8, h,
                     {T:hthick, L:-woffs-26, R:25, F:hthick, D:-1, B:hthick*2},
                     curverads={ T|R: (hthick, 0), T|B: (hthick, 0)})
-        b = translate(v=[(w-25+woffs)*scl, (l-130)*scl, (0)*scl]).add(b)
+        b = translate(v=[(w-25+woffs)*scl, (l-8-hoffs)*scl, (0)*scl]).add(b)
         u += b
     
     # extra bit for kbd corner support
@@ -2554,11 +2554,13 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == FRONT_KBD_TRAY:
-        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset, 0)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
+        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
+                                 0, 0)
+        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,
+                         0]).add(se)
         b.add(m)
         se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
-                                    -kbd_numpad_indent)
+                                    -kbd_numpad_indent, -tpanel_offset)
         m = mirror_part(se, scl,
                             total_width-base_adjust_ht+scrn_hinge_ht+hthick)
         b.add(m)
