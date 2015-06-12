@@ -18,6 +18,7 @@ single = True
 TPANEL_MID = 5
 BASE_BACK = 4
 BASE_END = 3
+BASE_FRONT_TOP = 7
 BASE_MID = 8
 FRONT_KBD_TRAY = 12
 FRONT_TRAY_CORNER = 13
@@ -438,7 +439,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
-    # add top strut
+    # add top strut, along entire length of base_end.
     c = union()
     b = cube([lcd_w*scl, (ht-20)*scl, 35*scl])
     b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
@@ -657,7 +658,8 @@ def holed_support(scl, ht, sht=50, dep=60, inverse=False):
 def base_end_bit(scl, ht, fwd=False, below=False):
     u = union()
     # add bits for screws through to base back
-    c = cube([(40)*scl, (22+ht)*scl, (50)*scl])
+    c = cube([(115)*scl, (22+ht)*scl, (60)*scl])
+    c = translate(v=[15*scl,(0)*scl,(5)*scl]).add(c)
     u += c
     c = cube([(60)*scl, (ht)*scl, (35)*scl])
     c = translate(v=[-15*scl,(0)*scl,(-2)*scl]).add(c)
@@ -2531,7 +2533,7 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
-    if part == 7:
+    if part == BASE_FRONT_TOP:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
@@ -2673,6 +2675,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         BASE_END,
+                        BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         FRONT_TRAY_CORNER,
                         PCB1,
