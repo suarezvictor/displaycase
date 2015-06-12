@@ -2352,17 +2352,17 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1460*scl, 1200*scl, (12)*scl])
+    b = cube([1650*scl, 1200*scl, (12)*scl])
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1350)*scl, 440*scl, -10*scl]).add(b)
+    b = translate([(1540)*scl, 440*scl, -10*scl]).add(b)
     pcb -= b
-    b = cube([391*scl, 1200*scl, (30)*scl])
+    b = cube([581*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
     b = cube([40*scl, 90*scl, (30)*scl])
-    b = translate([(380)*scl, (1200-55)*scl, -10*scl]).add(b)
+    b = translate([(570)*scl, (1200-55)*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
@@ -2376,7 +2376,7 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    cpu_offs = 670
+    cpu_offs = 860
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -2398,13 +2398,13 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(450)*scl, 0*scl,
+    r = translate([(640)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
     # Headphone jack
     j = cube([60*scl, 93*scl, (52)*scl])
-    r = translate([(1400)*scl, 0*scl,
+    r = translate([(1590)*scl, 0*scl,
                 (-52)*scl]).add(j)
     t.add(r)
 
@@ -2414,9 +2414,11 @@ def pcb1(scl):
     t.add(r)
     r = translate([(260)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
+    r = translate([(445)*scl, 0*scl, (-61.5)*scl]).add(u)
+    t.add(r)
 
     v = union()
-    t = translate([(510)*scl, 0*scl, (150)*scl]).add(t)
+    t = translate([(320)*scl, 0*scl, (150)*scl]).add(t)
     v.add(t)
     return t
 
