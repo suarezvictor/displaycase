@@ -1030,7 +1030,8 @@ def base_front_top(scl, ht, ht_offset):
 
     # and support wall
     c = cube([30*scl, (tpanel_b_w/2-ht_offset-25)*scl, (boxheight-50)*scl])
-    c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-85)*scl, (40)*scl]).add(c)
+    c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-85)*scl,
+                        (40)*scl]).add(c)
     u += c
 
     # screw holes in box
@@ -1056,24 +1057,30 @@ def base_front_top(scl, ht, ht_offset):
                     segments=50, center=True)
     t = translate(v=[(40)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+40)*scl, (50)*scl]).add(d)
+    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+40)*scl, 
+                        (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
-    t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, (73)*scl]).add(t)
+    t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, 
+                        (73)*scl]).add(t)
     u -= t
 
     # add support for tpanel_mid
     b = cube([(60)*scl, (62)*scl, (70)*scl])
-    t = translate(v=[(120)*scl, (tpanel_ht-tpanel_b_w/2-155)*scl, (40)*scl]).add(b)
+    t = translate(v=[(120)*scl, (tpanel_ht-tpanel_b_w/2-155)*scl, 
+                        (40)*scl]).add(b)
     u += t
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, -90]).add(t)
-    t = translate(v=[(130)*scl, (tpanel_ht-tpanel_b_w/2-80)*scl, (43)*scl]).add(t)
+    t = translate(v=[(130)*scl, (tpanel_ht-tpanel_b_w/2-80)*scl, 
+                        (43)*scl]).add(t)
     u -= t
     
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl, (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl, (-1)*scl]).add(c)
+    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl, 
+                        (tpanel_h+1)*scl])
+    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl, 
+                        (-1)*scl]).add(c)
     u -= c
 
     # lower screw hole for keyboard corner joiner
