@@ -1024,7 +1024,7 @@ def base_front_top(scl, ht, ht_offset):
     #u -= c
 
     # add fillin for touchpanel
-    c = base_front_fillin(scl, 20)
+    c = base_front_fillin(scl, 95)
     c = translate(v=[(0)*scl, (tpanel_ht-tpanel_b_w/2-95)*scl, (0)*scl]).add(c)
     u += c
 
