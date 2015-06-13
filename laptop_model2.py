@@ -540,10 +540,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += t
     
     # front keyboard tray indentation support, surrounds microsd
-    c = cube([(25)*scl, (ht-hthick-2)*scl, (boxheight-2)*scl])
+    c = cube([(25)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(tpanel_l_b-25)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    t = translate(v=[(tpanel_l_b+180)*scl, 0, (55+1)*scl]).add(c)
+    t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
     u += t
     t = translate(v=[(190)*scl, 0, (55+1)*scl]).add(c)
     u += t
@@ -552,10 +552,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += t
     
     # end pcb marker, also supports bamboo panels top and bottom
-    c = cube([(30)*scl, (ht)*scl, (boxheight-2)*scl])
+    c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    c = cube([(30)*scl, (ht+20)*scl, (boxheight-hthick*2)*scl])
+    c = cube([(30)*scl, (ht+20)*scl, (30)*scl])
     t = translate(v=[(540)*scl, 0, (55+hthick)*scl]).add(c)
     u += t
     
@@ -2362,7 +2362,8 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1650*scl, 1200*scl, (12)*scl])
+    b = cube([1610*scl, 1200*scl, (12)*scl])
+    b = translate([(40)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
     b = translate([(1580)*scl, 440*scl, -10*scl]).add(b)
