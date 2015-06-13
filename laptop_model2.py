@@ -2365,7 +2365,7 @@ def pcb1(scl):
     b = cube([1650*scl, 1200*scl, (12)*scl])
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1540)*scl, 440*scl, -10*scl]).add(b)
+    b = translate([(1580)*scl, 440*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([581*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
@@ -2386,7 +2386,7 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    cpu_offs = 860
+    cpu_offs = 660
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -2408,8 +2408,14 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(640)*scl, 0*scl,
+    r = translate([(1400)*scl, 0*scl,
                 (-18)*scl]).add(j)
+    t.add(r)
+
+    # LVDS IC
+    j = cube([141*scl, 83*scl, (12)*scl])
+    r = translate([(1400)*scl, 700*scl,
+                (-12)*scl]).add(j)
     t.add(r)
 
     # Headphone jack
@@ -2420,11 +2426,11 @@ def pcb1(scl):
 
     # USB x 2
     u = cube([132*scl, 137*scl, (61.5)*scl])
-    r = translate([(75)*scl, 0*scl, (-61.5)*scl]).add(u)
+    r = translate([(115)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
     r = translate([(260)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(445)*scl, 0*scl, (-61.5)*scl]).add(u)
+    r = translate([(405)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
 
     v = union()
@@ -2709,7 +2715,7 @@ if __name__ == '__main__':
 
                 # USB WIFI dongle
                 wifi = usb_wifi(scl)
-                r = translate([(525)*scl, 150*scl,
+                r = translate([(665)*scl, 150*scl,
                                 (85)*scl]).add(wifi)
                 c = [0.2, 0.8, 0.8, 0.2]
                 r = union().add(r)
