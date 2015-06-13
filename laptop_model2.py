@@ -1029,7 +1029,7 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # and support wall
-    c = cube([30*scl, (tpanel_b_w/2-ht_offset-25)*scl, (boxheight-50)*scl])
+    c = cube([30*scl, (tpanel_b_w/2-ht_offset+25)*scl, (boxheight-50)*scl])
     c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-85)*scl,
                         (40)*scl]).add(c)
     u += c
