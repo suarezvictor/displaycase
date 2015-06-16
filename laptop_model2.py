@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -980,7 +980,13 @@ def base_front_top(scl, ht, ht_offset):
 
     # add bits for screws through to base front
     c = cube([(120)*scl, (22)*scl, (64)*scl])
-    c = translate(v=[(32)*scl,(-1)*scl,(16)*scl]).add(c)
+    c = shearedcube([135*scl, (64)*scl, (22)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[15*scl, 0*scl, 0])
+    c = rotate([0, -90, 0]).add(c)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 0, -90]).add(c)
+    c = translate(v=[(32+135)*scl,(-1)*scl,(16)*scl]).add(c)
     u -= c
 
     # tpanel cutout
@@ -2630,12 +2636,12 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
-                        #BASE_FRONT_TOP,
+                        BASE_END,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
