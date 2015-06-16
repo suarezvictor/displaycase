@@ -2311,7 +2311,8 @@ def back_kbd_corner(scl, ht):
 def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
-    b = cube([(tpanel_l_b-180-hthick)*scl, ht*scl, (20)*scl])
+    b = cube([(tpanel_l_b-180-hthick-2)*scl, (ht-2)*scl, (20)*scl])
+    b = translate(v=[1*scl, 1*scl, (0)*scl]).add(b)
     u += b
     b = cube([(tpanel_l_b-180-hthick-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
     b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
