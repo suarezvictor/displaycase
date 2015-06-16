@@ -860,10 +860,6 @@ def tpanel_mid(scl, ht, ht_offset):
     c = translate(v=[(63)*scl, 0*scl, (38)*scl]).add(c)
     u += c
 
-    # support for base_mid
-    #u = base_mid_cutout(u, scl, ht, base_centre_ht/2-hthick/2)
-    #u = base_mid_cutout(u, scl, ht, -base_centre_ht/2+hthick/2)
-
     # cutout for underside of panel (reduce plastic usage)
     c = cube([tpanel_l_b*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(250)*scl, (-1)*scl, (60)*scl]).add(c)
@@ -875,10 +871,10 @@ def tpanel_mid(scl, ht, ht_offset):
             innershear=[-32*scl, 0*scl, 0])
     d = rotate([0, -90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(180)*scl, (-85)*scl, (48)*scl]).add(d)
+    c = translate(v=[(181)*scl, (-85)*scl, (48)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(180+40)*scl, (ht+85)*scl, (48)*scl]).add(d)
+    c = translate(v=[(181+40)*scl, (ht+85)*scl, (48)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -1069,17 +1065,6 @@ def base_front_top(scl, ht, ht_offset):
                         (73)*scl]).add(t)
     u -= t
 
-    # add support for tpanel_mid
-    b = cube([(60)*scl, (62)*scl, (70)*scl])
-    t = translate(v=[(120)*scl, (tpanel_ht-tpanel_b_w/2-155)*scl, 
-                        (40)*scl]).add(b)
-    u += t
-    t = holed_support(scl, 50, inverse=True)
-    t = rotate([0, 0, -90]).add(t)
-    t = translate(v=[(130)*scl, (tpanel_ht-tpanel_b_w/2-80)*scl, 
-                        (43)*scl]).add(t)
-    u -= t
-    
     # remove bit for touchpanel
     c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl, 
                         (tpanel_h+1)*scl])
@@ -1091,6 +1076,9 @@ def base_front_top(scl, ht, ht_offset):
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, -90]).add(t)
     b = translate(v=[(130)*scl, (73)*scl, (35)*scl]).add(t)
+    u -= b
+    # and one for tpanel_mid
+    b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl, (44)*scl]).add(t)
     u -= b
 
     if True:
@@ -2631,8 +2619,8 @@ if __name__ == '__main__':
             for i in [
                         BASE_END,
                         BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
-                        PCB1,
+                        #FRONT_KBD_TRAY,
+                        #PCB1,
                         TPANEL_MID,
                         #BASE_MID,
                         #BASE_BACK,
