@@ -916,6 +916,10 @@ def tpanel_mid(scl, ht, ht_offset):
     u -= b
     b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+11)*scl]).add(s)
     u -= b
+    # and into base_mid
+    b = translate(v=[(tpanel_l_b-75)*scl, (ht/2-ht_offset)*scl,
+                     (+20)*scl]).add(s)
+    u -= b
 
     # half-way point support for top front bamboo panel
     c = cube([(100)*scl, (90)*scl, (boxheight-hthick*2)*scl])
@@ -1478,19 +1482,6 @@ def base_mid(scl, ht):
     b = translate(v=[(0)*scl, (ht)*scl, (160)*scl]).add(b)
     u -= b
 
-    # screw holes in top for back_box_base
-    d = cylinder(r=topscrewrad*scl,
-                    h=(65)*scl,
-                    segments=50, center=True)
-    t = translate(v=[(w+93)*scl, (30)*scl, (50)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w+93)*scl, (ht-30)*scl, (50)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-40)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-40)*scl]).add(d)
-    u -= t
-
     # locking cut-out for back_box_base
     c = cube([(50)*scl, (20)*scl, 25*scl])
     b = translate(v=[(w+70)*scl, -61*scl, (50)*scl]).add(c)
@@ -1532,10 +1523,26 @@ def base_mid(scl, ht):
     u -= c
 
     # fillin for tpanel_mid screwhole
-    c = cube([(60)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
+    c = cube([(50)*scl, (ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(tpanel_l_b-100)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     
+    # screw holes in top for back_box_base
+    d = cylinder(r=topscrewrad*scl,
+                    h=(65)*scl,
+                    segments=50, center=True)
+    t = translate(v=[(w+93)*scl, (30)*scl, (50)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+93)*scl, (ht-30)*scl, (50)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-40)*scl]).add(d)
+    u -= t
+    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-40)*scl]).add(d)
+    u -= t
+    # and for tpanel_mid
+    t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
+    u -= t
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
