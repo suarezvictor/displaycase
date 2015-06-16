@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -21,7 +21,6 @@ BASE_END = 3
 BASE_FRONT_TOP = 7
 BASE_MID = 8
 FRONT_KBD_TRAY = 12
-FRONT_TRAY_CORNER = 13
 PCB1 = 14
 PCB1_SUPPORT = 17
 BATTERY_SUPPORT1 = 18
@@ -445,8 +444,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
     c += b
     d = cube([52*scl, (ht)*scl, 37*scl])
-    b = translate(v=[(290)*scl, (-1)*scl, (54)*scl]).add(d)
-    c -= b
     b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
     c -= b
 
@@ -535,17 +532,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     h = holed_support(scl, ht-hthick-1)
     t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
     u += t
-    h = holed_support(scl, ht-hthick-1, dep=boxheight-hthick)
-    t = translate(v=[(280)*scl, 0, (62)*scl]).add(h)
-    u += t
     
     # front keyboard tray indentation support, surrounds microsd
     c = cube([(25)*scl, (60)*scl, (boxheight-2)*scl])
-    t = translate(v=[(tpanel_l_b-25)*scl, 0, (55+1)*scl]).add(c)
+    t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
     u += t
     t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    t = translate(v=[(190)*scl, 0, (55+1)*scl]).add(c)
+    t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
     u += t
     # between usb ports
     t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
@@ -557,6 +551,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += t
     c = cube([(30)*scl, (ht+20)*scl, (30)*scl])
     t = translate(v=[(540)*scl, 0, (55+hthick)*scl]).add(c)
+    u += t
+    t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+hthick)*scl]).add(c)
     u += t
     
     # add bits for case bolthole at front
@@ -582,6 +578,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     for hole in [0,2]:
         t = case_bolthole(scl, hole).add(s)
         u -= t
+
+    # add screw hole for front
+    c = cube([40*scl, ht*scl, boxheight*scl])
+    t = translate(v=[(181)*scl, 0, (55)*scl]).add(c)
+    u += t
+    v = front_tray_corner(scl, 200)
+    v = translate([0, scl*(ht-hthick), 0]).add(v)
+    u += v
 
     if pin_parts_3d:
         c = union()
@@ -2223,73 +2227,13 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = hollowbox(scl, 20, l, boxheight-hthick-2,
-                {T:-1, L:-1, R:20, F:-1, D:-1, B:-1},
-                curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(0)*scl, 0*scl, (1)*scl]).add(b)
+    b = cube([40*scl, 85*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[(1)*scl, 0*scl, (hthick)*scl]).add(b)
     u += b
-
-    # extra bit for kbd corner support
-    b = hollowbox(scl, 200+hthick, 20+hthick, boxheight-hthick-2,
-                {T:-1, L:-1, R:-1, F:-1, D:-1, B:15+hthick},
-                curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(0)*scl, (0)*scl, (1)*scl]).add(b)
-    u += b
-    b = cube([(200+hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
-    b = translate(v=[(w)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
-
-    u = indented_screwhole(scl, u, (135), 6, 39)
-
-    # also locks into front base (far end)
-    b = cube([(hthick*2)*scl, (12)*scl, (boxheight-hthick*2-2)*scl])
-    b = translate(v=[(-hthick)*scl, (ht-12)*scl, (hthick+1)*scl]).add(b)
-    u += b
-
-    # cutouts for bamboo panel
-    b = cube([(w-hthick+1)*scl, (2+l)*scl, (hthick+1)*scl])
-    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
-    b = cube([(w+2)*scl, (hthick)*scl, (hthick+1)*scl])
-    b = translate(v=[(-1)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
 
     # screwhole into front base
     u = indented_screwhole(scl, u, 1, 50, 67, -90, 40)
 
-    if pin_parts_3d:
-        c = union()
-        h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, 25*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w)*scl, (-3)*scl, 25*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+200)*scl, (-3)*scl, 25*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+200)*scl, (-3)*scl, -50*scl]).add(h)
-        c += h
-
-        h = pin(B0, scl)
-        h = translate([w*scl, (-3)*scl, -l*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([45*scl, (-3)*scl, (-l-32)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([45*scl, (-3)*scl, (45-l)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([-32*scl, (-3)*scl, (65-l)*scl]).add(h)
-        c += h
-        c = rotate([90, 0, 0]).add(c)
-        c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
-        
-        u += c
-
-    
     v = union()
     u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -2555,11 +2499,6 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
-    if part == FRONT_TRAY_CORNER:
-        se = front_tray_corner(scl, 200)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,0]).add(se)
-        b.add(m)
-
     if part == FRONT_KBD_TRAY:
         se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
                                  0, 0)
@@ -2693,9 +2632,8 @@ if __name__ == '__main__':
                         BASE_END,
                         BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
-                        FRONT_TRAY_CORNER,
                         PCB1,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
