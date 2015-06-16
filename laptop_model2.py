@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -24,6 +24,7 @@ FRONT_KBD_TRAY = 12
 PCB1 = 14
 PCB1_SUPPORT = 17
 BATTERY_SUPPORT1 = 18
+COMPARTMENT_LID = 19
 
 if not test:
     lcd_l = 3598.0
@@ -2307,6 +2308,25 @@ def back_kbd_corner(scl, ht):
     v.add(u)
     return v
 
+def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
+
+    u = union()
+    b = cube([(tpanel_l_b-180-hthick)*scl, ht*scl, (20)*scl])
+    u += b
+    b = cube([(tpanel_l_b-180-hthick-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
+    b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
+    u -= b
+    b = cube([(tpanel_l_b-180-hthick-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
+    b = translate(v=[40*scl, 40*scl, (-1)*scl]).add(b)
+    u -= b
+
+    v = union()
+    u = translate(v=[180*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+
+    return v
+
+
 def pcb1(scl):
 
     t = union()
@@ -2406,7 +2426,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
+    if True:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2498,12 +2518,14 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
+    compartment_ht = base_adjust_ht-scrn_hinge_ht
+
     if part == BASE_FRONT_TOP:
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        m = translate(v=[0, (compartment_ht*scl),0]).add(se)
         b.add(m)
         se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
-        m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
+        m = mirror_part(se, scl, total_width-compartment_ht)
         b.add(m)
 
     if part == FRONT_KBD_TRAY:
@@ -2541,6 +2563,12 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     pcb1_support_ht = 30
+
+    if part == COMPARTMENT_LID:
+        se = compartment_lid(scl, tpanel_ht-compartment_ht, tpanel_offset,
+                             kbd_numpad_indent)
+        m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+        b.add(m)
 
     if part == BATTERY_SUPPORT1:
         se = battery_support1(scl, pcb1_support_ht, tpanel_offset)
@@ -2638,13 +2666,14 @@ if __name__ == '__main__':
             for i in [
                         BASE_END,
                         BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
