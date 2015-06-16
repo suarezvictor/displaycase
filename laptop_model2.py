@@ -1478,11 +1478,6 @@ def base_mid(scl, ht):
     b = translate(v=[(0)*scl, (ht)*scl, (160)*scl]).add(b)
     u -= b
 
-    c = cube([54*scl, (base_centre_ht+4)*scl, (60)*scl])
-    c = translate(v=[(tpanel_l_b-52)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
-                (0)*scl]).add(c)
-    u -= c
-
     # screw holes in top for back_box_base
     d = cylinder(r=topscrewrad*scl,
                     h=(65)*scl,
@@ -1505,15 +1500,15 @@ def base_mid(scl, ht):
 
     # diagonal cross-walls for internal stiffness
     fthick = 6
-    offs = tpanel_l_b+40
-    step = (w-160-offs) / (8.0 if test else 16.0)
+    offs = 210#tpanel_l_b+40
+    step = (w-160-offs) / (8.0 if test else 28.0)
     steps = []
     while offs < (w-step):
         steps.append((offs, boxheight-39-2))
         offs += step
 
-    steps.append((210, boxheight-39-2))
-    steps.append((280, boxheight-59-2))
+    #steps.append((210, boxheight-39-2))
+    #steps.append((280, boxheight-59-2))
 
     for (offs, ch) in steps:
         hoff = (boxheight-39-2) - ch
@@ -1528,6 +1523,17 @@ def base_mid(scl, ht):
     # fill in end for diagonals to mesh to
     c = cube([(40)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
     c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
+    u += c
+    
+    # cutout for tpanel_mid to drop into
+    c = cube([34*scl, (base_centre_ht+4)*scl, (60)*scl])
+    c = translate(v=[(tpanel_l_b-32)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+                (0)*scl]).add(c)
+    u -= c
+
+    # fillin for tpanel_mid screwhole
+    c = cube([(60)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
+    c = translate(v=[(tpanel_l_b-100)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     
     if pin_parts_3d:
@@ -2617,12 +2623,12 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
-                        BASE_FRONT_TOP,
+                        #BASE_END,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
