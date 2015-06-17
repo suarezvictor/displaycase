@@ -2311,6 +2311,8 @@ def back_kbd_corner(scl, ht):
 def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
+
+    # main panel, create staggered part for bamboo panel fill-in
     b = cube([(tpanel_l_b-180-hthick-2)*scl, (ht-2)*scl, (20)*scl])
     b = translate(v=[1*scl, 1*scl, (0)*scl]).add(b)
     u += b
@@ -2320,6 +2322,11 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = cube([(tpanel_l_b-180-hthick-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
     b = translate(v=[40*scl, 40*scl, (-1)*scl]).add(b)
     u -= b
+
+    # cut out corner for tpanel_mid joiner
+    b = cube([50*scl, 12*scl, (12)*scl])
+    b = translate(v=[-1*scl, (ht-11)*scl, (15)*scl]).add(b)
+    u += b
 
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
@@ -2666,7 +2673,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         BASE_END,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
                         TPANEL_MID,
