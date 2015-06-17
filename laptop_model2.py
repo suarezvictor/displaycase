@@ -2344,7 +2344,7 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     # cut out corner for tpanel_mid joiner
     b = cube([50*scl, 12*scl, (12)*scl])
     b = translate(v=[-1*scl, (ht-11)*scl, (15)*scl]).add(b)
-    u += b
+    u -= b
 
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
@@ -2699,7 +2699,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
