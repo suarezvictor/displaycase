@@ -2117,11 +2117,15 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
+    if woffs < 0:
+        cutht = hthick+1
+    else:
+        cutht = 21
     # cutouts for bamboo panel
-    b = cube([(25)*scl, (2+l)*scl, (hthick+1)*scl])
+    b = cube([(25)*scl, (2+l)*scl, cutht*scl])
     b = translate(v=[(w-25-hthick+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
-    b = cube([(202)*scl, (hthick)*scl, (hthick+1)*scl])
+    b = cube([(202)*scl, (hthick)*scl, cutht*scl])
     b = translate(v=[(w-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
