@@ -521,14 +521,6 @@ def base_end(scl, ht, kbd_numpad_indent):
                       (0)*scl, (56+hthick)*scl]).add(v)
     u += c
 
-    # weird angled cutout
-    c = cube([(ht)*scl, (118)*scl, (30)*scl])
-    c = rotate([0, 0, 90]).add(c)
-    c = rotate([0, 14, 0]).add(c)
-    c = translate(v=[3*scl,hthick*scl,7*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    #u -= t
-
     # add support for keyboard corner
     h = holed_support(scl, ht-hthick-1)
     t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
@@ -551,9 +543,9 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
     u += t
     c = cube([(30)*scl, (ht+20)*scl, (30)*scl])
-    t = translate(v=[(540)*scl, 0, (55+hthick)*scl]).add(c)
+    t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
     u += t
-    t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+hthick)*scl]).add(c)
+    t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
     u += t
     
     # add bits for case bolthole at front
@@ -2239,8 +2231,8 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = cube([40*scl, 85*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(1)*scl, 0*scl, (hthick)*scl]).add(b)
+    b = cube([40*scl, 85*scl, (boxheight-hthick-21)*scl])
+    b = translate(v=[(1)*scl, 0*scl, (21)*scl]).add(b)
     u += b
 
     # screwhole into front base
