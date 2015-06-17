@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -839,6 +839,11 @@ def tpanel_mid(scl, ht, ht_offset):
     c = cube([tpanel_l*scl, tpanel_w*scl, (42)*scl])
     c = translate(v=[(100)*scl, ((ht-tpanel_w)/2)*scl, (-1)*scl]).add(c)
     u -= c
+
+    # keyboard tray indent
+    b = kbd_tray_indent(scl)
+    t = translate(v=[(tpanel_l_b-19)*scl, (ht-282)*scl, (16)*scl]).add(b)
+    u -= t
 
     # inner cut-out for actual touchpanel
     # XXX TODO: add curved edges (use a hollowbox as the cutout)
@@ -2065,6 +2070,9 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
+def kbd_tray_indent(scl):
+    return cube([(30)*scl, (95)*scl, (24.1)*scl])
+
 def front_kbd_tray(scl, ht, woffs, hoffs):
     """
     TODO: L-piece, move micro-sd, have it go right into the corner
@@ -2125,6 +2133,20 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
+
+    # keyboard tray indents
+    b = kbd_tray_indent(scl)
+    if woffs >= 0:
+        t = translate(v=[(w-19)*scl, (l-132)*scl, (16)*scl]).add(b)
+        u -= t
+        t = translate(v=[(w-19)*scl, (134)*scl, (16)*scl]).add(b)
+        u -= t
+    else:
+        t = translate(v=[(w-19+woffs)*scl, (l-312-hoffs)*scl, (16)*scl]).add(b)
+        u -= t
+        t = translate(v=[(w-19+woffs)*scl, (148)*scl, (16)*scl]).add(b)
+        u -= t
+
     if woffs >= 0:
         # lock-in to tpanel
         b = cube([(95)*scl, (30)*scl, (h-40)*scl])
@@ -2430,7 +2452,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2668,7 +2690,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
@@ -2677,7 +2699,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
