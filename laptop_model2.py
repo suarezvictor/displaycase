@@ -2072,16 +2072,26 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
 
 def compartment_lockin(scl):
     u = union()
-    c = cube([(17)*scl, (60)*scl, (60)*scl])
-    u.add(c)
+    c = cube([(17)*scl, (60)*scl, (55)*scl])
+    c = translate(v=[(0)*scl, (0)*scl, (5)*scl]).add(c)
+    u += c
     c = cube([(20)*scl, (60)*scl, (35)*scl])
     c = rotate([0, 45, 0]).add(c)
     c = translate(v=[(0)*scl, (0)*scl, (60)*scl]).add(c)
-    u.add(c)
-    c = cube([(10)*scl, (60)*scl, (10)*scl])
+    u += c
+    c = cube([(10)*scl, (50)*scl, (10)*scl])
     c = rotate([0, 45, 0]).add(c)
-    c = translate(v=[(-5)*scl, (0)*scl, (12)*scl]).add(c)
-    u.add(c)
+    c = translate(v=[(-5)*scl, (5)*scl, (12)*scl]).add(c)
+    u += c
+
+    # take sheared top off lockin
+    c = shearedcube(size=[8*scl,
+                        64*scl, 25*scl],
+                    shear=[15*scl, 0, 0],
+                    innershear=[0*scl, 0, 0])
+    c = rotate([0, 180, 0]).add(c)
+    c = translate(v=[25*scl, -2*scl, (24)*scl]).add(c)
+    u -= c
 
     return u
 
@@ -2326,11 +2336,19 @@ def compartment_lockin_cutout(scl):
     c = cube([7*scl, 58*scl, 51*scl])
     c = translate(v=[0*scl, 1*scl, (0)*scl]).add(c)
     u.add(c)
-    c = shearedcube(size=[8*scl,
+
+    # hide lockin under a slope
+    c = shearedcube(size=[9*scl,
                         64*scl, 25*scl],
                     shear=[15*scl, 0, 0],
                     innershear=[0*scl, 0, 0])
-    c = translate(v=[0*scl, -2*scl, (-1)*scl]).add(c)
+    c = translate(v=[2*scl, -2*scl, (4)*scl]).add(c)
+    u.add(c)
+
+    # remove bit for clip to lock into
+    c = cube([(10)*scl, (60)*scl, (10)*scl])
+    c = rotate([0, 45, 0]).add(c)
+    c = translate(v=[(-5)*scl, (0)*scl, (13)*scl]).add(c)
     u.add(c)
 
     return u
@@ -2358,9 +2376,9 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u -= b
 
     c = compartment_lockin_cutout(scl)
-    t = translate(v=[(w-36)*scl, 30*scl, -1*scl]).add(c)
+    t = translate(v=[(w-35)*scl, 30*scl, -1*scl]).add(c)
     u -= t
-    t = translate(v=[(w-36)*scl, (ht-100)*scl, -1*scl]).add(c)
+    t = translate(v=[(w-35)*scl, (ht-100)*scl, -1*scl]).add(c)
     u -= t
 
     v = union()
