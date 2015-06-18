@@ -2070,6 +2070,21 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     u -= s
     return u
 
+def compartment_lockin(scl):
+    u = union()
+    c = cube([(17)*scl, (60)*scl, (60)*scl])
+    u.add(c)
+    c = cube([(20)*scl, (60)*scl, (35)*scl])
+    c = rotate([0, 45, 0]).add(c)
+    c = translate(v=[(0)*scl, (0)*scl, (60)*scl]).add(c)
+    u.add(c)
+    c = cube([(10)*scl, (60)*scl, (10)*scl])
+    c = rotate([0, 45, 0]).add(c)
+    c = translate(v=[(-5)*scl, (0)*scl, (12)*scl]).add(c)
+    u.add(c)
+
+    return u
+
 def kbd_tray_indent(scl):
     return cube([(30)*scl, (95)*scl, (24.1)*scl])
 
@@ -2164,6 +2179,18 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += b
 
         t = translate(v=[(w-75)*scl, (l+40)*scl, (19)*scl]).add(d)
+        u -= t
+
+    if woffs >= 0:
+        c = compartment_lockin(scl)
+        t = translate(v=[(w-45)*scl, 30*scl, 0]).add(c)
+        u += t
+        t = translate(v=[(w-45)*scl, (l-100)*scl, 0]).add(c)
+        u += t
+        c = cube([3*scl, 68*scl, 51*scl])
+        t = translate(v=[(w-25)*scl, 26*scl, 0]).add(c)
+        u -= t
+        t = translate(v=[(w-25)*scl, (l-104)*scl, 0]).add(c)
         u -= t
 
     if pin_parts_3d:
@@ -2291,18 +2318,37 @@ def back_kbd_corner(scl, ht):
     v.add(u)
     return v
 
+
+def compartment_lockin_cutout(scl):
+    u = union()
+
+    # screwdriver access
+    c = cube([7*scl, 58*scl, 51*scl])
+    c = translate(v=[0*scl, 1*scl, (0)*scl]).add(c)
+    u.add(c)
+    c = shearedcube(size=[8*scl,
+                        64*scl, 25*scl],
+                    shear=[15*scl, 0, 0],
+                    innershear=[0*scl, 0, 0])
+    c = translate(v=[0*scl, -2*scl, (-1)*scl]).add(c)
+    u.add(c)
+
+    return u
+
 def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
 
+    w = tpanel_l_b-180-hthick
+
     # main panel, create staggered part for bamboo panel fill-in
-    b = cube([(tpanel_l_b-180-hthick-2)*scl, (ht-2)*scl, (20)*scl])
+    b = cube([(w-2)*scl, (ht-2)*scl, (20)*scl])
     b = translate(v=[1*scl, 1*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(tpanel_l_b-180-hthick-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
+    b = cube([(w-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
     b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
     u -= b
-    b = cube([(tpanel_l_b-180-hthick-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
+    b = cube([(w-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
     b = translate(v=[40*scl, 40*scl, (-1)*scl]).add(b)
     u -= b
 
@@ -2310,6 +2356,12 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = cube([50*scl, 12*scl, (12)*scl])
     b = translate(v=[-1*scl, (ht-11)*scl, (15)*scl]).add(b)
     u -= b
+
+    c = compartment_lockin_cutout(scl)
+    t = translate(v=[(w-36)*scl, 30*scl, -1*scl]).add(c)
+    u -= t
+    t = translate(v=[(w-36)*scl, (ht-100)*scl, -1*scl]).add(c)
+    u -= t
 
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
