@@ -2166,38 +2166,6 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         t = translate(v=[(w-75)*scl, (l+40)*scl, (19)*scl]).add(d)
         u -= t
 
-    if woffs >= 0:
-        # funny cutouts (reduce plastic usage, screw access points as well)
-        offs = 32.0
-        if test:
-            count = 5
-        else:
-            if woffs < 0:
-                count = 16
-            else:
-                count = 12
-
-        step = (l-160-offs) / count
-        c = union()
-        b = cube([(70)*scl, (step-25)*scl, (boxheight-114)*scl])
-        b = translate(v=[(-1)*scl, (0)*scl, (30)*scl]).add(b)
-        c += b
-        r=(step-25.0)*scl/2
-        b = cylinder(r=r, h=70*scl, segments=100)
-        b = rotate([0, 90, 0]).add(b)
-        b = translate(v=[(-1)*scl, r, (30)*scl]).add(b)
-        c += b
-        # add fill-ins
-        b = translate(v=[(0)*scl, (0)*scl, (boxheight-140+25)*scl]).add(b)
-        c += b
-
-        while offs < (l-25-step*2):
-            d = translate(v=[(woffs)*scl, (offs)*scl, (25)*scl]).add(c)
-            d = translate(v=[(w-25+woffs)*scl, (offs)*scl, (25)*scl]).add(c)
-            u -= d
-
-            offs += step
-        
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
