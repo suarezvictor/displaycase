@@ -2106,8 +2106,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(hthick+2)*scl, (hthick+1)*scl, (hthick+1)*scl])
-    b = translate(v=[(w-hthick-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
+    b = cube([(hthick+22)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = translate(v=[(w-hthick-21+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
     # floor L-piece, stabilise and allow sticking to PCB
@@ -2123,10 +2123,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         cutht = 21
     # cutouts for bamboo panel
     b = cube([(25)*scl, (2+l)*scl, cutht*scl])
-    b = translate(v=[(w-25-hthick+woffs)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
-    b = cube([(202)*scl, (hthick)*scl, cutht*scl])
-    b = translate(v=[(w-1+woffs)*scl, -1*scl, (-1)*scl]).add(b)
+    b = translate(v=[(w-25-hthick+woffs)*scl, (hthick)*scl, (-1)*scl]).add(b)
     u -= b
 
     # screw holes in top for touchpanel
