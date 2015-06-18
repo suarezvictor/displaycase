@@ -2093,6 +2093,13 @@ def compartment_lockin(scl):
     c = translate(v=[25*scl, -2*scl, (24)*scl]).add(c)
     u -= c
 
+    # take corners off top
+    b = cube([(7)*scl, (3)*scl, (20)*scl])
+    c = translate(v=[(-1)*scl, (-1)*scl, (0)*scl]).add(b)
+    u -= c
+    c = translate(v=[(-1)*scl, (58)*scl, (0)*scl]).add(b)
+    u -= c
+
     return u
 
 def kbd_tray_indent(scl):
@@ -2193,12 +2200,12 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
 
     if woffs >= 0:
         c = compartment_lockin(scl)
-        t = translate(v=[(w-45)*scl, 30*scl, 0]).add(c)
+        t = translate(v=[(w-45)*scl, 38*scl, 0]).add(c)
         u += t
         t = translate(v=[(w-45)*scl, (l-100)*scl, 0]).add(c)
         u += t
         c = cube([3*scl, 68*scl, 51*scl])
-        t = translate(v=[(w-25)*scl, 26*scl, 0]).add(c)
+        t = translate(v=[(w-25)*scl, 34*scl, 0]).add(c)
         u -= t
         t = translate(v=[(w-25)*scl, (l-104)*scl, 0]).add(c)
         u -= t
@@ -2376,7 +2383,7 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u -= b
 
     c = compartment_lockin_cutout(scl)
-    t = translate(v=[(w-35)*scl, 30*scl, -1*scl]).add(c)
+    t = translate(v=[(w-35)*scl, 26*scl, -1*scl]).add(c)
     u -= t
     t = translate(v=[(w-35)*scl, (ht-100)*scl, -1*scl]).add(c)
     u -= t
