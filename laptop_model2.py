@@ -919,12 +919,15 @@ def tpanel_mid(scl, ht, ht_offset):
                      (+20)*scl]).add(s)
     u -= b
 
+    offs = tpanel_l_b/2-50
     # half-way point support for top front bamboo panel
-    c = cube([(100)*scl, (90)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[(w)/2*scl, (-8)*scl, (hthick)*scl]).add(c)
+    c = cube([(100)*scl, (58)*scl, (boxheight-hthick-21)*scl])
+    b = translate(v=[offs*scl, (-8)*scl, (21)*scl]).add(c)
     u += b
-    b = translate(v=[(w)/2*scl, (ht+8-90)*scl, (hthick)*scl]).add(c)
+    c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
     u += b
+
     
     if pin_parts_3d:
         c = union()
