@@ -67,6 +67,32 @@ D=0x8
 F=0x10
 B=0x20
 
+def curvebox(scl, l, w, ht, rad):
+    """ hollowbox has some bugs (not proper overlaps leaving gaps
+        between sections.  it therefore can't be used for "subtract".
+        this function can create a cube with 4 curved corners
+    """
+    u = union()
+    c = cylinder( r=rad*scl, h=ht*scl,
+                  segments=100, center=True)
+    t = translate([rad*scl, rad*scl, ht/2*scl]).add(c)
+    u += t
+    t = translate([(l-rad)*scl, rad*scl, ht/2*scl]).add(c)
+    u += t
+    t = translate([(l-rad)*scl, (w-rad)*scl, ht/2*scl]).add(c)
+    u += t
+    t = translate([(rad)*scl, (w-rad)*scl, ht/2*scl]).add(c)
+    u += t
+
+    c = cube([(l-rad*2)*scl, w*scl, ht*scl])
+    t = translate([(rad)*scl, (0)*scl, 0*scl]).add(c)
+    u += t
+    c = cube([l*scl, (w-rad*2)*scl, ht*scl])
+    t = translate([(0)*scl, (rad)*scl, 0*scl]).add(c)
+    u += t
+
+    return u
+    
 def box_edge_xform(scl, r, spec, w, h, d, r12):
     r = rotate([0, -90, 90]).add(r)
     rangy = {T|B: 90, D|B: 180, D|F: -90, T|F: 0}

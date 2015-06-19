@@ -6,7 +6,8 @@ import itertools
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
-from pyscadutil import B0, B45, pin, shearedcube, hollowbox, touch_arc
+from pyscadutil import B0, B45, pin
+from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
@@ -835,9 +836,14 @@ def tpanel_mid(scl, ht, ht_offset):
             curverads=curverads)
     u += b
 
-    # front cut-out matching base_front_top
-    c = cube([tpanel_l*scl, tpanel_w*scl, (42)*scl])
+    # inner cut-out for actual touchpanel
+    # XXX TODO: add curved edges (use a hollowbox as the cutout)
+    crad = 30
+    c = curvebox(scl, tpanel_l, tpanel_w, 11, crad)
     c = translate(v=[(100)*scl, ((ht-tpanel_w)/2)*scl, (-1)*scl]).add(c)
+    u -= c
+    c = curvebox(scl, tpanel_l-16, tpanel_w-16, 42, 22)
+    c = translate(v=[(100+8)*scl, ((ht-tpanel_w)/2+8)*scl, (9)*scl]).add(c)
     u -= c
 
     # keyboard tray indent
@@ -845,8 +851,7 @@ def tpanel_mid(scl, ht, ht_offset):
     t = translate(v=[(tpanel_l_b-19)*scl, (ht-282)*scl, (16)*scl]).add(b)
     u -= t
 
-    # inner cut-out for actual touchpanel
-    # XXX TODO: add curved edges (use a hollowbox as the cutout)
+    # front cut-out matching base_front_top
     c = cube([181*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
     u -= c
