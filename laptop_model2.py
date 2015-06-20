@@ -2212,10 +2212,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += t
         t = translate(v=[(w-45)*scl, (l-100)*scl, 0]).add(c)
         u += t
-        c = cube([3*scl, 68*scl, 51*scl])
-        t = translate(v=[(w-25)*scl, 34*scl, 0]).add(c)
+        c = cube([4*scl, 68*scl, 51*scl])
+        t = translate(v=[(w-26)*scl, 34*scl, 0]).add(c)
         u -= t
-        t = translate(v=[(w-25)*scl, (l-104)*scl, 0]).add(c)
+        t = translate(v=[(w-26)*scl, (l-104)*scl, 0]).add(c)
         u -= t
 
     if pin_parts_3d:
