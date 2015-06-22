@@ -1129,19 +1129,20 @@ def base_front_top(scl, ht, ht_offset):
 
     # dovetail cuts to fit base_mid
     # XXX height is magic constant
-    offs = base_centre_ht / 2.0 + 70
+    doffs = 37
+    offs = base_centre_ht / 2.0 + 70 - doffs
     b = shearedcube([(50)*scl, (offs+1)*scl, (33)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, -90, 0]).add(b)
-    c = translate(v=[(161)*scl, (ht-offs+1)*scl,
+    c = translate(v=[(161)*scl, (ht-offs+1-doffs)*scl,
                                     (50)*scl]).add(b)
     u -= c
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(161)*scl, (ht+1)*scl, (boxheight-3)*scl]).add(b)
+    b = translate(v=[(161)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
     u -= b
     b = cube([(31)*scl, (offs)*scl, (150)*scl])
-    c = translate(v=[(160)*scl, (ht-offs+1)*scl,
+    c = translate(v=[(160)*scl, (ht-offs+1-doffs)*scl,
                                     (50)*scl]).add(b)
     u -= c
 
@@ -1161,7 +1162,7 @@ def base_front_top(scl, ht, ht_offset):
     c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
-    c = translate(v=[(180-8)*scl, -1*scl,
+    c = translate(v=[(180-8)*scl, (-1-doffs)*scl,
                                 (boxheight-hthick-1)*scl]).add(c)
     u -= c
 
@@ -1479,7 +1480,7 @@ def base_mid(scl, ht):
     u = union()
     w = boxlength-150
 
-    walls = {T:-1, L:30, R:hthick, F:hthick, D:8, B:hthick}
+    walls = {T:-1, L:-1, R:hthick, F:hthick, D:8, B:hthick}
     curverads={
                 R|D: (boxheight-40, 0),
                 }
@@ -1513,8 +1514,23 @@ def base_mid(scl, ht):
     d = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(d)
     v += c
-    c = translate(v=[(180)*scl, (0)*scl, (40)*scl]).add(d)
+    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (50)*scl]).add(d)
+    c = translate(v=[(175)*scl, (0)*scl, (40)*scl]).add(d)
     v += c
+    # remove runner along bottom of base, for lower panel
+    d = union()
+    c = shearedcube([10*scl, (ht+2+80*2)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    c = translate(v=[(180-8)*scl, (-1-80)*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    d += c
+    c = cube([40*scl, (base_centre_ht)*scl, (30)*scl])
+    c = translate(v=[(180-9)*scl, (0)*scl,
+                                (boxheight-hthick-2)*scl]).add(c)
+    d -= c
+    v -= d
+
     u += v
 
     # chamfered screw hole through to base_front
@@ -1543,6 +1559,11 @@ def base_mid(scl, ht):
     u -= b
     b = rotate([180, 0, 0]).add(b)
     b = translate(v=[(0)*scl, (ht)*scl, (168)*scl]).add(b)
+    u -= b
+
+    # remove centre between screw wings
+    b = cube([(40)*scl, (ht-64)*scl, (boxheight)*scl])
+    b = translate(v=[(140)*scl, (32)*scl, (39)*scl]).add(b)
     u -= b
 
     # locking cut-out for back_box_base
