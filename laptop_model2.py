@@ -1129,7 +1129,7 @@ def base_front_top(scl, ht, ht_offset):
                 innershear=[8*scl, 0*scl, 0])
     c = translate(v=[(180-8)*scl, -1*scl,
                                 (boxheight-hthick-1)*scl]).add(c)
-    u += c
+    u -= c
 
     if pin_parts_3d:
         c = union()
@@ -1573,6 +1573,12 @@ def base_mid(scl, ht):
     # and for tpanel_mid
     t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
     u -= t
+
+    # cutout for pcb2 to fit into.  cutout is 12mm deep and 21mm wide
+    c = cube([210*scl, (base_centre_ht+4)*scl, (52)*scl])
+    c = translate(v=[(tpanel_l_b-330)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+                (0)*scl]).add(c)
+    u -= c
 
     if pin_parts_3d:
         c = union()
@@ -2529,7 +2535,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
+    if True:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2772,7 +2778,7 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
