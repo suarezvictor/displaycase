@@ -1088,6 +1088,14 @@ def base_front_top(scl, ht, ht_offset):
     t = translate(v=[(0)*scl, (85)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
+    # fillin/cutout for base_mid
+    cht = base_centre_ht/2+85
+    c = shearedcube([50*scl, cht*scl, (45)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[-10*scl, 0*scl, 0])
+    t = translate(v=[(120)*scl, (ht-cht)*scl, (40)*scl]).add(c)
+    u += t
+
     # screw holes in top for touchpanel
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
@@ -1098,8 +1106,8 @@ def base_front_top(scl, ht, ht_offset):
                         (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
-    t = translate(v=[(160)*scl, (ht-base_centre_ht/2-30)*scl, 
-                        (73)*scl]).add(t)
+    t = translate(v=[(140)*scl, (ht-base_centre_ht/2-30)*scl, 
+                        (80)*scl]).add(t)
     u -= t
 
     # remove bit for touchpanel
@@ -1115,22 +1123,27 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[(130)*scl, (73)*scl, (35)*scl]).add(t)
     u -= b
     # and one for tpanel_mid
-    b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl, (44)*scl]).add(t)
+    b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl,
+                     (44)*scl]).add(t)
     u -= b
 
     # dovetail cuts to fit base_mid
     # XXX height is magic constant
-    offs = base_centre_ht / 2.0
-    b = shearedcube([(40)*scl, (20)*scl, (33)*scl],
+    offs = base_centre_ht / 2.0 + 70
+    b = shearedcube([(50)*scl, (offs+1)*scl, (33)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, -90, 0]).add(b)
-    c = translate(v=[(181)*scl, (ht-offs-4)*scl,
-                                    (48)*scl]).add(b)
+    c = translate(v=[(161)*scl, (ht-offs+1)*scl,
+                                    (50)*scl]).add(b)
     u -= c
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(181)*scl, (ht-offs+16)*scl, (112)*scl]).add(b)
+    b = translate(v=[(161)*scl, (ht+1)*scl, (boxheight-3)*scl]).add(b)
     u -= b
+    b = cube([(31)*scl, (offs)*scl, (150)*scl])
+    c = translate(v=[(160)*scl, (ht-offs+1)*scl,
+                                    (50)*scl]).add(b)
+    u -= c
 
     # remove runner along top of base, for panel and compartment lid to fit
     if (ht_offset > 0):
@@ -1466,7 +1479,7 @@ def base_mid(scl, ht):
     u = union()
     w = boxlength-150
 
-    walls = {T:-1, L:-1, R:hthick, F:hthick, D:8, B:hthick}
+    walls = {T:-1, L:30, R:hthick, F:hthick, D:8, B:hthick}
     curverads={
                 R|D: (boxheight-40, 0),
                 }
@@ -1489,15 +1502,13 @@ def base_mid(scl, ht):
     # end wall for tpanel_mid to lock into
     v = union()
     # wings for screw-holes to fit with front base
-    d = shearedcube([(50)*scl, (40)*scl, (76)*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[-25*scl, 0*scl, 0])
+    d = cube([(boxheight-40)*scl, (49)*scl, (100)*scl])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 90]).add(d)
-    c = translate(v=[(180+40)*scl, (-75)*scl, (90)*scl]).add(d)
+    c = translate(v=[(180-1)*scl, (-68)*scl, (boxheight)*scl]).add(d)
     v += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(180)*scl, (ht+75)*scl, (90)*scl]).add(d)
+    c = translate(v=[(180-50)*scl, (ht+68)*scl, (boxheight)*scl]).add(d)
     v += c
     d = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(d)
@@ -1509,9 +1520,9 @@ def base_mid(scl, ht):
     # chamfered screw hole through to base_front
     s = chamfered_backbox_screwholes(scl, 50)
     s = rotate([0, 90, 0]).add(s)
-    t = translate(v=[(200)*scl, (-30)*scl, (73)*scl]).add(s)
+    t = translate(v=[(200-50)*scl, (-30)*scl, (80)*scl]).add(s)
     u -= t
-    t = translate(v=[(200)*scl, (base_centre_ht+30)*scl, (73)*scl]).add(s)
+    t = translate(v=[(200-50)*scl, (base_centre_ht+30)*scl, (80)*scl]).add(s)
     u -= t
 
     # hole for back screw-support to poke through
@@ -1524,14 +1535,14 @@ def base_mid(scl, ht):
 
     # dovetail cuts to fit into front base
     # XXX height is magic constant
-    b = shearedcube([(50)*scl, (ht+2)*scl, (31)*scl],
+    b = shearedcube([(50)*scl, (ht+2+80*2)*scl, (31)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
-    b = translate(v=[(149)*scl, -1*scl, (65)*scl]).add(b)
+    b = translate(v=[(129)*scl, -81*scl, (62)*scl]).add(b)
     u -= b
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(0)*scl, (ht)*scl, (160)*scl]).add(b)
+    b = translate(v=[(0)*scl, (ht)*scl, (168)*scl]).add(b)
     u -= b
 
     # locking cut-out for back_box_base
@@ -2824,16 +2835,16 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
-                        TPANEL_MID,
+                        #PCB2,
+                        #TPANEL_MID,
                         BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
