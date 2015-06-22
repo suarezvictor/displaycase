@@ -857,6 +857,16 @@ def tpanel_mid(scl, ht, ht_offset):
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
     u -= c
 
+    # back cutout to save plastic
+    c = cube([140*scl, (ht-200)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-160)*scl, (100)*scl, (15)*scl]).add(c)
+    u -= c
+
+    # add bit back in for screwhole
+    c = cube([160*scl, (80)*scl, (40)*scl])
+    c = translate(v=[(tpanel_l_b-180)*scl, (ht/2-ht_offset-40)*scl, (0)*scl]).add(c)
+    u += c
+
     # remove cutout for pcb2
     c = cube([170*scl, (147)*scl, (150)*scl])
     c = translate(v=[(tpanel_l_b-80)*scl, (ht-240)*scl, (40)*scl]).add(c)
