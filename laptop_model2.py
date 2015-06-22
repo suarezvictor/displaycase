@@ -890,15 +890,15 @@ def tpanel_mid(scl, ht, ht_offset):
     u -= c
 
     # wings for screw-holes to fit with front base
-    d = shearedcube([(60)*scl, (40)*scl, (86)*scl],
+    d = shearedcube([(64)*scl, (40)*scl, (86)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[-32*scl, 0*scl, 0])
     d = rotate([0, -90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(181)*scl, (-85)*scl, (48)*scl]).add(d)
+    c = translate(v=[(181)*scl, (-85)*scl, (44)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(181+40)*scl, (ht+85)*scl, (48)*scl]).add(d)
+    c = translate(v=[(181+40)*scl, (ht+85)*scl, (44)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -2440,8 +2440,8 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u += c
 
     # cut out corner for tpanel_mid joiner
-    b = cube([50*scl, 12*scl, (12)*scl])
-    b = translate(v=[-1*scl, (ht-11)*scl, (15)*scl]).add(b)
+    b = cube([60*scl, 12*scl, (12)*scl])
+    b = translate(v=[-11*scl, (ht-11)*scl, (11)*scl]).add(b)
     u -= b
 
     c = compartment_lockin_cutout(scl)
@@ -2824,7 +2824,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         PCB2,
