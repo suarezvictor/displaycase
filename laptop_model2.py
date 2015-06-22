@@ -26,6 +26,7 @@ PCB1 = 14
 PCB1_SUPPORT = 17
 BATTERY_SUPPORT1 = 18
 COMPARTMENT_LID = 19
+PCB2 = 20
 
 if not test:
     lcd_l = 3598.0
@@ -1574,9 +1575,9 @@ def base_mid(scl, ht):
     t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
     u -= t
 
-    # cutout for pcb2 to fit into.  cutout is 12mm deep and 21mm wide
-    c = cube([210*scl, (base_centre_ht+4)*scl, (52)*scl])
-    c = translate(v=[(tpanel_l_b-330)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+    # cutout for pcb2 to fit into.  cutout is 12mm deep and 31mm wide
+    c = cube([310*scl, (base_centre_ht+4)*scl, (52)*scl])
+    c = translate(v=[(tpanel_l_b-430)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
@@ -2436,6 +2437,31 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     return v
 
 
+def pcb2(scl):
+
+    t = union()
+
+    # PCB
+    pcb = union()
+    b = cube([800*scl, 760*scl, (12)*scl])
+    b = translate([(-160)*scl, 0*scl, 0*scl]).add(b)
+    pcb += b
+    b = cube([581*scl, 300*scl, (30)*scl])
+    b = translate([(230)*scl, 320*scl, -10*scl]).add(b)
+    pcb -= b
+    b = cube([581*scl, 400*scl, (30)*scl])
+    b = translate([(280)*scl, -1*scl, -10*scl]).add(b)
+    pcb -= b
+    b = cube([120*scl, 500*scl, (30)*scl])
+    b = translate([(-180)*scl, (420)*scl, -10*scl]).add(b)
+    pcb -= b
+
+    r = translate([(tpanel_l_b-360)*scl, (lcd_l/2-500)*scl,
+                    (40+55)*scl]).add(pcb)
+    t.add(r)
+
+    return t
+
 def pcb1(scl):
 
     t = union()
@@ -2591,6 +2617,10 @@ def create_laptop(t, scl, part, angle):
 
     if part == PCB1:
         se = pcb1(scl)
+        b.add(se)
+
+    if part == PCB2:
+        se = pcb2(scl)
         b.add(se)
 
     if part == BASE_BACK:
@@ -2777,7 +2807,8 @@ if __name__ == '__main__':
                         BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
-                        #TPANEL_MID,
+                        PCB2,
+                        TPANEL_MID,
                         BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
@@ -2787,8 +2818,10 @@ if __name__ == '__main__':
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
-                if i == 14: # pcb1
+                if i == PCB1: # pcb1
                     c = [0.8, 0.3, 0.8, 0.5]
+                elif i == PCB2: # pcb1
+                    c = [0.3, 0.8, 0.3, 0.25]
                 else:
                     c = [0.3, 0.5, 0.8, 0.5]
                 c = color(c)
