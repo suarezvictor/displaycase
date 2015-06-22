@@ -11,7 +11,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -1111,6 +1111,18 @@ def base_front_top(scl, ht, ht_offset):
         b = rotate([180, 0, 0]).add(b)
         b = translate(v=[(181)*scl, (ht-offs+16)*scl, (112)*scl]).add(b)
         u -= b
+
+    # remove runner along top of base, for panel and compartment lid to fit
+    if (ht_offset > 0):
+        dropoffs = 1
+    else:
+        dropoffs = 9
+    c = shearedcube([60*scl, (ht+2)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-8*scl, 0*scl, 0])
+    c = translate(v=[(180)*scl, -1*scl,
+                                (dropoffs)*scl]).add(c)
+    u -= c
 
     if pin_parts_3d:
         c = union()
@@ -2385,6 +2397,14 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = translate(v=[40*scl, 40*scl, (-1)*scl]).add(b)
     u -= b
 
+    # add a runner, fits into base_front_top
+    c = shearedcube([2*scl, (ht-2)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-8*scl, 0*scl, 0])
+    c = translate(v=[(1)*scl, 1*scl,
+                                (8)*scl]).add(c)
+    u += c
+
     # cut out corner for tpanel_mid joiner
     b = cube([50*scl, 12*scl, (12)*scl])
     b = translate(v=[-1*scl, (ht-11)*scl, (15)*scl]).add(b)
@@ -2741,10 +2761,10 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
