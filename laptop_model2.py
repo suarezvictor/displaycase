@@ -857,6 +857,11 @@ def tpanel_mid(scl, ht, ht_offset):
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
     u -= c
 
+    # remove cutout for pcb2
+    c = cube([170*scl, (147)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-80)*scl, (ht-240)*scl, (40)*scl]).add(c)
+    u -= c
+
     # lengthways support (keeps tpanel from bending)
     c = shearedcube([33*scl, ht*scl, (40)*scl],
                 shear=[0*scl, 0*scl, 0],
