@@ -1116,12 +1116,20 @@ def base_front_top(scl, ht, ht_offset):
         dropoffs = 1
     else:
         dropoffs = 9
-    c = shearedcube([60*scl, (ht+2)*scl, (hthick)*scl],
+    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-8*scl, 0*scl, 0])
     c = translate(v=[(180)*scl, -1*scl,
                                 (dropoffs)*scl]).add(c)
     u -= c
+
+    # remove runner along bottom of base, for lower panel
+    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    c = translate(v=[(180-8)*scl, -1*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    u += c
 
     if pin_parts_3d:
         c = union()
@@ -2761,7 +2769,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #TPANEL_MID,
                         #BASE_MID,
