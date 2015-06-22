@@ -1097,20 +1097,19 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl, (44)*scl]).add(t)
     u -= b
 
-    if True:
-        offs = base_centre_ht / 2.0
-        # dovetail cuts to fit base_mid
-        # XXX height is magic constant
-        b = shearedcube([(40)*scl, (20)*scl, (33)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[10*scl, 0*scl, 0])
-        b = rotate([0, -90, 0]).add(b)
-        c = translate(v=[(181)*scl, (ht-offs-4)*scl,
-                                        (48)*scl]).add(b)
-        u -= c
-        b = rotate([180, 0, 0]).add(b)
-        b = translate(v=[(181)*scl, (ht-offs+16)*scl, (112)*scl]).add(b)
-        u -= b
+    # dovetail cuts to fit base_mid
+    # XXX height is magic constant
+    offs = base_centre_ht / 2.0
+    b = shearedcube([(40)*scl, (20)*scl, (33)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[10*scl, 0*scl, 0])
+    b = rotate([0, -90, 0]).add(b)
+    c = translate(v=[(181)*scl, (ht-offs-4)*scl,
+                                    (48)*scl]).add(b)
+    u -= c
+    b = rotate([180, 0, 0]).add(b)
+    b = translate(v=[(181)*scl, (ht-offs+16)*scl, (112)*scl]).add(b)
+    u -= b
 
     # remove runner along top of base, for panel and compartment lid to fit
     if (ht_offset > 0):
