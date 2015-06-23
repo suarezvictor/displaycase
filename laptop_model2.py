@@ -11,7 +11,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -873,8 +873,8 @@ def tpanel_mid(scl, ht, ht_offset):
     u -= c
 
     # remove cutout for pcb2 touch panel cable
-    c = cube([170*scl, (147)*scl, (150)*scl])
-    c = translate(v=[(tpanel_l_b-191)*scl, (ht/2-220)*scl, (36)*scl]).add(c)
+    c = cube([170*scl, (167)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-191)*scl, (ht/2-200)*scl, (36)*scl]).add(c)
     u -= c
 
     # lengthways support (keeps tpanel from bending)
@@ -1628,8 +1628,8 @@ def base_mid(scl, ht):
     u -= t
 
     # cutout for pcb2 to fit into.  cutout is 12mm deep and 31mm wide
-    c = cube([310*scl, (base_centre_ht+4)*scl, (52)*scl])
-    c = translate(v=[(tpanel_l_b-430)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+    c = cube([410*scl, (base_centre_ht+4)*scl, (52)*scl])
+    c = translate(v=[(tpanel_l_b-530)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
@@ -2495,7 +2495,7 @@ def pcb2(scl):
 
     # PCB
     pcb = union()
-    b = cube([800*scl, 760*scl, (12)*scl])
+    b = cube([800*scl, 820*scl, (12)*scl])
     b = translate([(-160)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([581*scl, 300*scl, (30)*scl])
@@ -2504,8 +2504,8 @@ def pcb2(scl):
     b = cube([581*scl, 400*scl, (30)*scl])
     b = translate([(280)*scl, -1*scl, -10*scl]).add(b)
     pcb -= b
-    b = cube([120*scl, 500*scl, (30)*scl])
-    b = translate([(-180)*scl, (420)*scl, -10*scl]).add(b)
+    b = cube([550*scl, 200*scl, (30)*scl])
+    b = translate([(-180)*scl, (780)*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(tpanel_l_b-360)*scl, (lcd_l/2-500)*scl,
@@ -2613,7 +2613,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -2857,14 +2857,14 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
-                        #PCB2,
-                        #TPANEL_MID,
+                        PCB2,
+                        TPANEL_MID,
                         BASE_MID,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
