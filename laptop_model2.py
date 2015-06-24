@@ -2367,6 +2367,8 @@ def back_kbd_runner(scl, ht, mirrored=False):
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+
+    # add set of interlocks into back_base to hold it down
     c = cube([(8)*scl, (14)*scl, (40-hthick-1)*scl])
     b = translate(v=[(w-1)*scl, (ht-200)*scl, (hthick+1)*scl]).add(c)
     u += b
@@ -2374,6 +2376,27 @@ def back_kbd_runner(scl, ht, mirrored=False):
     u += b
     b = translate(v=[(w-1)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
     u += b
+
+    # add series of keyboard locks
+    c = union()
+    b = shearedcube([(15)*scl, (88)*scl, (16)*scl],
+                    shear=[0*scl, 0, 0],
+                    innershear=[9*scl, 0, 0])
+    c.add(b)
+    b = shearedcube([(15)*scl, (88)*scl, (6)*scl],
+                    shear=[0*scl, 0, 0],
+                    innershear=[-9*scl, 0, 0])
+    b = translate(v=[(10)*scl, (0)*scl, (-6)*scl]).add(b)
+    c.add(b)
+
+    if not mirrored:
+        locks = [20, ht-658]
+    else:
+        locks = [105, ht-799]
+    for h in locks:
+        b = translate(v=[(w-29)*scl, (h)*scl, (hthick+12)*scl]).add(c)
+        u += b
+
 
     if pin_parts_3d:
         c = union()
@@ -2753,6 +2776,11 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0,
                         (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
                          0]).add(se)
+        b.add(m)
+        se = back_kbd_runner(scl,
+                            base_back_ht+scrn_hinge_ht-back_kbd_offs+                                       base_centre_ht/2, True)
+        m = mirror_part(se, scl, total_width-
+                (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
         b.add(m)
 
     adj = scrn_end_ht
