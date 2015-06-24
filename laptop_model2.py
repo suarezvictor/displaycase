@@ -2379,14 +2379,10 @@ def back_kbd_runner(scl, ht, mirrored=False):
 
     # add series of keyboard locks
     c = union()
-    b = shearedcube([(15)*scl, (88)*scl, (16)*scl],
-                    shear=[0*scl, 0, 0],
-                    innershear=[9*scl, 0, 0])
-    c.add(b)
-    b = shearedcube([(15)*scl, (88)*scl, (6)*scl],
-                    shear=[0*scl, 0, 0],
-                    innershear=[-9*scl, 0, 0])
-    b = translate(v=[(10)*scl, (0)*scl, (-6)*scl]).add(b)
+    b = shearedcube([(16)*scl, (88)*scl, (10)*scl],
+                    shear=[-9*scl, 0, 0],
+                    innershear=[8*scl, 0, 0])
+    b = rotate([0, -90, 0]).add(b)
     c.add(b)
 
     if not mirrored:
@@ -2394,7 +2390,7 @@ def back_kbd_runner(scl, ht, mirrored=False):
     else:
         locks = [105, ht-799]
     for h in locks:
-        b = translate(v=[(w-29)*scl, (h)*scl, (hthick+12)*scl]).add(c)
+        b = translate(v=[(w-19)*scl, (h)*scl, (hthick+8)*scl]).add(c)
         u += b
 
 
