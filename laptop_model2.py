@@ -28,6 +28,7 @@ PCB1_SUPPORT = 17
 BATTERY_SUPPORT1 = 18
 COMPARTMENT_LID = 19
 PCB2 = 20
+BACK_KBD_RUNNER = 21
 
 if not test:
     lcd_l = 3598.0
@@ -2356,6 +2357,60 @@ def front_tray_corner(scl, ht):
     v.add(u)
     return v
 
+def back_kbd_runner(scl, ht, mirrored=False):
+
+    u = union()
+    w = boxlength-back_top_width
+
+    b = hollowbox(scl, 20, ht, 40,
+                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
+                curverads={ T|L: (hthick, 0)})
+    b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+    c = cube([(8)*scl, (14)*scl, (40-hthick-1)*scl])
+    b = translate(v=[(w-1)*scl, (ht-200)*scl, (hthick+1)*scl]).add(c)
+    u += b
+    b = translate(v=[(w-1)*scl, (0)*scl, (hthick+1)*scl]).add(c)
+    u += b
+    b = translate(v=[(w-1)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
+    u += b
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(ht-38)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht+33)*scl, (-3)*scl, -43*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht+33)*scl, (-3)*scl, -127*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(82)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (-3)*scl, -43*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht-45)*scl, (-3)*scl, -210*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht+33)*scl, (-3)*scl, -210*scl]).add(h)
+        c += h
+        c = rotate([90, 0, 0]).add(c)
+        c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
+        
+        u += c
+
+    v = union()
+    u = translate(v=[0, 0, (55)*scl]).add(u)
+    v.add(u)
+    return v
+
 def back_kbd_corner(scl, ht):
 
     u = union()
@@ -2374,6 +2429,9 @@ def back_kbd_corner(scl, ht):
     u += b
     b = cube([(7)*scl, (14)*scl, (boxheight-hthick*2-1)*scl])
     b = translate(v=[(w)*scl, (ht-14)*scl, (hthick+1)*scl]).add(b)
+    u += b
+    b = cube([(27)*scl, (12)*scl, (boxheight-hthick-40)*scl])
+    b = translate(v=[(w-20)*scl, (ht-1)*scl, (40)*scl]).add(b)
     u += b
     b = cube([(200+50)*scl, (hthick+1)*scl, (hthick+1)*scl])
     b = translate(v=[(w-201)*scl, (-hthick-1)*scl, (-1)*scl]).add(b)
@@ -2683,9 +2741,18 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
+    back_kbd_offs = 140
     if part == BACK_KBD_CORNER:
-        se = back_kbd_corner(scl, 140)
+        se = back_kbd_corner(scl, back_kbd_offs)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+        b.add(m)
+
+    if part == BACK_KBD_RUNNER:
+        se = back_kbd_runner(scl,
+                            base_back_ht+scrn_hinge_ht-back_kbd_offs+                                       base_centre_ht/2)
+        m = translate(v=[0,
+                        (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
+                         0]).add(se)
         b.add(m)
 
     adj = scrn_end_ht
@@ -2860,6 +2927,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         BASE_MID,
                         BACK_KBD_CORNER,
+                        BACK_KBD_RUNNER,
                         BASE_BACK,
                         PCB1_SUPPORT,
                         BATTERY_SUPPORT1,
