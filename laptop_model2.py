@@ -1323,12 +1323,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
     u -= c
 
-    # add support for keyboard corner
-    t = holed_support(scl, 50)
-    t = rotate([0, 0, 90]).add(t)
-    t = translate(v=[(w-8)*scl, (197)*scl, (5)*scl]).add(t)
-    u += t
-    
     # lower screw hole for keyboard corner joiner
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, 90]).add(t)
