@@ -2372,13 +2372,14 @@ def back_kbd_corner(scl, ht):
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+    b = cube([(7)*scl, (14)*scl, (boxheight-hthick*2-1)*scl])
+    b = translate(v=[(w)*scl, (ht-14)*scl, (hthick+1)*scl]).add(b)
+    u += b
     b = cube([(200+50)*scl, (hthick+1)*scl, (hthick+1)*scl])
     b = translate(v=[(w-201)*scl, (-hthick-1)*scl, (-1)*scl]).add(b)
     u -= b
 
     u = indented_screwhole(scl, u, (w-98), -hthick+6, 39)
-    u = indented_screwhole(scl, u, (w-1), 232, 37, 90)
-
     u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
 
     if pin_parts_3d:
@@ -2683,7 +2684,7 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == BACK_KBD_CORNER:
-        se = back_kbd_corner(scl, 275)
+        se = back_kbd_corner(scl, 140)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
@@ -2858,7 +2859,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         BASE_MID,
-                        #BACK_KBD_CORNER,
+                        BACK_KBD_CORNER,
                         BASE_BACK,
                         PCB1_SUPPORT,
                         BATTERY_SUPPORT1,
