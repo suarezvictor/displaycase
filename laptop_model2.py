@@ -21,6 +21,7 @@ BASE_BACK = 4
 BASE_END = 3
 BASE_FRONT_TOP = 7
 BASE_MID = 8
+BACK_KBD_CORNER = 9
 FRONT_KBD_TRAY = 12
 PCB1 = 14
 PCB1_SUPPORT = 17
@@ -1335,8 +1336,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= b
 
     # slot to fit a nut into
-    c = cube([70*scl, 50*scl, 80*scl], center=True)
-    c = translate(v=[(lcd_w+85)*scl, (100)*scl, (45)*scl]).add(c)
+    # XXX TODO: fill this all the way back (for mold purposes)
+    c = cube([70*scl, 50*scl, (boxheight-10)*scl], center=True)
+    c = translate(v=[(lcd_w+85)*scl, (100)*scl, (boxheight/2)*scl]).add(c)
     u += c
     c = cube([100*scl, 20*scl, 46*scl], center=True)
     c = translate(v=[(-50)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
@@ -2686,7 +2688,7 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
-    if part == 9:
+    if part == BACK_KBD_CORNER:
         se = back_kbd_corner(scl, 275)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
@@ -2856,14 +2858,15 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
-                        TPANEL_MID,
+                        #PCB2,
+                        #TPANEL_MID,
                         BASE_MID,
-                        #BASE_BACK,
-                        #PCB1_SUPPORT,
+                        #BACK_KBD_CORNER,
+                        BASE_BACK,
+                        PCB1_SUPPORT,
                         BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
