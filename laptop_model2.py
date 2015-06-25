@@ -1387,15 +1387,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = translate(v=[(w-20)*scl, (ht-30)*scl, (45)*scl]).add(s)
     u -= b
 
-    # add lock-in to base_mid
-    c = shearedcube([(20)*scl, (35)*scl, (16)*scl],
-                shear=[0, 10*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w+79)*scl,(ht-46)*scl,(52)*scl]).add(c)
-    u += c
-
     # add cut-out for back kbd runner
     b = cube([(17)*scl, (19)*scl, (42)*scl])
     b = translate(v=[(w-61)*scl, (ht-18)*scl, (11)*scl]).add(b)
@@ -2742,7 +2733,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
+    if True:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -3003,10 +2994,10 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
