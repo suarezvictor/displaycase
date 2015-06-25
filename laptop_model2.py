@@ -729,6 +729,11 @@ def battery_support1(scl, ht, tpanel_offset):
                     (kbd_inset)*scl]).add(c)
     u += c
 
+    # cut-out for back kbd runner
+    c = cube([(34)*scl, (150)*scl, (15)*scl])
+    c = translate(v=[(boxlength-170-32)*scl, (-40)*scl, (36)*scl]).add(c)
+    u -= c
+
     # screw holder, done in 2 parts so that it's easier to calculate heights
     # first part joins others together
     c = cube([(70)*scl, holder_ht*scl, (boxheight-hthick-kbd_inset)*scl])
@@ -768,20 +773,25 @@ def pcb1_support(scl, ht, tpanel_offset):
     kbd_inset = 38.0
     sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
     holder_ht = 80.0
-
+    w = (boxlength - tpanel_l_b - 170)
     tpanel_box_l = 150
     # main strut going from back base to tpanel
-    c = cube([(boxlength - tpanel_l_b - 170+30+18)*scl,
+    c = cube([(w+30+18)*scl,
                     ht*scl, (boxheight-hthick-kbd_inset)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
     u += c
     # secondary strut with pcb edge lock
-    c = cube([(boxlength - tpanel_l_b - 170+tpanel_box_l)*scl,
+    c = cube([(w+tpanel_box_l)*scl,
                     (holder_ht)*scl, (sdep-40)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                     (kbd_inset+40)*scl]).add(c)
     u += c
+
+    # cut-out for back kbd runner
+    c = cube([(34)*scl, (150)*scl, (15)*scl])
+    c = translate(v=[(boxlength-170-32)*scl, (-40)*scl, (36)*scl]).add(c)
+    u -= c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
@@ -1229,7 +1239,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += b
 
     # fill in around hinge before cut-out
-
     c = cube([120*scl, (scrn_hinge_ht+2)*scl, 40*scl])
     c = translate(v=[(w+20)*scl,hthick*scl,(5)*scl]).add(c)
     u += c
@@ -1378,6 +1387,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[(w+79)*scl,(ht-46)*scl,(52)*scl]).add(c)
     u += c
+
+    # add cut-out for back kbd runner
+    b = cube([(17)*scl, (19)*scl, (42)*scl])
+    b = translate(v=[(w-61)*scl, (ht-18)*scl, (11)*scl]).add(b)
+    u -= b
 
     if pin_parts_3d:
         c = union()
@@ -2369,15 +2383,18 @@ def back_kbd_runner(scl, ht, mirrored=False):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 20, ht-2, 40,
+    b = hollowbox(scl, 20, ht-2, 50,
                 {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
+    c = cube([(11)*scl, (ht-2)*scl, (9)*scl])
+    b = translate(v=[(w-30)*scl, (1)*scl, (40)*scl]).add(c)
+    u += b
 
     # add set of interlocks into back_base to hold it down
-    c = cube([(8)*scl, (14)*scl, (40-hthick-1)*scl])
-    b = translate(v=[(w-1)*scl, (ht-140)*scl, (hthick+1)*scl]).add(c)
+    c = cube([(8)*scl, (14)*scl, (50-hthick-1)*scl])
+    b = translate(v=[(w-1)*scl, (ht-15)*scl, (hthick+1)*scl]).add(c)
     u += b
     b = translate(v=[(w-1)*scl, (1)*scl, (hthick+1)*scl]).add(c)
     u += b
@@ -2951,14 +2968,14 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
-                        BACK_KBD_CORNER,
+                        #BASE_MID,
+                        #BACK_KBD_CORNER,
                         BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         PCB1_SUPPORT,
                         BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
