@@ -443,6 +443,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
+    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
+                                (boxheight-hthick-1+55)*scl]).add(c)
+    u -= c
+
     # add top strut, along entire length of base_end.
     c = union()
     b = cube([lcd_w*scl, (ht-20)*scl, 35*scl])
@@ -1393,6 +1401,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = translate(v=[(w-61)*scl, (ht-18)*scl, (11)*scl]).add(b)
     u -= b
 
+    # remove runner along bottom of base, for lower panel
+    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
+                shear=[-8*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = translate(v=[(boxlength-180+8)*scl, (-1-0)*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    u -= c
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1641,6 +1657,28 @@ def base_mid(scl, ht):
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-40)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+
+    # remove runner along bottom of base, for lower panel
+    c = shearedcube([10*scl, (ht+150)*scl, (hthick)*scl],
+                shear=[-8*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = translate(v=[(boxlength-180+8)*scl, (-1-75)*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    u -= c
+    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
+                shear=[-8*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (-1)*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    u -= c
+    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
+                                (boxheight-hthick-1)*scl]).add(c)
+    u -= c
 
     if pin_parts_3d:
         c = union()
@@ -2957,16 +2995,16 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
