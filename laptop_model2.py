@@ -879,9 +879,9 @@ def tpanel_mid(scl, ht, ht_offset):
     c = translate(v=[(tpanel_l_b-180)*scl, (ht/2-ht_offset-40)*scl, (0)*scl]).add(c)
     u += c
 
-    # remove cutout for pcb2
-    c = cube([170*scl, (147)*scl, (150)*scl])
-    c = translate(v=[(tpanel_l_b-80)*scl, (ht-240)*scl, (40)*scl]).add(c)
+    # remove cutout for pcb2 and base_mid
+    c = cube([470*scl, (347)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-80)*scl, (ht-440)*scl, (40)*scl]).add(c)
     u -= c
 
     # remove cutout for pcb2 touch panel cable
@@ -1523,9 +1523,6 @@ def base_mid(scl, ht):
     c = translate(v=[(180-50)*scl, (ht+68)*scl, (boxheight)*scl]).add(d)
     v += c
     d = cube([40*scl, (base_centre_ht)*scl, (boxheight-42)*scl])
-    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (40)*scl]).add(d)
-    v += c
-    c = translate(v=[(tpanel_l_b)*scl, (0)*scl, (50)*scl]).add(d)
     c = translate(v=[(175)*scl, (0)*scl, (40)*scl]).add(d)
     v += c
     # remove runner along bottom of base, for lower panel
@@ -1611,15 +1608,9 @@ def base_mid(scl, ht):
     c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     
-    # cutout for tpanel_mid to drop into
-    c = cube([34*scl, (base_centre_ht+4)*scl, (60)*scl])
-    c = translate(v=[(tpanel_l_b-32)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
-                (0)*scl]).add(c)
-    u -= c
-
     # fillin for tpanel_mid screwhole
-    c = cube([(50)*scl, (ht)*scl, (boxheight-42)*scl])
-    c = translate(v=[(tpanel_l_b-100)*scl, (0)*scl, (40)*scl]).add(c)
+    c = cube([(95)*scl, (ht)*scl, (boxheight-42)*scl])
+    c = translate(v=[(tpanel_l_b-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     
     # screw holes in top for back_box_base
@@ -2971,13 +2962,13 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_CORNER,
-                        BACK_KBD_RUNNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
