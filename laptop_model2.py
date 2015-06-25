@@ -10,8 +10,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
-add_internal_parts=True
+pin_parts_3d=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -1409,6 +1409,26 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                                 (boxheight-hthick-1)*scl]).add(c)
     u -= c
 
+    rad=35.0 + 15
+    friclen = 260
+    # add hinge
+    c = cylinder(r=rad*scl, h=(friclen+20)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
+    # hollow hinge out
+    c = cylinder(r=(rad-12)*scl, h=(friclen)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+    c = cube([60*scl, 40*scl, 30*scl], center=True)
+    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+10)*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1683,19 +1703,19 @@ def base_mid(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(265)*scl, (0)*scl, 10*scl]).add(h)
+        h = translate([(130)*scl, (0)*scl, 15*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(185)*scl, (0)*scl, -(ht+10)*scl]).add(h)
+        h = translate([(205)*scl, (0)*scl, -(ht+30)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(160)*scl, (0)*scl, -ht/2*scl]).add(h)
+        h = translate([(110)*scl, (0)*scl, -ht/2*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(185)*scl, (0)*scl, 10*scl]).add(h)
+        h = translate([(205)*scl, (0)*scl, 30*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(265)*scl, (0)*scl, -(ht+10)*scl]).add(h)
+        h = translate([(130)*scl, (0)*scl, -(ht+15)*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -1721,17 +1741,6 @@ def base_mid(scl, ht):
 
         c = rotate([90, 0, 0]).add(c)
         c = translate([(0)*scl, (0)*scl, (boxheight-3)*scl]).add(c)
-
-        h = cube([6*scl, 56*scl, 25*scl])
-        h = translate([(180)*scl, (ht-1)*scl, 95*scl]).add(h)
-        c += h
-        h = translate([(34)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-        h = cube([6*scl, 56*scl, 25*scl])
-        h = translate([(180+0)*scl, (-55)*scl, 95*scl]).add(h)
-        c += h
-        h = translate([(34)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
 
         step = (ht+120-6) / 7.0
         offs = -60
@@ -2995,7 +3004,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -3004,7 +3013,7 @@ if __name__ == '__main__':
                         BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
