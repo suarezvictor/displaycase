@@ -1630,6 +1630,13 @@ def base_mid(scl, ht):
                 (0)*scl]).add(c)
     u -= c
 
+    # back keyboard support
+    b = hollowbox(scl, 20, ht, boxheight,
+                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
+                curverads={ T|L: (hthick, 0)})
+    b = translate(v=[(w-40)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -2362,17 +2369,17 @@ def back_kbd_runner(scl, ht, mirrored=False):
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 20, ht, 40,
+    b = hollowbox(scl, 20, ht-2, 40,
                 {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
 
     # add set of interlocks into back_base to hold it down
     c = cube([(8)*scl, (14)*scl, (40-hthick-1)*scl])
-    b = translate(v=[(w-1)*scl, (ht-200)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-1)*scl, (ht-140)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-1)*scl, (0)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-1)*scl, (1)*scl, (hthick+1)*scl]).add(c)
     u += b
     b = translate(v=[(w-1)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
     u += b
@@ -2386,9 +2393,9 @@ def back_kbd_runner(scl, ht, mirrored=False):
     c.add(b)
 
     if not mirrored:
-        locks = [20, ht-658]
+        locks = [20, ht-658+70]
     else:
-        locks = [105, ht-799]
+        locks = [105, ht-799+70]
     for h in locks:
         b = translate(v=[(w-19)*scl, (h)*scl, (hthick+8)*scl]).add(c)
         u += b
@@ -2767,14 +2774,13 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == BACK_KBD_RUNNER:
-        se = back_kbd_runner(scl,
-                            base_back_ht+scrn_hinge_ht-back_kbd_offs+                                       base_centre_ht/2)
+        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs)
         m = translate(v=[0,
                         (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
                          0]).add(se)
         b.add(m)
-        se = back_kbd_runner(scl,
-                            base_back_ht+scrn_hinge_ht-back_kbd_offs+                                       base_centre_ht/2, True)
+        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
+                                    True)
         m = mirror_part(se, scl, total_width-
                 (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
         b.add(m)
@@ -2945,7 +2951,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
