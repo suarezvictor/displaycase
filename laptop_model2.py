@@ -443,14 +443,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
-    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
-                                (boxheight-hthick-1+55)*scl]).add(c)
-    u -= c
-
     # add top strut, along entire length of base_end.
     c = union()
     b = cube([lcd_w*scl, (ht-20)*scl, 35*scl])
@@ -591,6 +583,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     v = front_tray_corner(scl, 200)
     v = translate([0, scl*(ht-hthick), 0]).add(v)
     u += v
+
+    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
+                                (boxheight-hthick-1+55)*scl]).add(c)
+    u -= c
 
     if pin_parts_3d:
         c = union()
