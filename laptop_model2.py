@@ -90,7 +90,7 @@ lcd_hinge_inner_rad=70
 lcd_hinge_inside_rad=70
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
-lcd_end_ht = 50 
+lcd_end_ht = 50
 lcd_end_offs = 20
 
 # XXX should really be calculated from lcd width, scrn width etc.
@@ -105,7 +105,7 @@ boxtopoffs = 2
 boxinset = 55
 hinge_depth = 70
 hole_depth = hinge_depth
-boxlength = lcd_w + lcd_inset_top + lcd_inset_bot 
+boxlength = lcd_w + lcd_inset_top + lcd_inset_bot
 lidfront_offs = 10
 lcd_front_indent = 108
 back_top_width = 170
@@ -529,7 +529,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     h = holed_support(scl, ht-hthick-1)
     t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
     u += t
-    
+
     # front keyboard tray indentation support, surrounds microsd
     c = cube([(25)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
@@ -541,7 +541,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     # between usb ports
     t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    
+
     # end pcb marker, also supports bamboo panels top and bottom
     c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
@@ -551,7 +551,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += t
     t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
     u += t
-    
+
     # add bits for case bolthole at front
     c = cube([(90)*scl, (ht)*scl, (70)*scl])
     c = translate(v=[(60)*scl,
@@ -630,11 +630,11 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         c = translate([(0)*scl, (3)*scl, 0*scl]).add(c)
-        
+
         u += c
 
     return u
-    
+
 def holed_support(scl, ht, sht=50, dep=60, inverse=False):
     u = union()
     if not inverse:
@@ -775,7 +775,7 @@ def battery_support1(scl, ht, tpanel_offset):
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def pcb1_support(scl, ht, tpanel_offset):
     u = union()
     kbd_inset = 38.0
@@ -826,7 +826,7 @@ def pcb1_support(scl, ht, tpanel_offset):
     u -= t
 
     # cut-out for front kbd tray
-    w = tpanel_b_w 
+    w = tpanel_b_w
     b = cube([(84)*scl, (63)*scl, (27)*scl])
     b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
     u -= b
@@ -838,7 +838,7 @@ def pcb1_support(scl, ht, tpanel_offset):
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def tpanel_mid(scl, ht, ht_offset):
     """
     TODO:
@@ -922,7 +922,7 @@ def tpanel_mid(scl, ht, ht_offset):
     u += c
 
     # cut-out to match pcb1_support
-    w = tpanel_b_w 
+    w = tpanel_b_w
     l = 0
     c = cube([(160)*scl, (90)*scl, (20)*scl])
     b = translate(v=[(w-260)*scl, (0)*scl, (tpanel_h-3)*scl]).add(c)
@@ -974,7 +974,7 @@ def tpanel_mid(scl, ht, ht_offset):
     b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
     u += b
 
-    
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1074,7 +1074,7 @@ def base_front_top(scl, ht, ht_offset):
         u -= c
 
         offs += step
-        
+
     # remove bit more from base
     c = base_front_arc(scl, tpanel_b_w/2-65)
     c = translate(v=[(151)*scl, (tpanel_ht-80)*scl, (39.5)*scl]).add(c)
@@ -1122,18 +1122,18 @@ def base_front_top(scl, ht, ht_offset):
                     segments=50, center=True)
     t = translate(v=[(40)*scl, (ht-50)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+40)*scl, 
+    t = translate(v=[(40)*scl, (tpanel_ht-tpanel_b_w/2+40)*scl,
                         (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
-    t = translate(v=[(140)*scl, (ht-base_centre_ht/2-30)*scl, 
+    t = translate(v=[(140)*scl, (ht-base_centre_ht/2-30)*scl,
                         (80)*scl]).add(t)
     u -= t
 
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl, 
+    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl,
                         (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl, 
+    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl,
                         (-1)*scl]).add(c)
     u -= c
 
@@ -1220,14 +1220,14 @@ def base_front_top(scl, ht, ht_offset):
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(front_top_width-6)*scl, (0)*scl, 0*scl]).add(c)
-        
+
         u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
@@ -1312,7 +1312,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         u -= c
 
         offs += step
-        
+
     # ok these are for the pcb1_support and battery_support1
     # they extend all the way to the back (for injection molding)
     offs = ht + toffs - tpanel_l_b/2 +10
@@ -1443,14 +1443,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58)*scl, (0)*scl, 0*scl]).add(c)
-        
+
         u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def front_mid_joiner(scl, ht):
     u = union()
     w = boxlength
@@ -1468,7 +1468,7 @@ def front_mid_joiner(scl, ht):
     u = translate(v=[(131)*scl, (ht/2*scl), (136)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def base_back_joiner(scl, ht):
     u = union()
     w = boxlength
@@ -1502,7 +1502,7 @@ def base_back_joiner(scl, ht):
     u = translate(v=[(-26)*scl, -(ht/2)*scl, (boxheight-44)/2*scl]).add(u)
     v.add(u)
     return v
-    
+
 def base_mid(scl, ht):
     u = union()
     w = boxlength-150
@@ -1623,12 +1623,12 @@ def base_mid(scl, ht):
     c = cube([(40)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
     c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
-    
+
     # fillin for tpanel_mid screwhole
     c = cube([(95)*scl, (ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(tpanel_l_b-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
-    
+
     # screw holes in top for back_box_base
     d = cylinder(r=topscrewrad*scl,
                     h=(65)*scl,
@@ -1718,7 +1718,7 @@ def base_mid(scl, ht):
         h = pin(B0, scl)
         h = translate([(tpanel_l_b+65)*scl, (0)*scl, -(ht+32)*scl]).add(h)
         c += h
-        
+
         c = rotate([90, 0, 0]).add(c)
         c = translate([(0)*scl, (0)*scl, (boxheight-3)*scl]).add(c)
 
@@ -1747,14 +1747,14 @@ def base_mid(scl, ht):
         h = cube([20*scl, (ht+120)*scl, 6*scl])
         h = translate([(w+125)*scl, (-60)*scl, (boxheight-6)*scl]).add(h)
         c += h
-        
+
         u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
     return v
-    
+
 def screen_mid(scl, ht):
     u = union()
     b = screen_box(scl, ht, end=False)
@@ -1928,7 +1928,7 @@ def screen_front_edge(scl, ht):
         b += c
 
         offs += step
-        
+
     c = cylinder(r=29.5*scl, h=(24)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0, 3*scl,0]).add(c)
@@ -2184,7 +2184,7 @@ def screen_hinge(scl, ht):
         u += c
 
     return u
-    
+
 def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     d = cylinder(r=topscrewrad*1.2*scl, r1=28*scl,
                     h=17*scl,
@@ -2264,7 +2264,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
                     curverads={ T|R: (hthick, 0), T|B: (hthick, 0)})
         b = translate(v=[(w-25+woffs)*scl, (l-8-hoffs)*scl, (0)*scl]).add(b)
         u += b
-    
+
     # extra bit for kbd corner support
     b = hollowbox(scl, hthick, 20+hthick, h,
                 {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
@@ -2372,10 +2372,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
-        
+
         u += c
 
-    
+
     v = union()
     u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -2475,7 +2475,7 @@ def back_kbd_runner(scl, ht, mirrored=False):
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
-        
+
         u += c
 
     v = union()
@@ -2540,7 +2540,7 @@ def back_kbd_corner(scl, ht):
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
-        
+
         u += c
 
     v = union()
@@ -2677,7 +2677,7 @@ def pcb1(scl):
                 (-58)*scl]).add(s)
     t.add(r)
 
-    # EOMA68 CPU Card 
+    # EOMA68 CPU Card
     card = import_stl(filename = "eoma68.stl")
     r = rotate([90,180,180]).add(card)
     r = translate([(600+cpu_offs)*scl, 0*scl,
@@ -2929,7 +2929,7 @@ def usb_wifi(scl):
     return u
 
 def kbd_part(scl):
-    
+
     u = union()
 
     # make the keyboard look vaguely like the real thing, keys indented
