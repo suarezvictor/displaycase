@@ -1610,13 +1610,6 @@ def base_mid(scl, ht):
     b = translate(v=[(140)*scl, (32)*scl, (39)*scl]).add(b)
     u -= b
 
-    # locking cut-out for back_box_base
-    c = cube([(50)*scl, (20)*scl, 25*scl])
-    b = translate(v=[(w+70)*scl, -61*scl, (50)*scl]).add(c)
-    u -= b
-    b = translate(v=[(w+70)*scl, (ht+41)*scl, (50)*scl]).add(c)
-    u -= b
-
     # diagonal cross-walls for internal stiffness
     fthick = 6
     offs = 210#tpanel_l_b+40
