@@ -211,7 +211,7 @@ def chamfered_backbox_screwholes(scl, sht, r1=22):
 def case_bolthole(scl, end):
     bht = (-lcd_d+150+boxtopoffs-boxheight)
     if end == 0:
-        return translate([(120)*scl, 0*scl, bht*scl])
+        return translate([(100)*scl, 0*scl, bht*scl])
     elif end == 1:
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
@@ -600,8 +600,8 @@ def base_end(scl, ht, kbd_numpad_indent):
         u -= t
 
     # add screw hole for front
-    c = cube([40*scl, ht*scl, boxheight*scl])
-    t = translate(v=[(181)*scl, 0, (55)*scl]).add(c)
+    c = cube([72*scl, ht*scl, boxheight*scl])
+    t = translate(v=[(149)*scl, 0, (55)*scl]).add(c)
     u += t
     v = front_tray_corner(scl, 200)
     v = translate([0, scl*(ht-hthick), 0]).add(v)
@@ -613,6 +613,12 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
                                 (boxheight-hthick-1+55)*scl]).add(c)
+    u -= c
+
+    # inset for base_front
+    c = cube([(118)*scl, (40)*scl, (63)*scl])
+    c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
+    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
 
     if pin_parts_3d:
@@ -690,7 +696,7 @@ def holed_support(scl, ht, sht=50, dep=60, inverse=False):
 def base_end_bit(scl, ht, fwd=False, below=False):
     u = union()
     # add bits for screws through to base back
-    c = cube([(115)*scl, (18+ht)*scl, (60)*scl])
+    c = cube([(115)*scl, (ht)*scl, (60)*scl])
     c = translate(v=[15*scl,(0)*scl,(5)*scl]).add(c)
     u += c
     c = cube([(60)*scl, (ht)*scl, (35)*scl])
@@ -1050,14 +1056,14 @@ def base_front_top(scl, ht, ht_offset):
 
     # add bits for screws through to base front
     c = cube([(120)*scl, (22)*scl, (64)*scl])
-    c = shearedcube([135*scl, (64)*scl, (22)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[15*scl, 0*scl, 0])
+    c = shearedcube([115*scl, (60)*scl, (20)*scl],
+                shear=[-17*scl, 0*scl, 0],
+                innershear=[17*scl, 0*scl, 0])
     c = rotate([0, -90, 0]).add(c)
     c = rotate([90, 0, 0]).add(c)
-    c = rotate([0, 0, -90]).add(c)
-    c = translate(v=[(32+135)*scl,(-1)*scl,(16)*scl]).add(c)
-    u -= c
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(35)*scl,(1)*scl,(18)*scl]).add(c)
+    u += c
 
     # tpanel cutout
     c = shearedcube([60*scl, (tpanel_b_w+3)*scl, (43)*scl],
@@ -2416,7 +2422,7 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = cube([40*scl, 85*scl, (boxheight-hthick-21)*scl])
+    b = cube([40*scl, 85*scl, (boxheight-hthick-22)*scl])
     b = translate(v=[(1)*scl, 0*scl, (21)*scl]).add(b)
     u += b
 
