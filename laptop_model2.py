@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = False
@@ -437,7 +437,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    walls[B] = -1 # hthick
+    walls[B] = hthick
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
@@ -454,6 +454,29 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     u += c
 
+    # remove holes for connectors
+    if not test:
+        # Headphones
+        c = cube([60*scl, 60*scl, 55*scl])
+        c = translate(v=[(lcd_w-190)*scl, (-1)*scl, (95)*scl]).add(c)
+        u -= c
+        # MicroSD
+        c = cube([165*scl, 60*scl, 25*scl])
+        c = translate(v=[(lcd_w-382)*scl, (-1)*scl, (128)*scl]).add(c)
+        u -= c
+        # EOMA68
+        c = cube([550*scl, 60*scl, 55*scl])
+        c = translate(v=[(1085)*scl, (-1)*scl, (97)*scl]).add(c)
+        u -= c
+        # EOMA68 eject
+        c = cube([60*scl, 60*scl, 55*scl])
+        c = translate(v=[(985)*scl, (-1)*scl, (97)*scl]).add(c)
+        u -= c
+        # USB2
+        c = cube([130*scl, 60*scl, 60*scl])
+        c = translate(v=[(580)*scl, (-1)*scl, (91)*scl]).add(c)
+        u -= c
+    
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-103+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
@@ -2993,16 +3016,16 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
