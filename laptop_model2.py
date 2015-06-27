@@ -600,7 +600,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         u -= t
 
     # add screw hole for front
-    c = cube([72*scl, ht*scl, boxheight*scl])
+    c = cube([53*scl, ht*scl, boxheight*scl])
     t = translate(v=[(149)*scl, 0, (55)*scl]).add(c)
     u += t
     v = front_tray_corner(scl, 200)
@@ -1166,12 +1166,16 @@ def base_front_top(scl, ht, ht_offset):
                         (-1)*scl]).add(c)
     u -= c
 
-    # lower screw hole for keyboard corner joiner
+    # cut-in for base_end lock
+    t = shearedcube([(boxheight-hthick*2-22)*scl, (60)*scl, (33)*scl],
+            shear=[10*scl, 0*scl, 0],
+            innershear=[-10*scl, 0*scl, 0])
+    t = rotate([0, 90, 0]).add(t)
+    b = translate(v=[(151)*scl, (-1)*scl, (55+hthick+34)*scl]).add(t)
+    u -= b
+    # screw hole for tpanel_mid
     t = holed_support(scl, 50, inverse=True)
     t = rotate([0, 0, -90]).add(t)
-    b = translate(v=[(130)*scl, (73)*scl, (35)*scl]).add(t)
-    u -= b
-    # and one for tpanel_mid
     b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl,
                      (44)*scl]).add(t)
     u -= b
@@ -2422,12 +2426,16 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = cube([40*scl, 85*scl, (boxheight-hthick-22)*scl])
-    b = translate(v=[(1)*scl, 0*scl, (21)*scl]).add(b)
+    b = cube([30.1*scl, 70*scl, (boxheight-hthick-22)*scl])
+    b = translate(v=[(-8.1)*scl, 0*scl, (21)*scl]).add(b)
     u += b
 
-    # screwhole into front base
-    u = indented_screwhole(scl, u, 1, 50, 67, -90, 40)
+    t = shearedcube([(boxheight-hthick*2-22)*scl, (71)*scl, (20)*scl],
+            shear=[6*scl, 0*scl, 0],
+            innershear=[-6*scl, 0*scl, 0])
+    t = rotate([0, 90, 0]).add(t)
+    b = translate(v=[(-28)*scl, (-1)*scl, (boxheight-19)*scl]).add(t)
+    u += b
 
     v = union()
     u = translate(v=[(180)*scl, 0, (55)*scl]).add(u)
@@ -3023,7 +3031,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         BASE_END,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         PCB1,
                         #PCB2,
