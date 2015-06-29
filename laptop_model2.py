@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = False
@@ -451,8 +451,11 @@ def base_end(scl, ht, kbd_numpad_indent):
     d = cube([52*scl, (ht)*scl, 37*scl])
     b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
     c -= b
-
     u += c
+    # add bottom strut, along EOMA68 and USB
+    b = cube([982*scl, (ht-20)*scl, 150*scl])
+    b = translate(v=[(730)*scl, (0)*scl, (boxheight-hthick-12+55)*scl]).add(b)
+    u += b
 
     # remove holes for connectors
     if not test:
@@ -3059,7 +3062,7 @@ if __name__ == '__main__':
                         BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
