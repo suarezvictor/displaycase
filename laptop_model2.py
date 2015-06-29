@@ -2724,6 +2724,9 @@ def pcb1(scl):
     b = cube([40*scl, 90*scl, (30)*scl])
     b = translate([(570)*scl, (1200-55)*scl, -10*scl]).add(b)
     pcb -= b
+    b = cube([775*scl, (91)*scl, 30*scl])
+    b = translate(v=[(570)*scl, (-1)*scl, (-10)*scl]).add(b)
+    pcb -= b
 
     r = translate([(30)*scl, 15*scl, 0]).add(pcb)
     t.add(r)
