@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = False
@@ -1346,6 +1346,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
         offs += step
 
+    # add runner support, has to be done before pcb/battery support
+    c = shearedcube([75*scl, (ht)*scl, (8)*scl])
+    c = translate(v=[(boxlength-180+10)*scl, (0)*scl,
+                                (boxheight-hthick-6)*scl]).add(c)
+    u += c
     # ok these are for the pcb1_support and battery_support1
     # they extend all the way to the back (for injection molding)
     offs = ht + toffs - tpanel_l_b/2 +10
@@ -1426,11 +1431,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= b
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
+    c = shearedcube([10*scl, (ht+2)*scl, (10)*scl],
                 shear=[-8*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
-    c = translate(v=[(boxlength-180+8)*scl, (-1-0)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
+    c = translate(v=[(boxlength-180+5)*scl, (-1-0)*scl,
+                                (boxheight-hthick)*scl]).add(c)
     u -= c
 
     rad=35.0 + 15
