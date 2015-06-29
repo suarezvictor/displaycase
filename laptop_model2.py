@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = False
@@ -607,7 +607,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     v = translate([0, scl*(ht-hthick), 0]).add(v)
     u += v
 
-    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (hthick)*scl],
+    # remove runner for panel
+    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (8)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
@@ -3055,7 +3056,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -3064,7 +3065,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
