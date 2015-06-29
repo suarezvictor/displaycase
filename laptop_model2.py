@@ -1436,7 +1436,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     rad=35.0 + 15
     friclen = 260
     # add hinge
-    c = cylinder(r=rad*scl, h=(friclen+20)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(friclen+45)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -1449,9 +1449,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
     v = union()
-    c = cube([68*scl, 40*scl, 30*scl], center=True)
+    c = cube([30*scl, 80*scl, 67*scl], center=True)
     v.add(c)
-    c = cylinder(r=27*scl, h=30*scl, center=True, segments=50)
+    c = cylinder(r=27*scl, h=80*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
     v.add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht+friclen+10)*scl,-55*scl]).add(v)
@@ -3056,10 +3056,10 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
