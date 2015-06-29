@@ -1701,6 +1701,7 @@ def base_mid(scl, ht):
     u += b
 
     # remove runner along bottom of base, for lower panel
+    # these are along the back wings
     c = shearedcube([10*scl, (90)*scl, (8)*scl],
                 shear=[-8*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
@@ -1710,6 +1711,22 @@ def base_mid(scl, ht):
     t = translate(v=[(boxlength-180+8)*scl, (ht-1)*scl,
                                 (boxheight-hthick-1)*scl]).add(c)
     u -= t
+    # add internal runners because walls get too thin
+    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (12)*scl],
+                shear=[8*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (7)*scl,
+                                (boxheight-hthick-6)*scl]).add(c)
+    u += c
+    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (12)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-8*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(boxlength-180+8+8)*scl, (ht-12)*scl,
+                                (boxheight-hthick-6)*scl]).add(c)
+    u += c
+    # now remove along length of base
     c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (8)*scl],
                 shear=[-8*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
