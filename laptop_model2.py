@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = False
@@ -1235,16 +1235,16 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(ht)*scl, (-3)*scl, 150*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2-38)*scl, (-3)*scl, -5*scl]).add(h)
+        h = translate([(ht/2-38+100)*scl, (-3)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2+38)*scl, (-3)*scl, -5*scl]).add(h)
+        h = translate([(ht/2+138)*scl, (-3)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2-38)*scl, (-3)*scl, 120*scl]).add(h)
+        h = translate([(ht/2-38-50)*scl, (-3)*scl, 120*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2+38)*scl, (-3)*scl, 120*scl]).add(h)
+        h = translate([(ht/2+38-50)*scl, (-3)*scl, 120*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, -15*scl]).add(h)
@@ -1257,6 +1257,14 @@ def base_front_top(scl, ht, ht_offset):
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(front_top_width-6)*scl, (0)*scl, 0*scl]).add(c)
+
+        h = cube([30*scl, 7*scl, (boxheight-2)*scl])
+        h = translate([(front_top_width-30)*scl, (0)*scl, 1*scl]).add(h)
+        c += h
+
+        h = cube([30*scl, 7*scl, (boxheight-42)*scl])
+        h = translate([(front_top_width-30)*scl, (ht-90)*scl, 41*scl]).add(h)
+        c += h
 
         u += c
 
@@ -3062,10 +3070,10 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
-                        #BASE_FRONT_TOP,
+                        #BASE_END,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        PCB1,
+                        #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
