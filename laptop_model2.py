@@ -1023,13 +1023,20 @@ def tpanel_mid(scl, ht, ht_offset):
         h = translate([(tpanel_l_b)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
+        h = pin(B0, scl)
+        h = translate([(197)*scl, (0)*scl, (-ht-40)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(197)*scl, (0)*scl, (+40)*scl]).add(h)
+        c += h
+
         c = rotate([90, 0, 0]).add(c)
         c = translate([(0)*scl, (0)*scl, 3*scl]).add(c)
 
-        h = cube([6*scl, 55*scl, 50*scl])
-        h = translate([(197)*scl, (ht+30)*scl, 0*scl]).add(h)
+        h = cube([6*scl, 86*scl, 50*scl])
+        h = translate([(197)*scl, (ht-1)*scl, 0*scl]).add(h)
         c += h
-        h = cube([6*scl, 55*scl, 50*scl])
+        h = cube([6*scl, 86*scl, 50*scl])
         h = translate([(197)*scl, (-85)*scl, 0*scl]).add(h)
         c += h
 
@@ -3089,11 +3096,11 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
