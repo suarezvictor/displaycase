@@ -893,8 +893,8 @@ def tpanel_mid(scl, ht, ht_offset):
     # inner cut-out for actual touchpanel
     # XXX TODO: add curved edges (use a hollowbox as the cutout)
     crad = 30
-    c = curvebox(scl, tpanel_l, tpanel_w, 11, crad)
-    c = translate(v=[(100)*scl, ((ht-tpanel_w)/2)*scl, (-1)*scl]).add(c)
+    c = curvebox(scl, tpanel_l+6, tpanel_w+6, 11, crad)
+    c = translate(v=[(100-3)*scl, ((ht-tpanel_w-6)/2)*scl, (-1)*scl]).add(c)
     u -= c
     c = curvebox(scl, tpanel_l-16, tpanel_w-16, 42, 22)
     c = translate(v=[(100+8)*scl, ((ht-tpanel_w)/2+8)*scl, (9)*scl]).add(c)
@@ -1009,12 +1009,40 @@ def tpanel_mid(scl, ht, ht_offset):
 
 
     if pin_parts_3d:
+
+        c = curvebox(scl, tpanel_l-13, tpanel_w-13, 9, 21)
+        c = translate(v=[(100+6.5)*scl, ((ht-tpanel_w)/2+6.5)*scl,
+                        (0)*scl]).add(c)
+        u += c
+        c = curvebox(scl, tpanel_l-26, tpanel_w-26, 11, 14)
+        c = translate(v=[(100+13)*scl, ((ht-tpanel_w)/2+13)*scl, 
+                        (-1)*scl]).add(c)
+        u -= c
         c = union()
         h = pin(B0, scl)
-        h = translate([(0)*scl, (0)*scl, 0*scl]).add(h)
+        h = translate([(152)*scl, (0)*scl, -102*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(0)*scl, (0)*scl, -ht*scl]).add(h)
+        h = translate([(tpanel_l_b-234)*scl, (0)*scl, -102*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b-234)*scl, (0)*scl, (-ht)/2*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(tpanel_l_b-234)*scl, (0)*scl, (-ht+102)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(152)*scl, (0)*scl, (-ht+102)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(152)*scl, (0)*scl, (-ht)/2*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, 30*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(0)*scl, (0)*scl, (-ht-30)*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(tpanel_l_b)*scl, (0)*scl, -ht*scl]).add(h)
