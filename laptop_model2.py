@@ -1278,6 +1278,12 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-7)*scl]).add(h)
         c += h
 
+        h = cube([(6)*scl, (ht+ht_offset-tpanel_l-70)*scl,
+                            (12)*scl])
+        h = translate(v=[(180-6)*scl, (100)*scl,
+                            (21)*scl]).add(h)
+        c += h
+
         u += c
 
     v = union()
