@@ -1235,6 +1235,9 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(ht)*scl, (-3)*scl, 150*scl]).add(h)
         c += h
         h = pin(B0, scl)
+        h = translate([(ht-76)*scl, (-3)*scl, 150*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
         h = translate([(ht/2-38+100)*scl, (-3)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl)
@@ -1264,6 +1267,10 @@ def base_front_top(scl, ht, ht_offset):
 
         h = cube([30*scl, 7*scl, (boxheight-42)*scl])
         h = translate([(front_top_width-30)*scl, (ht-90)*scl, 41*scl]).add(h)
+        c += h
+
+        h = cube([30*scl, 60*scl, (7)*scl])
+        h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-7)*scl]).add(h)
         c += h
 
         u += c
