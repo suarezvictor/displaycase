@@ -1113,6 +1113,11 @@ def base_front_top(scl, ht, ht_offset):
     c = translate(v=[(151)*scl, (tpanel_ht-80)*scl, (39.5)*scl]).add(c)
     #u -= c
 
+    # add runner support
+    c = shearedcube([75*scl, (ht)*scl, (8)*scl])
+    c = translate(v=[(180-75)*scl, (0)*scl,
+                                (boxheight-hthick-6)*scl]).add(c)
+    u += c
     # add fillin for touchpanel
     c = base_front_fillin(scl, 95)
     c = translate(v=[(0)*scl, (tpanel_ht-tpanel_b_w/2-95)*scl, (0)*scl]).add(c)
@@ -1216,10 +1221,10 @@ def base_front_top(scl, ht, ht_offset):
     u -= c
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
+    c = shearedcube([10*scl, (ht+2)*scl, (8)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
-    c = translate(v=[(180-8)*scl, (-1-doffs)*scl,
+    c = translate(v=[(180-7)*scl, (-1-doffs)*scl,
                                 (boxheight-hthick-1)*scl]).add(c)
     u -= c
 
