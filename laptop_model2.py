@@ -1164,9 +1164,9 @@ def base_front_top(scl, ht, ht_offset):
     u -= t
 
     # remove bit for touchpanel
-    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+2-ht_offset)*scl,
-                        (tpanel_h+1)*scl])
-    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-1)*scl,
+    c = cube([(tpanel_b_w+1-50)*scl, (tpanel_l+3-ht_offset)*scl,
+                        (tpanel_h+3)*scl])
+    c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-2)*scl,
                         (-1)*scl]).add(c)
     u -= c
 
