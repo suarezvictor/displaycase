@@ -10,8 +10,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
-add_internal_parts=False
+pin_parts_3d=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -39,7 +39,7 @@ if not test:
     lcd_cable_depth = 1000
     kbd_d = 60
     kbd_l = 3390.0
-    kbd_w = 1170.0
+    kbd_w = 1170.0-79.0
 
     tpanel_w = 950.0
     tpanel_wb = 50.0
@@ -3123,16 +3123,16 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         TPANEL_MID,
-                        #BASE_MID,
-                        #BACK_KBD_CORNER,
-                        #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_MID,
+                        BACK_KBD_CORNER,
+                        BACK_KBD_RUNNER,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
@@ -3164,7 +3164,7 @@ if __name__ == '__main__':
 
                 # Keyboard
                 kbd = kbd_part(scl)
-                r = translate([(lcd_w-kbd_w/2+25)*scl, total_width/2*scl,
+                r = translate([(lcd_w-kbd_w/2+25-79)*scl, total_width/2*scl,
                                 (62)*scl]).add(kbd)
                 c = [0.3, 0.8, 0.5, 0.2]
                 r = union().add(r)
