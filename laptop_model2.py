@@ -11,7 +11,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 
 test = False
 single = True
@@ -97,7 +97,7 @@ lcd_end_offs = 20
 base_end_ht = 100
 
 lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
-screwrad = 32 / 2.0 # XXX: 2mm thread diameter, needs 1.2mm extra!!!
+screwrad = 27 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 120
 backboxheight = boxheight+bwid*2-10
@@ -108,7 +108,7 @@ hole_depth = hinge_depth
 boxlength = lcd_w + lcd_inset_top + lcd_inset_bot
 lidfront_offs = 10
 lcd_front_indent = 108
-back_top_width = 170
+back_top_width = 170+79
 front_top_width = 180
 
 centre_ht = 30.0
@@ -216,7 +216,7 @@ def case_bolthole(scl, end):
         return translate([(-10+lcd_w+11)*scl, 0*scl, bht*scl])
     elif end == 2:
         return translate([(lcd_w+lcd_inset_bot-100)*scl, 0*scl,
-                            bht*scl])
+                            (bht-5)*scl])
     elif end == 3:
         return translate([(-20+lcd_w/2.0+30)*scl, 0*scl, bht*scl])
 
@@ -441,24 +441,21 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    u += b
+    #u += b
 
     # add top strut, along entire length of base_end.
     c = union()
-    b = cube([lcd_w*scl, (ht-20)*scl, 35*scl])
+    b = cube([lcd_w*scl, (ht)*scl, 35*scl])
     b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
     c += b
     d = cube([52*scl, (ht)*scl, 37*scl])
     b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
-    c -= b
+    #c -= b
     u += c
-    # add bottom strut, along EOMA68 and USB
-    b = cube([765*scl, (ht)*scl, 15*scl])
-    b = translate(v=[(925)*scl, (0)*scl, (boxheight-hthick-12+55)*scl]).add(b)
-    u += b
 
-    # remove holes for connectors
     if not test:
+        # remove holes for connectors
+
         # Headphones
         c = cube([60*scl, 60*scl, 55*scl])
         c = translate(v=[(lcd_w-190)*scl, (-1)*scl, (95)*scl]).add(c)
@@ -479,9 +476,15 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([130*scl, 60*scl, 60*scl])
         c = translate(v=[(580)*scl, (-1)*scl, (91)*scl]).add(c)
         u -= c
+
+        # add bottom strut, along EOMA68 and USB
+        b = cube([765*scl, (ht)*scl, 15*scl])
+        b = translate(v=[(925)*scl, (0)*scl, (boxheight-hthick-12+55)*scl]).add(b)
+        u += b
+
     
     # add keyboard left support
-    b = hollowbox(scl, lcd_w-tpanel_l_b-103+kbd_numpad_indent, ht+20, 35,
+    b = hollowbox(scl, lcd_w-tpanel_l_b-183+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl,
@@ -496,6 +499,19 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = hinge_translate(scl).add(c)
     u += t
 
+    # block up hole
+    c = cube([(ht)*scl, (50)*scl, (85)*scl])
+    c = rotate([0, 0, 90]).add(c)
+    c = rotate([0, -90, 0]).add(c)
+    c = translate(v=[-(rad-12)*scl,0*scl,10*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
+    c = base_end_bit(scl, ht, fwd=True)
+    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    u += c
+
+    # add bits for screws through to base front
     c = touch_arc(0, (ht+1), (boxheight-40-hthick),
                         25, scl,
                   angle=0)
@@ -505,18 +521,28 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = translate(v=[(lcd_w+66)*scl, (hthick)*scl, (boxheight-25)*scl]).add(c)
     u -= c
 
-    # block up hole
-    c = cube([(ht)*scl, (50)*scl, (85)*scl])
-    c = rotate([0, 0, 90]).add(c)
-    c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[-(rad-12)*scl,0*scl,10*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u += t
-
-    # add bits for screws through to base front
-    c = base_end_bit(scl, ht, fwd=True)
-    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    # add base_back lock-ins
+    c = shearedcube([(21)*scl, (34)*scl, 61*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+20)*scl,(ht+57)*scl,
+                        (hthick+55+2)*scl]).add(c)
     u += c
+
+    d = union()
+    c = shearedcube([(110)*scl, (25)*scl, 61*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
+                        (hthick+55+11)*scl]).add(c)
+    d += c
+    c = cube([(50)*scl, (150)*scl, 50*scl])
+    c = translate(v=[(w-back_top_width+145)*scl,(0)*scl,
+                        (hthick+55+2)*scl]).add(c)
+    d -= c
+    u += d
 
     # add bit for hinge part to rest against when over 120 degrees
     # XXX: this might not be necessary when the spring is in place
@@ -547,14 +573,9 @@ def base_end(scl, ht, kbd_numpad_indent):
     #c = rotate([0, -20, 0]).add(c)
     c = translate(v=[35*scl, (25)*scl, (35)*scl]).add(c)
     v.add(c)
-    c = translate(v=[(boxlength-back_top_width-5)*scl,
+    c = translate(v=[(boxlength-170-5)*scl,
                       (0)*scl, (56+hthick)*scl]).add(v)
     u += c
-
-    # add support for keyboard corner
-    h = holed_support(scl, ht-hthick-1)
-    t = translate(v=[(w-300)*scl, 0, (62)*scl]).add(h)
-    u += t
 
     # front keyboard tray indentation support, surrounds microsd
     c = cube([(25)*scl, (60)*scl, (boxheight-2)*scl])
@@ -1356,14 +1377,44 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w+25)*scl,-1*scl,(0)*scl]).add(c)
     u -= c
 
+    # cut-off for screen
     c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
                 shear=[50*scl, 0, 0],
                 innershear=[-15*scl, 0, 0])
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
-    #c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w+225)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
+
+    # cable access and interlock with base_end
+    c = shearedcube([(41)*scl, (boxheight-hthick*2)*scl, 61*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+110)*scl,59*scl,(hthick)*scl]).add(c)
+    u -= c
+    c = shearedcube([(61)*scl, (40)*scl, 61*scl],
+                shear=[50*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+150)*scl,59*scl,
+                    (boxheight-hthick-45)*scl]).add(c)
+    u -= c
+    c = shearedcube([(61)*scl, (60)*scl, 14*scl],
+                shear=[10*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+180)*scl,13*scl,
+                    (20)*scl]).add(c)
+    u -= c
+    c = cube([(80)*scl, (50)*scl, 63*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,13*scl,
+                    (50)*scl]).add(c)
+    u += c
+    c = cube([(15)*scl, (50)*scl, 63*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,13*scl,
+                    (hthick)*scl]).add(c)
+    u += c
 
     # put in series of cutouts
     fthick = 8
@@ -1412,8 +1463,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    c = shearedcube([75*scl, (ht)*scl, (8)*scl])
-    c = translate(v=[(boxlength-180+10)*scl, (0)*scl,
+    c = shearedcube([(back_top_width-95)*scl, (ht)*scl, (8)*scl])
+    c = translate(v=[(boxlength-back_top_width)*scl, (0)*scl,
                                 (boxheight-hthick-6)*scl]).add(c)
     u += c
     # ok these are for the pcb1_support and battery_support1
@@ -1444,12 +1495,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
     u -= c
 
-    # lower screw hole for keyboard corner joiner
-    t = holed_support(scl, 50, inverse=True)
-    t = rotate([0, 0, 90]).add(t)
-    b = translate(v=[(w-8)*scl, (10)*scl, (35)*scl]).add(t)
-    u -= b
-
     # slot to fit a nut into
     # XXX TODO: fill this all the way back (for mold purposes)
     c = cube([70*scl, 50*scl, (boxheight-10)*scl], center=True)
@@ -1472,14 +1517,15 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= t
 
     # fit base_mid
-    b = cube([(188)*scl, (62)*scl, (42)*scl])
-    b = translate(v=[(w-61)*scl, (ht-61)*scl, (boxheight-41)*scl]).add(b)
+    wd = back_top_width-109
+    b = cube([(288)*scl, (62)*scl, (42)*scl])
+    b = translate(v=[(w-wd)*scl, (ht-61)*scl, (boxheight-41)*scl]).add(b)
     u -= b
-    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight+50)*scl])
+    b = cube([(288)*scl, (base_centre_ht/2+62)*scl, (boxheight+50)*scl])
     b = translate(v=[(w-61+77)*scl, (ht-61)*scl, (40)*scl]).add(b)
     u -= b
-    b = cube([(188)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
-    b = translate(v=[(w-61)*scl, (ht)*scl, (40)*scl]).add(b)
+    b = cube([(288)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
+    b = translate(v=[(w-wd)*scl, (ht)*scl, (40)*scl]).add(b)
     u -= b
 
     # screw-holes into base_mid
@@ -1492,14 +1538,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # add cut-out for back kbd runner
     b = cube([(17)*scl, (19)*scl, (42)*scl])
-    b = translate(v=[(w-61)*scl, (ht-18)*scl, (11)*scl]).add(b)
+    b = translate(v=[(w-wd)*scl, (ht-18)*scl, (11)*scl]).add(b)
     u -= b
 
     # remove runner along bottom of base, for lower panel
     c = shearedcube([10*scl, (ht+2)*scl, (10)*scl],
                 shear=[-8*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
-    c = translate(v=[(boxlength-180+5)*scl, (-1-0)*scl,
+    c = translate(v=[(boxlength-back_top_width-5)*scl, (-1-0)*scl,
                                 (boxheight-hthick)*scl]).add(c)
     u -= c
 
@@ -1577,7 +1623,7 @@ def front_mid_joiner(scl, ht):
     b = cube([(62)*scl, (ht)*scl, 32*scl], center=True)
     u += b
 
-    b = cylinder(r=screwrad*1.2/2*scl, h=(50)*scl, center=True, segments=50)
+    b = cylinder(r=9.6*scl, h=(50)*scl, center=True, segments=50)
     c = translate(v=[4*scl, -50*scl,0]).add(b)
     u -= c
     c = translate(v=[4*scl, 50*scl,0]).add(b)
@@ -1607,7 +1653,7 @@ def base_back_joiner(scl, ht):
     b = cube([(90)*scl, (45)*scl, 45*scl], center=True)
     u -= b
 
-    b = cylinder(r=screwrad*1.2/2*scl, h=(50)*scl, center=True, segments=50)
+    b = cylinder(r=9.6*scl, h=(50)*scl, center=True, segments=50)
     b = rotate([0, 90, 0]).add(b)
     c = translate(v=[4*scl, -50*scl,0]).add(b)
     u -= c
@@ -3128,10 +3174,10 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        TPANEL_MID,
-                        BASE_MID,
-                        BACK_KBD_CORNER,
-                        BACK_KBD_RUNNER,
+                        #TPANEL_MID,
+                        #BASE_MID,
+                        #BACK_KBD_CORNER,
+                        #BACK_KBD_RUNNER,
                         BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
@@ -3187,7 +3233,7 @@ if __name__ == '__main__':
                 # Battery
                 b = union()
                 p = cube([1620*scl, 1360*scl, 65*scl])
-                p = translate(v=[500.0*scl, (lcd_l-1360-70)*scl,(97)*scl]).add(p)
+                p = translate(v=[(500.0-80)*scl, (lcd_l-1360-70)*scl,(97)*scl]).add(p)
                 b += p
                 r = b
 
