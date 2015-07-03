@@ -13,7 +13,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 add_internal_parts=False
 
-test = True
+test = False
 single = True
 
 TPANEL_MID = 5
@@ -568,11 +568,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     v = union()
     c = cube([(60)*scl, (ht)*scl, (40)*scl])
     v.add(c)
-    c = cylinder(r=40*scl, h=50*scl, segments=6, center=True)
-    c = rotate([0, 0, 90]).add(c)
-    c = rotate([90, 0, 0]).add(c)
-    #c = rotate([0, -20, 0]).add(c)
-    c = translate(v=[35*scl, (25)*scl, (35)*scl]).add(c)
+    c = cube([(130)*scl, (50)*scl, (95)*scl])
+    c = translate(v=[-57*scl, (0)*scl, (5)*scl]).add(c)
     v.add(c)
     c = translate(v=[(boxlength-170-5)*scl,
                       (0)*scl, (56+hthick)*scl]).add(v)
@@ -589,6 +586,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     # between usb ports
     t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
     u += t
+    # at end of PCB
+    t = translate(v=[(boxlength-back_top_width-50)*scl, 0, (55+1)*scl]).add(c)
+    u += t
+
 
     # end pcb marker, also supports bamboo panels top and bottom
     c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
@@ -687,6 +688,11 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = translate([(0)*scl, (3)*scl, 0*scl]).add(c)
 
         u += c
+
+    # cut down
+    c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
+    c = translate([(-79)*scl, -20*scl, -50*scl]).add(c)
+    u -= c
 
     return u
 
@@ -3175,7 +3181,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -3184,7 +3190,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
