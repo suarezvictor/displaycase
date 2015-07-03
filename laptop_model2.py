@@ -651,6 +651,17 @@ def base_end(scl, ht, kbd_numpad_indent):
                                 (boxheight-hthick-1+55)*scl]).add(c)
     u -= c
 
+    # add interlock down behind base_back_bot
+    b = cube([30*scl, (ht-10)*scl, (hthick+1)*scl])
+    b = translate(v=[(boxlength-back_top_width-32)*scl, (0)*scl,
+                    (55+boxheight-hthick*2)*scl]).add(b)
+    u += b
+
+    b = cube([30*scl, (21)*scl, (hthick)*scl])
+    b = translate(v=[(boxlength-back_top_width-32)*scl, (ht-11)*scl,
+                    (55+boxheight-hthick*2)*scl]).add(b)
+    u += b
+
     # inset for base_front
     c = cube([(118)*scl, (40)*scl, (63)*scl])
     c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
@@ -1436,8 +1447,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
                     (boxheight-hthick-10)*scl]).add(c)
     u += c
-    c = cube([(140)*scl, (80)*scl, 10*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
+    c = cube([(140)*scl, (75)*scl, 10*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,-10*scl,
                     (53)*scl]).add(c)
     u += c
 
