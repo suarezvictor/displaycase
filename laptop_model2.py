@@ -10,11 +10,12 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = False
 single = True
+cutdown = False
 
 TPANEL_MID = 5
 BASE_BACK = 4
@@ -485,11 +486,19 @@ def base_end(scl, ht, kbd_numpad_indent):
     
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140)-25+kbd_numpad_indent, ht+20, 35,
+                        (back_top_width-140)-2+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl,
                     (55)*scl]).add(b)
+    u += b
+
+    # back keyboard support
+    b = hollowbox(scl, 18, ht+20, 35,
+                {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
+                curverads={ T|L: (hthick, 0)})
+    b = translate(v=[(boxlength-back_top_width-20)*scl, 
+                     0*scl, (55)*scl]).add(b)
     u += b
 
     rad=35.0 + 15
@@ -689,10 +698,11 @@ def base_end(scl, ht, kbd_numpad_indent):
 
         u += c
 
-    # cut down
-    c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-    c = translate([(-79)*scl, -20*scl, -50*scl]).add(c)
-    u -= c
+    if cutdown:
+        # cut down
+        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(-79)*scl, -20*scl, -50*scl]).add(c)
+        u -= c
 
     return u
 
@@ -3190,7 +3200,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
