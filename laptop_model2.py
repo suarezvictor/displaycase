@@ -438,7 +438,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    walls[B] = hthick
+    walls[B] = -1#hthick
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
@@ -1428,9 +1428,17 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w-back_top_width+112)*scl,13*scl,
                     (50)*scl]).add(c)
     u += c
-    c = cube([(15)*scl, (50)*scl, 63*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,13*scl,
+    c = cube([(15)*scl, (70)*scl, 41*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,0*scl,
                     (hthick)*scl]).add(c)
+    u += c
+    c = cube([(140)*scl, (80)*scl, 10*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
+                    (boxheight-hthick-10)*scl]).add(c)
+    u += c
+    c = cube([(140)*scl, (80)*scl, 10*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
+                    (53)*scl]).add(c)
     u += c
 
     # put in series of cutouts
@@ -3191,7 +3199,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
