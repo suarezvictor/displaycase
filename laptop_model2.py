@@ -441,7 +441,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    #u += b
+    u += b
 
     # add top strut, along entire length of base_end.
     c = union()
@@ -484,7 +484,8 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     
     # add keyboard left support
-    b = hollowbox(scl, lcd_w-tpanel_l_b-183+kbd_numpad_indent, ht+20, 35,
+    b = hollowbox(scl, lcd_w-tpanel_l_b-
+                        (back_top_width-140)-25+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl,
@@ -1422,8 +1423,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     step = (ht-100-offs) / (4.0 if test else 15.0)
     while offs < (ht-step-10):
         # add fill-ins
-        c = cube([80*scl, fthick*scl, (boxheight-hthick+2)*scl])
-        c = translate(v=[(w-58)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
+        c = cube([(80+79)*scl, fthick*scl, (boxheight-hthick+2)*scl])
+        c = translate(v=[(w-back_top_width+112)*scl,
+                         (offs-fthick)*scl, (1)*scl]).add(c)
         u += c
 
         c = cube([135*scl, fthick*scl, (42)*scl])
@@ -1479,11 +1481,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = rotate([0, 180, 0]).add(c)
     c = resize([(150-hthick)*scl, 0, 0], False).add(c)
     b += c
-    c = cube([60*scl, 50*scl, (boxheight-30)*scl])
-    c = translate(v=[-20*scl, (0)*scl, (-15)*scl]).add(c)
+    c = cube([(60+79)*scl, 50*scl, (boxheight-30)*scl])
+    c = translate(v=[(-20-79)*scl, (0)*scl, (-15)*scl]).add(c)
     b += c
-    c = cube([168*scl, 50*scl, (16)*scl])
-    c = translate(v=[-20*scl, (0)*scl, (-15)*scl]).add(c)
+    c = cube([(168+79)*scl, 50*scl, (16)*scl])
+    c = translate(v=[(-20-79)*scl, (0)*scl, (-15)*scl]).add(c)
     b += c
     b = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(b)
 
@@ -1492,16 +1494,20 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     # ... cutout for the actual support, the rest was housing for the cutout
     c = cube([30*scl, 37*scl, (boxheight-47)*scl])
     c = translate(v=[-22*scl, (7)*scl, (-3)*scl]).add(c)
-    c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
+    c = translate(v=[(lcd_w+69-79)*scl, (offs)*scl, (39.5)*scl]).add(c)
     u -= c
 
     # slot to fit a nut into
     # XXX TODO: fill this all the way back (for mold purposes)
-    c = cube([70*scl, 50*scl, (boxheight-10)*scl], center=True)
-    c = translate(v=[(lcd_w+85)*scl, (100)*scl, (boxheight/2)*scl]).add(c)
+    c = cube([(70+79)*scl, 40*scl, (boxheight-10)*scl], center=True)
+    c = translate(v=[(lcd_w+85-79/2.)*scl, (95)*scl, (boxheight/2)*scl]).add(c)
     u += c
-    c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(-50)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    c = cube([200*scl, 20*scl, 46*scl], center=True)
+    c = translate(v=[(-100)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    t = case_bolthole(scl, 2).add(c)
+    u -= t
+    c = cube([200*scl, 32*scl, 60*scl], center=True)
+    c = translate(v=[(-140)*scl, (91)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
     c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
@@ -1518,14 +1524,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = cube([(288)*scl, (62)*scl, (42)*scl])
-    b = translate(v=[(w-wd)*scl, (ht-61)*scl, (boxheight-41)*scl]).add(b)
+    b = cube([(288)*scl, (63)*scl, (43)*scl])
+    b = translate(v=[(w-wd+78)*scl, (ht-62)*scl, (boxheight-42)*scl]).add(b)
     u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+62)*scl, (boxheight+50)*scl])
-    b = translate(v=[(w-61+77)*scl, (ht-61)*scl, (40)*scl]).add(b)
+    b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight+50)*scl])
+    b = translate(v=[(w-61+77)*scl, (ht-62)*scl, (38)*scl]).add(b)
     u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+62)*scl, (boxheight)*scl])
-    b = translate(v=[(w-wd)*scl, (ht)*scl, (40)*scl]).add(b)
+    b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight)*scl])
+    b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
 
     # screw-holes into base_mid
@@ -1810,10 +1816,10 @@ def base_mid(scl, ht):
     u -= c
 
     # back keyboard support
-    b = hollowbox(scl, 20, ht, boxheight,
-                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
+    b = hollowbox(scl, 18, ht, boxheight,
+                {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-40)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-40-79)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
     # remove runner along bottom of base, for lower panel
@@ -3169,13 +3175,13 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
