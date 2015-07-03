@@ -10,12 +10,12 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 TPANEL_MID = 5
 BASE_BACK = 4
@@ -1655,6 +1655,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
+
+    if cutdown:
+        # cut down
+        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(300)*scl, 174*scl, -50*scl]).add(c)
+        v -= c
+
     return v
 
 def front_mid_joiner(scl, ht):
