@@ -10,12 +10,12 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 TPANEL_MID = 5
 BASE_BACK = 4
@@ -438,7 +438,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    walls[B] = -1#hthick
+    walls[B] = hthick
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
@@ -652,13 +652,13 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
 
     # add interlock down behind base_back_bot
-    b = cube([30*scl, (ht-10)*scl, (hthick+1)*scl])
-    b = translate(v=[(boxlength-back_top_width-32)*scl, (0)*scl,
+    b = cube([48*scl, (ht-10)*scl, (hthick+1)*scl])
+    b = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
                     (55+boxheight-hthick*2)*scl]).add(b)
     u += b
 
-    b = cube([30*scl, (21)*scl, (hthick)*scl])
-    b = translate(v=[(boxlength-back_top_width-32)*scl, (ht-11)*scl,
+    b = cube([48*scl, (21)*scl, (hthick)*scl])
+    b = translate(v=[(boxlength-back_top_width-50)*scl, (ht-11)*scl,
                     (55+boxheight-hthick*2)*scl]).add(b)
     u += b
 
@@ -3217,7 +3217,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -3226,7 +3226,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
