@@ -585,7 +585,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += c
 
     # front keyboard tray indentation support, surrounds microsd
-    c = cube([(25)*scl, (60)*scl, (boxheight-2)*scl])
+    c = cube([(29)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
     u += t
     t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
@@ -604,10 +604,13 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    c = cube([(30)*scl, (ht+20)*scl, (30)*scl])
+    c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
     t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
     u += t
     t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
+    u += t
+    c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
+    t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
     u += t
 
     # add bits for case bolthole at front
@@ -3290,15 +3293,15 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
-                        BACK_KBD_RUNNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
