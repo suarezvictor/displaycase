@@ -10,10 +10,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
-test = True
+test = False
 single = True
 cutdown = False
 
@@ -2749,16 +2749,19 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         h = translate([(ht+32)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(82)*scl, (-3)*scl, 33*scl]).add(h)
+        h = translate([(40)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
+        h = translate([(-32)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(offs)*scl, (-3)*scl, 33*scl]).add(h)
+        h = translate([(offs+86)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(offs+78)*scl, (-3)*scl, 33*scl]).add(h)
+        h = translate([(offs-65+86)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(offs+65+86)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = rotate([0, 0, 90]).add(c)
@@ -3293,7 +3296,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_CORNER,
                         BACK_KBD_RUNNER,
                         #BASE_BACK,
