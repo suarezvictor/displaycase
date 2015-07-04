@@ -486,10 +486,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140)-2+kbd_numpad_indent, ht+20, 35,
+                        (back_top_width-140-79)-2+kbd_numpad_indent, ht+20, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent)*scl, (0)*scl,
+    b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent-79)*scl, (0)*scl,
                     (55)*scl]).add(b)
     u += b
 
@@ -872,15 +872,16 @@ def pcb1_support(scl, ht, tpanel_offset):
                     (kbd_inset)*scl]).add(c)
     u += c
     # secondary strut with pcb edge lock
-    c = cube([(w+tpanel_box_l)*scl,
+    c = cube([(w+tpanel_box_l-130)*scl,
                     (holder_ht)*scl, (sdep-40)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                     (kbd_inset+40)*scl]).add(c)
     u += c
 
     # cut-out for back kbd runner
-    c = cube([(34)*scl, (150)*scl, (15)*scl])
-    c = translate(v=[(boxlength-170-32)*scl, (-40)*scl, (36)*scl]).add(c)
+    c = cube([(24)*scl, (150)*scl, (15)*scl])
+    c = translate(v=[(boxlength-back_top_width-22)*scl,
+                (-40)*scl, (36)*scl]).add(c)
     u -= c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
@@ -1740,6 +1741,21 @@ def base_mid(scl, ht):
     b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
     u += b
 
+    # lock for back keyboard runner
+
+    d = shearedcube([(boxheight-70)*scl, 25*scl, 20*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([0, 0, -90]).add(d)
+    c = translate(v=[(boxlength-back_top_width-46)*scl,
+                (1)*scl, (53+50)*scl]).add(d)
+    u += c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(boxlength-back_top_width-46+25)*scl,
+                (ht-1)*scl, (53+50)*scl]).add(d)
+    u += c
+
     # end wall for tpanel_mid to lock into
     v = union()
     # wings for screw-holes to fit with front base
@@ -2460,7 +2476,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     """
 
     u = union()
-    w = lcd_w-kbd_w-158
+    w = lcd_w-kbd_w-back_top_width+12
     l = ht-tpanel_b_w/2+hthick
     if woffs < 0:
         h = 40
@@ -2626,74 +2642,84 @@ def front_tray_corner(scl, ht):
     v.add(u)
     return v
 
-def back_kbd_runner(scl, ht, mirrored=False):
+def back_kbd_runner(scl, ht, toffs, mirrored=False):
 
     u = union()
     w = boxlength-back_top_width
 
-    b = hollowbox(scl, 20, ht-2, 50,
-                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
+    b = hollowbox(scl, 18, ht-2, boxheight-hthick,
+                {T:13, L:10, R:-1, F:10, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
     c = cube([(11)*scl, (ht-2)*scl, (9)*scl])
-    b = translate(v=[(w-30)*scl, (1)*scl, (40)*scl]).add(c)
+    c = shearedcube([(4.0)*scl, (ht-2)*scl, (13)*scl],
+                    shear=[0*scl, 0, 0],
+                    innershear=[-12*scl, 0, 0])
+    c = rotate([0, 90, 0]).add(c)
+    b = translate(v=[(w-32)*scl, (1)*scl, (42.0)*scl]).add(c)
+    u += b
+    c = cube([(19)*scl, (15)*scl, (14)*scl])
+    b = translate(v=[(w-20)*scl, (-12)*scl, (36)*scl]).add(c)
     u += b
 
     # add set of interlocks into back_base to hold it down
-    c = cube([(8)*scl, (14)*scl, (50-hthick-1)*scl])
-    b = translate(v=[(w-1)*scl, (ht-15)*scl, (hthick+1)*scl]).add(c)
+    c = cube([(27)*scl, (16)*scl, (boxheight-hthick-23)*scl])
+    b = translate(v=[(w-16)*scl, (ht-128)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-1)*scl, (1)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-16)*scl, (100)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-1)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-16)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
     u += b
 
     # add series of keyboard locks
     c = union()
-    b = shearedcube([(16)*scl, (88)*scl, (10)*scl],
+    b = shearedcube([(18.5)*scl, (88)*scl, (10)*scl],
                     shear=[-9*scl, 0, 0],
                     innershear=[8*scl, 0, 0])
     b = rotate([0, -90, 0]).add(b)
     c.add(b)
 
     if not mirrored:
-        locks = [20, ht-658+70]
+        locks = [140, ht-658+170]
     else:
-        locks = [105, ht-799+70]
+        locks = [130, ht-899+70]
     for h in locks:
-        b = translate(v=[(w-19)*scl, (h)*scl, (hthick+8)*scl]).add(c)
+        b = translate(v=[(w-19)*scl, (h)*scl, (hthick+6)*scl]).add(c)
         u += b
 
+    # remove bit for pcb1/battery support
+    offs = ht + toffs - tpanel_l_b/2 
+    c = cube([(90)*scl, (36)*scl, (boxheight-hthick-23)*scl])
+    b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
+    u -= b
+    c = cube([(30)*scl, (36)*scl, (boxheight-hthick-23)*scl])
+    b = translate(v=[(w-50)*scl, (offs+68)*scl, (20+1)*scl]).add(c)
+    u -= b
+    c = cube([(18)*scl, (56)*scl, (26)*scl])
+    b = translate(v=[(w-20)*scl, (offs+58)*scl, (10+1)*scl]).add(c)
+    u += b
 
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(ht-38)*scl, (-3)*scl, 33*scl]).add(h)
+        h = translate([(ht-40)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -43*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -127*scl]).add(h)
+        h = translate([(ht+32)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(82)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
-        c += h
         h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, -43*scl]).add(h)
+        h = translate([(ht/2)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
-        h = pin(B0, scl)
-        h = translate([(ht-45)*scl, (-3)*scl, -210*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -210*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
-        c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
+        c = rotate([0, 0, 90]).add(c)
+        c = translate([(w-50)*scl, (0)*scl, (50)*scl]).add(c)
 
         u += c
 
@@ -3035,20 +3061,21 @@ def create_laptop(t, scl, part, angle):
         m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
         b.add(m)
 
-    back_kbd_offs = 140
+    back_kbd_offs = 20
     if part == BACK_KBD_CORNER:
         se = back_kbd_corner(scl, back_kbd_offs)
         m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
         b.add(m)
 
     if part == BACK_KBD_RUNNER:
-        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs)
+        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
+                                  tpanel_offset)
         m = translate(v=[0,
                         (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
                          0]).add(se)
         b.add(m)
         se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
-                                    True)
+                                    tpanel_offset, True)
         m = mirror_part(se, scl, total_width-
                 (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
         b.add(m)
@@ -3190,11 +3217,11 @@ def kbd_part(scl):
     b = cube([(20)*scl, (100)*scl, (20.0)*scl])
     b  = translate(v=[(kbd_w-19)*scl, (130)*scl, (-24)*scl]).add(b)
     u -= b
-    b = translate(v=[(0)*scl, (900)*scl, (0)*scl]).add(b)
+    b = translate(v=[(0)*scl, (1000)*scl, (0)*scl]).add(b)
     u -= b
     b = translate(v=[(0)*scl, (1370)*scl, (0)*scl]).add(b)
     u -= b
-    b = translate(v=[(0)*scl, (675)*scl, (0)*scl]).add(b)
+    b = translate(v=[(0)*scl, (670)*scl, (0)*scl]).add(b)
     u -= b
 
     v = union()
@@ -3223,12 +3250,12 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_CORNER,
-                        #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        #PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BACK_KBD_RUNNER,
+                        BASE_BACK,
+                        PCB1_SUPPORT,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
