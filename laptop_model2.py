@@ -913,11 +913,11 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     # cut-out for front kbd tray
     w = tpanel_b_w
-    b = cube([(84)*scl, (63)*scl, (27)*scl])
+    b = cube([(84)*scl, (66)*scl, (27)*scl])
     b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
     u -= b
-    b = cube([(40)*scl, (63)*scl, (37)*scl])
-    b = translate(v=[(w-193)*scl, (-1)*scl, (48)*scl]).add(b)
+    b = cube([(50)*scl, (66)*scl, (37)*scl])
+    b = translate(v=[(w-200)*scl, (-1)*scl, (48)*scl]).add(b)
     u -= b
 
     v = union()
@@ -2563,11 +2563,11 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = cube([(95)*scl, (30)*scl, (h-40)*scl])
         b = translate(v=[(w-70)*scl, (l-30)*scl, (40)*scl]).add(b)
         u += b
-        b = cube([(80)*scl, (110)*scl, (h-70)*scl])
+        b = cube([(80)*scl, (112)*scl, (h-70)*scl])
         b = translate(v=[(w-100)*scl, (l-50)*scl, (70)*scl]).add(b)
         u += b
-        b = cube([(36)*scl, (90)*scl, (40)*scl])
-        b = translate(v=[(w-93)*scl, (l-30)*scl, (50)*scl]).add(b)
+        b = cube([(46)*scl, (92)*scl, (40)*scl])
+        b = translate(v=[(w-100)*scl, (l-30)*scl, (50)*scl]).add(b)
         u += b
 
         t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
@@ -3297,7 +3297,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
@@ -3305,7 +3305,7 @@ if __name__ == '__main__':
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
