@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 
 test = True
@@ -1741,21 +1741,6 @@ def base_mid(scl, ht):
     b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
     u += b
 
-    # lock for back keyboard runner
-
-    d = shearedcube([(boxheight-70)*scl, 25*scl, 20*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
-    d = rotate([0, 90, 0]).add(d)
-    d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(boxlength-back_top_width-46)*scl,
-                (1)*scl, (53+50)*scl]).add(d)
-    u += c
-    d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(boxlength-back_top_width-46+25)*scl,
-                (ht-1)*scl, (53+50)*scl]).add(d)
-    u += c
-
     # end wall for tpanel_mid to lock into
     v = union()
     # wings for screw-holes to fit with front base
@@ -1879,6 +1864,36 @@ def base_mid(scl, ht):
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-40-79)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+
+    # lock for back keyboard runner
+    d = shearedcube([(boxheight-70)*scl, 25*scl, 20*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[8*scl, 0*scl, 0])
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([0, 0, -90]).add(d)
+    c = translate(v=[(boxlength-back_top_width-46)*scl,
+                (1)*scl, (53+50)*scl]).add(d)
+    u += c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(boxlength-back_top_width-46+25)*scl,
+                (ht-1)*scl, (53+50)*scl]).add(d)
+    u += c
+    d = cube([(32)*scl, ht*scl, (boxheight-40)*scl])
+    c = translate(v=[(boxlength-back_top_width-27)*scl,
+                (0)*scl, (40)*scl]).add(d)
+    u += c
+    d = shearedcube([(20)*scl, 22*scl, 20*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[16*scl, 0*scl, 0])
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([0, 0, 90]).add(d)
+    c = translate(v=[(boxlength-back_top_width+0)*scl,
+                (-5)*scl, (74)*scl]).add(d)
+    u -= c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(boxlength-back_top_width-22)*scl,
+                (ht+5)*scl, (74)*scl]).add(d)
+    u -= c
 
     # remove runner along bottom of base, for lower panel
     # these are along the back wings
@@ -2659,8 +2674,21 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     c = rotate([0, 90, 0]).add(c)
     b = translate(v=[(w-32)*scl, (1)*scl, (42.0)*scl]).add(c)
     u += b
-    c = cube([(19)*scl, (15)*scl, (14)*scl])
-    b = translate(v=[(w-20)*scl, (-12)*scl, (36)*scl]).add(c)
+    c = shearedcube([(18)*scl, (17)*scl, (14)*scl],
+                    shear=[0, -12*scl, 0, 0],
+                    innershear=[0, 0*scl, 0])
+    #c = rotate([0, 0, 180]).add(c)
+    c = rotate([90, 0, 0]).add(c)
+    b = translate(v=[(w-20)*scl, (3)*scl, (36)*scl]).add(c)
+    u += b
+    c = rotate([0, 0, 180]).add(c)
+    b = translate(v=[(w-2)*scl, (ht-3)*scl, (55)*scl]).add(c)
+    u += b
+    c = shearedcube([(14.0)*scl, (ht-2)*scl, (13)*scl],
+                    shear=[0*scl, 0, 0],
+                    innershear=[12*scl, 0, 0])
+    c = rotate([0, 90, 0]).add(c)
+    b = translate(v=[(w-15)*scl, (1)*scl, (26.0)*scl]).add(c)
     u += b
 
     offs = ht + toffs - tpanel_l_b/2 
@@ -2680,11 +2708,10 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     u += b
     b = translate(v=[(w-16)*scl, (100)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-16)*scl, (offs+35)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-16)*scl, (offs+40)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-16)*scl, (offs+120)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-16)*scl, (offs+114)*scl, (hthick+1)*scl]).add(c)
     u += b
-
 
     # add series of keyboard locks
     c = union()
@@ -2703,15 +2730,15 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         u += b
 
     # remove bit for pcb1/battery support
+    c = cube([(18)*scl, (76)*scl, (boxheight-30)*scl])
+    b = translate(v=[(w-20)*scl, (offs+48)*scl, (10+1)*scl]).add(c)
+    u += b
     c = cube([(90)*scl, (36)*scl, (boxheight-hthick-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
     u -= b
     c = cube([(30)*scl, (36)*scl, (boxheight-hthick-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (20+1)*scl]).add(c)
     u -= b
-    c = cube([(18)*scl, (76)*scl, (40)*scl])
-    b = translate(v=[(w-20)*scl, (offs+48)*scl, (10+1)*scl]).add(c)
-    u += b
 
     if pin_parts_3d:
         c = union()
@@ -3266,7 +3293,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_CORNER,
                         BACK_KBD_RUNNER,
                         #BASE_BACK,
