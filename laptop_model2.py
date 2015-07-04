@@ -10,10 +10,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 
-test = False
+test = True
 single = True
 cutdown = False
 
@@ -2648,7 +2648,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     w = boxlength-back_top_width
 
     b = hollowbox(scl, 18, ht-2, boxheight-hthick,
-                {T:13, L:10, R:-1, F:10, D:12, B:10},
+                {T:14, L:10, R:-1, F:10, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
@@ -2663,14 +2663,28 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     b = translate(v=[(w-20)*scl, (-12)*scl, (36)*scl]).add(c)
     u += b
 
+    offs = ht + toffs - tpanel_l_b/2 
+
     # add set of interlocks into back_base to hold it down
-    c = cube([(27)*scl, (16)*scl, (boxheight-hthick-23)*scl])
+    c = union()
+    d = cube([(15)*scl, (16)*scl, (boxheight-hthick-24)*scl])
+    c += d
+    d = shearedcube([(boxheight-hthick-33)*scl, (16)*scl, (9)*scl],
+                    shear=[0*scl, 0, 0],
+                    innershear=[-10*scl, 0, 0])
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([0, 0, 180]).add(d)
+    d = translate(v=[(23)*scl, (16)*scl, (boxheight-hthick-33)*scl]).add(d)
+    c += d
     b = translate(v=[(w-16)*scl, (ht-128)*scl, (hthick+1)*scl]).add(c)
     u += b
     b = translate(v=[(w-16)*scl, (100)*scl, (hthick+1)*scl]).add(c)
     u += b
-    b = translate(v=[(w-16)*scl, (ht/2)*scl, (hthick+1)*scl]).add(c)
+    b = translate(v=[(w-16)*scl, (offs+35)*scl, (hthick+1)*scl]).add(c)
     u += b
+    b = translate(v=[(w-16)*scl, (offs+120)*scl, (hthick+1)*scl]).add(c)
+    u += b
+
 
     # add series of keyboard locks
     c = union()
@@ -2689,15 +2703,14 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         u += b
 
     # remove bit for pcb1/battery support
-    offs = ht + toffs - tpanel_l_b/2 
     c = cube([(90)*scl, (36)*scl, (boxheight-hthick-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
     u -= b
     c = cube([(30)*scl, (36)*scl, (boxheight-hthick-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (20+1)*scl]).add(c)
     u -= b
-    c = cube([(18)*scl, (56)*scl, (26)*scl])
-    b = translate(v=[(w-20)*scl, (offs+58)*scl, (10+1)*scl]).add(c)
+    c = cube([(18)*scl, (76)*scl, (40)*scl])
+    b = translate(v=[(w-20)*scl, (offs+48)*scl, (10+1)*scl]).add(c)
     u += b
 
     if pin_parts_3d:
@@ -2713,13 +2726,16 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
-        h = pin(B0, scl)
-        h = translate([(ht/2)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
+        h = pin(B0, scl)
+        h = translate([(offs)*scl, (-3)*scl, 33*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(offs+78)*scl, (-3)*scl, 33*scl]).add(h)
         c += h
         c = rotate([90, 0, 0]).add(c)
         c = rotate([0, 0, 90]).add(c)
-        c = translate([(w-50)*scl, (0)*scl, (50)*scl]).add(c)
+        c = translate([(w-50)*scl, (0)*scl, (boxheight-12)*scl]).add(c)
 
         u += c
 
@@ -3244,18 +3260,18 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_CORNER,
                         BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #BASE_BACK,
+                        #PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
