@@ -608,7 +608,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
     u += t
     t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
-    u += t
+    #u += t
     c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
     t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
     u += t
@@ -2520,7 +2520,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(hthick+22)*scl, (hthick+1)*scl, (hthick+1)*scl])
+    b = cube([(hthick+22)*scl, (hthick+2)*scl, (37+1)*scl])
     b = translate(v=[(w-hthick-21+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
@@ -2595,32 +2595,34 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, 25*scl]).add(h)
+        h = translate([(w-40)*scl, (-3)*scl, 32*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(w)*scl, (-3)*scl, 25*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+200)*scl, (-3)*scl, 25*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+200)*scl, (-3)*scl, -50*scl]).add(h)
+        h = translate([(w+40)*scl, (-3)*scl, 32*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
-        h = translate([w*scl, (-3)*scl, -l*scl]).add(h)
+        h = translate([w*scl, (-3)*scl, (-l-15)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([45*scl, (-3)*scl, (-l-32)*scl]).add(h)
+        h = translate([(w-90)*scl, (-3)*scl, (-l-92)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([45*scl, (-3)*scl, (45-l)*scl]).add(h)
+        h = translate([(w-90)*scl, (-3)*scl, (-l+82)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
-        h = translate([-32*scl, (-3)*scl, (65-l)*scl]).add(h)
+
+        v = cube([12*scl, 30*scl, 6*scl])
+        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+60)*scl]).add(v)
         c += h
+        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+100)*scl]).add(v)
+        c += h
+        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-165)*scl]).add(v)
+        c += h
+        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-205)*scl]).add(v)
+        c += h
+        
         c = rotate([90, 0, 0]).add(c)
-        c = translate([0*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
+        c = translate([0*scl, (0)*scl, (boxheight-hthick-pcbthick-2)*scl]).add(c)
 
         u += c
 
@@ -3293,7 +3295,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
