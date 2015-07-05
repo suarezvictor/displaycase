@@ -866,7 +866,7 @@ def pcb1_support(scl, ht, tpanel_offset):
     kbd_inset = 38.0
     sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
     holder_ht = 80.0
-    w = (boxlength - tpanel_l_b - 170)
+    w = (boxlength - tpanel_l_b - back_top_width)
     tpanel_box_l = 150
     # main strut going from back base to tpanel
     c = cube([(w+30+18)*scl,
@@ -875,31 +875,31 @@ def pcb1_support(scl, ht, tpanel_offset):
                     (kbd_inset)*scl]).add(c)
     u += c
     # secondary strut with pcb edge lock
-    c = cube([(w+tpanel_box_l-130)*scl,
+    c = cube([(w+tpanel_box_l-23)*scl,
                     (holder_ht)*scl, (sdep-40)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                     (kbd_inset+40)*scl]).add(c)
     u += c
 
     # cut-out for back kbd runner
-    c = cube([(24)*scl, (150)*scl, (15)*scl])
-    c = translate(v=[(boxlength-back_top_width-22)*scl,
+    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
     u -= c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
-    c = cube([(tpanel_box_l)*scl, holder_ht*scl, sdep*scl])
+    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, sdep*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (kbd_inset)*scl]).add(c)
     u += c
     # second part goes up to underside of tpanel
-    c = cube([(tpanel_box_l)*scl, holder_ht*scl, 10*scl])
+    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, 10*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (tpanel_h+1)*scl]).add(c)
     u += c
     # third part goes down to bamboo panel
-    c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
+    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, 20*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
                 (boxheight-20-hthick)*scl]).add(c)
     u += c
@@ -913,10 +913,10 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     # cut-out for front kbd tray
     w = tpanel_b_w
-    b = cube([(84)*scl, (66)*scl, (27)*scl])
+    b = cube([(84)*scl, (68)*scl, (27)*scl])
     b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
     u -= b
-    b = cube([(50)*scl, (66)*scl, (37)*scl])
+    b = cube([(50)*scl, (68)*scl, (37)*scl])
     b = translate(v=[(w-200)*scl, (-1)*scl, (48)*scl]).add(b)
     u -= b
 
@@ -2943,7 +2943,7 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1610*scl, 1200*scl, (12)*scl])
+    b = cube([1610*scl, 1135*scl, (12)*scl])
     b = translate([(40)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
@@ -2953,8 +2953,8 @@ def pcb1(scl):
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
-    b = cube([40*scl, 90*scl, (30)*scl])
-    b = translate([(570)*scl, (1200-55)*scl, -10*scl]).add(b)
+    b = cube([60*scl, 130*scl, (30)*scl])
+    b = translate([(570)*scl, (1200-120)*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([775*scl, (91)*scl, 30*scl])
     b = translate(v=[(570)*scl, (-1)*scl, (-10)*scl]).add(b)
@@ -3298,13 +3298,13 @@ if __name__ == '__main__':
                         #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
