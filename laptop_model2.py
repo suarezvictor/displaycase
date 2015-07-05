@@ -10,8 +10,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
-add_internal_parts=False
+pin_parts_3d=False
+add_internal_parts=True
 
 test = False
 single = True
@@ -455,33 +455,35 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += c
 
     if not test:
-        # remove holes for connectors
+        if kbd_numpad_indent == 0:
+            # remove holes for connectors
 
-        # Headphones
-        c = cube([60*scl, 60*scl, 55*scl])
-        c = translate(v=[(lcd_w-190)*scl, (-1)*scl, (95)*scl]).add(c)
-        u -= c
-        # MicroSD
-        c = cube([165*scl, 60*scl, 25*scl])
-        c = translate(v=[(lcd_w-382)*scl, (-1)*scl, (128)*scl]).add(c)
-        u -= c
-        # EOMA68
-        c = cube([550*scl, 60*scl, 55*scl])
-        c = translate(v=[(1085)*scl, (-1)*scl, (97)*scl]).add(c)
-        u -= c
-        # EOMA68 eject
-        c = cube([60*scl, 60*scl, 55*scl])
-        c = translate(v=[(985)*scl, (-1)*scl, (97)*scl]).add(c)
-        u -= c
-        # USB2
-        c = cube([130*scl, 60*scl, 60*scl])
-        c = translate(v=[(580)*scl, (-1)*scl, (91)*scl]).add(c)
-        u -= c
+            # Headphones
+            c = cube([60*scl, 60*scl, 55*scl])
+            c = translate(v=[(lcd_w-190)*scl, (-1)*scl, (95)*scl]).add(c)
+            u -= c
+            # MicroSD
+            c = cube([165*scl, 60*scl, 25*scl])
+            c = translate(v=[(lcd_w-382)*scl, (-1)*scl, (128)*scl]).add(c)
+            u -= c
+            # EOMA68
+            c = cube([550*scl, 60*scl, 55*scl])
+            c = translate(v=[(1085)*scl, (-1)*scl, (97)*scl]).add(c)
+            u -= c
+            # EOMA68 eject
+            c = cube([60*scl, 60*scl, 55*scl])
+            c = translate(v=[(985)*scl, (-1)*scl, (97)*scl]).add(c)
+            u -= c
+            # USB2
+            c = cube([130*scl, 60*scl, 60*scl])
+            c = translate(v=[(580)*scl, (-1)*scl, (91)*scl]).add(c)
+            u -= c
 
-        # add bottom strut, along EOMA68 and USB
-        b = cube([765*scl, (ht)*scl, 15*scl])
-        b = translate(v=[(925)*scl, (0)*scl, (boxheight-hthick-12+55)*scl]).add(b)
-        u += b
+            # add bottom strut, along EOMA68 and USB
+            b = cube([765*scl, (ht)*scl, 15*scl])
+            b = translate(v=[(925)*scl, (0)*scl,
+                    (boxheight-hthick-12+55)*scl]).add(b)
+            u += b
 
     
     # add keyboard left support
@@ -607,11 +609,12 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
     t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
     u += t
-    t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
-    #u += t
-    c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
-    t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
-    u += t
+    if kbd_numpad_indent == 0:
+        t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
+        u += t
+        c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
+        t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
+        u += t
 
     # add bits for case bolthole at front
     c = cube([(90)*scl, (ht)*scl, (70)*scl])
@@ -2539,22 +2542,25 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-25+woffs)*scl, (l-8-hoffs)*scl, (0)*scl]).add(b)
         u += b
 
-    # extra bit for kbd corner support
-    b = hollowbox(scl, hthick, 20+hthick, h,
-                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
-                curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
-    u += b
-    b = cube([(hthick+22)*scl, (hthick+2)*scl, (37+1)*scl])
-    b = translate(v=[(w-hthick-21+woffs)*scl, -1*scl, (-1)*scl]).add(b)
-    u -= b
-
     # floor L-piece, stabilise and allow sticking to PCB
     b = cube([(26)*scl, (l)*scl, (hthick)*scl])
     b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
     if woffs < 0:
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+
+    # extra bit for kbd corner support
+    b = hollowbox(scl, hthick, 20+hthick, h,
+                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
+                curverads={ T|F: (hthick, 0)})
+    b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
+    u += b
+    if woffs >= 0:
+        b = cube([(hthick+52)*scl, (hthick+2)*scl, (37+1)*scl])
+    else:
+        b = cube([(hthick+52)*scl, (hthick+2)*scl, (47+1)*scl])
+    b = translate(v=[(w-hthick-41+woffs)*scl, -1*scl, (-1)*scl]).add(b)
+    u -= b
 
     if woffs < 0:
         cutht = hthick+1
