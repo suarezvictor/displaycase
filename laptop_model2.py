@@ -2538,7 +2538,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if woffs < 0:
         b = hollowbox(scl, 25-woffs, hoffs+8, h,
                     {T:hthick, L:-woffs-26, R:25, F:hthick, D:-1, B:hthick*2},
-                    curverads={ T|R: (hthick, 0), T|B: (hthick, 0)})
+                    curverads={ T|R: (hthick, 0), T|B: (hthick, 0),
+                                B|R: (hthick, 0)})
         b = translate(v=[(w-25+woffs)*scl, (l-8-hoffs)*scl, (0)*scl]).add(b)
         u += b
 
