@@ -2618,38 +2618,88 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u -= t
 
     if pin_parts_3d:
-        c = union()
-        h = pin(B0, scl)
-        h = translate([(w-40)*scl, (-3)*scl, 32*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+40)*scl, (-3)*scl, 32*scl]).add(h)
-        c += h
+        if woffs >= 0:
+            c = union()
+            h = pin(B0, scl)
+            h = translate([(w-40)*scl, (-3)*scl, 32*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w+40)*scl, (-3)*scl, 32*scl]).add(h)
+            c += h
 
-        h = pin(B0, scl)
-        h = translate([w*scl, (-3)*scl, (-l-15)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w-90)*scl, (-3)*scl, (-l-92)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w-90)*scl, (-3)*scl, (-l+82)*scl]).add(h)
-        c += h
+            h = pin(B0, scl)
+            h = translate([w*scl, (-3)*scl, (-l-15)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-90)*scl, (-3)*scl, (-l-92)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-90)*scl, (-3)*scl, (-l+82)*scl]).add(h)
+            c += h
 
-        v = cube([12*scl, 30*scl, 6*scl])
-        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+60)*scl]).add(v)
-        c += h
-        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+100)*scl]).add(v)
-        c += h
-        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-165)*scl]).add(v)
-        c += h
-        h = translate([(w-12)*scl, (-boxheight+40)*scl, (-205)*scl]).add(v)
-        c += h
-        
-        c = rotate([90, 0, 0]).add(c)
-        c = translate([0*scl, (0)*scl, (boxheight-hthick-pcbthick-2)*scl]).add(c)
+            v = cube([12*scl, 30*scl, 6*scl])
+            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+60)*scl]).add(v)
+            c += h
+            h = translate([(w-12)*scl, (-boxheight+40)*scl,
+                                        (-l+100)*scl]).add(v)
+            c += h
+            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-165)*scl]).add(v)
+            c += h
+            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-205)*scl]).add(v)
+            c += h
+            
+            c = rotate([90, 0, 0]).add(c)
+            c = translate([0*scl, (0)*scl, 
+                           (boxheight-hthick-pcbthick-2)*scl]).add(c)
 
-        u += c
+            u += c
+        else:
+            c = union()
+            h = pin(B0, scl)
+            h = translate([(w-70)*scl, (-3)*scl, 32*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-140)*scl, (-3)*scl, 32*scl]).add(h)
+            c += h
+
+            h = pin(B0, scl)
+            h = translate([(w)*scl, (-3)*scl, (-l-32)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-84)*scl, (-3)*scl, (-l-92)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w+32)*scl, (-3)*scl, (-l+182)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-46)*scl, (-3)*scl, (-170)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-46)*scl, (-3)*scl, (-220)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-46)*scl, (-3)*scl, (-l+470)*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(w-46)*scl, (-3)*scl, (-l+440)*scl]).add(h)
+            c += h
+
+            v = cube([12*scl, 30*scl, 6*scl])
+            h = translate([(w-12+woffs)*scl, (-30)*scl, (-l+470)*scl]).add(v)
+            c += h
+            h = translate([(w-12+woffs)*scl, (-30)*scl,
+                                        (-l+440)*scl]).add(v)
+            c += h
+            h = translate([(w-12+woffs)*scl, (-30)*scl, (-180)*scl]).add(v)
+            c += h
+            h = translate([(w-12+woffs)*scl, (-30)*scl, (-220)*scl]).add(v)
+            c += h
+            
+            c = rotate([90, 0, 0]).add(c)
+            c = translate([0*scl, (0)*scl, 
+                           (40)*scl]).add(c)
+
+            u += c
 
 
     v = union()
@@ -3324,14 +3374,14 @@ if __name__ == '__main__':
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
-                        TPANEL_MID,
+                        #PCB2,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
