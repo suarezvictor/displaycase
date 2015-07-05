@@ -816,7 +816,7 @@ def battery_support1(scl, ht, tpanel_offset):
 
     tpanel_box_l = 150
     # main strut going from back base to tpanel
-    c = cube([(boxlength - tpanel_l_b - 170+30+18)*scl,
+    c = cube([(boxlength - tpanel_l_b - back_top_width+30+18)*scl,
                     ht*scl, (boxheight-hthick-kbd_inset)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
@@ -824,7 +824,8 @@ def battery_support1(scl, ht, tpanel_offset):
 
     # cut-out for back kbd runner
     c = cube([(34)*scl, (150)*scl, (15)*scl])
-    c = translate(v=[(boxlength-170-32)*scl, (-40)*scl, (36)*scl]).add(c)
+    c = translate(v=[(boxlength-back_top_width-32)*scl,
+                (-40)*scl, (36)*scl]).add(c)
     u -= c
 
     # screw holder, done in 2 parts so that it's easier to calculate heights
@@ -846,6 +847,16 @@ def battery_support1(scl, ht, tpanel_offset):
     # finally a cut-out for the kbd tray slot
     c = cube([(104)*scl, 70*scl, (20)*scl])
     c = translate(v=[(19+tpanel_l_b-tpanel_box_l)*scl, (11)*scl,
+                (21)*scl]).add(c)
+    u -= c
+
+    # small cut-out to match tpanel
+    c = cube([(22)*scl, 90*scl, (20)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l-1)*scl, (-1)*scl,
+                (21)*scl]).add(c)
+    u -= c
+    c = cube([(32)*scl, 90*scl, (20)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+121)*scl, (-1)*scl,
                 (21)*scl]).add(c)
     u -= c
 
@@ -3039,7 +3050,7 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if True:
+    if False:
         return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
@@ -3297,16 +3308,16 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        PCB1,
-                        #PCB2,
-                        #TPANEL_MID,
+                        FRONT_KBD_TRAY,
+                        #PCB1,
+                        PCB2,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
