@@ -823,10 +823,17 @@ def battery_support1(scl, ht, tpanel_offset):
     u += c
 
     # cut-out for back kbd runner
-    c = cube([(34)*scl, (150)*scl, (15)*scl])
-    c = translate(v=[(boxlength-back_top_width-32)*scl,
+    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
     u -= c
+
+    # shape end of support so it fits in slot
+    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = rotate([0, -20, 0]).add(c)
+    c = translate(v=[(boxlength-back_top_width+12)*scl,
+                (-40)*scl, (24)*scl]).add(c)
+    u += c
 
     # screw holder, done in 2 parts so that it's easier to calculate heights
     # first part joins others together
@@ -897,6 +904,13 @@ def pcb1_support(scl, ht, tpanel_offset):
     c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
     u -= c
+
+    # shape end of support so it fits in slot
+    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = rotate([0, -20, 0]).add(c)
+    c = translate(v=[(boxlength-back_top_width+12)*scl,
+                (-40)*scl, (24)*scl]).add(c)
+    u += c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
