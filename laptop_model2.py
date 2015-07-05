@@ -427,7 +427,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     w = boxlength-3
 
     topcurve = 30
-    walls = {T:hthick, L:hthick, R:hthick, F:-1, D:hthick}
+    walls = {T:25, L:hthick, R:hthick, F:-1, D:hthick}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -444,15 +444,15 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
-    # add top strut, along entire length of base_end.
-    c = union()
-    b = cube([lcd_w*scl, (ht)*scl, 35*scl])
-    b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
-    c += b
-    d = cube([52*scl, (ht)*scl, 37*scl])
-    b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
-    #c -= b
-    u += c
+    if kbd_numpad_indent == 0:
+        # add top strut, along entire length of base_end.
+        c = union()
+        b = cube([lcd_w*scl, (ht)*scl, 35*scl])
+        b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
+        c += b
+        d = cube([52*scl, (ht)*scl, 37*scl])
+        b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
+        u += c
 
     if not test:
         if kbd_numpad_indent == 0:
@@ -484,6 +484,12 @@ def base_end(scl, ht, kbd_numpad_indent):
             b = translate(v=[(925)*scl, (0)*scl,
                     (boxheight-hthick-12+55)*scl]).add(b)
             u += b
+
+        else:
+            # Power Jack
+            c = cube([70*scl, 60*scl, 60*scl])
+            c = translate(v=[(280)*scl, (-1)*scl, (91)*scl]).add(c)
+            u -= c
 
     
     # add keyboard left support
@@ -601,19 +607,34 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[(boxlength-back_top_width-50)*scl, 0, (55+1)*scl]).add(c)
     u += t
 
-
     # end pcb marker, also supports bamboo panels top and bottom
     c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
     t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
     u += t
-    c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
-    t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
-    u += t
     if kbd_numpad_indent == 0:
+        c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
+        t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
+        u += t
         t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
+        u += t
+    else:
+        c = cube([(30)*scl, (ht+10)*scl, (14)*scl])
+        t = translate(v=[(tpanel_l_b-57-kbd_numpad_indent)*scl, 0,
+                            (55+12)*scl]).add(c)
+        u += t
+        c = cube([(70)*scl, (ht+10)*scl, (14)*scl])
+        t = translate(v=[(tpanel_l_b-57-kbd_numpad_indent)*scl, 0,
+                            (55+42)*scl]).add(c)
+        u += t
+        c = cube([(12)*scl, (ht+10)*scl, (44)*scl])
+        t = translate(v=[(tpanel_l_b-64-kbd_numpad_indent)*scl, 0,
+                            (55+12)*scl]).add(c)
+        u += t
+        t = translate(v=[(tpanel_l_b+1-kbd_numpad_indent)*scl, 0,
+                            (55+12)*scl]).add(c)
         u += t
 
     # add bits for case bolthole at front
@@ -3377,7 +3398,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
