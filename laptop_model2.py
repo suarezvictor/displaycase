@@ -831,9 +831,9 @@ def battery_support1(scl, ht, tpanel_offset):
     # shape end of support so it fits in slot
     c = cube([(26)*scl, (150)*scl, (15)*scl])
     c = rotate([0, -20, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width+12)*scl,
+    c = translate(v=[(boxlength-back_top_width+10)*scl,
                 (-40)*scl, (24)*scl]).add(c)
-    u += c
+    u -= c
 
     # screw holder, done in 2 parts so that it's easier to calculate heights
     # first part joins others together
@@ -908,9 +908,9 @@ def pcb1_support(scl, ht, tpanel_offset):
     # shape end of support so it fits in slot
     c = cube([(26)*scl, (150)*scl, (15)*scl])
     c = rotate([0, -20, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width+12)*scl,
+    c = translate(v=[(boxlength-back_top_width+10)*scl,
                 (-40)*scl, (24)*scl]).add(c)
-    u += c
+    u -= c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
