@@ -714,14 +714,14 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         b = union()
-        c = cube([48*scl, (ht+10)*scl, (hthick+1)*scl])
+        c = cube([48*scl, (ht+10)*scl, (hthick+5)*scl])
         b += c
-        c = cube([48*scl, (ht-10)*scl, (hthick+3)*scl])
+        c = cube([48*scl, (ht-10)*scl, (hthick+7)*scl])
         b += c
         for l in [(boxlength-back_top_width-200),
                  (boxlength*0.45), (boxlength*0.64), 500, 789]:
             t = translate(v=[l*scl, (0)*scl,
-                            (55+boxheight-hthick*2-2)*scl]).add(b)
+                            (55+boxheight-hthick*2-6)*scl]).add(b)
             u += t
 
     b = cube([48*scl, (21)*scl, (hthick)*scl])
