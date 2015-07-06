@@ -10,8 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
-add_internal_parts=True
+pin_parts_3d=True
+add_internal_parts=False
+LEFTPART = 1
+RIGHTPART = 2
+mirroring = RIGHTPART #| LEFTPART
 
 test = False
 single = True
@@ -3195,8 +3198,6 @@ def screen_adjust(b, scl, angle):
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
-    if False:
-        return union()
     m = mirror([0, 0, 1]).add(se)
     m = rotate([0, 0, 180]).add(m)
     return translate(v=[0, offs*scl,0]).add(m)
@@ -3212,9 +3213,11 @@ def create_laptop(t, scl, part, angle):
     if part == 0:
         se = screen_end(scl, scrn_end_ht, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
-        b.add(m)
-        m = mirror_part(se, scl, total_width)
-        b.add(m)
+        if mirroring & LEFTPART:
+            b.add(m)
+        if mirroring & RIGHTPART:
+            m = mirror_part(se, scl, total_width)
+            b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
@@ -3236,12 +3239,14 @@ def create_laptop(t, scl, part, angle):
     lid_adjust_ht += scrn_hinge_ht
 
     if part == BASE_END:
-        se = base_end(scl, base_end_ht, 0)
-        m = translate(v=[0, 0*scl,0]).add(se)
-        b.add(m)
-        se = base_end(scl, base_end_ht, kbd_numpad_indent)
-        m = mirror_part(se, scl, total_width)
-        b.add(m)
+        if mirroring & LEFTPART:
+            se = base_end(scl, base_end_ht, 0)
+            m = translate(v=[0, 0*scl,0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_end(scl, base_end_ht, kbd_numpad_indent)
+            m = mirror_part(se, scl, total_width)
+            b.add(m)
 
     base_adjust_ht = base_end_ht
     base_adjust_ht += scrn_hinge_ht
@@ -3453,7 +3458,7 @@ if __name__ == '__main__':
             for i in [
                         BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
