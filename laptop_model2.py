@@ -705,9 +705,25 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # add interlock down behind base_back_bot
     b = cube([48*scl, (ht-10)*scl, (hthick+1)*scl])
-    b = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
+    t = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
                     (55+boxheight-hthick*2)*scl]).add(b)
-    u += b
+    u += t
+
+    if kbd_numpad_indent != 0:
+        b = union()
+        c = cube([48*scl, (ht+10)*scl, (hthick+1)*scl])
+        b += c
+        c = cube([48*scl, (ht-10)*scl, (hthick+3)*scl])
+        b += c
+        t = translate(v=[(boxlength-back_top_width-200)*scl, (0)*scl,
+                        (55+boxheight-hthick*2-2)*scl]).add(b)
+        u += t
+        t = translate(v=[(boxlength/2)*scl, (0)*scl,
+                        (55+boxheight-hthick*2-2)*scl]).add(b)
+        u += t
+        t = translate(v=[(500)*scl, (0)*scl,
+                        (55+boxheight-hthick*2-2)*scl]).add(b)
+        u += t
 
     b = cube([48*scl, (21)*scl, (hthick)*scl])
     b = translate(v=[(boxlength-back_top_width-50)*scl, (ht-11)*scl,
