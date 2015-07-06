@@ -487,8 +487,13 @@ def base_end(scl, ht, kbd_numpad_indent):
 
         else:
             # Power Jack
-            c = cube([70*scl, 60*scl, 60*scl])
-            c = translate(v=[(280)*scl, (-1)*scl, (91)*scl]).add(c)
+            c = cube([60*scl, 60*scl, 60*scl])
+            c = translate(v=[(230)*scl, (-1)*scl, (91)*scl]).add(c)
+            u -= c
+
+            # Reset switch
+            c = cube([50*scl, 60*scl, 60*scl])
+            c = translate(v=[(340)*scl, (-1)*scl, (91)*scl]).add(c)
             u -= c
 
     
@@ -594,23 +599,43 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # front keyboard tray indentation support, surrounds microsd
     c = cube([(29)*scl, (60)*scl, (boxheight-2)*scl])
-    t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
-    u += t
-    t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
-    u += t
-    t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
-    u += t
-    # between usb ports
-    t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
-    u += t
-    # at end of PCB
-    t = translate(v=[(boxlength-back_top_width-50)*scl, 0, (55+1)*scl]).add(c)
-    u += t
+    if kbd_numpad_indent == 0:
+        t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        # between usb ports
+        t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        # at end of PCB
+        t = translate(v=[(boxlength-back_top_width-50)*scl, 0,
+                (55+1)*scl]).add(c)
+        u += t
 
-    # end pcb marker, also supports bamboo panels top and bottom
-    c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
-    t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
-    u += t
+        # end pcb marker, also supports bamboo panels top and bottom
+        c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
+        t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+    else:
+        # next to the reset switch and moving on towards the keyboard tray
+        t = translate(v=[(410)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        t = translate(v=[(650)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        # roughly along the keyboard edge
+        t = translate(v=[(tpanel_l_b-95)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        t = translate(v=[(tpanel_l_b+300)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        t = translate(v=[(tpanel_l_b+700)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+        # at end of PCB
+        t = translate(v=[(boxlength-back_top_width-50)*scl, 0,
+                (55+1)*scl]).add(c)
+        u += t
+
     if kbd_numpad_indent == 0:
         c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
@@ -694,6 +719,22 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
     c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
+
+    if kbd_numpad_indent != 0:
+        # remove runner for top panel
+        c = shearedcube([2*scl, (tpanel_l_b-180-114)*scl, (8)*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[-8*scl, 0*scl, 0])
+        c = rotate([0, 0, 90]).add(c)
+        c = translate(v=[(tpanel_l_b+8-100)*scl, (ht)*scl,
+                                    (55+4)*scl]).add(c)
+        u -= c
+        # add an underside support
+        c = cube([(tpanel_l_b-190-134)*scl, 11*scl, (14)*scl])
+        c = translate(v=[(202)*scl, (ht-1)*scl,
+                                    (55+12)*scl]).add(c)
+        u += c
+
 
     if pin_parts_3d:
         c = union()
