@@ -1672,7 +1672,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = translate(v=[(w-wd+78)*scl, (ht-62)*scl, (boxheight-42)*scl]).add(b)
     u -= b
     b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight+50)*scl])
-    b = translate(v=[(w-61+77)*scl, (ht-62)*scl, (38)*scl]).add(b)
+    b = translate(v=[(w-61+75)*scl, (ht-62)*scl, (38)*scl]).add(b)
     u -= b
     b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight)*scl])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
