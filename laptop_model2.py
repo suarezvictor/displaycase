@@ -1323,20 +1323,20 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[0], h=120)
+    t = box_screwholes(scl, hthick, holes=[0], h=130)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
     # add hexagonal bolt hole support for a nut to sit in
-    c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(50)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    c = cube([100*scl, 40*scl, 46*scl], center=True)
+    c = translate(v=[(50)*scl, (110)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 0).add(c)
     u -= t
-    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = cylinder(r=27.0*scl, h=40*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 0).add(c)
-    t = translate(v=[(0)*scl, (85)*scl, (boxheight-55)*scl]).add(t)
+    t = translate(v=[(0)*scl, (110)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # fillin/cutout for base_mid
@@ -3315,12 +3315,14 @@ def create_laptop(t, scl, part, angle):
     compartment_ht = base_adjust_ht-scrn_hinge_ht
 
     if part == BASE_FRONT_TOP:
-        se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
-        m = translate(v=[0, (compartment_ht*scl),0]).add(se)
-        b.add(m)
-        se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
-        m = mirror_part(se, scl, total_width-compartment_ht)
-        b.add(m)
+        if mirroring & LEFTPART:
+            se = base_front_top(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
+            m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
+            m = mirror_part(se, scl, total_width-compartment_ht)
+            b.add(m)
 
     if part == FRONT_KBD_TRAY:
         se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
@@ -3459,7 +3461,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -3467,7 +3469,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
