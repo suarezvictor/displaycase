@@ -2614,11 +2614,18 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
 
     if woffs < 0:
         b = hollowbox(scl, 25-woffs, hoffs+8, h,
-                    {T:hthick, L:-woffs-26, R:25, F:hthick, D:-1, B:hthick*2},
+                    {T:hthick, L:20, R:15, F:hthick, D:-1, B:hthick*2},
                     curverads={ T|R: (hthick, 0), T|B: (hthick, 0),
-                                B|R: (hthick, 0)})
+                                B|R: (hthick, 0)}) # XXX argh need better box!
         b = translate(v=[(w-25+woffs)*scl, (l-8-hoffs)*scl, (0)*scl]).add(b)
         u += b
+        # XXX blergh cut off corner using arc...
+        c = touch_arc(60, 60, 20,
+                            30, scl, roffsinner=0, 
+                      angle=0)
+        c = rotate([0, 0, 90]).add(c)
+        c = translate(v=[(w-30)*scl, (l-8-hoffs+30)*scl, (50)*scl]).add(c)
+        u -= c
 
     # floor L-piece, stabilise and allow sticking to PCB
     b = cube([(26)*scl, (l)*scl, (hthick)*scl])
@@ -2626,6 +2633,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if woffs < 0:
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     u += b
+    if woffs < 0:
+        b = cube([(60)*scl, (l-100)*scl, (40-hthick)*scl])
+        b = translate(v=[(w-1+woffs-80)*scl, 40*scl, (h-40+hthick)*scl]).add(b)
+        u += b
 
     # extra bit for kbd corner support
     b = hollowbox(scl, hthick, 20+hthick, h,
@@ -2664,7 +2675,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     else:
         t = translate(v=[(w-19+woffs)*scl, (l-312-hoffs)*scl, (16)*scl]).add(b)
         u -= t
-        t = translate(v=[(w-19+woffs)*scl, (148)*scl, (16)*scl]).add(b)
+        t = translate(v=[(w-19+woffs)*scl, (123)*scl, (16)*scl]).add(b)
         u -= t
 
     if woffs >= 0:
@@ -2756,10 +2767,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             h = translate([(w+32)*scl, (-3)*scl, (-l+182)*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-170)*scl]).add(h)
+            h = translate([(w-46)*scl, (-3)*scl, (-150)*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-220)*scl]).add(h)
+            h = translate([(w-46)*scl, (-3)*scl, (-200)*scl]).add(h)
             c += h
             h = pin(B0, scl)
             h = translate([(w-46)*scl, (-3)*scl, (-l+470)*scl]).add(h)
@@ -2774,9 +2785,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             h = translate([(w-12+woffs)*scl, (-30)*scl,
                                         (-l+440)*scl]).add(v)
             c += h
-            h = translate([(w-12+woffs)*scl, (-30)*scl, (-180)*scl]).add(v)
+            h = translate([(w-12+woffs)*scl, (-30)*scl, (-160)*scl]).add(v)
             c += h
-            h = translate([(w-12+woffs)*scl, (-30)*scl, (-220)*scl]).add(v)
+            h = translate([(w-12+woffs)*scl, (-30)*scl, (-200)*scl]).add(v)
             c += h
             
             c = rotate([90, 0, 0]).add(c)
@@ -3325,16 +3336,18 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
 
     if part == FRONT_KBD_TRAY:
-        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
-                                 0, 0)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,
-                         0]).add(se)
-        b.add(m)
-        se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
-                                    -kbd_numpad_indent, -tpanel_offset)
-        m = mirror_part(se, scl,
-                            total_width-base_adjust_ht+scrn_hinge_ht+hthick)
-        b.add(m)
+        if mirroring & LEFTPART:
+            se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
+                                     0, 0)
+            m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht-hthick)*scl,
+                             0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht-tpanel_offset,
+                                        -kbd_numpad_indent, -tpanel_offset)
+            m = mirror_part(se, scl,
+                                total_width-base_adjust_ht+scrn_hinge_ht+hthick)
+            b.add(m)
 
     base_adjust_ht += base_back_ht
 
@@ -3461,8 +3474,8 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
