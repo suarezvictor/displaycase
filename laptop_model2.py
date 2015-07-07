@@ -3263,15 +3263,17 @@ def create_laptop(t, scl, part, angle):
         b.add(se)
 
     if part == BASE_BACK:
-        # NOTE: ... here's the other bit
-        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
-                                tpanel_offset)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
-        b.add(m)
-        se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
-                                -tpanel_offset)
-        m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
-        b.add(m)
+        if mirroring & LEFTPART:
+            # NOTE: ... here's the other bit
+            se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+                                    tpanel_offset)
+            m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+                                    -tpanel_offset)
+            m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
+            b.add(m)
 
     back_kbd_offs = 20
     if part == BACK_KBD_CORNER:
@@ -3456,7 +3458,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -3465,7 +3467,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
