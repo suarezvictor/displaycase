@@ -1463,8 +1463,8 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(front_top_width-30)*scl, (0)*scl, 1*scl]).add(h)
         c += h
 
-        h = cube([30*scl, 7*scl, (boxheight-42)*scl])
-        h = translate([(front_top_width-30)*scl, (ht-90)*scl, 41*scl]).add(h)
+        h = cube([60*scl, 7*scl, (boxheight-44)*scl])
+        h = translate([(front_top_width-60)*scl, (ht-90)*scl, 42*scl]).add(h)
         c += h
 
         h = cube([30*scl, 60*scl, (7)*scl])
