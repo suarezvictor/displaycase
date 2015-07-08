@@ -2870,23 +2870,18 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
 
     # add set of interlocks into back_base to hold it down
     c = union()
-    d = cube([(15)*scl, (16)*scl, (boxheight-hthick-24)*scl])
+    d = cube([(15)*scl, (16)*scl, (boxheight-hthick-25)*scl])
     c += d
-    d = shearedcube([(boxheight-hthick-33)*scl, (16)*scl, (9)*scl],
+    d = shearedcube([(boxheight-hthick-33)*scl, (16)*scl, (10)*scl],
                     shear=[0*scl, 0, 0],
-                    innershear=[-10*scl, 0, 0])
+                    innershear=[-7*scl, 0, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    d = translate(v=[(23)*scl, (16)*scl, (boxheight-hthick-33)*scl]).add(d)
+    d = translate(v=[(24)*scl, (16)*scl, (boxheight-hthick-32)*scl]).add(d)
     c += d
-    b = translate(v=[(w-16)*scl, (ht-128)*scl, (hthick+1)*scl]).add(c)
-    u += b
-    b = translate(v=[(w-16)*scl, (100)*scl, (hthick+1)*scl]).add(c)
-    u += b
-    b = translate(v=[(w-16)*scl, (offs+40)*scl, (hthick+1)*scl]).add(c)
-    u += b
-    b = translate(v=[(w-16)*scl, (offs+114)*scl, (hthick+1)*scl]).add(c)
-    u += b
+    for h in [ht-128, 100, offs+40, offs+114]:
+        b = translate(v=[(w-17)*scl, h*scl, (hthick+1)*scl]).add(c)
+        u += b
 
     # add series of keyboard locks
     c = union()
@@ -3299,8 +3294,9 @@ def create_laptop(t, scl, part, angle):
                         (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
                          0]).add(se)
         b.add(m)
+        # XXX grr magic constant, matching battery support
         se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
-                                    tpanel_offset, True)
+                                    -tpanel_offset-50, True)
         m = mirror_part(se, scl, total_width-
                 (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
         b.add(m)
@@ -3381,6 +3377,8 @@ def create_laptop(t, scl, part, angle):
 
     if part == BATTERY_SUPPORT1:
         se = battery_support1(scl, pcb1_support_ht, tpanel_offset)
+        # XXX grr, magic constant for height, has to match
+        # back kbd runner
         m = translate(v=[0,
                          (tpanel_ht+tpanel_b_w-80)*scl,
                          0]).add(se)
@@ -3475,16 +3473,16 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_CORNER,
-                        #BACK_KBD_RUNNER,
+                        BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        PCB1_SUPPORT,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
