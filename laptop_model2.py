@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #| LEFTPART
+mirroring = LEFTPART#| RIGHTPART 
 
 test = False
 single = True
@@ -2567,7 +2567,7 @@ def compartment_lockin(scl):
     u += c
     c = cube([(10)*scl, (50)*scl, (10)*scl])
     c = rotate([0, 45, 0]).add(c)
-    c = translate(v=[(-5)*scl, (5)*scl, (12)*scl]).add(c)
+    c = translate(v=[(-7)*scl, (5)*scl, (12)*scl]).add(c)
     u += c
 
     # take sheared top off lockin
@@ -2701,14 +2701,14 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
 
     if woffs >= 0:
         c = compartment_lockin(scl)
-        t = translate(v=[(w-45)*scl, 38*scl, 0]).add(c)
+        t = translate(v=[(w-45)*scl, 58*scl, -2*scl]).add(c)
         u += t
-        t = translate(v=[(w-45)*scl, (l-100)*scl, 0]).add(c)
+        t = translate(v=[(w-45)*scl, (l-120)*scl, -2*scl]).add(c)
         u += t
-        c = cube([8*scl, 72*scl, 51*scl])
-        t = translate(v=[(w-26)*scl, 32*scl, 0]).add(c)
+        c = cube([8*scl, 76*scl, 49*scl])
+        t = translate(v=[(w-26)*scl, 50*scl, 0]).add(c)
         u -= t
-        t = translate(v=[(w-26)*scl, (l-106)*scl, 0]).add(c)
+        t = translate(v=[(w-26)*scl, (l-128)*scl, 0]).add(c)
         u -= t
 
     if pin_parts_3d:
@@ -2948,22 +2948,22 @@ def compartment_lockin_cutout(scl):
     u = union()
 
     # screwdriver access
-    c = cube([7*scl, 58*scl, 51*scl])
-    c = translate(v=[0*scl, 1*scl, (0)*scl]).add(c)
+    c = cube([8*scl, 60*scl, 51*scl])
+    c = translate(v=[0*scl, 0*scl, (0)*scl]).add(c)
     u.add(c)
 
     # hide lockin under a slope
-    c = shearedcube(size=[9*scl,
-                        64*scl, 25*scl],
+    c = shearedcube(size=[12*scl,
+                        70*scl, 26*scl],
                     shear=[15*scl, 0, 0],
                     innershear=[0*scl, 0, 0])
-    c = translate(v=[2*scl, -2*scl, (4)*scl]).add(c)
+    c = translate(v=[2*scl, -5*scl, (3)*scl]).add(c)
     u.add(c)
 
     # remove bit for clip to lock into
-    c = cube([(10)*scl, (60)*scl, (10)*scl])
-    c = rotate([0, 45, 0]).add(c)
-    c = translate(v=[(-5)*scl, (0)*scl, (13)*scl]).add(c)
+    c = cube([(12)*scl, (60)*scl, (12)*scl])
+    c = rotate([0, 55, 0]).add(c)
+    c = translate(v=[(-7)*scl, (0)*scl, (13)*scl]).add(c)
     u.add(c)
 
     return u
@@ -2975,8 +2975,8 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     w = tpanel_l_b-180-hthick
 
     # main panel, create staggered part for bamboo panel fill-in
-    b = cube([(w-2)*scl, (ht-2)*scl, (20)*scl])
-    b = translate(v=[1*scl, 1*scl, (0)*scl]).add(b)
+    b = cube([(w-6)*scl, (ht-6)*scl, (20)*scl])
+    b = translate(v=[3*scl, 3*scl, (0)*scl]).add(b)
     u += b
     b = cube([(w-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
     b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
@@ -2989,9 +2989,17 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     c = shearedcube([2*scl, (ht-80)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-8*scl, 0*scl, 0])
-    c = translate(v=[(1)*scl, 40*scl,
+    c = translate(v=[(3)*scl, 40*scl,
                                 (8)*scl]).add(c)
     u += c
+
+    # cut off edge so that lid can drop down without catching
+    c = shearedcube([2*scl, (ht+2)*scl, (22)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-5*scl, 0*scl, 0])
+    c = translate(v=[(w-1.5)*scl, -1*scl,
+                                (-1)*scl]).add(c)
+    u -= c
 
     # cut out corner for tpanel_mid joiner
     b = cube([60*scl, 30*scl, (15)*scl])
@@ -3000,9 +3008,9 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u -= b
 
     c = compartment_lockin_cutout(scl)
-    t = translate(v=[(w-35)*scl, 26*scl, -1*scl]).add(c)
+    t = translate(v=[(w-35)*scl, 46*scl, -1*scl]).add(c)
     u -= t
-    t = translate(v=[(w-35)*scl, (ht-100)*scl, -1*scl]).add(c)
+    t = translate(v=[(w-35)*scl, (ht-120)*scl, -1*scl]).add(c)
     u -= t
 
     v = union()
@@ -3406,7 +3414,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
