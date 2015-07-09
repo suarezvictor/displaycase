@@ -2627,10 +2627,15 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u -= c
 
     # floor L-piece, stabilise and allow sticking to PCB
-    b = cube([(26)*scl, (l)*scl, (hthick)*scl])
+    b = cube([(36)*scl, (l)*scl, (hthick)*scl])
     b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
     if woffs < 0:
+        b = cube([(36)*scl, (l)*scl, (hthick)*scl])
+        b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
+    else:
+        b = cube([(76)*scl, (l)*scl, (18)*scl])
+        b = translate(v=[(w-1+woffs-40)*scl, 0*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
         b = cube([(60)*scl, (l-100)*scl, (40-hthick)*scl])
@@ -2986,10 +2991,10 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u -= b
 
     # add a runner, fits into base_front_top
-    c = shearedcube([2*scl, (ht-80)*scl, (hthick)*scl],
+    c = shearedcube([2*scl, (ht-260)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-8*scl, 0*scl, 0])
-    c = translate(v=[(3)*scl, 40*scl,
+    c = translate(v=[(3)*scl, 130*scl,
                                 (8)*scl]).add(c)
     u += c
 
@@ -3414,7 +3419,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
