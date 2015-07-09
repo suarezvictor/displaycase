@@ -3052,16 +3052,17 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     u -= b
 
     # add a runner, fits into base_front_top
-    c = shearedcube([2*scl, (ht-2)*scl, (hthick)*scl],
+    c = shearedcube([2*scl, (ht-80)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-8*scl, 0*scl, 0])
-    c = translate(v=[(1)*scl, 1*scl,
+    c = translate(v=[(1)*scl, 40*scl,
                                 (8)*scl]).add(c)
     u += c
 
     # cut out corner for tpanel_mid joiner
-    b = cube([60*scl, 12*scl, (12)*scl])
-    b = translate(v=[-11*scl, (ht-11)*scl, (11)*scl]).add(b)
+    b = cube([60*scl, 30*scl, (15)*scl])
+    b = rotate([-25,0,0]).add(b)
+    b = translate(v=[-11*scl, (ht-27)*scl, (21)*scl]).add(b)
     u -= b
 
     c = compartment_lockin_cutout(scl)
@@ -3288,18 +3289,20 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == BACK_KBD_RUNNER:
-        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
-                                  tpanel_offset)
-        m = translate(v=[0,
-                        (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
-                         0]).add(se)
-        b.add(m)
-        # XXX grr magic constant, matching battery support
-        se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
-                                    -tpanel_offset-50, True)
-        m = mirror_part(se, scl, total_width-
-                (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
-        b.add(m)
+        if mirroring & LEFTPART:
+            se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
+                                      tpanel_offset)
+            m = translate(v=[0,
+                            (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
+                             0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            # XXX grr magic constant, matching battery support
+            se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
+                                        -tpanel_offset-50, True)
+            m = mirror_part(se, scl, total_width-
+                    (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
+            b.add(m)
 
     adj = scrn_end_ht
     if part == 10:
@@ -3478,12 +3481,12 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
-                        #BACK_KBD_CORNER,
-                        BACK_KBD_RUNNER,
+                        BACK_KBD_CORNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        #PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
