@@ -25,7 +25,6 @@ BASE_BACK = 4
 BASE_END = 3
 BASE_FRONT_TOP = 7
 BASE_MID = 8
-BACK_KBD_CORNER = 9
 FRONT_KBD_TRAY = 12
 PCB1 = 14
 PCB1_SUPPORT = 17
@@ -2944,71 +2943,6 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     v.add(u)
     return v
 
-def back_kbd_corner(scl, ht):
-
-    u = union()
-    w = boxlength-back_top_width
-
-    b = hollowbox(scl, 150, 20+hthick, boxheight-hthick,
-                {T:-1, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
-                curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(w-150)*scl, -hthick*scl, (0)*scl]).add(b)
-    u += b
-
-    b = hollowbox(scl, 20, ht, boxheight-hthick,
-                {T:-1, L:20, R:-1, F:-1, D:-1, B:-1},
-                curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-20)*scl, 0*scl, (0)*scl]).add(b)
-    u += b
-    b = cube([(7)*scl, (14)*scl, (boxheight-hthick*2-1)*scl])
-    b = translate(v=[(w)*scl, (ht-14)*scl, (hthick+1)*scl]).add(b)
-    u += b
-    b = cube([(27)*scl, (12)*scl, (boxheight-hthick-40)*scl])
-    b = translate(v=[(w-20)*scl, (ht-1)*scl, (40)*scl]).add(b)
-    u += b
-    b = cube([(200+50)*scl, (hthick+1)*scl, (hthick+1)*scl])
-    b = translate(v=[(w-201)*scl, (-hthick-1)*scl, (-1)*scl]).add(b)
-    u -= b
-
-    u = indented_screwhole(scl, u, (w-98), -hthick+6, 39)
-    u = indented_screwhole(scl, u, (w-1), 45, 67, 90)
-
-    if pin_parts_3d:
-        c = union()
-        h = pin(B0, scl)
-        h = translate([(ht-38)*scl, (-3)*scl, 33*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -43*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -127*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(82)*scl, (-3)*scl, 33*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, 33*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(0)*scl, (-3)*scl, -43*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht-45)*scl, (-3)*scl, -210*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht+33)*scl, (-3)*scl, -210*scl]).add(h)
-        c += h
-        c = rotate([90, 0, 0]).add(c)
-        c = translate([(w-200)*scl, (0)*scl, (boxheight-hthick)*scl]).add(c)
-
-        u += c
-
-    v = union()
-    u = translate(v=[0, 0, (55)*scl]).add(u)
-    v.add(u)
-    return v
-
 
 def compartment_lockin_cutout(scl):
     u = union()
@@ -3283,10 +3217,6 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
 
     back_kbd_offs = 20
-    if part == BACK_KBD_CORNER:
-        se = back_kbd_corner(scl, back_kbd_offs)
-        m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
-        b.add(m)
 
     if part == BACK_KBD_RUNNER:
         if mirroring & LEFTPART:
@@ -3481,7 +3411,6 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
-                        BACK_KBD_CORNER,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
