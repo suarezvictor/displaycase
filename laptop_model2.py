@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -3021,6 +3021,31 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
     v.add(u)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(-20)*scl, (0)*scl, 20*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(17)*scl, (0)*scl, (-ht-8)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+26)*scl, (0)*scl, 4*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-20)*scl, (0)*scl, -156*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+26)*scl, (0)*scl, (-ht+10)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-20)*scl, (0)*scl, (-ht+170)*scl]).add(h)
+        c += h
+
+        c = translate([(180)*scl, (55-3+20)*scl, 0*scl]).add(c)
+        c = rotate([90,0,0]).add(c)
+        v += c
 
     return v
 
