@@ -2960,7 +2960,7 @@ def compartment_lockin_cutout(scl):
     # hide lockin under a slope
     c = shearedcube(size=[12*scl,
                         70*scl, 26*scl],
-                    shear=[15*scl, 0, 0],
+                    shear=[45*scl, 0, 0],
                     innershear=[0*scl, 0, 0])
     c = translate(v=[2*scl, -5*scl, (3)*scl]).add(c)
     u.add(c)
