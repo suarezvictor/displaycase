@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART| RIGHTPART 
+mirroring = LEFTPART#| RIGHTPART 
 
 test = False
 single = True
@@ -2760,10 +2760,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         if woffs >= 0:
             c = union()
             h = pin(B0, scl)
-            h = translate([(w-40)*scl, (-3)*scl, 32*scl]).add(h)
+            h = translate([(w-50)*scl, (-3)*scl, 10*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(w+40)*scl, (-3)*scl, 32*scl]).add(h)
+            h = translate([(w+31)*scl, (-3)*scl, 30*scl]).add(h)
             c += h
 
             h = pin(B0, scl)
