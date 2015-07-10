@@ -2725,13 +2725,13 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if woffs >= 0:
         # lock-in to tpanel
         b = cube([(95)*scl, (30)*scl, (h-40)*scl])
-        b = translate(v=[(w-70)*scl, (l-30)*scl, (40)*scl]).add(b)
+        b = translate(v=[(w-70)*scl, (l-31)*scl, (40)*scl]).add(b)
         u += b
-        b = cube([(80)*scl, (112)*scl, (h-70)*scl])
-        b = translate(v=[(w-100)*scl, (l-50)*scl, (70)*scl]).add(b)
+        b = cube([(79)*scl, (112)*scl, (h-71)*scl])
+        b = translate(v=[(w-100)*scl, (l-50)*scl, (71)*scl]).add(b)
         u += b
         b = cube([(46)*scl, (92)*scl, (40)*scl])
-        b = translate(v=[(w-100)*scl, (l-30)*scl, (50)*scl]).add(b)
+        b = translate(v=[(w-100)*scl, (l-30)*scl, (51)*scl]).add(b)
         u += b
 
         t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
