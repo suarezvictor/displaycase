@@ -2712,9 +2712,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     # keyboard tray indents
     b = kbd_tray_indent(scl)
     if woffs >= 0:
-        t = translate(v=[(w-19)*scl, (l-132)*scl, (16)*scl]).add(b)
+        t = translate(v=[(w-26)*scl, (l-132)*scl, (16)*scl]).add(b)
         u -= t
-        t = translate(v=[(w-19)*scl, (134)*scl, (16)*scl]).add(b)
+        t = translate(v=[(w-26)*scl, (134)*scl, (16)*scl]).add(b)
         u -= t
     else:
         t = translate(v=[(w-19+woffs)*scl, (l-312-hoffs)*scl, (16)*scl]).add(b)
@@ -2750,10 +2750,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += t
         t = translate(v=[(w-45)*scl, (l-120)*scl, -2*scl]).add(c)
         u += t
-        c = cube([8*scl, 76*scl, 49*scl])
-        t = translate(v=[(w-26)*scl, 50*scl, 0]).add(c)
+        c = cube([10*scl, 94*scl, 49*scl])
+        t = translate(v=[(w-26)*scl, 41*scl, 0]).add(c)
         u -= t
-        t = translate(v=[(w-26)*scl, (l-128)*scl, 0]).add(c)
+        t = translate(v=[(w-26)*scl, (l-132)*scl, 0]).add(c)
         u -= t
 
     if pin_parts_3d:
