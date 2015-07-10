@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#| RIGHTPART 
+mirroring = LEFTPART| RIGHTPART 
 
 test = False
 single = True
@@ -642,22 +642,18 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b-56)*scl, 0, (55+21)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+21)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
         u += t
     else:
-        c = cube([(30)*scl, (ht+10)*scl, (14)*scl])
-        t = translate(v=[(tpanel_l_b-57-kbd_numpad_indent)*scl, 0,
-                            (55+12)*scl]).add(c)
+        c = cube([(100)*scl, (ht+10)*scl, (14)*scl])
+        t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
+                            (55+44)*scl]).add(c)
         u += t
-        c = cube([(70)*scl, (ht+10)*scl, (14)*scl])
-        t = translate(v=[(tpanel_l_b-57-kbd_numpad_indent)*scl, 0,
-                            (55+42)*scl]).add(c)
-        u += t
-        c = cube([(12)*scl, (ht+10)*scl, (44)*scl])
-        t = translate(v=[(tpanel_l_b-64-kbd_numpad_indent)*scl, 0,
+        c = cube([(20)*scl, (ht+10)*scl, (44)*scl])
+        t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
                             (55+12)*scl]).add(c)
         u += t
         t = translate(v=[(tpanel_l_b+1-kbd_numpad_indent)*scl, 0,
@@ -748,6 +744,32 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = translate(v=[(202)*scl, (ht-1)*scl,
                                     (55+12)*scl]).add(c)
         u += c
+
+    if kbd_numpad_indent != 0:
+        doffs = 75
+    else:
+        doffs = boxheight-12
+    # top screwhole into front kbd tray
+    s = cube([100*scl, (ht-8)*scl, boxheight*scl])
+    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-50)*scl,
+                    (0)*scl, (+55)*scl]).add(s)
+    u += s
+    s = chamfered_backbox_screwholes(scl, 60, 25)
+    #s = rotate([180, 0, 0]).add(s)
+    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent)*scl,
+                    (ht-40)*scl, (55+doffs)*scl]).add(s)
+    u -= s
+
+    if kbd_numpad_indent != 0:
+        c = cube([(60)*scl, (ht+20)*scl, (33)*scl])
+        t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
+                            (55+11)*scl]).add(c)
+        u -= t
+    else:
+        c = cube([(60)*scl, (ht+20)*scl, (33)*scl])
+        t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
+                            (55+boxheight-24-33)*scl]).add(c)
+        u -= t
 
 
     if pin_parts_3d:
@@ -3442,9 +3464,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
@@ -3453,7 +3475,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
