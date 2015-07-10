@@ -648,9 +648,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
         u += t
     else:
-        c = cube([(100)*scl, (ht+10)*scl, (14)*scl])
+        c = cube([(100)*scl, (ht+10)*scl, (18)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
-                            (55+44)*scl]).add(c)
+                            (55+42)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+10)*scl, (44)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
@@ -761,7 +761,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= s
 
     if kbd_numpad_indent != 0:
-        c = cube([(60)*scl, (ht+20)*scl, (33)*scl])
+        c = cube([(60)*scl, (ht+20)*scl, (31)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
                             (55+11)*scl]).add(c)
         u -= t
@@ -2627,10 +2627,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     else:
         h = boxheight - hthick - pcbthick - 2
 
-    b = hollowbox(scl, 25, l, h,
+    b = hollowbox(scl, 25, l-2, h,
                 {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
                 curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(w-25+woffs)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-25+woffs)*scl, 1*scl, (0)*scl]).add(b)
     u += b
 
     if woffs < 0:
@@ -2656,13 +2656,31 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     else:
-        b = cube([(76)*scl, (l)*scl, (18)*scl])
-        b = translate(v=[(w-1+woffs-40)*scl, 0*scl, (h-18)*scl]).add(b)
+        b = cube([(76)*scl, (l-6)*scl, (18)*scl])
+        b = translate(v=[(w-1+woffs-40)*scl, 3*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
         b = cube([(60)*scl, (l-100)*scl, (40-hthick)*scl])
         b = translate(v=[(w-1+woffs-80)*scl, 40*scl, (h-40+hthick)*scl]).add(b)
         u += b
+
+    # screw holes in top for base_end
+    d = cylinder(r=topscrewrad*scl,
+                    h=(55)*scl,
+                    segments=50, center=True)
+
+    if woffs >= 0:
+        b = cube([(55)*scl, (100)*scl, (41-hthick)*scl])
+        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-41+hthick)*scl]).add(b)
+        u += b
+        b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
+        u -= b
+    else:
+        b = cube([(55)*scl, (100)*scl, (39-hthick)*scl])
+        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-39+hthick)*scl]).add(b)
+        u += b
+        b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
+        u -= b
 
     # extra bit for kbd corner support
     b = hollowbox(scl, hthick, 20+hthick, h,
@@ -2671,9 +2689,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     b = translate(v=[(w-hthick+woffs)*scl, (0)*scl, (0)*scl]).add(b)
     u += b
     if woffs >= 0:
-        b = cube([(hthick+52)*scl, (hthick+2)*scl, (37+1)*scl])
+        b = cube([(hthick+52)*scl, (hthick+3)*scl, (66)*scl])
     else:
-        b = cube([(hthick+52)*scl, (hthick+2)*scl, (47+1)*scl])
+        b = cube([(hthick+52)*scl, (hthick+3)*scl, (14)*scl])
     b = translate(v=[(w-hthick-41+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
@@ -3464,7 +3482,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
                         #PCB1,
