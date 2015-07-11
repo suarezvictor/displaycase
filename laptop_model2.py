@@ -14,11 +14,11 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#| RIGHTPART 
+mirroring = RIGHTPART #LEFTPART#| RIGHTPART 
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 TPANEL_MID = 5
 BASE_BACK = 4
@@ -498,7 +498,6 @@ def base_end(scl, ht, kbd_numpad_indent):
             c = translate(v=[(340)*scl, (-1)*scl, (91)*scl]).add(c)
             u -= c
 
-    
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-
                         (back_top_width-140-79)-2+kbd_numpad_indent, ht+20, 35,
@@ -762,7 +761,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         c = cube([(60)*scl, (ht+20)*scl, (31)*scl])
-        t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
+        t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 27*scl,
                             (55+11)*scl]).add(c)
         u -= t
     else:
@@ -815,8 +814,11 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if cutdown:
         # cut down
-        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-79)*scl, -20*scl, -50*scl]).add(c)
+        c = cube([(tpanel_l_b-20)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(-79-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
+        u -= c
+        c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(tpanel_l_b+30-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
         u -= c
 
     return u
@@ -3482,9 +3484,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
