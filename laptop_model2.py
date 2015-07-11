@@ -14,11 +14,11 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART#| RIGHTPART 
+mirroring = LEFTPART #RIGHTPART #LEFTPART| RIGHTPART 
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 TPANEL_MID = 5
 BASE_BACK = 4
@@ -746,11 +746,13 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         doffs = 75
+        wd = 120
     else:
         doffs = boxheight-12
+        wd = 110
     # top screwhole into front kbd tray
-    s = cube([100*scl, (ht-8)*scl, boxheight*scl])
-    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-50)*scl,
+    s = cube([wd*scl, (ht-8)*scl, boxheight*scl])
+    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-60)*scl,
                     (0)*scl, (+55)*scl]).add(s)
     u += s
     s = chamfered_backbox_screwholes(scl, 60, 25)
