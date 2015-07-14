@@ -2201,8 +2201,9 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # bolt-hole
     for end in [True, False]:
-        c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
-        c = rotate([0, 90, 90]).add(c)
+        c = chamfered_backbox_screwholes(scl, 60, 25)
+        c = rotate([0, -90, 90]).add(c)
+        c = translate(v=[0, 12*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
         u -= t
 
