@@ -2207,6 +2207,15 @@ def screen_end(scl, ht, lcd_end_ht):
         t = lid_bolthole(scl, end=end).add(c)
         u -= t
 
+    if not test:
+        # lcd screw holes
+        for sht in [120.0, 790.0, lcd_w-120.0, lcd_w-790.0]:
+            c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
+            c = rotate([0, -90, 90]).add(c)
+            c = translate(v=[(sht+lcd_inset_top+40)*scl, 10*scl,
+                       13*scl]).add(c)
+            u -= c
+
     b = screen_edge_complete(scl, lcd_end_ht)
     b = translate(v=[0, ht*scl,0]).add(b)
     u += b
@@ -3497,7 +3506,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         SCREEN_END,
                         SCREEN_HINGE,
                         SCREEN_BACK_EDGE,
