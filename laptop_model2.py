@@ -97,13 +97,13 @@ lcd_hinge_inner_rad=70
 lcd_hinge_inside_rad=70
 lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
-lcd_end_ht = 50
+lcd_end_ht = 72
 lcd_end_offs = 20
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 100
 
-lcdscrewrad = 29 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+lcdscrewrad = 25 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 27 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 120
@@ -196,13 +196,13 @@ def lcd_view_area(scl, offs=0):
 
     return a
 
-def chamfered_backbox_screwholes(scl, sht, r1=22):
+def chamfered_backbox_screwholes(scl, sht, r1=22, ri=topscrewrad):
     # chamfered screw holes in top of lid
     c = union()
     c.add(cylinder(r=topscrewrad*1.2*scl, r1=r1*scl,
                     h=12*scl,
                     segments=50, center=True))
-    d = cylinder(r=topscrewrad*scl,
+    d = cylinder(r=ri*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
     d = translate(v=[0, 0, +(bwid+0.2+sht/2)*0.5*scl]).add(d)
@@ -2201,7 +2201,7 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # bolt-hole
     for end in [True, False]:
-        c = chamfered_backbox_screwholes(scl, 60, 25)
+        c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
         c = rotate([0, -90, 90]).add(c)
         c = translate(v=[0, 12*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
@@ -3258,9 +3258,11 @@ def create_laptop(t, scl, part, angle):
     if part == SCREEN_HINGE:
         se = screen_hinge(scl, scrn_hinge_ht)
         m = translate(v=[0, lid_adjust_ht*scl,0]).add(se)
-        b.add(m)
-        m = mirror_part(se, scl, total_width-lid_adjust_ht)
-        b.add(m)
+        if mirroring & LEFTPART:
+            b.add(m)
+        if mirroring & RIGHTPART:
+            m = mirror_part(se, scl, total_width-lid_adjust_ht)
+            b.add(m)
 
         b = screen_adjust(b, scl, angle)
 
@@ -3325,18 +3327,22 @@ def create_laptop(t, scl, part, angle):
     if part == SCREEN_FRONT_EDGE:
         se = screen_front_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
-        b.add(m)
-        m = mirror_part(se, scl, total_width-adj)
-        b.add(m)
+        if mirroring & LEFTPART:
+            b.add(m)
+        if mirroring & RIGHTPART:
+            m = mirror_part(se, scl, total_width-adj)
+            b.add(m)
         b = screen_adjust(b, scl, angle)
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == SCREEN_BACK_EDGE:
         se = screen_back_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
-        b.add(m)
-        m = mirror_part(se, scl, total_width-adj)
-        b.add(m)
+        if mirroring & LEFTPART:
+            b.add(m)
+        if mirroring & RIGHTPART:
+            m = mirror_part(se, scl, total_width-adj)
+            b.add(m)
         b = screen_adjust(b, scl, angle)
 
     compartment_ht = base_adjust_ht-scrn_hinge_ht
@@ -3491,7 +3497,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         SCREEN_END,
                         SCREEN_HINGE,
                         SCREEN_BACK_EDGE,
@@ -3502,7 +3508,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
