@@ -10,16 +10,20 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #RIGHTPART #LEFTPART| RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART 
 
 test = False
 single = True
 cutdown = False
 
+SCREEN_END = 0
+SCREEN_HINGE = 2
+SCREEN_FRONT_EDGE = 10
+SCREEN_BACK_EDGE = 6
 TPANEL_MID = 5
 BASE_BACK = 4
 BASE_END = 3
@@ -3233,7 +3237,7 @@ def create_laptop(t, scl, part, angle):
     scrn_end_ht = 30
     scrn_hinge_ht = 60
 
-    if part == 0:
+    if part == SCREEN_END:
         se = screen_end(scl, scrn_end_ht, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         if mirroring & LEFTPART:
@@ -3250,7 +3254,7 @@ def create_laptop(t, scl, part, angle):
     tpanel_offset = -190
     kbd_numpad_indent = 79
 
-    if part == 2:
+    if part == SCREEN_HINGE:
         se = screen_hinge(scl, scrn_hinge_ht)
         m = translate(v=[0, lid_adjust_ht*scl,0]).add(se)
         b.add(m)
@@ -3317,7 +3321,7 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
 
     adj = scrn_end_ht
-    if part == 10:
+    if part == SCREEN_FRONT_EDGE:
         se = screen_front_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
@@ -3326,7 +3330,7 @@ def create_laptop(t, scl, part, angle):
         b = screen_adjust(b, scl, angle)
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
-    if part == 6:
+    if part == SCREEN_BACK_EDGE:
         se = screen_back_edge(scl, (total_width-centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         b.add(m)
@@ -3480,13 +3484,16 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [120]
+        angles = [00]
 
     for i in range(rpt):
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
+                        SCREEN_END,
+                        SCREEN_HINGE,
+                        SCREEN_BACK_EDGE,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
