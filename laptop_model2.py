@@ -231,7 +231,7 @@ def lid_bolthole(scl, end=True):
     if end:
         return translate([(-lcd_inset_top+89)*scl, 0*scl, (7+lcd_doff)*scl])
     else:
-        return translate([(168+lcd_w)*scl, 0*scl, (7+lcd_doff)*scl])
+        return translate([(171+lcd_w)*scl, 0*scl, (7+lcd_doff)*scl])
 
 def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
@@ -2190,6 +2190,8 @@ def screen_mid(scl, ht):
     return u
 
 def screen_end(scl, ht, lcd_end_ht):
+
+    ht = ht + lcd_end_ht
     u = union()
     b = screen_box(scl, ht, end=True)
     u += b
@@ -2202,7 +2204,7 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # bolt-hole
     for end in [True, False]:
-        c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
+        c = chamfered_backbox_screwholes(scl, 60+ht, 25, lcdscrewrad)
         c = rotate([0, -90, 90]).add(c)
         c = translate(v=[0, 12*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
@@ -2217,19 +2219,27 @@ def screen_end(scl, ht, lcd_end_ht):
                        13*scl]).add(c)
             u -= c
 
-    b = screen_edge_complete(scl, lcd_end_ht)
-    b = translate(v=[0, ht*scl,0]).add(b)
-    u += b
+    #b = screen_edge_complete(scl, lcd_end_ht)
+    #b = translate(v=[0, ht*scl,0]).add(b)
+    #u += b
+
+    # hex indentation
+    c = cylinder(r=29.5*scl, h=(30)*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    t = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(t)
+    u -= t
 
     # lock-in to screen_hinge part
     d = cube([45*scl, 20*scl, 37*scl])
-    c = translate(v=[(lcd_w+79)*scl, (ht+lcd_end_ht-10)*scl,
+    c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl,
                 (hthick-3.6-16)*scl]).add(d)
     u += c
 
     rad=54.0
     # remove hinge
-    c = cylinder(r=rad*scl, h=(ht+lcd_end_ht+2)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(ht+2)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-1*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2524,6 +2534,14 @@ def screen_hinge(scl, ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
+    # hex indentation
+    c = cylinder(r=27*scl, h=(30)*scl, center=True, segments=6)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    t = translate(v=[0*scl,-5*scl,0*scl]).add(t)
+    u += t
+
     # bolt-hole
     c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
@@ -2532,7 +2550,7 @@ def screen_hinge(scl, ht):
 
     c = shearedcube([(rad*2-32)*scl, (ht*2)*scl, (30+hinge_offs)*scl],
                 shear=[70*scl, 0, 0],
-                innershear=[46*scl, 0, 0])
+                innershear=[56*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w-rad+8)*scl,-(ht+hthick)*scl,
@@ -2540,7 +2558,7 @@ def screen_hinge(scl, ht):
     u -= c
 
     c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick)*scl])
-    c = translate(v=[(w-155)*scl,-(1)*scl,
+    c = translate(v=[(w-170)*scl,-(1)*scl,
                      (-8)*scl]).add(c)
     u -= c
 
@@ -3507,10 +3525,10 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         SCREEN_END,
                         SCREEN_HINGE,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
