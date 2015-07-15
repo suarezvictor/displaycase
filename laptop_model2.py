@@ -2237,10 +2237,10 @@ def screen_end(scl, ht, lcd_end_ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(boxlength-62)*scl, (3)*scl, -45*scl]).add(h)
+        h = translate([(boxlength-50)*scl, (3)*scl, -60*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(boxlength+15)*scl, (3)*scl, 3*scl]).add(h)
+        h = translate([(boxlength+27)*scl, (3)*scl, 3*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength-18)*scl, (3)*scl, 80*scl]).add(h)
@@ -2250,17 +2250,17 @@ def screen_end(scl, ht, lcd_end_ht):
         c += h
 
         h = pin(B0, scl)
-        h = translate([(62)*scl, (3)*scl, -45*scl]).add(h)
+        h = translate([(47)*scl, (3)*scl, -59*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(-15)*scl, (3)*scl, 3*scl]).add(h)
+        h = translate([(-30)*scl, (3)*scl, 3*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(62)*scl, (3)*scl, 80*scl]).add(h)
+        h = translate([(47)*scl, (3)*scl, 80*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
-        h = translate([(boxlength/2)*scl, (3)*scl, 80*scl]).add(h)
+        h = translate([(boxlength/2)*scl, (3)*scl, 60*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
@@ -3506,7 +3506,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         SCREEN_END,
                         SCREEN_HINGE,
                         SCREEN_BACK_EDGE,
@@ -3517,7 +3517,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
