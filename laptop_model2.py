@@ -103,7 +103,7 @@ lcd_end_offs = 20
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 100
 
-lcdscrewrad = 25 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+lcdscrewrad = 27 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 27 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 120
@@ -388,9 +388,10 @@ def lid_screwholes(scl, edge_inset):
 def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     u = union()
 
-    ld = lcd_d+hthick+5.4+9
+    lth = 15
+    ld = lcd_d+lth+5.4+9
 
-    walls = {T:hthick, L:80, R:hthick, F:-1, D:115}
+    walls = {T:lth, L:80, R:hthick, F:-1, D:115}
     curverads={
                 }
     scalecurve = {
@@ -417,7 +418,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         offs = 0
     b = hollowbox(scl, slen, ht, ld, walls,
                     curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[offs*scl, 0, -(lcd_d-21)*scl]).add(b)
+    b = translate(v=[offs*scl, 0, -(lcd_d-18)*scl]).add(b)
     u += b
 
     if hingewall:
