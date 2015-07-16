@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -390,6 +390,8 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
 
     lth = 15
     ld = lcd_d+lth+5.4+9
+    rh = ht
+    roff = 0
 
     walls = {T:lth, L:80, R:hthick, F:-1, D:115}
     curverads={
@@ -402,8 +404,10 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         curverads[L|T] = (ld-hthick, 0)
         curverads[L|D] = (hthick, 0)
     if end:
-        walls[B] = hthick
+        walls[B] = 20
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
+        rh = ht+8
+        roff = -8
     elif not front:
         walls[B] = -1
         curverads.update({ R|T: (ld-hthick, 0) })
@@ -416,7 +420,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     else:
         slen = boxlength
         offs = 0
-    b = hollowbox(scl, slen, ht, ld, walls,
+    b = hollowbox(scl, slen, rh, ld, walls,
                     curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[offs*scl, 0, -(lcd_d-18)*scl]).add(b)
     u += b
@@ -427,6 +431,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         c = translate(v=[(w1)*scl, 0, -30*scl]).add(c)
         u += c
 
+    u = translate(v=[(0)*scl, roff*scl, 0]).add(u)
     return u
 
 def base_end(scl, ht, kbd_numpad_indent):
@@ -2215,8 +2220,8 @@ def screen_end(scl, ht, lcd_end_ht):
         for sht in [120.0, 790.0, lcd_w-120.0, lcd_w-790.0]:
             c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
             c = rotate([0, -90, 90]).add(c)
-            c = translate(v=[(sht+lcd_inset_top+40)*scl, 10*scl,
-                       13*scl]).add(c)
+            c = translate(v=[(sht+lcd_inset_top+40)*scl, 2*scl,
+                       16*scl]).add(c)
             u -= c
 
     #b = screen_edge_complete(scl, lcd_end_ht)
@@ -2224,7 +2229,7 @@ def screen_end(scl, ht, lcd_end_ht):
     #u += b
 
     # hex indentation
-    c = cylinder(r=29.5*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=28.5*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -2244,6 +2249,23 @@ def screen_end(scl, ht, lcd_end_ht):
     c = translate(v=[0*scl,-1*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
+
+    # lock-in cutout to screen_hinge part
+    d = shearedcube([42*scl, 13*scl, 13*scl],
+            shear=[0,-11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
+    c = translate(v=[(lcd_w+84)*scl, (ht-10)*scl,
+                    (lcd_d-hthick-8.6)*scl]).add(c)
+    u -= c
+    d = shearedcube([72*scl, 14*scl, 13*scl],
+            shear=[0,11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (12)*scl, (-8)*scl]).add(c)
+    c = translate(v=[(lcd_w+108)*scl, (ht-2)*scl, (-13)*scl]).add(c)
+    u -= c
 
     if pin_parts_3d:
         c = union()
@@ -2277,6 +2299,7 @@ def screen_end(scl, ht, lcd_end_ht):
         h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
         c += h
 
+        c = translate([0, (-8)*scl, 0*scl]).add(c)
         u += c
 
     return u
@@ -2535,7 +2558,7 @@ def screen_hinge(scl, ht):
     u -= t
 
     # hex indentation
-    c = cylinder(r=27*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=26*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -2548,6 +2571,24 @@ def screen_hinge(scl, ht):
     t = lid_bolthole(scl, end=False).add(c)
     u -= t
 
+    # lock-in cutin to screen_end part
+    d = shearedcube([42*scl, 13*scl, 13*scl],
+            shear=[0,-11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (11)*scl, (0.5)*scl]).add(c)
+    c = translate(v=[(lcd_w+84)*scl, (-8.5)*scl,
+                    (lcd_d-hthick-8.6)*scl]).add(c)
+    u += c
+    d = shearedcube([66*scl, 14*scl, 13*scl],
+            shear=[0,11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (12)*scl, (-7)*scl]).add(c)
+    c = translate(v=[(lcd_w+104)*scl, (-1)*scl, (-13)*scl]).add(c)
+    u += c
+
+    # cable cutout
     c = shearedcube([(rad*2-32)*scl, (ht*2)*scl, (30+hinge_offs)*scl],
                 shear=[70*scl, 0, 0],
                 innershear=[56*scl, 0, 0])
@@ -3527,7 +3568,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         SCREEN_END,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #SCREEN_BACK_EDGE,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
