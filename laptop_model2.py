@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2301,6 +2301,12 @@ def screen_end(scl, ht, lcd_end_ht):
 
         c = translate([0, (-8)*scl, 0*scl]).add(c)
         u += c
+
+    if cutdown:
+        # cut down
+        c = cube([(boxlength+500)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(-800)*scl, -20*scl, -150*scl]).add(c)
+        u -= c
 
     return u
 
