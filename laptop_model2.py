@@ -29,6 +29,7 @@ BASE_BACK = 4
 BASE_END = 3
 BASE_FRONT_TOP = 7
 BASE_MID = 8
+SCREEN_MID = 9
 FRONT_KBD_TRAY = 12
 PCB1 = 14
 PCB1_SUPPORT = 17
@@ -118,7 +119,7 @@ lcd_front_indent = 108
 back_top_width = 170+79
 front_top_width = 180
 
-centre_ht = 30.0
+scrn_centre_ht = 70.0
 base_centre_ht = 140.0
 
 bdep = 325
@@ -231,7 +232,7 @@ def lid_bolthole(scl, end=True):
     if end:
         return translate([(-lcd_inset_top+89)*scl, 0*scl, (7+lcd_doff)*scl])
     else:
-        return translate([(171+lcd_w)*scl, 0*scl, (7+lcd_doff)*scl])
+        return translate([(168+lcd_w)*scl, 0*scl, (7+lcd_doff)*scl])
 
 def screen_frontedge(scl, ht, extralen, toplenoffs,
                             curvefront=True, curvetopback=False,
@@ -2145,6 +2146,7 @@ def base_mid(scl, ht):
     return v
 
 def screen_mid(scl, ht):
+
     u = union()
     b = screen_box(scl, ht, end=False)
     u += b
@@ -2155,8 +2157,8 @@ def screen_mid(scl, ht):
     u -= c
     c = translate(v=[(lcd_w+160)*scl, (-2)*scl, (-5)*scl]).add(d)
     u -= c
-    d = cube([(25)*scl, (ht+2)*scl, (40)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-8)*scl]).add(d)
+    d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
+    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-8.5)*scl]).add(d)
     u -= c
     c = translate(v=[55*scl, (-1)*scl, (-8)*scl]).add(d)
     u -= c
@@ -2201,7 +2203,7 @@ def screen_end(scl, ht, lcd_end_ht):
     b = screen_box(scl, ht, end=True)
     u += b
 
-    c = cylinder(r=28.5*scl, h=(20)*scl, center=True, segments=6)
+    c = cylinder(r=27.5*scl, h=(20)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0, ht*scl,0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
@@ -2305,7 +2307,7 @@ def screen_end(scl, ht, lcd_end_ht):
     if cutdown:
         # cut down
         c = cube([(boxlength+500)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-800)*scl, -20*scl, -150*scl]).add(c)
+        c = translate([(-1500)*scl, -20*scl, -150*scl]).add(c)
         u -= c
 
     return u
@@ -2387,7 +2389,7 @@ def screen_front_edge(scl, ht):
     b -= t
 
     # matching screen mid (front)
-    d = shearedcube([(24)*scl, (centre_ht/2+2)*scl, (31)*scl],
+    d = shearedcube([(24)*scl, (scrn_centre_ht/2+2)*scl, (31)*scl],
             shear=[0, -12*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[20*scl, (ht-1)*scl, (7)*scl]).add(d)
@@ -2479,7 +2481,7 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # matching screen mid (back)
-    d = shearedcube([(26)*scl, ((centre_ht/2+2))*scl, (31)*scl],
+    d = shearedcube([(26)*scl, ((scrn_centre_ht/2+2))*scl, (31)*scl],
             shear=[0, -12*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
@@ -2564,7 +2566,7 @@ def screen_hinge(scl, ht):
     u -= t
 
     # hex indentation
-    c = cylinder(r=26*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=25*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -2597,7 +2599,7 @@ def screen_hinge(scl, ht):
     # cable cutout
     c = shearedcube([(rad*2-32)*scl, (ht*2)*scl, (30+hinge_offs)*scl],
                 shear=[70*scl, 0, 0],
-                innershear=[56*scl, 0, 0])
+                innershear=[59*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = translate(v=[(w-rad+8)*scl,-(ht+hthick)*scl,
@@ -3400,7 +3402,7 @@ def create_laptop(t, scl, part, angle):
 
     adj = scrn_end_ht
     if part == SCREEN_FRONT_EDGE:
-        se = screen_front_edge(scl, (total_width-centre_ht)/2-adj)
+        se = screen_front_edge(scl, (total_width-scrn_centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3411,7 +3413,7 @@ def create_laptop(t, scl, part, angle):
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == SCREEN_BACK_EDGE:
-        se = screen_back_edge(scl, (total_width-centre_ht)/2-adj)
+        se = screen_back_edge(scl, (total_width-scrn_centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3453,9 +3455,9 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
         b.add(m)
 
-    if part == 11:
-        se = screen_mid(scl, centre_ht)
-        m = translate(v=[0, (total_width/2-centre_ht/2)*scl,0]).add(se)
+    if part == SCREEN_MID:
+        se = screen_mid(scl, scrn_centre_ht)
+        m = translate(v=[0, (total_width/2-scrn_centre_ht/2)*scl,0]).add(se)
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
@@ -3573,9 +3575,11 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #SCREEN_HINGE,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
+                        SCREEN_FRONT_EDGE,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
