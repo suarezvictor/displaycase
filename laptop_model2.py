@@ -2152,15 +2152,13 @@ def screen_mid(scl, ht):
     u += b
 
     # cutouts for connectors
-    d = cube([(28)*scl, (ht+4)*scl, (35)*scl])
-    c = translate(v=[18*scl, (-2)*scl, (5)*scl]).add(d)
+    d = cube([(30)*scl, (ht+4)*scl, (37)*scl])
+    c = translate(v=[25*scl, (-2)*scl, (0)*scl]).add(d)
     u -= c
-    c = translate(v=[(lcd_w+160)*scl, (-2)*scl, (-5)*scl]).add(d)
+    c = translate(v=[(lcd_w+159)*scl, (-2)*scl, (-6)*scl]).add(d)
     u -= c
     d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
     c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-8.5)*scl]).add(d)
-    u -= c
-    c = translate(v=[55*scl, (-1)*scl, (-8)*scl]).add(d)
     u -= c
 
     if pin_parts_3d:
@@ -2340,13 +2338,13 @@ def screen_front_edge(scl, ht):
     b -= c
 
     # remove interior
-    c = touch_arc(0, ht-155, 45,
+    c = touch_arc(0, ht-115, 45,
                         25, scl,
                   angle=0)
     c = rotate([-90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
     c = resize([(60)*scl, 0, 0], False).add(c)
-    c = translate(v=[(76)*scl, (ht-65)*scl, (lcd_d-15)*scl]).add(c)
+    c = translate(v=[(76)*scl, (ht-15)*scl, (lcd_d-15)*scl]).add(c)
     b -= c
 
     fthick = 6
@@ -2378,30 +2376,22 @@ def screen_front_edge(scl, ht):
 
     # slot to fit a nut into
     c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(45)*scl, (60)*scl, (0)*scl]).add(c)
+    c = translate(v=[(45)*scl, (70)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
     b -= t
     c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
-    t = translate(v=[(0)*scl, (60)*scl, (0)*scl]).add(t)
+    t = translate(v=[(0)*scl, (70)*scl, (0)*scl]).add(t)
     b -= t
 
     # matching screen mid (front)
     d = shearedcube([(24)*scl, (scrn_centre_ht/2+2)*scl, (31)*scl],
-            shear=[0, -12*scl, 0],
+            shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[20*scl, (ht-1)*scl, (7)*scl]).add(d)
+    c = translate(v=[28*scl, (ht-1)*scl, (3)*scl]).add(d)
     b += c
-
-    # cutout for locking part
-    d = cube([(25)*scl, (55)*scl, (40)*scl])
-    c = translate(v=[55*scl, (ht-50)*scl, (-8)*scl]).add(d)
-    b -= c
-    d = cube([(55)*scl, (30)*scl, (40)*scl])
-    c = translate(v=[30*scl, (ht-50)*scl, (-8)*scl]).add(d)
-    b -= c
 
     if pin_parts_3d:
         c = union()
@@ -3587,9 +3577,9 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #SCREEN_HINGE,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
