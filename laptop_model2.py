@@ -407,8 +407,8 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     if end:
         walls[B] = 20
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
-        rh = ht+8
-        roff = -8
+        rh = ht+10
+        roff = -10
     elif not front:
         walls[B] = -1
         curverads.update({ R|T: (ld-hthick, 0) })
@@ -2220,7 +2220,7 @@ def screen_end(scl, ht, lcd_end_ht):
         for sht in [120.0, 790.0, lcd_w-120.0, lcd_w-790.0]:
             c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
             c = rotate([0, -90, 90]).add(c)
-            c = translate(v=[(sht+lcd_inset_top+40)*scl, 2*scl,
+            c = translate(v=[(sht+lcd_inset_top+40)*scl, 0*scl,
                        16*scl]).add(c)
             u -= c
 
