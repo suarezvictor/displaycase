@@ -2443,7 +2443,7 @@ def screen_back_edge(scl, ht):
     fthick = 8
     offs = 80-hthick+fthick
     step = (ht-160-offs) / (8.0 if test else 20.0)
-    while offs < (ht-step-55):
+    while offs < (ht-step-10):
         c = touch_arc(0, step-fthick, 50,
                             25, scl,
                       angle=0)
@@ -2456,7 +2456,7 @@ def screen_back_edge(scl, ht):
         c = translate(v=[(lcd_w+41)*scl, (offs)*scl, (lcd_d-15-50)*scl]).add(c)
         b -= c
         offs += step
-    c = hollowbox(scl, 100, (ht-80), 50,
+    c = hollowbox(scl, 100, (ht+2), 50,
                 {T:50, L:40, R:30, F:1, D:18, B:1},
                 curverads={ T|R: (35, 0)})
     c = translate(v=[(lcd_w+20)*scl, (-1)*scl, (lcd_d-15-46)*scl]).add(c)
@@ -2470,14 +2470,14 @@ def screen_back_edge(scl, ht):
 
     # slot to fit a nut into
     c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(-45)*scl, (40)*scl, (0)*scl]).add(c)
+    c = translate(v=[(-45)*scl, (55)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
     c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[(0)*scl, (40)*scl, (0)*scl]).add(t)
+    t = translate(v=[(0)*scl, (55)*scl, (0)*scl]).add(t)
     b -= t
 
     # matching screen mid (back)
@@ -2486,14 +2486,6 @@ def screen_back_edge(scl, ht):
             innershear=[0, 0*scl, 0])
     c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
     b += c
-
-    # cutout for locking part
-    d = cube([(25)*scl, (55)*scl, (40)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-50)*scl, (-8)*scl]).add(d)
-    b -= c
-    d = cube([(45)*scl, (30)*scl, (40)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (ht-50)*scl, (-8)*scl]).add(d)
-    b -= c
 
     # lock-in to screen_hinge part
     d = shearedcube([30*scl, 15*scl, 9*scl],
