@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2481,8 +2481,8 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # matching screen mid (back)
-    d = shearedcube([(26)*scl, ((scrn_centre_ht/2+2))*scl, (31)*scl],
-            shear=[0, -12*scl, 0],
+    d = shearedcube([(26)*scl, ((scrn_centre_ht/2-3))*scl, (31)*scl],
+            shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
     b += c
@@ -2522,6 +2522,26 @@ def screen_back_edge(scl, ht):
         c += h
         h = cube([25*scl, 6*scl, 60*scl])
         h = translate([(lcd_w+80)*scl, (ht-6)*scl, -18*scl]).add(h)
+        c += h
+
+        h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
+        h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
+        c += h
+        h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(lcd_w+175)*scl, (ht-4)*scl, (7.4+37)*scl]).add(h)
+        c += h
+        h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(lcd_w+175)*scl, (4)*scl, (7.4+37)*scl]).add(h)
+        c += h
+        h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         b += c
@@ -3570,8 +3590,8 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #SCREEN_HINGE,
                         SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_FRONT_EDGE,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
