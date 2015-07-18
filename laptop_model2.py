@@ -2299,7 +2299,7 @@ def screen_end(scl, ht, lcd_end_ht):
         h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
         c += h
 
-        c = translate([0, (-8)*scl, 0*scl]).add(c)
+        c = translate([0, (-10)*scl, 0*scl]).add(c)
         u += c
 
     if cutdown:
