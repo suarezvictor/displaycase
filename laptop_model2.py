@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2349,7 +2349,7 @@ def screen_front_edge(scl, ht):
 
     fthick = 6
     offs = 70-hthick+fthick
-    step = (ht-160-offs) / (8.0 if test else 16.0)
+    step = (ht-160-offs) / (8.0 if test else 24.0)
     while offs < (ht-step):
         c = touch_arc(0, fthick, 45,
                             25, scl,
@@ -2387,29 +2387,39 @@ def screen_front_edge(scl, ht):
     b -= t
 
     # matching screen mid (front)
-    d = shearedcube([(24)*scl, (scrn_centre_ht/2+2)*scl, (31)*scl],
+    d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
             shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[28*scl, (ht-1)*scl, (3)*scl]).add(d)
+    c = translate(v=[28.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
     b += c
 
     if pin_parts_3d:
         c = union()
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(50)*scl, (ht-6)*scl, -12*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 55*scl])
-        h = translate([(50)*scl, (ht-37)*scl, -12*scl]).add(h)
-        c += h
 
         h = cube([7*scl, 25*scl, 65*scl])
         h = translate([(45)*scl, (-24)*scl, -18*scl]).add(h)
         c += h
-        h = cube([7*scl, 25*scl, 52*scl])
+        h = cube([7*scl, 45*scl, 52*scl])
         h = translate([(67)*scl, (-24)*scl, -5*scl]).add(h)
         c += h
         h = cube([7*scl, 25*scl, 52*scl])
         h = translate([(22)*scl, (-24)*scl, -5*scl]).add(h)
+        c += h
+
+        h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
+        h = translate([(45.5)*scl, (ht-4)*scl, 7.4*scl]).add(h)
+        c += h
+        h = translate([(-17)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(30)*scl, (ht-4)*scl, (7.4+37)*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(30)*scl, (10)*scl, (7.4+37)*scl]).add(h)
         c += h
 
         b += c
@@ -3580,7 +3590,7 @@ if __name__ == '__main__':
                         SCREEN_END,
                         #SCREEN_HINGE,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
