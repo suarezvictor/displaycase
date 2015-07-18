@@ -3412,7 +3412,7 @@ def create_laptop(t, scl, part, angle):
                     (base_adjust_ht-scrn_hinge_ht+back_kbd_offs))
             b.add(m)
 
-    adj = scrn_end_ht
+    adj = scrn_end_ht+lcd_end_ht
     if part == SCREEN_FRONT_EDGE:
         se = screen_front_edge(scl, (total_width-scrn_centre_ht)/2-adj)
         m = translate(v=[0, (adj)*scl,0]).add(se)
