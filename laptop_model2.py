@@ -104,8 +104,8 @@ lcd_end_offs = 20
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 100
 
-lcdscrewrad = 27 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
-screwrad = 27 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
+lcdscrewrad = 28 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+screwrad = 28 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 120
 backboxheight = boxheight+bwid*2-10
@@ -3588,9 +3588,9 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         SCREEN_END,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
@@ -3599,7 +3599,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
