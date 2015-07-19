@@ -1747,36 +1747,37 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += t
 
     # hollow hinge out
+    hd = 30
     c = cylinder(r=(rad-12)*scl, h=(friclen+50)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
     v = union()
-    c = shearedcube([14*scl, 75*scl, 20*scl], center=True,
+    c = shearedcube([14*scl, 75*scl, hd*scl], center=True,
                 shear=[-3*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[-22*scl,20*scl,0*scl]).add(c)
     v += c
-    c = cube([15*scl, 20*scl, 52*scl], center=True)
+    c = cube([15*scl, hd*scl, 52*scl], center=True)
     c = translate(v=[-32*scl,20*scl,0*scl]).add(c)
     v += c
-    c = shearedcube([14*scl, 75*scl, 20*scl], center=True,
+    c = shearedcube([14*scl, 75*scl, hd*scl], center=True,
                 shear=[0*scl, 0*scl, 0],
                 innershear=[3*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[22*scl,20*scl, 0*scl]).add(c)
     v += c
-    c = cube([15*scl, 20*scl, 52*scl], center=True)
+    c = cube([15*scl, hd*scl, 52*scl], center=True)
     c = translate(v=[32*scl,20*scl,0*scl]).add(c)
     v += c
-    c = cylinder(r=30*scl, r1=27*scl, h=26*scl, center=True, segments=50)
+    c = cylinder(r=30*scl, r1=27*scl, h=(hd+5)*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[0*scl,21*scl,0*scl]).add(c)
     v -= c
     v = rotate([0, 90, 0]).add(v)
-    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+18.5)*scl,-55*scl]).add(v)
+    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+13)*scl,-55*scl]).add(v)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -1828,7 +1829,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 272.5*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 272.0*scl, -50*scl]).add(c)
         v -= c
 
     return v
@@ -2582,38 +2583,38 @@ def friction_hinge2(scl, ht):
     c = rotate([180, 90, 90]).add(c)
     a += c
 
-    hl = 27
+    hl = 35
     # outer disc
     r = union()
     c = cylinder(r=(rad)*scl,
-                        h=(hl)*scl, segments=50, center=True)
+                        h=(hl+2)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (ht-19)*scl, 0]).add(c)
+    c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
     r += c
 
     c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[0, (ht-hl/2-5)*scl, 29*scl]).add(c)
+    c = translate(v=[0, (ht-hl/2)*scl, 29*scl]).add(c)
     r -= c
 
     c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[0, (ht-hl/2-5)*scl, -29*scl]).add(c)
+    c = translate(v=[0, (ht-hl/2)*scl, -29*scl]).add(c)
     r -= c
 
     c = cylinder(r=(27)*scl,
-                        h=(hl)*scl, segments=50, center=True)
+                        h=(hl+2)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (ht/2-9)*scl, 0]).add(c)
+    c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
     r += c
 
-    t = translate(v=[0, (-ht/2+49-bwid)*scl, 0]).add(r)
+    t = translate(v=[0, (-ht/2+49-bwid)*scl, 0*scl]).add(r)
     a += t
 
     # hinge hole
     r = cylinder(r=(screwrad)*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
-    t = translate(v=[0, (-ht/2+16.5)*scl, 0]).add(r)
+    t = translate(v=[0, (-ht/2+16.5)*scl, 0*scl]).add(r)
     a -= t
 
     a = hinge_translate(scl).add(a)
@@ -3460,7 +3461,7 @@ def create_laptop(t, scl, part, angle):
 
     if part == FRICTION_HINGE2:
         se = friction_hinge2(scl, 20)
-        h = lid_adjust_ht+scrn_hinge_ht+friclen+12
+        h = lid_adjust_ht+scrn_hinge_ht+friclen
         m = translate(v=[0, h*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3728,7 +3729,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        #FRICTION_HINGE2,
+                        FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
