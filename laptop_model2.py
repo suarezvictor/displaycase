@@ -1550,7 +1550,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     # add hinge
     w = boxlength-112
     c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
-    c = translate(v=[(w+25)*scl,-1*scl,(0)*scl]).add(c)
+    c = translate(v=[(w+23)*scl,-1*scl,(0)*scl]).add(c)
     u -= c
 
     # cut-off for screen
@@ -1559,7 +1559,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                 innershear=[-15*scl, 0, 0])
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(w+225)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w+223)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
     # cable access and interlock with base_end
@@ -3728,7 +3728,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        FRICTION_HINGE2,
+                        #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
