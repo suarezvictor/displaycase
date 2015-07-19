@@ -458,7 +458,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    u += b
+    #u += b
 
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
@@ -604,10 +604,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     # add bits for screws through to base back
     v = union()
     c = cube([(60)*scl, (ht)*scl, (40)*scl])
-    v.add(c)
+    v += c
     c = cube([(130)*scl, (50)*scl, (95)*scl])
     c = translate(v=[-57*scl, (0)*scl, (5)*scl]).add(c)
-    v.add(c)
+    v += c
+    c = cube([(130)*scl, (50)*scl, (95)*scl])
+    c = rotate([0, 0, -35]).add(c)
+    c = translate(v=[10*scl, (70)*scl, (45)*scl]).add(c)
+    v -= c
     c = translate(v=[(boxlength-170-5)*scl,
                       (0)*scl, (56+hthick)*scl]).add(v)
     u += c
@@ -1576,10 +1580,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                 shear=[50*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+150)*scl,59*scl,
+    c = translate(v=[(w-back_top_width+140)*scl,29*scl,
                     (boxheight-hthick-45)*scl]).add(c)
     u -= c
-    c = shearedcube([(61)*scl, (60)*scl, 14*scl],
+    c = shearedcube([(61)*scl, (43)*scl, 14*scl],
                 shear=[10*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
@@ -1601,6 +1605,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = cube([(140)*scl, (75)*scl, 10*scl])
     c = translate(v=[(w-back_top_width+112)*scl,-10*scl,
                     (53)*scl]).add(c)
+    u += c
+    # special indent which pushes cable in
+    c = shearedcube([(72)*scl, (48)*scl, 60*scl],
+                shear=[0*scl, 0, 0],
+                innershear=[65*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+200)*scl,29*scl,
+                    (boxheight-hthick-55)*scl]).add(c)
     u += c
 
     # put in series of cutouts
@@ -1832,7 +1844,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 272.0*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 292.0*scl, -50*scl]).add(c)
         v -= c
 
     return v
@@ -3728,11 +3740,11 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        FRICTION_HINGE2,
+                        #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -3743,7 +3755,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
