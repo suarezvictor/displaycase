@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2685,7 +2685,7 @@ def screen_hinge(scl, ht):
 
     rad=35.0
     # add hinge
-    c = cylinder(r=(rad+1.5)*scl, h=(ht+20)*scl, segments=50)
+    c = cylinder(r=(rad+1.5)*scl, h=(ht+20-14)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-20*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2770,6 +2770,32 @@ def screen_hinge(scl, ht):
     c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
     u -= c
 
+    # cutout to match with friction_hinge1
+    for ang in [0, 120, 240]:
+        c = touch_arc(rad-15.5, 15, bwid,
+                            -3.5, scl,
+                      angle=27)
+        c = rotate([180, 90, 90]).add(c)
+        c = rotate([0, 60+240+ang, 0]).add(c)
+        c = translate(v=[0, (-32)*scl, 0]).add(c)
+        c = hinge_translate(scl).add(c)
+        c = translate(v=[0, (ht+16.5)*scl, 0*scl]).add(c)
+
+        u += c
+
+    # take some more bits out...
+    c = cube([(38)*scl, (20)*scl, (18)*scl])
+    c = rotate([0, 26, 0]).add(c)
+    c = hinge_translate(scl).add(c)
+    c = translate(v=[0, (ht-14)*scl, 0*scl]).add(c)
+    u -= c
+    c = cube([(38)*scl, (20)*scl, (34)*scl], center=True)
+    c = translate(v=[19*scl, 0*scl, 3*scl]).add(c)
+    c = rotate([0, 33.5+90, 0]).add(c)
+    c = hinge_translate(scl).add(c)
+    c = translate(v=[0, (ht-9)*scl, 0*scl]).add(c)
+    u -= c
+
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -2784,6 +2810,20 @@ def screen_hinge(scl, ht):
         h = pin(B0, scl)
         h = translate([(boxlength-131)*scl, (ht-3)*scl, 90*scl]).add(h)
         c += h
+        u += c
+
+    # cutout to match with friction_hinge1
+    ea = -20.0
+    for ang in [120, 240, 120+ea, 240+ea]:
+        c = touch_arc(rad-15.5, 15, bwid,
+                            -3.5, scl,
+                      angle=82)
+        c = rotate([180, 90, 90]).add(c)
+        c = rotate([0, 222+ang, 0]).add(c)
+        c = translate(v=[0, (-32)*scl, 0]).add(c)
+        c = hinge_translate(scl).add(c)
+        c = translate(v=[0, (ht+16.5)*scl, 0*scl]).add(c)
+
         u += c
 
     return u
@@ -3742,7 +3782,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #SCREEN_END,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -3755,7 +3795,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,

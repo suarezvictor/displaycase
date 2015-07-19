@@ -263,9 +263,9 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
     r = union()
     c = cylinder( r=rad2*scl, r1=rad2_r*scl, h=ht*scl,
                   segments=100, center=True)
-    z = cylinder( r=rad*scl, r1=rad_r*scl, h=(ht+1)*scl,
+    z = cylinder( r=rad*scl, r1=rad_r*scl, h=(ht+5)*scl,
                    segments=100, center=True)
-    z = translate(v=[0*scl,0*scl,-0.5*scl]).add(z)
+    z = translate(v=[0*scl,0*scl,-2*scl]).add(z)
     c -= z
     cb = cube(size=[rad2*scl*2.2,2.2*rad2*scl,2*(ht)*scl])
     ct = translate(v=[0*scl,-rad2*scl,-ht*scl])
