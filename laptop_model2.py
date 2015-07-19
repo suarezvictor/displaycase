@@ -2595,12 +2595,12 @@ def friction_hinge2(scl, ht):
     c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
     r += c
 
-    c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
+    c = cube([28.0*scl, (hl+4)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[0, (ht-hl/2)*scl, 29*scl]).add(c)
     r -= c
 
-    c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
+    c = cube([28.0*scl, (hl+4)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[0, (ht-hl/2)*scl, -29*scl]).add(c)
     r -= c
