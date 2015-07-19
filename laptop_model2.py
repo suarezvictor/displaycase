@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -830,11 +830,14 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if cutdown:
         # cut down
-        c = cube([(tpanel_l_b-20)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-79-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
-        u -= c
+        #c = cube([(tpanel_l_b-20)*scl, (ht+100)*scl, 400*scl])
+        #c = translate([(-79-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
+        #u -= c
+        #c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
+        #c = translate([(tpanel_l_b+30-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
+        #u -= c
         c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(tpanel_l_b+30-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
+        c = translate([(-600)*scl, -20*scl, -50*scl]).add(c)
         u -= c
 
     return u
@@ -3725,9 +3728,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -3740,7 +3743,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
