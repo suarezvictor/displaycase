@@ -1754,18 +1754,18 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= t
     v = union()
     c = cube([14*scl, 40*scl, 75*scl], center=True)
-    c = translate(v=[-22*scl,20*scl,0*scl]).add(c)
+    c = translate(v=[-24*scl,20*scl,0*scl]).add(c)
     v += c
     c = cube([15*scl, 40*scl, 52*scl], center=True)
     c = translate(v=[-32*scl,20*scl,0*scl]).add(c)
     v += c
     c = cube([14*scl, 40*scl, 75*scl], center=True)
-    c = translate(v=[22*scl,20*scl,0*scl]).add(c)
+    c = translate(v=[24*scl,20*scl,0*scl]).add(c)
     v += c
     c = cube([15*scl, 40*scl, 52*scl], center=True)
     c = translate(v=[32*scl,20*scl,0*scl]).add(c)
     v += c
-    c = cylinder(r=27*scl, h=81*scl, center=True, segments=50)
+    c = cylinder(r=30*scl, h=81*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
     v -= c
     v = rotate([0, 90, 0]).add(v)
@@ -1817,7 +1817,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 380*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 370*scl, -50*scl]).add(c)
         v -= c
 
     return v
@@ -2571,31 +2571,32 @@ def friction_hinge2(scl, ht):
     c = rotate([180, 90, 90]).add(c)
     a += c
 
+    hl = 27
     # outer disc
     r = union()
     c = cylinder(r=(rad)*scl,
-                        h=(22)*scl, segments=50, center=True)
+                        h=(hl)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (ht-19)*scl, 0]).add(c)
     r += c
 
-    c = cube([28.0*scl, 24*scl, 2*rad*scl], center=True)
+    c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[0, (ht/2+1)*scl, 29*scl]).add(c)
     r -= c
 
-    c = cube([28.0*scl, 24*scl, 2*rad*scl], center=True)
+    c = cube([28.0*scl, (hl+2)*scl, 2*rad*scl], center=True)
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[0, (ht/2+1)*scl, -29*scl]).add(c)
     r -= c
 
-    c = cylinder(r=(25)*scl,
-                        h=(22)*scl, segments=50, center=True)
+    c = cylinder(r=(28)*scl,
+                        h=(hl)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (ht-19)*scl, 0]).add(c)
+    c = translate(v=[0, (ht/2-9)*scl, 0]).add(c)
     r += c
 
-    t = translate(v=[0, (-ht/2+46-bwid)*scl, 0]).add(r)
+    t = translate(v=[0, (-ht/2+49-bwid)*scl, 0]).add(r)
     a += t
 
     # hinge hole
@@ -3448,7 +3449,7 @@ def create_laptop(t, scl, part, angle):
 
     if part == FRICTION_HINGE2:
         se = friction_hinge2(scl, 20)
-        h = lid_adjust_ht+scrn_hinge_ht+54 + 200
+        h = lid_adjust_ht+scrn_hinge_ht+72 + 200
         m = translate(v=[0, h*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3716,7 +3717,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        FRICTION_HINGE2,
+                        #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -3727,7 +3728,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
