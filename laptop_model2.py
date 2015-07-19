@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1685,19 +1685,19 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = cube([(70+79)*scl, 40*scl, (boxheight-10)*scl], center=True)
     c = translate(v=[(lcd_w+85-79/2.)*scl, (95)*scl, (boxheight/2)*scl]).add(c)
     u += c
-    c = cube([200*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(-100)*scl, (85)*scl, (boxheight-55)*scl]).add(c)
+    c = cube([200*scl, 24*scl, 46*scl], center=True)
+    c = translate(v=[(-100)*scl, (87)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
-    c = cube([200*scl, 32*scl, 60*scl], center=True)
-    c = translate(v=[(-140)*scl, (91)*scl, (boxheight-55)*scl]).add(c)
+    c = cube([200*scl, 52*scl, 46*scl], center=True)
+    c = translate(v=[(-140)*scl, (101)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
-    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = cylinder(r=27.0*scl, h=24*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 2).add(c)
-    t = translate(v=[(0)*scl, (85)*scl, (boxheight-55)*scl]).add(t)
+    t = translate(v=[(0)*scl, (87)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # screw holes in box
@@ -1817,6 +1817,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
         u += c
 
+        c = cube([100*scl, 6*scl, 70*scl])
+        c = translate([(w-58-79)*scl, (99)*scl, 5*scl]).add(c)
+        u += c
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -1824,7 +1828,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 370*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 272.5*scl, -50*scl]).add(c)
         v -= c
 
     return v
