@@ -2282,7 +2282,7 @@ def screen_end(scl, ht, lcd_end_ht):
     #u += b
 
     # hex indentation
-    c = cylinder(r=28.5*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=29*scl, r1=27*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -2742,7 +2742,7 @@ def screen_hinge(scl, ht):
     u -= t
 
     # hex indentation
-    c = cylinder(r=26.5*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=27*scl, r1=26*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -3834,7 +3834,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
