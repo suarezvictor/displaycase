@@ -2792,23 +2792,22 @@ def screen_hinge(scl, ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
-    if False:
-        # lock-in cutout to screen_hinge part
-        d = shearedcube([42*scl, 13*scl, 11*scl],
-                shear=[0,-11*scl,0],
-                innershear=[0,0*scl,0])
-        c = rotate([0, 0, 180]).add(d)
-        c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
-        c = translate(v=[(lcd_w+89)*scl, (ht-10)*scl,
-                        (lcd_d-hthick-8.6)*scl]).add(c)
-        u -= c
-        d = shearedcube([42*scl, 14*scl, 11*scl],
-                shear=[0,11*scl,0],
-                innershear=[0,0*scl,0])
-        c = rotate([0, 0, 180]).add(d)
-        c = translate(v=[(32)*scl, (12)*scl, (-6)*scl]).add(c)
-        c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
-        u -= c
+    # lock-in cutout to screen_hinge part
+    d = shearedcube([42*scl, 13*scl, 11*scl],
+            shear=[0,-11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
+    c = translate(v=[(lcd_w+89)*scl, (ht-10)*scl,
+                    (lcd_d-hthick-8.6)*scl]).add(c)
+    u -= c
+    d = shearedcube([42*scl, 14*scl, 11*scl],
+            shear=[0,11*scl,0],
+            innershear=[0,0*scl,0])
+    c = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(32)*scl, (12)*scl, (-6)*scl]).add(c)
+    c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
+    u -= c
 
     # add interlock with friction_hinge1
     for ang in [0, 120, 240]:
@@ -2833,7 +2832,7 @@ def screen_hinge(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(boxlength-70)*scl, (ht-3)*scl, -55*scl]).add(h)
+        h = translate([(boxlength-64)*scl, (ht-3)*scl, -55*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
