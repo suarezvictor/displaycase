@@ -252,7 +252,8 @@ def hollowbox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
 
     return v
 
-def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
+def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0,
+                    shear=0):
     rad2 = bwid+rad
     rad -= iro
     rad_r = rad
@@ -271,15 +272,23 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0):
     ct = translate(v=[0*scl,-rad2*scl,-ht*scl])
     ct.add(cb)
     c -= ct
-    cb = cube(size=[2.2*rad2*scl,rad2*2*scl,2*(ht)*scl])
-    ct = translate(v=[-rad2*scl*1.1,-0*scl,-ht*scl])
+    cb = shearedcube(size=[(rad2*2)*scl,(rad2+1)*scl,(ht+0.1)*scl],
+            shear=[shear*scl, 0, 0],
+            innershear=[0*scl, 0, 0])
+    cb = rotate([0, 0, -90]).add(cb)
+    cb = translate(v=[0*scl,(rad2*2+shear/2)*scl,0]).add(cb)
+    #cb = cube(size=[2.2*rad2*scl,rad2*2*scl,2*(ht)*scl])
+    ct = translate(v=[-(rad2+0.5)*scl,-0*scl,-(ht/2+0.05)*scl])
     ct.add(cb)
     c -= ct
     if angle != 0.0:
-        cb = cube(size=[rad2*scl*2.2,2.2*rad2*scl,2*(ht)*scl])
-        #cb = translate(v=[0*scl,-rad2*scl,-ht*scl]).add(cb)
+        cb = shearedcube(size=[(rad2*2)*scl,(rad2+1)*scl,(ht+0.1)*scl],
+                shear=[shear*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+        cb = rotate([0, 0, -90]).add(cb)
+        cb = translate(v=[0*scl,(rad2*2+shear/2)*scl,0]).add(cb)
         t = rotate([0, 0, 270-angle]).add(cb)
-        ct = translate(v=[0*scl,0*scl,-ht*scl]).add(t)
+        ct = translate(v=[0*scl,0*scl,-(ht/2+0.05)*scl]).add(t)
         c -= ct
     r.add(c)
     t = translate(v=[0,0,-ht/2*scl+0*scl])
