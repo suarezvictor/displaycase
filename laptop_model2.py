@@ -2742,7 +2742,7 @@ def screen_hinge(scl, ht):
     u -= t
 
     # hex indentation
-    c = cylinder(r=25*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=26.5*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
