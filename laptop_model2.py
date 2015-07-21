@@ -59,7 +59,7 @@ if not test:
     tpanel_h = 40
 
     lcd_indent = 61
-    friclen = 162
+    friclen = 64
 
 else:
     # HSD070PWW1
@@ -1763,24 +1763,24 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += t
 
     # hollow hinge out
-    hd = 30
     c = cylinder(r=(rad-12)*scl, h=(friclen+50)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-    c = cylinder(r=(rad+1)*scl, h=(hinge_indent_ht+scrn_hinge_ht+1)*scl, segments=50)
+    c = cylinder(r=(rad+2)*scl, h=(hinge_indent_ht+scrn_hinge_ht+4)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-    c = cylinder(r1=(rad-2)*scl, r=(rad-13)*scl,
-                    h=(20)*scl, segments=50)
+    c = cylinder(r1=(rad-1)*scl, r=(rad-14)*scl,
+                    h=(22)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht+hinge_indent_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
+    hd = 25
     v = union()
     c = shearedcube([14*scl, 75*scl, hd*scl], center=True,
                 shear=[-3*scl, 0*scl, 0],
@@ -1805,7 +1805,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,21*scl,0*scl]).add(c)
     v -= c
     v = rotate([0, 90, 0]).add(v)
-    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+13)*scl,-55*scl]).add(v)
+    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+16)*scl,-55*scl]).add(v)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -1857,7 +1857,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 292.0*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 174.0*scl, -50*scl]).add(c)
         v -= c
 
     return v
@@ -2611,7 +2611,7 @@ def friction_hinge2(scl, ht):
     c = rotate([180, 90, 90]).add(c)
     a += c
 
-    hl = 35
+    hl = 30
     # outer disc
     r = union()
     c = cylinder(r=(rad)*scl,
@@ -2636,7 +2636,7 @@ def friction_hinge2(scl, ht):
     c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
     r += c
 
-    t = translate(v=[0, (-ht/2+49-bwid)*scl, 0*scl]).add(r)
+    t = translate(v=[0, (-ht/2+47-bwid)*scl, 0*scl]).add(r)
     a += t
 
     # hinge hole
@@ -2811,21 +2811,21 @@ def screen_hinge(scl, ht):
 
     # add interlock with friction_hinge1
     for ang in [0, 120, 240]:
-        c = touch_arc(rad-15.5, 16, bwid,
+        c = touch_arc(rad-15.5, 17, bwid,
                             -3.5, scl,
                       angle=30, shear=-2, roffsinner=6)
         c = rotate([180, 90, 90]).add(c)
         c = rotate([0, 60+238+ang, 0]).add(c)
         c = translate(v=[0, (-33)*scl, 0]).add(c)
         c = hinge_translate(scl).add(c)
-        c = translate(v=[0, (ht+17)*scl, 0*scl]).add(c)
+        c = translate(v=[0, (ht+15.5)*scl, 0*scl]).add(c)
 
         u += c
 
     c = cylinder(r=(rad-10)*scl, r1=(rad-4)*scl,
-                    h=(16)*scl, center=True, segments=50)
+                    h=(17)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,52*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,51.5*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -2847,9 +2847,9 @@ def screen_hinge(scl, ht):
 
         # underside circle support
         ea = -20.0
-        for ang in [120, 240]:
-            c = touch_arc(rad-3, 16, bwid,
-                                -3.5, scl,
+        for ang in []: #[120, 240]:
+            c = touch_arc(rad-2, 16, bwid,
+                                -5.5, scl,
                           angle=77)
             c = rotate([180, 90, 90]).add(c)
             c = rotate([0, 214+ang, 0]).add(c)
@@ -2860,11 +2860,11 @@ def screen_hinge(scl, ht):
             u += c
 
         v = union()
-        c = cylinder(r=(rad+20)*scl, 
+        c = cylinder(r=(rad+22)*scl, 
                         h=(18)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v += c
-        c = cylinder(r=(rad+13)*scl, 
+        c = cylinder(r=(rad+14)*scl, 
                         h=(20)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v -= c
@@ -3568,8 +3568,8 @@ def create_laptop(t, scl, part, angle):
     kbd_numpad_indent = 79
 
     if part == FRICTION_HINGE2:
-        se = friction_hinge2(scl, 20)
-        h = lid_adjust_ht+scrn_hinge_ht+friclen
+        se = friction_hinge2(scl, 12)
+        h = lid_adjust_ht+scrn_hinge_ht+friclen+10
         m = translate(v=[0, h*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3834,7 +3834,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
