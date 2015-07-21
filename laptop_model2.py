@@ -59,7 +59,7 @@ if not test:
     tpanel_h = 40
 
     lcd_indent = 61
-    friclen = 64
+    friclen = 84
 
 else:
     # HSD070PWW1
@@ -1536,7 +1536,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     w = boxlength-back_top_width
 
     walls = {T:hthick, L:-1, R:hthick, F:97+hthick+base_centre_ht/2,
-                                        D:hthick, B:70}
+                                        D:hthick, B:110}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -1618,7 +1618,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # put in series of cutouts
     fthick = 8
-    offs = 80-hthick+fthick
+    offs = scrn_hinge_ht+40-hthick+fthick
     step = (ht-100-offs) / (4.0 if test else 15.0)
     while offs < (ht-step-10):
         # add fill-ins
@@ -1698,8 +1698,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # slot to fit a nut into
     # XXX TODO: fill this all the way back (for mold purposes)
-    c = cube([(70+79)*scl, 40*scl, (boxheight-10)*scl], center=True)
-    c = translate(v=[(lcd_w+85-79/2.)*scl, (95)*scl, (boxheight/2)*scl]).add(c)
+    c = cube([(40+73)*scl, 40*scl, (boxheight-10)*scl], center=True)
+    c = translate(v=[(lcd_w+85-79/2.)*scl, (88)*scl, (boxheight/2)*scl]).add(c)
     u += c
     c = cube([200*scl, 24*scl, 46*scl], center=True)
     c = translate(v=[(-100)*scl, (87)*scl, (boxheight-55)*scl]).add(c)
@@ -1857,7 +1857,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 174.0*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 214.0*scl, -50*scl]).add(c)
+        v -= c
+        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
         v -= c
 
     return v
@@ -3843,7 +3846,7 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #SCREEN_END,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -3856,7 +3859,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
