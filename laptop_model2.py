@@ -2773,22 +2773,30 @@ def screen_hinge(scl, ht):
     u += c
 
     # cable cutout
-    c = cube([(36)*scl, (ht*2)*scl, (30+hinge_offs)*scl])
+    c = cube([(40)*scl, (ht*2)*scl, (30+hinge_offs)*scl])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 31, 0]).add(c)
     c = translate(v=[(w-rad-4)*scl,-(ht+hthick)*scl,
                      (10+hinge_offs)*scl]).add(c)
     u -= c
+    # put a bit back
+    c = cube([(42)*scl, (12)*scl, (51)*scl])
+    c = rotate([0, 0, 180]).add(c)
+    c = rotate([180, 0, 0]).add(c)
+    c = rotate([0, 31, 0]).add(c)
+    c = translate(v=[(w-rad-3)*scl,(ht-21)*scl,
+                     (10+hinge_offs)*scl]).add(c)
+    u += c
 
     c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick)*scl])
     c = translate(v=[(w-170)*scl,-(1)*scl,
                      (-8)*scl]).add(c)
     u -= c
 
-    c = cylinder(r=(rad+15)*scl, h=(20)*scl, center=True, segments=50)
+    c = cylinder(r=(rad+17)*scl, h=(20)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,54*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,(ht-6)*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2813,7 +2821,7 @@ def screen_hinge(scl, ht):
     for ang in [0, 120, 240]:
         c = touch_arc(rad-15.5, 17, bwid,
                             -3.5, scl,
-                      angle=30, shear=-2, roffsinner=6)
+                      angle=30, shear=-4, roffsinner=6)
         c = rotate([180, 90, 90]).add(c)
         c = rotate([0, 60+238+ang, 0]).add(c)
         c = translate(v=[0, (-33)*scl, 0]).add(c)
@@ -2822,10 +2830,10 @@ def screen_hinge(scl, ht):
 
         u += c
 
-    c = cylinder(r=(rad-10)*scl, r1=(rad-4)*scl,
+    c = cylinder(r=(rad-12)*scl, r1=(rad-6)*scl,
                     h=(17)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,51.5*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,(ht-8.5)*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -2841,13 +2849,13 @@ def screen_hinge(scl, ht):
         #h = translate([(boxlength-30)*scl, (ht-3)*scl, 175*scl]).add(h)
         #c += h
         h = pin(B0, scl)
-        h = translate([(boxlength-141)*scl, (ht-3)*scl, 90*scl]).add(h)
+        h = translate([(boxlength-151)*scl, (ht-3)*scl, 91.9*scl]).add(h)
         c += h
         u += c
 
         # underside circle support
         ea = -20.0
-        for ang in []: #[120, 240]:
+        for ang in [120, 240]:
             c = touch_arc(rad-2, 16, bwid,
                                 -5.5, scl,
                           angle=77)
@@ -2864,7 +2872,7 @@ def screen_hinge(scl, ht):
                         h=(18)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v += c
-        c = cylinder(r=(rad+14)*scl, 
+        c = cylinder(r=(rad+14.5)*scl, 
                         h=(20)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v -= c
@@ -2875,7 +2883,7 @@ def screen_hinge(scl, ht):
         v -= c
         c = rotate([0, 38, 0]).add(c)
         v -= c
-        v = translate(v=[0*scl,51*scl,0*scl]).add(v)
+        v = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(v)
         t = hinge_translate(scl).add(v)
         u += t
 
@@ -3548,7 +3556,7 @@ def create_laptop(t, scl, part, angle):
     lid_adjust_ht = 0
     base_adjust_ht = 0
     scrn_end_ht = 30
-    scrn_hinge_ht = 60
+    scrn_hinge_ht = 80
 
     if part == SCREEN_END:
         se = screen_end(scl, scrn_end_ht, lcd_end_ht)
