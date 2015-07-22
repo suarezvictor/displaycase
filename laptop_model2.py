@@ -14,7 +14,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
@@ -526,7 +526,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, 18, ht+20, 35,
                 {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(boxlength-back_top_width-20)*scl, 
+    b = translate(v=[(boxlength-back_top_width-20)*scl,
                      0*scl, (55)*scl]).add(b)
     u += b
 
@@ -1226,7 +1226,7 @@ def tpanel_mid(scl, ht, ht_offset):
                         (0)*scl]).add(c)
         u += c
         c = curvebox(scl, tpanel_l-26, tpanel_w-26, 11, 14)
-        c = translate(v=[(100+13)*scl, ((ht-tpanel_w)/2+13)*scl, 
+        c = translate(v=[(100+13)*scl, ((ht-tpanel_w)/2+13)*scl,
                         (-1)*scl]).add(c)
         u -= c
         c = union()
@@ -2842,11 +2842,11 @@ def screen_hinge(scl, ht):
         u += c
 
         v = union()
-        c = cylinder(r=(rad+22)*scl, 
+        c = cylinder(r=(rad+22)*scl,
                         h=(22)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v += c
-        c = cylinder(r=(rad+13)*scl, 
+        c = cylinder(r=(rad+13)*scl,
                         h=(24)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v -= c
@@ -2861,7 +2861,7 @@ def screen_hinge(scl, ht):
         t = hinge_translate(scl).add(v)
         u += t
 
-        c = cylinder(r=10*scl, 
+        c = cylinder(r=10*scl,
                         h=(1000)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         t = hinge_translate(scl).add(c)
@@ -2951,7 +2951,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += b
         # XXX blergh cut off corner using arc...
         c = touch_arc(60, 60, 20,
-                            30, scl, roffsinner=0, 
+                            30, scl, roffsinner=0,
                       angle=0)
         c = rotate([0, 0, 90]).add(c)
         c = translate(v=[(w-30)*scl, (l-8-hoffs+30)*scl, (50)*scl]).add(c)
@@ -3095,9 +3095,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             c += h
             h = translate([(w-12)*scl, (-boxheight+40)*scl, (-205)*scl]).add(v)
             c += h
-            
+
             c = rotate([90, 0, 0]).add(c)
-            c = translate([0*scl, (0)*scl, 
+            c = translate([0*scl, (0)*scl,
                            (boxheight-hthick-pcbthick-2)*scl]).add(c)
 
             u += c
@@ -3142,9 +3142,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             c += h
             h = translate([(w-12+woffs)*scl, (-30)*scl, (-200)*scl]).add(v)
             c += h
-            
+
             c = rotate([90, 0, 0]).add(c)
-            c = translate([0*scl, (0)*scl, 
+            c = translate([0*scl, (0)*scl,
                            (40)*scl]).add(c)
 
             u += c
@@ -3219,7 +3219,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     b = translate(v=[(w-15)*scl, (1)*scl, (26.0)*scl]).add(c)
     u += b
 
-    offs = ht + toffs - tpanel_l_b/2 
+    offs = ht + toffs - tpanel_l_b/2
 
     # add set of interlocks into back_base to hold it down
     c = union()
