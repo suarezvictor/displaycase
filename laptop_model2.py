@@ -11,7 +11,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART
@@ -797,6 +797,24 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+boxheight-24-33)*scl]).add(c)
         u -= t
 
+    # add spring-loaded clasp
+    c = cube([(150)*scl, (ht)*scl, (boxheight)*scl])
+    t = translate(v=[150*scl, 0*scl,
+                        (55)*scl]).add(c)
+    u += t
+    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-45+1)*scl])
+    t = translate(v=[145*scl, -1*scl,
+                        (55-1+25)*scl]).add(c)
+    u -= t
+    c = cube([(120)*scl, (40+1)*scl, (30)*scl])
+    t = translate(v=[145*scl, -1*scl,
+                        (55-1)*scl]).add(c)
+    u -= t
+    c = cylinder(r=(24)*scl, h=(160)*scl, segments=50)
+    c = rotate([0, 90, 0]).add(c)
+    c = translate(v=[130*scl,30*scl,(55+70)*scl]).add(c)
+    u -= c
+    
 
     if pin_parts_3d:
         c = union()
@@ -3830,14 +3848,14 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
