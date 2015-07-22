@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -106,7 +106,7 @@ lcd_end_ht = 72
 lcd_end_offs = 20
 
 # XXX should really be calculated from lcd width, scrn width etc.
-base_end_ht = 100
+base_end_ht = 120
 
 lcdscrewrad = 28 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 28 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
@@ -459,7 +459,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    #u += b
+    u += b
 
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
@@ -3424,7 +3424,7 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1610*scl, 1135*scl, (12)*scl])
+    b = cube([1610*scl, 1155*scl, (12)*scl])
     b = translate([(40)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
@@ -3435,7 +3435,7 @@ def pcb1(scl):
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
     b = cube([60*scl, 130*scl, (30)*scl])
-    b = translate([(570)*scl, (1200-120)*scl, -10*scl]).add(b)
+    b = translate([(570)*scl, (1200-100)*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([775*scl, (91)*scl, 30*scl])
     b = translate(v=[(570)*scl, (-1)*scl, (-10)*scl]).add(b)
@@ -3589,14 +3589,14 @@ def create_laptop(t, scl, part, angle):
     if part == BASE_END:
         if mirroring & LEFTPART:
             se = base_end(scl, base_end_ht, 0)
-            m = translate(v=[0, 0*scl,0]).add(se)
+            m = translate(v=[0, -20*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
             se = base_end(scl, base_end_ht, kbd_numpad_indent)
             m = mirror_part(se, scl, total_width)
             b.add(m)
 
-    base_adjust_ht = base_end_ht
+    base_adjust_ht = base_end_ht-20
     base_adjust_ht += scrn_hinge_ht
 
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
@@ -3604,7 +3604,8 @@ def create_laptop(t, scl, part, angle):
 
     if part == PCB1:
         se = pcb1(scl)
-        b.add(se)
+        m = translate(v=[0, -20*scl,0]).add(se)
+        b.add(m)
 
     if part == PCB2:
         se = pcb2(scl)
@@ -3815,10 +3816,10 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #SCREEN_HINGE,
-                        FRICTION_HINGE1,
+                        #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
