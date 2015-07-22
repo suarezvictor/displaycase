@@ -2661,7 +2661,7 @@ def friction_hinge1(scl, ht):
 
     # outer disc
     r = union()
-    c = cylinder(r=rad*scl,
+    c = cylinder(r=(rad-2)*scl,
                         h=(hht)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     r += c
@@ -2670,15 +2670,15 @@ def friction_hinge1(scl, ht):
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (6)*scl, 0]).add(c)
     r += c
-    c = cylinder(r=rad2*scl,
+    c = cylinder(r=(rad2+0.5)*scl,
                         h=(32)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (-19.5)*scl, 0]).add(c)
     r += c
-    c = cylinder(r=(rad2-5)*scl, r1=(rad2-8)*scl,
-                        h=(20)*scl, segments=6, center=True)
+    c = cylinder(r=(rad2-6)*scl, r1=(rad2-9)*scl,
+                        h=(25)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (-30)*scl, 0]).add(c)
+    c = translate(v=[0, (-29+2.5)*scl, 0]).add(c)
     r -= c
 
     t = hinge_translate(scl).add(r)
@@ -2693,11 +2693,11 @@ def friction_hinge1(scl, ht):
     a -= t
 
     # bolt  hole
-    r = cylinder(r1=(26.5)*scl, r=(30)*scl, h=(ht)*scl, segments=6, center=True)
+    r = cylinder(r1=(26.5)*scl, r=(29)*scl, h=(24)*scl, segments=6, center=True)
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, -1.5, 0]).add(r)
     t = hinge_translate(scl).add(r)
-    t = translate(v=[0, (-ht/2-7)*scl, 0]).add(t)
+    t = translate(v=[0, (-24/2-6)*scl, 0]).add(t)
     a -= t
 
     return a
@@ -3817,8 +3817,8 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #SCREEN_END,
-                        SCREEN_HINGE,
-                        #FRICTION_HINGE1,
+                        #SCREEN_HINGE,
+                        FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
