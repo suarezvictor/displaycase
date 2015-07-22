@@ -11,14 +11,14 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -106,7 +106,7 @@ lcd_end_ht = 72
 lcd_end_offs = 20
 
 # XXX should really be calculated from lcd width, scrn width etc.
-base_end_ht = 120
+base_end_ht = 110
 
 lcdscrewrad = 28 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 28 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
@@ -602,7 +602,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += t
 
     # hollow hinge out
-    c = cylinder(r=(rad-10)*scl, h=(ht)*scl, segments=50)
+    c = cylinder(r=(rad-12)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -3595,14 +3595,14 @@ def create_laptop(t, scl, part, angle):
     if part == BASE_END:
         if mirroring & LEFTPART:
             se = base_end(scl, base_end_ht, 0)
-            m = translate(v=[0, -20*scl,0]).add(se)
+            m = translate(v=[0, -10*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
             se = base_end(scl, base_end_ht, kbd_numpad_indent)
             m = mirror_part(se, scl, total_width)
             b.add(m)
 
-    base_adjust_ht = base_end_ht-20
+    base_adjust_ht = base_end_ht-10
     base_adjust_ht += scrn_hinge_ht
 
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
@@ -3823,21 +3823,21 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
