@@ -1768,7 +1768,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-    c = cylinder(r=(rad+2)*scl, h=(hinge_indent_ht+scrn_hinge_ht+4)*scl, segments=50)
+    c = cylinder(r=(rad+2)*scl, h=(hinge_indent_ht+scrn_hinge_ht+7)*scl,
+                    segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -1776,7 +1777,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = cylinder(r1=(rad-1)*scl, r=(rad-14)*scl,
                     h=(22)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht+hinge_indent_ht-1)*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht+hinge_indent_ht+3)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2664,7 +2665,7 @@ def friction_hinge1(scl, ht):
                         h=(hht)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     r += c
-    c = cylinder(r1=rad*scl, r=rad2*scl,
+    c = cylinder(r1=(rad-2)*scl, r=(rad2-2)*scl,
                         h=(20)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (6)*scl, 0]).add(c)
@@ -2674,20 +2675,11 @@ def friction_hinge1(scl, ht):
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (-19.5)*scl, 0]).add(c)
     r += c
-    c = cylinder(r=(rad2-5)*scl, r1=(rad2-12)*scl,
-                        h=(16)*scl, segments=50, center=True)
+    c = cylinder(r=(rad2-5)*scl, r1=(rad2-8)*scl,
+                        h=(20)*scl, segments=6, center=True)
     c = rotate([180, 90, 90]).add(c)
     c = translate(v=[0, (-30)*scl, 0]).add(c)
     r -= c
-    # cutout to match with inset in the wall, stops the friction hinge turning
-    for ang in [0, 120, 240]:
-        c = touch_arc(rad2-17, 16, bwid,
-                            -2, scl, roffs=-8,
-                      angle=30, shear=-3)
-        c = rotate([180, -90, 90]).add(c)
-        c = rotate([0, 238+ang, 0]).add(c)
-        c = translate(v=[0, (-19.5)*scl, 0*scl]).add(c)
-        r += c
 
     t = hinge_translate(scl).add(r)
     t = translate(v=[0, (-ht/2+27.5-bwid)*scl, 0]).add(t)
@@ -2701,7 +2693,7 @@ def friction_hinge1(scl, ht):
     a -= t
 
     # bolt  hole
-    r = cylinder(r=(26.5)*scl, h=(ht)*scl, segments=6, center=True)
+    r = cylinder(r1=(26.5)*scl, r=(30)*scl, h=(ht)*scl, segments=6, center=True)
     r = rotate([180, 90, 90]).add(r)
     r = rotate([0, -1.5, 0]).add(r)
     t = hinge_translate(scl).add(r)
@@ -2820,21 +2812,8 @@ def screen_hinge(scl, ht):
     c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
     u -= c
 
-    # add interlock with friction_hinge1
-    for ang in [0, 120, 240]:
-        c = touch_arc(rad-15.5, 17, bwid,
-                            -3.5, scl,
-                      angle=30, shear=-4, roffsinner=6)
-        c = rotate([180, 90, 90]).add(c)
-        c = rotate([0, 60+238+ang, 0]).add(c)
-        c = translate(v=[0, (-33)*scl, 0]).add(c)
-        c = hinge_translate(scl).add(c)
-        c = translate(v=[0, (ht+15.5)*scl, 0*scl]).add(c)
-
-        u += c
-
-    c = cylinder(r=(rad-12)*scl, r1=(rad-6)*scl,
-                    h=(17)*scl, center=True, segments=50)
+    c = cylinder(r=(rad-3)*scl, r1=(rad+5)*scl,
+                    h=(17)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(ht-8.5)*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2856,20 +2835,6 @@ def screen_hinge(scl, ht):
         c += h
         u += c
 
-        # underside circle support
-        ea = -20.0
-        for ang in [120, 240]:
-            c = touch_arc(rad-2, 16, bwid,
-                                -5.5, scl,
-                          angle=77)
-            c = rotate([180, 90, 90]).add(c)
-            c = rotate([0, 214+ang, 0]).add(c)
-            c = translate(v=[0, (-32)*scl, 0]).add(c)
-            c = hinge_translate(scl).add(c)
-            c = translate(v=[0, (ht+16)*scl, 0*scl]).add(c)
-
-            u += c
-
         v = union()
         c = cylinder(r=(rad+22)*scl, 
                         h=(18)*scl, center=True, segments=50)
@@ -2882,13 +2847,19 @@ def screen_hinge(scl, ht):
         c = cube([70*scl, 70*scl, 20*scl])
         c = rotate([-90, 0, 0]).add(c)
         c = translate(v=[0*scl,-10*scl,0*scl]).add(c)
-        c = rotate([0, 34, 0]).add(c)
+        c = rotate([0, 30, 0]).add(c)
         v -= c
-        c = rotate([0, 38, 0]).add(c)
+        c = rotate([0, 44, 0]).add(c)
         v -= c
         v = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(v)
         t = hinge_translate(scl).add(v)
         u += t
+
+        c = cylinder(r=10*scl, 
+                        h=(1000)*scl, center=True, segments=50)
+        c = rotate([0, 90, 90]).add(c)
+        t = hinge_translate(scl).add(c)
+        u -= t
 
     return u
 
@@ -3847,7 +3818,7 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #SCREEN_HINGE,
-                        #FRICTION_HINGE1,
+                        FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
@@ -3859,7 +3830,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
