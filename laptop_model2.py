@@ -561,13 +561,19 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
 
     # add base_back lock-ins
+    d = union()
     c = shearedcube([(21)*scl, (34)*scl, 61*scl],
                 shear=[50*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+20)*scl,(ht+57)*scl,
-                        (hthick+55+2)*scl]).add(c)
-    u += c
+    d += c
+    c = cube([(60)*scl, (40)*scl, 40*scl])
+    c = translate(v=[(-1)*scl,(-30)*scl,
+                        (-1)*scl]).add(c)
+    d -= c
+    d = translate(v=[(w-back_top_width+20)*scl,(ht+57)*scl,
+                        (hthick+55+2)*scl]).add(d)
+    u += d
 
     d = union()
     c = shearedcube([(110)*scl, (25)*scl, 61*scl],
