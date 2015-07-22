@@ -576,8 +576,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += d
 
     d = union()
-    c = shearedcube([(110)*scl, (25)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
+    c = shearedcube([(110)*scl, (25)*scl, 91*scl],
+                shear=[70*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
