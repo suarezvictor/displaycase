@@ -2780,7 +2780,7 @@ def screen_hinge(scl, ht):
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 31, 0]).add(c)
-    c = translate(v=[(w-rad-3)*scl,(ht-21)*scl,
+    c = translate(v=[(w-rad-3)*scl,(ht-26)*scl,
                      (10+hinge_offs)*scl]).add(c)
     u += c
 
@@ -2789,9 +2789,9 @@ def screen_hinge(scl, ht):
                      (-8)*scl]).add(c)
     u -= c
 
-    c = cylinder(r=(rad+17)*scl, h=(20)*scl, center=True, segments=50)
+    c = cylinder(r=(rad+17)*scl, h=(26)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(ht-6)*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2812,10 +2812,10 @@ def screen_hinge(scl, ht):
     c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
     u -= c
 
-    c = cylinder(r=(rad-3)*scl, r1=(rad+5)*scl,
-                    h=(17)*scl, center=True, segments=6)
+    c = cylinder(r=(rad-3)*scl, r1=(rad+2)*scl,
+                    h=(23)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(ht-8.5)*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,(ht-11)*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -2831,27 +2831,27 @@ def screen_hinge(scl, ht):
         #h = translate([(boxlength-30)*scl, (ht-3)*scl, 175*scl]).add(h)
         #c += h
         h = pin(B0, scl)
-        h = translate([(boxlength-151)*scl, (ht-3)*scl, 91.9*scl]).add(h)
+        h = translate([(boxlength-155)*scl, (ht-3)*scl, 91.9*scl]).add(h)
         c += h
         u += c
 
         v = union()
         c = cylinder(r=(rad+22)*scl, 
-                        h=(18)*scl, center=True, segments=50)
+                        h=(22)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v += c
-        c = cylinder(r=(rad+14.5)*scl, 
-                        h=(20)*scl, center=True, segments=50)
+        c = cylinder(r=(rad+13)*scl, 
+                        h=(24)*scl, center=True, segments=50)
         c = rotate([0, 90, 90]).add(c)
         v -= c
-        c = cube([70*scl, 70*scl, 20*scl])
+        c = cube([70*scl, 70*scl, 24*scl])
         c = rotate([-90, 0, 0]).add(c)
         c = translate(v=[0*scl,-10*scl,0*scl]).add(c)
-        c = rotate([0, 30, 0]).add(c)
+        c = rotate([0, 40, 0]).add(c)
         v -= c
-        c = rotate([0, 44, 0]).add(c)
+        c = rotate([0, 25, 0]).add(c)
         v -= c
-        v = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(v)
+        v = translate(v=[0*scl,(ht-11)*scl,0*scl]).add(v)
         t = hinge_translate(scl).add(v)
         u += t
 
@@ -3817,8 +3817,8 @@ if __name__ == '__main__':
             for i in [
                         #BASE_END,
                         #SCREEN_END,
-                        #SCREEN_HINGE,
-                        FRICTION_HINGE1,
+                        SCREEN_HINGE,
+                        #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
