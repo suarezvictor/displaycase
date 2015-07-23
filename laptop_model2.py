@@ -447,7 +447,7 @@ def case_clasp(scl):
     t = translate(v=[148*scl, 0*scl,
                         (55+35+2)*scl]).add(c)
     u += t
-    c = cube([(114)*scl, (25)*scl, (boxheight-17)*scl])
+    c = cube([(114)*scl, (30)*scl, (boxheight-17)*scl])
     t = translate(v=[148*scl, 0*scl,
                         (55)*scl]).add(c)
     u += t
@@ -464,9 +464,9 @@ def case_clasp(scl):
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[232*scl,55*scl,(55+75)*scl]).add(c)
     u -= c
-    c = cylinder(r=(24)*scl, h=(80)*scl, segments=50)
+    c = cylinder(r=(25)*scl, h=(88)*scl, segments=50)
     c = rotate([40, 00, 0]).add(c)
-    c = translate(v=[202*scl,80*scl,(55-1)*scl]).add(c)
+    c = translate(v=[202*scl,81*scl,(55-1)*scl]).add(c)
     u -= c
     c = cube([(116)*scl, (90)*scl, (30)*scl])
     c = rotate([-102, 00, 0]).add(c)
