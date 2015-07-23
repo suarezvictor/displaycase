@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -39,6 +39,7 @@ PCB2 = 20
 BACK_KBD_RUNNER = 21
 FRICTION_HINGE1 = 22
 FRICTION_HINGE2 = 23
+CASE_CLASP = 24
 
 if not test:
     lcd_l = 3598.0
@@ -439,6 +440,70 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     u = translate(v=[(0)*scl, roff*scl, 0]).add(u)
     return u
 
+
+def case_clasp(scl):
+    u = union()
+    c = cube([(100)*scl, (80)*scl, (boxheight-50-4)*scl])
+    t = translate(v=[148*scl, 0*scl,
+                        (55+35+2)*scl]).add(c)
+    u += t
+    c = cube([(114)*scl, (25)*scl, (boxheight-17)*scl])
+    t = translate(v=[148*scl, 0*scl,
+                        (55)*scl]).add(c)
+    u += t
+    c = cylinder(r=(25)*scl, r1=18*scl, h=(17)*scl, segments=50)
+    c = rotate([0, 90, 0]).add(c)
+    c = translate(v=[132*scl,55*scl,(55+75)*scl]).add(c)
+    u += c
+    c = cube([(100)*scl, (25)*scl, (50)*scl])
+    c = rotate([-35, 00, 0]).add(c)
+    t = translate(v=[148*scl, 4*scl,
+                        (55+15)*scl]).add(c)
+    u += t
+    c = cylinder(r=(23)*scl, r1=18*scl, h=(31)*scl, segments=50)
+    c = rotate([0, 90, 0]).add(c)
+    c = translate(v=[232*scl,55*scl,(55+75)*scl]).add(c)
+    u -= c
+    c = cylinder(r=(24)*scl, h=(80)*scl, segments=50)
+    c = rotate([40, 00, 0]).add(c)
+    c = translate(v=[202*scl,80*scl,(55-1)*scl]).add(c)
+    u -= c
+    c = cube([(116)*scl, (90)*scl, (30)*scl])
+    c = rotate([-102, 00, 0]).add(c)
+    t = translate(v=[147*scl, 80*scl,
+                        (55+75)*scl]).add(c)
+    u -= t
+    c = cube([(116)*scl, (90)*scl, (30)*scl])
+    c = rotate([-25, 00, 0]).add(c)
+    t = translate(v=[147*scl, 53*scl,
+                        (55+105)*scl]).add(c)
+    u -= t
+    c = cube([(75)*scl, (20)*scl, (30)*scl])
+    t = translate(v=[158*scl, -1*scl,
+                        (55-1)*scl]).add(c)
+    u -= t
+    c = cube([(75)*scl, (15)*scl, (30)*scl])
+    c = rotate([-35, 00, 0]).add(c)
+    t = translate(v=[158*scl, -1*scl,
+                        (55)*scl]).add(c)
+    u -= t
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = translate([(116)*scl, (0)*scl, -12*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(280)*scl, (0)*scl, -12*scl]).add(h)
+        c += h
+
+        c = rotate([90, 00, 0]).add(c)
+        c = translate([(0)*scl, (0)*scl, (55+100)*scl]).add(c)
+        u += c
+
+    return u
+
+
 def base_end(scl, ht, kbd_numpad_indent):
     u = union()
     w = boxlength-3
@@ -802,7 +867,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[150*scl, 0*scl,
                         (55)*scl]).add(c)
     u += t
-    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-45+1)*scl])
+    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-40+1)*scl])
     t = translate(v=[145*scl, -1*scl,
                         (55-1+25)*scl]).add(c)
     u -= t
@@ -812,9 +877,13 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= t
     c = cylinder(r=(24)*scl, h=(160)*scl, segments=50)
     c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[130*scl,30*scl,(55+70)*scl]).add(c)
+    c = translate(v=[130*scl,55*scl,(55+75)*scl]).add(c)
     u -= c
-    
+    c = cube([(120)*scl, (15)*scl, (30)*scl])
+    c = rotate([-40, 00, 0]).add(c)
+    t = translate(v=[145*scl, 20*scl,
+                        (55+11)*scl]).add(c)
+    u -= t
 
     if pin_parts_3d:
         c = union()
@@ -3610,6 +3679,16 @@ def create_laptop(t, scl, part, angle):
 
     lid_adjust_ht += scrn_hinge_ht
 
+    if part == CASE_CLASP:
+        if mirroring & LEFTPART:
+            se = case_clasp(scl)
+            m = translate(v=[0, -10*scl,0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = case_clasp(scl)
+            m = mirror_part(se, scl, total_width+10)
+            b.add(m)
+
     if part == BASE_END:
         if mirroring & LEFTPART:
             se = base_end(scl, base_end_ht, 0)
@@ -3617,7 +3696,7 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
         if mirroring & RIGHTPART:
             se = base_end(scl, base_end_ht, kbd_numpad_indent)
-            m = mirror_part(se, scl, total_width)
+            m = mirror_part(se, scl, total_width+10)
             b.add(m)
 
     base_adjust_ht = base_end_ht-10
@@ -3840,8 +3919,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
-                        SCREEN_END,
+                        #BASE_END,
+                        #SCREEN_END,
+                        CASE_CLASP,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
