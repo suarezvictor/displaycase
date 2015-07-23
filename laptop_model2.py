@@ -814,7 +814,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += b
 
     # inset for base_front
-    c = cube([(118)*scl, (40)*scl, (63)*scl])
+    c = cube([(105)*scl, (40)*scl, (63)*scl])
     c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
     c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
