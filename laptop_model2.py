@@ -871,7 +871,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[145*scl, -1*scl,
                         (55-1+25)*scl]).add(c)
     u -= t
-    c = cube([(120)*scl, (40+1)*scl, (30)*scl])
+    c = cube([(120)*scl, (50+1)*scl, (30)*scl])
     t = translate(v=[145*scl, -1*scl,
                         (55-1)*scl]).add(c)
     u -= t
@@ -881,7 +881,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
     c = cube([(120)*scl, (15)*scl, (30)*scl])
     c = rotate([-40, 00, 0]).add(c)
-    t = translate(v=[145*scl, 20*scl,
+    t = translate(v=[145*scl, 32*scl,
                         (55+11)*scl]).add(c)
     u -= t
 
@@ -922,7 +922,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(w-45)*scl, (0)*scl, 185*scl]).add(h)
         c += h
 
-        h = cube([150*scl, 40*scl, 7*scl])
+        h = cube([150*scl, 60*scl, 7*scl])
         h = translate([(130)*scl, (-3)*scl, 55*scl]).add(h)
         c += h
 
