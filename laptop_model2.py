@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -891,10 +891,10 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(75)*scl, (0)*scl, 45*scl]).add(h)
+        h = translate([(77.5)*scl, (0)*scl, 25*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(150)*scl, (0)*scl, 45*scl]).add(h)
+        h = translate([(255)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(120)*scl, (0)*scl, 195*scl]).add(h)
@@ -922,6 +922,16 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(w-45)*scl, (0)*scl, 185*scl]).add(h)
         c += h
 
+        h = cube([150*scl, 40*scl, 7*scl])
+        h = translate([(130)*scl, (-3)*scl, 55*scl]).add(h)
+        c += h
+
+        h = cube([6*scl, (base_end_ht-15)*scl, boxheight*scl])
+        h = translate([(175)*scl, (-3)*scl, 55*scl]).add(h)
+        c += h
+        h = translate([(45)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
         c = translate([(0)*scl, (3)*scl, 0*scl]).add(c)
 
         u += c
@@ -934,8 +944,12 @@ def base_end(scl, ht, kbd_numpad_indent):
         #c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
         #c = translate([(tpanel_l_b+30-kbd_numpad_indent)*scl, -20*scl, -50*scl]).add(c)
         #u -= c
+
+        #c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
+        #c = translate([(-600)*scl, -20*scl, -50*scl]).add(c)
+        #u -= c
         c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-600)*scl, -20*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, -20*scl, -50*scl]).add(c)
         u -= c
 
     return u
@@ -3919,9 +3933,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
-                        CASE_CLASP,
+                        #CASE_CLASP,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
