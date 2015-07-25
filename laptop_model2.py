@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -449,6 +449,13 @@ def clasp_nib(scl):
     c = translate(v=[225*scl,55*scl,(55+75)*scl]).add(c)
     u += c
 
+    c = shearedcube([(20)*scl, (45)*scl, (50)*scl],
+                    shear=[10*scl, 0, 0],
+                    innershear=[-10*scl, 0, 0])
+    c = rotate([0, 90, 0]).add(c)
+    c = translate(v=[212*scl,25*scl,(55+80)*scl]).add(c)
+    u += c
+
     c = cylinder(r1=(29)*scl, r=(15)*scl, h=(15)*scl, segments=50)
     c = rotate([0, 90, 0]).add(c)
     c = translate(v=[238*scl,55*scl,(55+75)*scl]).add(c)
@@ -458,49 +465,61 @@ def clasp_nib(scl):
 
 def case_clasp(scl):
     u = union()
-    c = cube([(85)*scl, (80)*scl, (boxheight-50-4)*scl])
+    c = cube([(100)*scl, (70)*scl, (boxheight-30-6)*scl])
     t = translate(v=[148*scl, 0*scl,
-                        (55+35+2)*scl]).add(c)
+                        (55+15+2)*scl]).add(c)
     u += t
-    c = cube([(114)*scl, (35)*scl, (boxheight-17)*scl])
+    c = cube([(114)*scl, (15)*scl, (boxheight-30-6)*scl])
     t = translate(v=[148*scl, 0*scl,
-                        (55)*scl]).add(c)
+                        (55+15+2)*scl]).add(c)
     u += t
-    c = cylinder(r=(25)*scl, r1=18*scl, h=(17)*scl, segments=50)
+    c = shearedcube([(12)*scl, (40)*scl, (20)*scl],
+                    shear=[10*scl, 0, 0],
+                    innershear=[-10*scl, 0, 0])
     c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[132*scl,55*scl,(55+75)*scl]).add(c)
+    c = translate(v=[132*scl,25*scl,(55+75)*scl]).add(c)
     u += c
+
     c = cube([(100)*scl, (25)*scl, (50)*scl])
     c = rotate([-35, 00, 0]).add(c)
-    t = translate(v=[148*scl, 4*scl,
+    t = translate(v=[148*scl, 6*scl,
                         (55+15)*scl]).add(c)
-    u += t
-    c = cylinder(r=(23)*scl, r1=18*scl, h=(31)*scl, segments=50)
-    c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[222*scl,55*scl,(55+75)*scl]).add(c)
+    #u += t
+    c = cube([(40)*scl, (20)*scl, (30)*scl])
+    c = translate(v=[212*scl,20*scl,(55+55)*scl]).add(c)
     u -= c
-    c = cylinder(r=(25)*scl, h=(88)*scl, segments=50)
-    c = rotate([40, 00, 0]).add(c)
-    c = translate(v=[192*scl,81*scl,(55-1)*scl]).add(c)
+    c = cube([(40)*scl, (40)*scl, (30)*scl])
+    c = translate(v=[230*scl,20*scl,(55+55)*scl]).add(c)
+    u -= c
+    c = cylinder(r=(13)*scl, h=(90)*scl, segments=50)
+    c = rotate([90, 00, 0]).add(c)
+    c = translate(v=[192*scl,81*scl,(55+70)*scl]).add(c)
+    u -= c
+    c = cylinder(r=(25)*scl, h=(70)*scl, segments=50)
+    c = rotate([90, 00, 0]).add(c)
+    c = translate(v=[192*scl,81*scl,(55+70)*scl]).add(c)
+    u -= c
+    c = cube([(56)*scl, (45)*scl, (boxheight)*scl])
+    c = translate(v=[164*scl,45*scl,(55-1)*scl]).add(c)
     u -= c
     c = cube([(116)*scl, (90)*scl, (30)*scl])
     c = rotate([-102, 00, 0]).add(c)
     t = translate(v=[147*scl, 80*scl,
                         (55+75)*scl]).add(c)
-    u -= t
+    #u -= t
     c = cube([(116)*scl, (90)*scl, (30)*scl])
     c = rotate([-25, 00, 0]).add(c)
     t = translate(v=[147*scl, 53*scl,
                         (55+105)*scl]).add(c)
-    u -= t
-    c = cube([(75)*scl, (20)*scl, (30)*scl])
+    #u -= t
+    c = cube([(70)*scl, (25)*scl, (45)*scl])
     t = translate(v=[158*scl, -1*scl,
                         (55-1)*scl]).add(c)
     u -= t
-    c = cube([(75)*scl, (15)*scl, (30)*scl])
-    c = rotate([-35, 00, 0]).add(c)
+    c = cube([(70)*scl, (12)*scl, (30)*scl])
+    c = rotate([-55, 00, 0]).add(c)
     t = translate(v=[158*scl, -1*scl,
-                        (55)*scl]).add(c)
+                        (55+25)*scl]).add(c)
     u -= t
 
     c = shearedcube([(120)*scl, (35)*scl, (50)*scl],
@@ -508,21 +527,21 @@ def case_clasp(scl):
                     innershear=[30*scl, 0, 0])
     c = rotate([0, -90, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    t = translate(v=[268*scl, 60*scl,
+    t = translate(v=[283*scl, 60*scl,
                         (55)*scl]).add(c)
     u -= t
 
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(116)*scl, (0)*scl, -12*scl]).add(h)
+        h = translate([(116)*scl, (0)*scl, -25*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(280)*scl, (0)*scl, -12*scl]).add(h)
+        h = translate([(270.5)*scl, (0)*scl, -45*scl]).add(h)
         c += h
 
         c = rotate([90, 00, 0]).add(c)
-        c = translate([(0)*scl, (0)*scl, (55+100)*scl]).add(c)
+        c = translate([(0)*scl, (0)*scl, (55+98)*scl]).add(c)
         u += c
 
     return u
@@ -891,23 +910,22 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[150*scl, 0*scl,
                         (55)*scl]).add(c)
     u += t
-    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-40+1)*scl])
+    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-30+1)*scl])
     t = translate(v=[145*scl, -1*scl,
-                        (55-1+25)*scl]).add(c)
+                        (55-1+15)*scl]).add(c)
     u -= t
-    c = cube([(120)*scl, (50+1)*scl, (30)*scl])
+    c = cube([(120)*scl, (28+1)*scl, (30)*scl])
     t = translate(v=[145*scl, -1*scl,
                         (55-1)*scl]).add(c)
     u -= t
-    c = cylinder(r=(24)*scl, h=(160)*scl, segments=50)
-    c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[130*scl,55*scl,(55+75)*scl]).add(c)
+    c = cube([(160)*scl, (55)*scl, (30)*scl])
+    c = translate(v=[130*scl,15*scl,(55+53)*scl]).add(c)
     u -= c
-    c = cube([(120)*scl, (15)*scl, (30)*scl])
-    c = rotate([-40, 00, 0]).add(c)
-    t = translate(v=[145*scl, 32*scl,
-                        (55+11)*scl]).add(c)
-    u -= t
+    # add middle-bit back in
+    c = cube([(26)*scl, (40)*scl, (boxheight)*scl])
+    t = translate(v=[180*scl, (base_end_ht-47)*scl,
+                        (55)*scl]).add(c)
+    u += t
 
     if pin_parts_3d:
         c = union()
@@ -915,13 +933,16 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(77.5)*scl, (0)*scl, 25*scl]).add(h)
+        h = translate([(120)*scl, (0)*scl, 25*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(255)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(120)*scl, (0)*scl, 195*scl]).add(h)
+        h = translate([(255)*scl, (0)*scl, 205*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(120)*scl, (0)*scl, 205*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(45)*scl, (0)*scl, 195*scl]).add(h)
@@ -951,7 +972,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = cube([6*scl, (base_end_ht-15)*scl, boxheight*scl])
-        h = translate([(175)*scl, (-3)*scl, 55*scl]).add(h)
+        h = translate([(180)*scl, (-3)*scl, 55*scl]).add(h)
         c += h
         h = translate([(45)*scl, (0)*scl, 0*scl]).add(h)
         c += h
@@ -974,6 +995,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         #u -= c
         c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
         c = translate([(300)*scl, -20*scl, -50*scl]).add(c)
+        u -= c
+        c = cube([(300)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(-175)*scl, -20*scl, -50*scl]).add(c)
         u -= c
 
     return u
@@ -3966,7 +3990,7 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         CASE_CLASP,
-                        CLASP_NIB,
+                        #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
@@ -3992,6 +4016,8 @@ if __name__ == '__main__':
                     c = [0.8, 0.3, 0.8, 0.5]
                 elif i == PCB2: # pcb1
                     c = [0.3, 0.8, 0.3, 0.25]
+                elif i == CASE_CLASP: # pcb1
+                    c = [0.3, 0.8, 0.3, 0.2]
                 else:
                     c = [0.3, 0.5, 0.8, 0.5]
                 c = color(c)
