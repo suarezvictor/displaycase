@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -857,7 +857,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += b
 
     # inset for base_front
-    c = cube([(105)*scl, (40)*scl, (63)*scl])
+    c = cube([(115)*scl, (40)*scl, (63)*scl])
     c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
     c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
@@ -905,27 +905,29 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+boxheight-24-33)*scl]).add(c)
         u -= t
 
-    # add spring-loaded clasp
-    c = cube([(150)*scl, (ht)*scl, (boxheight)*scl])
-    t = translate(v=[150*scl, 0*scl,
-                        (55)*scl]).add(c)
-    u += t
-    c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-30+1)*scl])
-    t = translate(v=[145*scl, -1*scl,
-                        (55-1+15)*scl]).add(c)
-    u -= t
-    c = cube([(120)*scl, (28+1)*scl, (30)*scl])
-    t = translate(v=[145*scl, -1*scl,
-                        (55-1)*scl]).add(c)
-    u -= t
-    c = cube([(160)*scl, (55)*scl, (30)*scl])
-    c = translate(v=[130*scl,15*scl,(55+53)*scl]).add(c)
-    u -= c
-    # add middle-bit back in
-    c = cube([(26)*scl, (40)*scl, (boxheight)*scl])
-    t = translate(v=[180*scl, (base_end_ht-47)*scl,
-                        (55)*scl]).add(c)
-    u += t
+    clasp = False
+    if clasp:
+        # add spring-loaded clasp
+        c = cube([(150)*scl, (ht)*scl, (boxheight)*scl])
+        t = translate(v=[150*scl, 0*scl,
+                            (55)*scl]).add(c)
+        u += t
+        c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-30+1)*scl])
+        t = translate(v=[145*scl, -1*scl,
+                            (55-1+15)*scl]).add(c)
+        u -= t
+        c = cube([(120)*scl, (28+1)*scl, (30)*scl])
+        t = translate(v=[145*scl, -1*scl,
+                            (55-1)*scl]).add(c)
+        u -= t
+        c = cube([(160)*scl, (55)*scl, (30)*scl])
+        c = translate(v=[130*scl,15*scl,(55+53)*scl]).add(c)
+        u -= c
+        # add middle-bit back in
+        c = cube([(26)*scl, (40)*scl, (boxheight)*scl])
+        t = translate(v=[180*scl, (base_end_ht-47)*scl,
+                            (55)*scl]).add(c)
+        u += t
 
     if pin_parts_3d:
         c = union()
@@ -996,9 +998,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([(boxlength+300)*scl, (ht+100)*scl, 400*scl])
         c = translate([(300)*scl, -20*scl, -50*scl]).add(c)
         u -= c
-        c = cube([(300)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-175)*scl, -20*scl, -50*scl]).add(c)
-        u -= c
+        #c = cube([(300)*scl, (ht+100)*scl, 400*scl])
+        #c = translate([(-175)*scl, -20*scl, -50*scl]).add(c)
+        #u -= c
 
     return u
 
@@ -3987,9 +3989,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
-                        CASE_CLASP,
+                        #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
