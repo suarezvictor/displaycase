@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -1925,16 +1925,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-    c = cylinder(r=(rad+2)*scl, h=(hinge_indent_ht+scrn_hinge_ht+7)*scl,
+    c = cylinder(r=(rad+2)*scl, h=(scrn_hinge_ht+2+40)*scl,
                     segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(-1)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
-    c = cylinder(r1=(rad-1)*scl, r=(rad-14)*scl,
-                    h=(22)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht+hinge_indent_ht+3)*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,(-1-40)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2015,7 +2009,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if cutdown:
         # cut down
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 214.0*scl, -50*scl]).add(c)
+        c = translate([(300)*scl, 212.0*scl, -50*scl]).add(c)
         v -= c
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
         c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
@@ -3989,7 +3983,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -4002,7 +3996,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
