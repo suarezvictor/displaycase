@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2988,26 +2988,6 @@ def screen_hinge(scl, ht):
         c += h
         u += c
 
-        v = union()
-        c = cylinder(r=(rad+22)*scl,
-                        h=(22)*scl, center=True, segments=50)
-        c = rotate([0, 90, 90]).add(c)
-        v += c
-        c = cylinder(r=(rad+13)*scl,
-                        h=(24)*scl, center=True, segments=50)
-        c = rotate([0, 90, 90]).add(c)
-        v -= c
-        c = cube([70*scl, 70*scl, 24*scl])
-        c = rotate([-90, 0, 0]).add(c)
-        c = translate(v=[0*scl,-10*scl,0*scl]).add(c)
-        c = rotate([0, 40, 0]).add(c)
-        v -= c
-        c = rotate([0, 25, 0]).add(c)
-        v -= c
-        v = translate(v=[0*scl,(ht-11)*scl,0*scl]).add(v)
-        t = hinge_translate(scl).add(v)
-        u += t
-
     return u
 
 def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
@@ -3983,7 +3963,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -3996,7 +3976,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
