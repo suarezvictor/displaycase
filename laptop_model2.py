@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2015,6 +2015,21 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
         v -= c
 
+        if pin_parts_3d:
+
+            c = union()
+
+            h = pin(B0, scl)
+            h = translate([(245)*scl, (0)*scl, 45*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(245)*scl, (0)*scl, 74*scl]).add(h)
+            c += h
+            c = rotate([0, 0, 90]).add(c)
+            c = translate([(w-10)*scl, (0)*scl, 55*scl]).add(c)
+
+            v += c
+
     return v
 
 def front_mid_joiner(scl, ht):
@@ -3963,7 +3978,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -3976,7 +3991,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
