@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -1827,21 +1827,26 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += c
     # ok these are for the pcb1_support and battery_support1
     # they extend all the way to the back (for injection molding)
-    offs = ht + toffs - tpanel_l_b/2 +10
+    offs = ht + toffs - tpanel_l_b/2 +8
     if toffs < 0:
         offs += 50
     b = union()
-    c = touch_arc(0, (50), (boxheight-40-hthick),
+    c = touch_arc(0, (54), (boxheight-40-hthick),
                         25, scl, angle=0)
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
     c = resize([(150-hthick)*scl, 0, 0], False).add(c)
     b += c
-    c = cube([(60+79)*scl, 50*scl, (boxheight-30)*scl])
-    c = translate(v=[(-20-79)*scl, (0)*scl, (-15)*scl]).add(c)
+    c = cube([(60+79)*scl, 54*scl, (boxheight-30)*scl])
+    c = translate(v=[(-20-78)*scl, (0)*scl, (-15)*scl]).add(c)
     b += c
-    c = cube([(168+79)*scl, 50*scl, (16)*scl])
-    c = translate(v=[(-20-79)*scl, (0)*scl, (-15)*scl]).add(c)
+    c = shearedcube([(168+58)*scl, 54*scl, (16)*scl],
+                shear=[20*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
+    c = translate(v=[(-20-78)*scl, (0)*scl, (-30)*scl]).add(c)
+    b += c
+    c = cube([(168+78)*scl, 54*scl, (16)*scl])
+    c = translate(v=[(-20-78)*scl, (0)*scl, (-15)*scl]).add(c)
     b += c
     b = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(b)
 
@@ -1849,7 +1854,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # ... cutout for the actual support, the rest was housing for the cutout
     c = cube([30*scl, 37*scl, (boxheight-47)*scl])
-    c = translate(v=[-22*scl, (7)*scl, (-3)*scl]).add(c)
+    c = translate(v=[-22*scl, (9)*scl, (-3)*scl]).add(c)
     c = translate(v=[(lcd_w+69-79)*scl, (offs)*scl, (39.5)*scl]).add(c)
     u -= c
 
