@@ -14,7 +14,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART# LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1902,11 +1902,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = translate(v=[(w+55)*scl, (ht+30)*scl, (20)*scl]).add(s)
     u -= b
     b = translate(v=[(w-20)*scl, (ht-30)*scl, (45)*scl]).add(s)
-    u -= b
-
-    # add cut-out for back kbd runner
-    b = cube([(17)*scl, (19)*scl, (42)*scl])
-    b = translate(v=[(w-wd)*scl, (ht-18)*scl, (11)*scl]).add(b)
     u -= b
 
     # remove runner along bottom of base, for lower panel
