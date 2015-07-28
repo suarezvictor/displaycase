@@ -1915,11 +1915,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= b
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([10*scl, (ht+2)*scl, (10)*scl],
-                shear=[-8*scl, 0*scl, 0],
+    c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
+                shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = translate(v=[(boxlength-back_top_width-5)*scl, (-1-0)*scl,
-                                (boxheight-hthick)*scl]).add(c)
+                                (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
     rad=35.0 + 15
