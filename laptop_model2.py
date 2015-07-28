@@ -1975,6 +1975,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
+        h = translate([(ht-52)*scl, (-3)*scl, -25*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
         h = translate([(ht+25)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
         h = pin(B0, scl)
@@ -1985,6 +1988,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c += h
         h = pin(B0, scl)
         h = translate([(ht-47)*scl, (-3)*scl, 140*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(ht-47+75)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
         for of in [0]:
             h = pin(B0, scl)
@@ -2007,6 +2013,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
             c += h
         h = pin(B0, scl)
         h = translate([(-30)*scl, (-3)*scl, 62*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(77)*scl, (-3)*scl, 153*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(77)*scl, (-3)*scl, -30*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
