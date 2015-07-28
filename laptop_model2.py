@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART# LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART# LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1826,7 +1826,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     c = base_cutout(scl, fthick, arch=True)
     c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (204)*scl, (0)*scl]).add(c)
+    c = translate(v=[boxlength*scl, (209)*scl, (0)*scl]).add(c)
     u += c
     # put in series of cutouts
     step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
@@ -1971,6 +1971,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,(scrn_hinge_ht+friclen+16)*scl,-55*scl]).add(v)
     t = hinge_translate(scl).add(c)
     u += t
+    # cutout for nut to poke through
+    c = cylinder(r=27*scl, h=(90)*scl, center=True, segments=50)
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[0*scl,250*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
 
     if pin_parts_3d:
         c = union()
@@ -2027,6 +2033,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
         c += h
         offs = ht + toffs - tpanel_l_b/2 +8
+        if toffs > 0:
+            offs -= 50
         h = cube([(offs-45)*scl, 4*scl, 80*scl])
         h = translate([(100)*scl, (-4)*scl, 20*scl]).add(h)
         c += h
