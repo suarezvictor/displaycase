@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1709,17 +1709,17 @@ def base_cutout(scl, ht, loffs=0, arch=False):
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, -90, 0]).add(c)
     # XXX resize needed to do something odd with openscad (fixes a bug)
-    c = resize([(40-hthick)*scl, 0, 0], False).add(c)
+    c = resize([(40-hthick+0.5)*scl, 0, 0], False).add(c)
     c = translate(v=[(-40)*scl, 0*scl, (40)*scl]).add(c)
     u += c
 
-    c = touch_arc(0, ht, (boxheight-40-hthick),
+    c = touch_arc(0, ht, (boxheight-40-hthick+0.2),
                         25, scl,
                   angle=0)
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
     c = resize([(150-hthick)*scl, 0, 0], False).add(c)
-    c = translate(v=[(-150)*scl, 0*scl, (40)*scl]).add(c)
+    c = translate(v=[(-150)*scl, 0*scl, (40-0.2)*scl]).add(c)
     u += c
 
     if arch:
