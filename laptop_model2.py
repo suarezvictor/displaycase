@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1688,6 +1688,49 @@ def base_front_top(scl, ht, ht_offset):
     v.add(u)
     return v
 
+def base_cutout(scl, ht, loffs=0, arch=False):
+
+    dep = (boxheight-hthick*2)
+    u = union()
+    # add fill-ins
+    c = cube([(99.2-loffs)*scl, ht*scl, dep*scl])
+    c = translate(v=[(-back_top_width+loffs)*scl,
+                     0*scl, (hthick)*scl]).add(c)
+    u += c
+
+    c = cube([(130.2-loffs)*scl, ht*scl, (42)*scl])
+    c = translate(v=[(-170+loffs)*scl, 0*scl, (hthick)*scl]).add(c)
+    u += c
+
+    # cutout lower and upper arcs
+    c = touch_arc(0, ht, 40-hthick,
+                        25, scl,
+                  angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, -90, 0]).add(c)
+    # XXX resize needed to do something odd with openscad (fixes a bug)
+    c = resize([(40-hthick)*scl, 0, 0], False).add(c)
+    c = translate(v=[(-40)*scl, 0*scl, (40)*scl]).add(c)
+    u += c
+
+    c = touch_arc(0, ht, (boxheight-40-hthick),
+                        25, scl,
+                  angle=0)
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 180, 0]).add(c)
+    c = resize([(150-hthick)*scl, 0, 0], False).add(c)
+    c = translate(v=[(-150)*scl, 0*scl, (40)*scl]).add(c)
+    u += c
+
+    if arch:
+        c = cylinder(r=dep/2.0*scl, h=ht*4*scl, segments=90, center=True)
+        c = resize([(dep*2.2)*scl, 0, 0], False).add(c)
+        c = rotate([90, 0, 0]).add(c)
+        c = translate(v=[(-160-dep+loffs)*scl, 0*scl, (dep/2+10)*scl]).add(c)
+        u -= c
+
+    return u
+
 def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
@@ -1774,84 +1817,51 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                     (boxheight-hthick-55)*scl]).add(c)
     u += c
 
-    # put in series of cutouts
     fthick = 6
     offs = scrn_hinge_ht+40-hthick+fthick
+    c = base_cutout(scl, ht-wthick-offs-2)
+    c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
+    c = translate(v=[boxlength*scl, (offs-fthick)*scl, (0)*scl]).add(c)
+    u -= c
+
+    c = base_cutout(scl, fthick, arch=True)
+    c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
+    c = translate(v=[boxlength*scl, (204)*scl, (0)*scl]).add(c)
+    u += c
+    # put in series of cutouts
     step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
+    offs += step - 10
     while offs < (ht-step-90):
         # add fill-ins
-        c = cube([(80+79)*scl, fthick*scl, (boxheight-hthick+2)*scl])
-        c = translate(v=[(w-back_top_width+112)*scl,
-                         (offs-fthick)*scl, (1)*scl]).add(c)
+        b = base_cutout(scl, fthick, arch=True)
+        b = resize([(236)*scl, 0,
+                    pow(2, 0.5)*(boxheight-hthick*2+10)*scl], False).add(b)
+        c = rotate([-45, 0, 0]).add(b)
+        c = translate(v=[boxlength*scl, (offs-fthick)*scl, (-5)*scl]).add(c)
         u += c
-
-        c = cube([135*scl, fthick*scl, (42)*scl])
-        c = translate(v=[(w-58)*scl, (offs-fthick)*scl, (1)*scl]).add(c)
+        offs += step
+        c = rotate([45, 0, 0]).add(b)
+        c = translate(v=[boxlength*scl, (offs-fthick+35+step)*scl,
+                (-5)*scl]).add(c)
         u += c
-
-        c = touch_arc(0, (step-fthick), 40-hthick,
-                            25, scl,
-                      angle=0)
-        c = rotate([90, 0, 0]).add(c)
-        c = rotate([0, -90, 0]).add(c)
-        # XXX resize needed to do something odd with openscad (fixes a bug)
-        c = resize([(40-hthick)*scl, 0, 0], False).add(c)
-        c = translate(v=[(boxlength-41)*scl, (offs)*scl, (40)*scl]).add(c)
-        u -= c
-
-        # cutout lower and upper arcs
-        c = touch_arc(0, (step-fthick), 40-hthick,
-                            25, scl,
-                      angle=0)
-        c = rotate([90, 0, 0]).add(c)
-        c = rotate([0, -90, 0]).add(c)
-        # XXX resize needed to do something odd with openscad (fixes a bug)
-        c = resize([(40-hthick)*scl, 0, 0], False).add(c)
-        c = translate(v=[(boxlength-41)*scl, (offs)*scl, (40)*scl]).add(c)
-        u -= c
-
-        c = touch_arc(0, (step-fthick), (boxheight-40-hthick),
-                            25, scl,
-                      angle=0)
-        c = rotate([90, 0, 0]).add(c)
-        c = rotate([0, 180, 0]).add(c)
-        c = resize([(150-hthick)*scl, 0, 0], False).add(c)
-        c = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(c)
-        u -= c
 
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    c = shearedcube([(back_top_width-95)*scl, (ht)*scl, (8)*scl])
-    c = translate(v=[(boxlength-back_top_width)*scl, (0)*scl,
-                                (boxheight-hthick-6)*scl]).add(c)
-    u += c
+    for h in [ht*0.285, ht*0.515, ht*0.74]:
+        c = shearedcube([(back_top_width-78)*scl, (40)*scl, (15)*scl])
+        c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
+                                    (boxheight-hthick-13)*scl]).add(c)
+        u += c
     # ok these are for the pcb1_support and battery_support1
     # they extend all the way to the back (for injection molding)
     offs = ht + toffs - tpanel_l_b/2 +8
     if toffs < 0:
         offs += 50
-    b = union()
-    c = touch_arc(0, (54), (boxheight-40-hthick),
-                        25, scl, angle=0)
-    c = rotate([90, 0, 0]).add(c)
-    c = rotate([0, 180, 0]).add(c)
-    c = resize([(150-hthick)*scl, 0, 0], False).add(c)
-    b += c
-    c = cube([(60+79)*scl, 54*scl, (boxheight-30)*scl])
-    c = translate(v=[(-20-78)*scl, (0)*scl, (-15)*scl]).add(c)
-    b += c
-    c = shearedcube([(168+58)*scl, 54*scl, (16)*scl],
-                shear=[20*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = translate(v=[(-20-78)*scl, (0)*scl, (-30)*scl]).add(c)
-    b += c
-    c = cube([(168+78)*scl, 54*scl, (16)*scl])
-    c = translate(v=[(-20-78)*scl, (0)*scl, (-15)*scl]).add(c)
-    b += c
-    b = translate(v=[(lcd_w+69)*scl, (offs)*scl, (39.5)*scl]).add(b)
-
-    u += b
+    c = base_cutout(scl, 54)
+    c = resize([(236)*scl, 0, (boxheight-hthick*2+2)*scl], False).add(c)
+    c = translate(v=[boxlength*scl, (offs)*scl, (-1)*scl]).add(c)
+    u += c
 
     # ... cutout for the actual support, the rest was housing for the cutout
     c = cube([30*scl, 37*scl, (boxheight-47)*scl])
@@ -1971,20 +1981,30 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = translate([(ht+25)*scl, (-3)*scl, 65*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht-30)*scl, (-3)*scl, 140*scl]).add(h)
+        h = translate([(ht+102)*scl, (-3)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht/2-38)*scl, (-3)*scl, -5*scl]).add(h)
+        h = translate([(ht-47)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
-        h = pin(B0, scl)
-        h = translate([(ht/2+38)*scl, (-3)*scl, -5*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht/2-38)*scl, (-3)*scl, 120*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(ht/2+38)*scl, (-3)*scl, 120*scl]).add(h)
-        c += h
+        for of in [0]:
+            h = pin(B0, scl)
+            h = translate([(ht*0.53+of)*scl, (-3)*scl, -3*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(ht*0.53+of)*scl, (-3)*scl, 120*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(ht*0.75+of)*scl, (-3)*scl, -3*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(ht*0.75+of)*scl, (-3)*scl, 120*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(ht*0.3+of)*scl, (-3)*scl, -3*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(ht*0.3+of)*scl, (-3)*scl, 120*scl]).add(h)
+            c += h
         h = pin(B0, scl)
         h = translate([(-30)*scl, (-3)*scl, 62*scl]).add(h)
         c += h
@@ -1993,6 +2013,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c += h
         h = pin(B0, scl)
         h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
+        c += h
+        offs = ht + toffs - tpanel_l_b/2 +8
+        h = cube([(offs-45)*scl, 4*scl, 80*scl])
+        h = translate([(100)*scl, (-4)*scl, 20*scl]).add(h)
+        c += h
+        h = cube([(ht-offs-220)*scl, 4*scl, 80*scl])
+        h = translate([(offs+100)*scl, (-4)*scl, 20*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58-79)*scl, (0)*scl, 0*scl]).add(c)
