@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART# LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART# LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1726,7 +1726,7 @@ def base_cutout(scl, ht, loffs=0, arch=False):
         c = cylinder(r=dep/2.0*scl, h=ht*4*scl, segments=90, center=True)
         c = resize([(dep*2.2)*scl, 0, 0], False).add(c)
         c = rotate([90, 0, 0]).add(c)
-        c = translate(v=[(-160-dep+loffs)*scl, 0*scl, (dep/2+10)*scl]).add(c)
+        c = translate(v=[(-160-dep+loffs)*scl, 0*scl, (dep/2+7)*scl]).add(c)
         u -= c
 
     return u
@@ -1825,8 +1825,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= c
 
     c = base_cutout(scl, fthick, arch=True)
-    c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (209)*scl, (0)*scl]).add(c)
+    c = resize([(236)*scl, 0, (boxheight-hthick*2+7)*scl], False).add(c)
+    c = translate(v=[boxlength*scl, (209)*scl, (-5)*scl]).add(c)
     u += c
     # put in series of cutouts
     step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
@@ -1836,13 +1836,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         b = base_cutout(scl, fthick, arch=True)
         b = resize([(236)*scl, 0,
                     pow(2, 0.5)*(boxheight-hthick*2+10)*scl], False).add(b)
-        c = rotate([-45, 0, 0]).add(b)
+        c = rotate([-43, 0, 0]).add(b)
         c = translate(v=[boxlength*scl, (offs-fthick)*scl, (-5)*scl]).add(c)
         u += c
         offs += step
-        c = rotate([45, 0, 0]).add(b)
+        c = rotate([43, 0, 0]).add(b)
         c = translate(v=[boxlength*scl, (offs-fthick+35+step)*scl,
-                (-5)*scl]).add(c)
+                (-9)*scl]).add(c)
         u += c
 
         offs += step
@@ -4026,10 +4026,10 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4039,7 +4039,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
