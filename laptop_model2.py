@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1896,22 +1896,22 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = cube([(288)*scl, (63)*scl, (43)*scl])
-    b = translate(v=[(w-wd+78)*scl, (ht-62)*scl, (boxheight-42)*scl]).add(b)
+    b = cube([(288)*scl, (123)*scl, (43)*scl])
+    b = translate(v=[(w-wd+78)*scl, (ht-112)*scl, (boxheight-42)*scl]).add(b)
     u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight+50)*scl])
-    b = translate(v=[(w-61+75)*scl, (ht-62)*scl, (38)*scl]).add(b)
+    b = cube([(288)*scl, (base_centre_ht/2+123)*scl, (boxheight+50)*scl])
+    b = translate(v=[(w-61+75)*scl, (ht-112)*scl, (38)*scl]).add(b)
     u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+63)*scl, (boxheight)*scl])
+    b = cube([(288)*scl, (base_centre_ht/2+93)*scl, (boxheight)*scl])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
 
     # screw-holes into base_mid
     s = chamfered_backbox_screwholes(scl, 50)
     s = rotate([-180, 0, 0]).add(s)
-    b = translate(v=[(w+55)*scl, (ht+30)*scl, (20)*scl]).add(s)
+    b = translate(v=[(w-75)*scl, (ht+25)*scl, (16)*scl]).add(s)
     u -= b
-    b = translate(v=[(w-20)*scl, (ht-30)*scl, (45)*scl]).add(s)
+    b = translate(v=[(w+50)*scl, (ht-85)*scl, (16)*scl]).add(s)
     u -= b
 
     # remove runner along bottom of base, for lower panel
@@ -2149,11 +2149,11 @@ def base_mid(scl, ht):
     u += b
 
     # couple of wings on the side for back base to screw into
-    walls[F] = 60
-    walls[B] = 60
-    b = hollowbox(scl, 170, ht+120, boxheight-40,
+    walls[F] = 110
+    walls[B] = 110
+    b = hollowbox(scl, 170, ht+220, boxheight-40,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(w-20)*scl, -60*scl, 40*scl]).add(b)
+    b = translate(v=[(w-20)*scl, -110*scl, 40*scl]).add(b)
     u += b
 
     # end wall for tpanel_mid to lock into
@@ -2196,10 +2196,10 @@ def base_mid(scl, ht):
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
-    b = cube([(86)*scl, (61)*scl, (41)*scl])
-    b = translate(v=[(w-31)*scl, -(61)*scl, (39)*scl]).add(b)
+    b = cube([(86)*scl, (121)*scl, (41)*scl])
+    b = translate(v=[(w-31)*scl, -(121)*scl, (39)*scl]).add(b)
     u -= b
-    b = translate(v=[(0)*scl, (ht+61)*scl, (0)*scl]).add(b)
+    b = translate(v=[(0)*scl, (ht+121)*scl, (0)*scl]).add(b)
     u -= b
 
     # dovetail cuts to fit into front base
@@ -2224,7 +2224,7 @@ def base_mid(scl, ht):
     offs = 210#tpanel_l_b+40
     step = (w-160-offs) / (8.0 if test else 28.0)
     steps = []
-    while offs < (w-step):
+    while offs < (w-step*2):
         steps.append((offs, boxheight-39-2))
         offs += step
 
@@ -2242,8 +2242,8 @@ def base_mid(scl, ht):
         u += c
 
     # fill in end for diagonals to mesh to
-    c = cube([(40)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
-    c = translate(v=[(w-20)*scl, (0)*scl, (40)*scl]).add(c)
+    c = cube([(140)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
+    c = translate(v=[(w-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
 
     # fillin for tpanel_mid screwhole
@@ -2255,13 +2255,13 @@ def base_mid(scl, ht):
     d = cylinder(r=topscrewrad*scl,
                     h=(65)*scl,
                     segments=50, center=True)
-    t = translate(v=[(w+93)*scl, (30)*scl, (50)*scl]).add(d)
+    t = translate(v=[(w+87)*scl, (-85)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(w+93)*scl, (ht-30)*scl, (50)*scl]).add(d)
+    t = translate(v=[(w+87)*scl, (ht+85)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(w+18)*scl, (-30)*scl, (boxheight-40)*scl]).add(d)
+    t = translate(v=[(w-38)*scl, (25)*scl, (50)*scl]).add(d)
     u -= t
-    t = translate(v=[(w+18)*scl, (ht+30)*scl, (boxheight-40)*scl]).add(d)
+    t = translate(v=[(w-38)*scl, (ht-25)*scl, (50)*scl]).add(d)
     u -= t
     # and for tpanel_mid
     t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
@@ -2378,10 +2378,10 @@ def base_mid(scl, ht):
         c += h
 
         h = pin(B0, scl)
-        h = translate([(w+177)*scl, (0)*scl, -(ht+45)*scl]).add(h)
+        h = translate([(w+177)*scl, (0)*scl, -(ht+65)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(w+177)*scl, (0)*scl, (45)*scl]).add(h)
+        h = translate([(w+177)*scl, (0)*scl, (65)*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -2394,19 +2394,21 @@ def base_mid(scl, ht):
         c = rotate([90, 0, 0]).add(c)
         c = translate([(0)*scl, (0)*scl, (boxheight-3)*scl]).add(c)
 
-        step = (ht+120-6) / 7.0
-        offs = -60
-        while offs < ht+60:
+        step = (ht+110-3) / 7.0
+        offs = -110
+        while offs < ht+110:
             h = cube([145*scl, 7*scl, (boxheight-40)*scl])
             h = translate([w*scl, (offs)*scl, 40*scl]).add(h)
             c += h
             offs += step
 
         h = cube([91*scl, (ht+124)*scl, 95*scl])
-        h = translate([(w-1)*scl, (-61)*scl, 0*scl]).add(h)
+        h = translate([(w-1)*scl, (-111)*scl, 0*scl]).add(h)
         c -= h
-        h = cube([20*scl, (ht+120)*scl, 6*scl])
-        h = translate([(w+125)*scl, (-60)*scl, (boxheight-6)*scl]).add(h)
+        h = translate([(0)*scl, (ht+111)*scl, 0*scl]).add(h)
+        c -= h
+        h = cube([20*scl, (ht+220)*scl, 6*scl])
+        h = translate([(w+125)*scl, (-110)*scl, (boxheight-6)*scl]).add(h)
         c += h
 
         u += c
@@ -4026,10 +4028,10 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4037,7 +4039,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
