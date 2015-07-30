@@ -2371,12 +2371,30 @@ def base_mid(scl, ht):
         c += h
 
         h = pin(B0, scl)
-        h = translate([(w-50)*scl, (0)*scl, -(ht+15)*scl]).add(h)
+        h = translate([(w-52)*scl, (0)*scl, -(ht+90)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(w-50)*scl, (0)*scl, (15)*scl]).add(h)
+        h = translate([(w-52)*scl, (0)*scl, 90*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-52)*scl, (0)*scl, -(ht+15)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-52)*scl, (0)*scl, (15)*scl]).add(h)
         c += h
 
+        h = pin(B0, scl)
+        h = translate([(w+25)*scl, (0)*scl, -(ht+115)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+25)*scl, (0)*scl, 115*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+100)*scl, (0)*scl, -(ht+115)*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w+100)*scl, (0)*scl, 115*scl]).add(h)
+        c += h
         h = pin(B0, scl)
         h = translate([(w+177)*scl, (0)*scl, -(ht+65)*scl]).add(h)
         c += h
