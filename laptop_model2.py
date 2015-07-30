@@ -2883,6 +2883,13 @@ def friction_hinge2(scl, ht):
     t = translate(v=[0, (-ht/2+16.5)*scl, 0*scl]).add(r)
     a -= t
 
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl, fill=True)
+        h = translate([(0)*scl, (-7.2)*scl, 0*scl]).add(h)
+        c += h
+        a += c
+
     a = hinge_translate(scl).add(a)
     return a
 
@@ -3057,16 +3064,19 @@ def screen_hinge(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = pin(B0, scl)
-        h = translate([(boxlength-64)*scl, (ht-3)*scl, -55*scl]).add(h)
+        h = pin(B0, scl, fill=True)
+        h = translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
+        h = translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
         h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
         c += h
-        #h = pin(B45, scl)
-        #h = translate([(boxlength-30)*scl, (ht-3)*scl, 175*scl]).add(h)
-        #c += h
-        h = pin(B0, scl)
+        h = pin(B45, scl, fill=True)
+        h = translate([(boxlength-30)*scl, (ht-3)*scl, 175*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
         h = translate([(boxlength-155)*scl, (ht-3)*scl, 91.9*scl]).add(h)
         c += h
         u += c
@@ -4048,7 +4058,7 @@ if __name__ == '__main__':
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        #FRICTION_HINGE2,
+                        FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -4059,7 +4069,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
