@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1355,7 +1355,7 @@ def tpanel_mid(scl, ht, ht_offset):
     u -= b
     b = translate(v=[(tpanel_l_b-75)*scl, (ht-40)*scl, (+11)*scl]).add(s)
     u -= b
-    # and into base_mid
+    # and into #base_mid
     b = translate(v=[(tpanel_l_b-75)*scl, (ht/2-ht_offset)*scl,
                      (+20)*scl]).add(s)
     u -= b
@@ -1601,8 +1601,8 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[(161)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
     u -= b
     b = cube([(31)*scl, (offs)*scl, (150)*scl])
-    c = translate(v=[(160)*scl, (ht-offs+1-doffs)*scl,
-                                    (50)*scl]).add(b)
+    c = translate(v=[(159)*scl, (ht-offs+1-doffs)*scl,
+                                    (40)*scl]).add(b)
     u -= c
 
     # remove runner along top of base, for panel and compartment lid to fit
@@ -2215,17 +2215,17 @@ def base_mid(scl, ht):
     u -= b
 
     # remove centre between screw wings
-    b = cube([(40)*scl, (ht-64)*scl, (boxheight)*scl])
-    b = translate(v=[(140)*scl, (32)*scl, (39)*scl]).add(b)
+    b = cube([(60)*scl, (ht-62)*scl, (boxheight)*scl])
+    b = translate(v=[(122)*scl, (31)*scl, (39)*scl]).add(b)
     u -= b
 
     # diagonal cross-walls for internal stiffness
     fthick = 6
-    offs = 210#tpanel_l_b+40
-    step = (w-160-offs) / (8.0 if test else 28.0)
+    offs = 190#tpanel_l_b+40
+    step = (w-160-offs) / (8.0 if test else 16.0)
     steps = []
     while offs < (w-step*2):
-        steps.append((offs, boxheight-39-2))
+        steps.append((offs+20, boxheight-39-2))
         offs += step
 
     #steps.append((210, boxheight-39-2))
@@ -2233,12 +2233,12 @@ def base_mid(scl, ht):
 
     for (offs, ch) in steps:
         hoff = (boxheight-39-2) - ch
-        d = cube([fthick*scl, 150*scl, ch*scl])
-        c = rotate([0, 0, -30]).add(d)
+        d = cube([fthick*scl, 180*scl, ch*scl])
+        c = rotate([0, 0, -45]).add(d)
         c = translate(v=[(offs)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
         u += c
-        c = rotate([0, 0, 30]).add(d)
-        c = translate(v=[(offs+75)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
+        c = rotate([0, 0, 45]).add(d)
+        c = translate(v=[(offs+127)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
         u += c
 
     # fill in end for diagonals to mesh to
