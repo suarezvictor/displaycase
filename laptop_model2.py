@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART# LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART # LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1980,66 +1980,66 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     if pin_parts_3d:
         c = union()
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht-52)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht+25)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht+25)*scl, (-3)*scl, 65*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht+102)*scl, (-3)*scl, 45*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht-47)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(ht-47+75)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
         for of in [0]:
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.53+of)*scl, (-3)*scl, -3*scl]).add(h)
             c += h
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.53+of)*scl, (-3)*scl, 120*scl]).add(h)
             c += h
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.75+of)*scl, (-3)*scl, -3*scl]).add(h)
             c += h
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.75+of)*scl, (-3)*scl, 120*scl]).add(h)
             c += h
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.3+of)*scl, (-3)*scl, -3*scl]).add(h)
             c += h
-            h = pin(B0, scl)
+            h = pin(B0, scl, fill=True)
             h = translate([(ht*0.3+of)*scl, (-3)*scl, 120*scl]).add(h)
             c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(-30)*scl, (-3)*scl, 62*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(77)*scl, (-3)*scl, 153*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(77)*scl, (-3)*scl, -30*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
         c += h
         offs = ht + toffs - tpanel_l_b/2 +8
         if toffs > 0:
             offs -= 50
-        h = cube([(offs-45)*scl, 4*scl, 80*scl])
-        h = translate([(100)*scl, (-4)*scl, 20*scl]).add(h)
+        h = cube([(offs-45)*scl, 1.8*scl, boxheight*scl])
+        h = translate([(100)*scl, (-1.8)*scl, 0*scl]).add(h)
         c += h
-        h = cube([(ht-offs-220)*scl, 4*scl, 80*scl])
-        h = translate([(offs+100)*scl, (-4)*scl, 20*scl]).add(h)
+        h = cube([(ht-offs-235)*scl, 1.8*scl, boxheight*scl])
+        h = translate([(offs+100)*scl, (-1.8)*scl, 0*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58-79)*scl, (0)*scl, 0*scl]).add(c)
@@ -4057,9 +4057,9 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
