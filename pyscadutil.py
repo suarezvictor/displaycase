@@ -10,18 +10,19 @@ from copy import deepcopy
 B0 = 1
 B45 = 2
 
-def pin(spec, scl, r=0):
-    ht = 6
+def pin(spec, scl, r=0, fill=False, ht=1.8):
     if spec == B0 or spec == B45:
         c = union()
         h = cube([90*scl, ht*scl, (90)*scl], center=True)
         c += h
-        h = cube([65*scl, (ht+1)*scl, (65)*scl], center=True)
-        c -= h
+        if not fill:
+            h = cube([65*scl, (ht+1)*scl, (65)*scl], center=True)
+            c -= h
     if spec == B45:
         c = rotate([0, 45, 0]).add(c)
     if r == 1:
         c = rotate([90,0,0]).add(c)
+    c = translate([0*scl, (-ht/2+3)*scl, 0]).add(c)
     return c
         
 def shearedcube(size, center=False, shear=None, innershear=None):

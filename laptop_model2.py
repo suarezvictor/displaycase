@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2354,58 +2354,58 @@ def base_mid(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(130)*scl, (0)*scl, 15*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(205)*scl, (0)*scl, -(ht+30)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(110)*scl, (0)*scl, -ht/2*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(205)*scl, (0)*scl, 30*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(130)*scl, (0)*scl, -(ht+15)*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w-52)*scl, (0)*scl, -(ht+90)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w-52)*scl, (0)*scl, 90*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w-52)*scl, (0)*scl, -(ht+15)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w-52)*scl, (0)*scl, (15)*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+25)*scl, (0)*scl, -(ht+115)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+25)*scl, (0)*scl, 115*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+100)*scl, (0)*scl, -(ht+115)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+100)*scl, (0)*scl, 115*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+177)*scl, (0)*scl, -(ht+65)*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(w+177)*scl, (0)*scl, (65)*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(tpanel_l_b+65)*scl, (0)*scl, 32*scl]).add(h)
         c += h
-        h = pin(B0, scl)
+        h = pin(B0, scl, fill=True)
         h = translate([(tpanel_l_b+65)*scl, (0)*scl, -(ht+32)*scl]).add(h)
         c += h
 
@@ -2425,8 +2425,8 @@ def base_mid(scl, ht):
         c -= h
         h = translate([(0)*scl, (ht+111)*scl, 0*scl]).add(h)
         c -= h
-        h = cube([20*scl, (ht+220)*scl, 6*scl])
-        h = translate([(w+125)*scl, (-110)*scl, (boxheight-6)*scl]).add(h)
+        h = cube([20*scl, (ht+220)*scl, 1.8*scl])
+        h = translate([(w+125)*scl, (-110)*scl, (boxheight-1.8)*scl]).add(h)
         c += h
 
         u += c
