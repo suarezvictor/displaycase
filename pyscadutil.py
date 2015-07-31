@@ -10,7 +10,7 @@ from copy import deepcopy
 B0 = 1
 B45 = 2
 
-def pin(spec, scl, r=0, fill=False, ht=1.8):
+def pin(spec, scl, r=0, fill=True, ht=1.8):
     if spec == B0 or spec == B45:
         c = union()
         h = cube([90*scl, ht*scl, (90)*scl], center=True)
