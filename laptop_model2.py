@@ -2835,6 +2835,11 @@ def screen_back_edge(scl, ht):
         h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(lcd_w+235)*scl, (ht/2)*scl, (7.4+37)*scl]).add(h)
+        c += h
+
         b += c
 
     return b
