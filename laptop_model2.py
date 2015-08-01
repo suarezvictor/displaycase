@@ -2590,7 +2590,7 @@ def screen_end(scl, ht, lcd_end_ht):
         h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
         c += h
 
-        c = translate([0, (-10)*scl, 0*scl]).add(c)
+        c = translate([0, (-14.2)*scl, 0*scl]).add(c)
         u += c
 
     if cutdown:
@@ -4058,13 +4058,13 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
