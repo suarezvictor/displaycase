@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2596,8 +2596,21 @@ def screen_end(scl, ht, lcd_end_ht):
     if cutdown:
         # cut down
         c = cube([(boxlength+500)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-1500)*scl, -20*scl, -150*scl]).add(c)
+        c = translate([(-640)*scl, -20*scl, -150*scl]).add(c)
         u -= c
+
+        if pin_parts_3d:
+            c = union()
+            h = pin(B0, scl)
+            h = translate([(boxlength-125)*scl, (3)*scl, 30*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(boxlength-125)*scl, (3)*scl, -40*scl]).add(h)
+            c += h
+            c = translate([0, (-14.2)*scl, 0*scl]).add(c)
+            u += c
+
+
 
     return u
 
