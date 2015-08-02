@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART # LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -413,7 +413,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     if end:
         walls[B] = 20
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
-        rh = ht+10
+        rh = ht
         roff = -10
     elif not front:
         walls[B] = -1
@@ -2520,7 +2520,7 @@ def screen_end(scl, ht, lcd_end_ht):
     #u += b
 
     # hex indentation
-    c = cylinder(r=29*scl, r1=27*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=28.5*scl, r1=27*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -2535,9 +2535,9 @@ def screen_end(scl, ht, lcd_end_ht):
 
     rad=54.0
     # remove hinge
-    c = cylinder(r=rad*scl, h=(ht+2)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(ht+30)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,-1*scl,0]).add(c)
+    c = translate(v=[0*scl,-12*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2701,6 +2701,11 @@ def screen_front_edge(scl, ht):
         h = translate([(45.5)*scl, (ht-4)*scl, 7.4*scl]).add(h)
         c += h
         h = translate([(-17)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        h = translate([(30)*scl, (ht/2)*scl, (7.4+37)*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
@@ -3758,6 +3763,7 @@ def create_laptop(t, scl, part, angle):
     scrn_hinge_ht = 80
 
     if part == SCREEN_END:
+        print "screen end", scrn_end_ht/10., lcd_end_ht/10.
         se = screen_end(scl, scrn_end_ht, lcd_end_ht)
         m = translate(v=[0, 0*scl,0]).add(se)
         if mirroring & LEFTPART:
@@ -3855,12 +3861,14 @@ def create_laptop(t, scl, part, angle):
     if part == BASE_BACK:
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
-            se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+            bh = base_back_ht+scrn_hinge_ht
+            print "base back height", bh/10., (scrn_hinge_ht)/10.
+            se = base_back_bot(scl, bh, scrn_hinge_ht+2,
                                     tpanel_offset)
             m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
-            se = base_back_bot(scl, base_back_ht+scrn_hinge_ht, scrn_hinge_ht+2,
+            se = base_back_bot(scl, bh, scrn_hinge_ht+2,
                                     -tpanel_offset)
             m = mirror_part(se, scl, total_width-base_adjust_ht+scrn_hinge_ht)
             b.add(m)
@@ -3885,7 +3893,9 @@ def create_laptop(t, scl, part, angle):
 
     adj = scrn_end_ht+lcd_end_ht
     if part == SCREEN_FRONT_EDGE:
-        se = screen_front_edge(scl, (total_width-scrn_centre_ht)/2-adj)
+        sfh = (total_width-scrn_centre_ht)/2-adj
+        print "screen front edge", sfh/10., scrn_centre_ht/2./10.
+        se = screen_front_edge(scl, sfh)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -3896,7 +3906,9 @@ def create_laptop(t, scl, part, angle):
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == SCREEN_BACK_EDGE:
-        se = screen_back_edge(scl, (total_width-scrn_centre_ht)/2-adj)
+        sbh = (total_width-scrn_centre_ht)/2-adj
+        print "screen back edge", sbh/10., scrn_centre_ht/2./10.
+        se = screen_back_edge(scl, sbh)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)

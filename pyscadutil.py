@@ -168,7 +168,7 @@ def hollowbox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
         r12 = rad1+rad2
         if rad1 == 0.0:
             continue
-        print hex(spec), hex(~spec), hex(R|L), hex((~spec) & (R|L))
+        #print hex(spec), hex(~spec), hex(R|L), hex((~spec) & (R|L))
         xaxis = spec in [T|B, D|B, D|F, T|F]
         yaxis = spec in [T|L, T|R, D|L, D|R]
         zaxis = spec in [F|L, B|L, F|R, B|R]
