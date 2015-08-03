@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2492,9 +2492,9 @@ def screen_end(scl, ht, lcd_end_ht):
     b = screen_box(scl, ht, end=True)
     u += b
 
-    c = cylinder(r=27.5*scl, h=(20)*scl, center=True, segments=6)
+    c = cylinder(r1=28*scl, r=26.5*scl, h=(15)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0, ht*scl,0]).add(c)
+    c = translate(v=[0, (ht-6)*scl,0]).add(c)
     t = lid_bolthole(scl, end=True).add(c)
     u += t
 
@@ -2524,7 +2524,7 @@ def screen_end(scl, ht, lcd_end_ht):
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[0*scl,(ht-9)*scl,0*scl]).add(t)
+    t = translate(v=[0*scl,(ht-24)*scl,0*scl]).add(t)
     u -= t
 
     # lock-in to screen_hinge part
@@ -2546,7 +2546,7 @@ def screen_end(scl, ht, lcd_end_ht):
             shear=[0,-11*scl,0],
             innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
+    c = translate(v=[(32)*scl, (1)*scl, (0)*scl]).add(c)
     c = translate(v=[(lcd_w+84)*scl, (ht-10)*scl,
                     (lcd_d-hthick-8.6)*scl]).add(c)
     u -= c
@@ -2554,7 +2554,7 @@ def screen_end(scl, ht, lcd_end_ht):
             shear=[0,11*scl,0],
             innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (12)*scl, (-8)*scl]).add(c)
+    c = translate(v=[(32)*scl, (2)*scl, (-8)*scl]).add(c)
     c = translate(v=[(lcd_w+108)*scl, (ht-2)*scl, (-13)*scl]).add(c)
     u -= c
 
@@ -2977,7 +2977,7 @@ def screen_hinge(scl, ht):
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-20*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
-    u += t
+    #u += t
     c = cylinder(r=(rad+14)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,0*scl,0]).add(c)
@@ -3064,9 +3064,16 @@ def screen_hinge(scl, ht):
     u -= c
 
     # hollow hinge out
-    c = cylinder(r=(rad-10)*scl, h=(ht+15)*scl, segments=50)
+    c = cylinder(r=(61/2.)*scl, h=(ht+15)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-30*scl,0*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
+    # hollow hinge out
+    c = cylinder(r=(60.9/2.)*scl, r1=(80/2.)*scl, h=(15)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,-1*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -3078,7 +3085,7 @@ def screen_hinge(scl, ht):
     t = translate(v=[0, (ht-20/2-16)*scl, 0]).add(t)
     #u -= t
 
-    c = cylinder(r=lcdscrewrad*scl,
+    c = cylinder(r=15*scl,
                     h=(1000)*scl, center=True, segments=50)
     c = rotate([0, 90, 90]).add(c)
     t = hinge_translate(scl).add(c)
@@ -3096,11 +3103,14 @@ def screen_hinge(scl, ht):
         h = pin(B0, scl, fill=True)
         h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
         c += h
-        h = pin(B45, scl, fill=True)
-        h = translate([(boxlength-30)*scl, (ht-3)*scl, 175*scl]).add(h)
+        h = pin(B0, scl, fill=True)
+        h = translate([(boxlength-50)*scl, (ht-3)*scl, 175*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-155)*scl, (ht-3)*scl, 91.9*scl]).add(h)
+        h = translate([(boxlength-130)*scl, (ht-3)*scl, 91.9*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
+        h = translate([(boxlength+20)*scl, (ht-3)*scl, 88*scl]).add(h)
         c += h
         u += c
 
@@ -4083,10 +4093,10 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
