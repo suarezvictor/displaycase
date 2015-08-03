@@ -1756,10 +1756,17 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += c
 
     rad=35.0 + 12
-    # add hinge
+    # cut down for hinge, but allow a stop at 150 degrees
     w = boxlength-112
+    d = union()
     c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
-    c = translate(v=[(w+23)*scl,-1*scl,(0)*scl]).add(c)
+    d += c
+    c = cube([rad*4*scl, (scrn_hinge_ht+3)*scl, boxheight*1.2*scl])
+    c = rotate([0, 18, 0]).add(c)
+    c = translate(v=[(-177)*scl,-1*scl,(100)*scl]).add(c)
+    d -= c
+    
+    c = translate(v=[(w+23)*scl,-1*scl,(0)*scl]).add(d)
     u -= c
 
     # cut-off for screen
@@ -2085,10 +2092,16 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
             h = translate([(245)*scl, (0)*scl, 45*scl]).add(h)
             c += h
             h = pin(B0, scl)
+            h = translate([(0)*scl, (0)*scl, 74*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
             h = translate([(245)*scl, (0)*scl, 74*scl]).add(h)
             c += h
             c = rotate([0, 0, 90]).add(c)
-            c = translate([(w-10)*scl, (0)*scl, 55*scl]).add(c)
+            c = translate([(w-30)*scl, (0)*scl, 55*scl]).add(c)
 
             v += c
 
@@ -4079,7 +4092,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [00]
+        angles = [150]
 
     for i in range(rpt):
         for angle in angles:
@@ -4091,7 +4104,7 @@ if __name__ == '__main__':
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        FRICTION_HINGE2,
+                        #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -4102,7 +4115,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
