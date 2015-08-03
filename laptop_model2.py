@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -18,7 +18,7 @@ mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -1924,9 +1924,17 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     rad=35.0 + 15
     # add hinge
+    d = union()
     c = cylinder(r=rad*scl, h=(friclen+45)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(c)
+    d += c
+    c = cube([55*scl, (friclen+45)*scl, 93*scl])
+    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
+    d += c
+    c = cube([35*scl, (friclen+45)*scl, 100*scl])
+    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
+    d += c
+    c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(d)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -1943,34 +1951,30 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
 
+    # capture channel in hinge
     hd = 25
     v = union()
-    c = shearedcube([14*scl, 75*scl, hd*scl], center=True,
+    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
                 shear=[-3*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[-22*scl,20*scl,0*scl]).add(c)
+    c = translate(v=[5*scl,-40*scl,0*scl]).add(c)
     v += c
-    c = cube([15*scl, hd*scl, 52*scl], center=True)
-    c = translate(v=[-32*scl,20*scl,0*scl]).add(c)
-    v += c
-    c = shearedcube([14*scl, 75*scl, hd*scl], center=True,
+    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
                 shear=[0*scl, 0*scl, 0],
                 innershear=[3*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[22*scl,20*scl, 0*scl]).add(c)
-    v += c
-    c = cube([15*scl, hd*scl, 52*scl], center=True)
-    c = translate(v=[32*scl,20*scl,0*scl]).add(c)
+    c = translate(v=[-5*scl,-40*scl, 0*scl]).add(c)
     v += c
     c = cylinder(r=30*scl, r1=27*scl, h=(hd+5)*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[0*scl,21*scl,0*scl]).add(c)
-    v -= c
+    #v -= c
+    v = rotate([90, 0, 0]).add(v)
     v = rotate([0, 90, 0]).add(v)
-    c = translate(v=[0*scl,(scrn_hinge_ht+friclen+16)*scl,-55*scl]).add(v)
+    c = translate(v=[0*scl,((scrn_hinge_ht+friclen)/2+30)*scl,-55*scl]).add(v)
     t = hinge_translate(scl).add(c)
-    u += t
+    u -= t
     # cutout for nut to poke through
     c = cylinder(r=27*scl, h=(90)*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
@@ -2865,43 +2869,19 @@ def screen_back_edge(scl, ht):
 def friction_hinge2(scl, ht):
 
     a = union()
-    rad = 36
+    rad = 35
 
     c = cylinder(r=rad*scl,
-                        h=(ht)*scl, segments=50, center=True)
+                        h=(30)*scl, segments=50, center=True)
     c = rotate([180, 90, 90]).add(c)
     a += c
 
-    hl = 30
-    # outer disc
-    r = union()
-    c = cylinder(r=(rad)*scl,
-                        h=(hl+2)*scl, segments=50, center=True)
-    c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
-    r += c
-
-    c = cube([28.0*scl, (hl+4)*scl, 2*rad*scl], center=True)
-    c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[0, (ht-hl/2)*scl, 29*scl]).add(c)
-    r -= c
-
-    c = cube([28.0*scl, (hl+4)*scl, 2*rad*scl], center=True)
-    c = rotate([0, 90, 0]).add(c)
-    c = translate(v=[0, (ht-hl/2)*scl, -29*scl]).add(c)
-    r -= c
-
-    c = cylinder(r=(27)*scl,
-                        h=(hl+2)*scl, segments=50, center=True)
-    c = rotate([180, 90, 90]).add(c)
-    c = translate(v=[0, (ht-hl/2)*scl, 0]).add(c)
-    r += c
-
-    t = translate(v=[0, (-ht/2+47-bwid)*scl, 0*scl]).add(r)
-    a += t
+    c = cube([30*scl, 30*scl, 27*scl], center=True)
+    c = translate([-35*scl, 0, 0]).add(c)
+    a += c
 
     # hinge hole
-    r = cylinder(r=(screwrad)*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
+    r = cylinder(r=(16)*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = translate(v=[0, (-ht/2+16.5)*scl, 0*scl]).add(r)
     a -= t
@@ -4096,9 +4076,9 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        #FRICTION_HINGE2,
+                        FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -4109,7 +4089,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
