@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1934,6 +1934,16 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = cube([35*scl, (friclen+45)*scl, 100*scl])
     c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
     d += c
+    c = shearedcube([30*scl, (friclen+45)*scl, 50*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[30*scl, 0*scl, 0])
+    c = translate(v=[-90*scl,0*scl,(-35)*scl]).add(c)
+    d += c
+    c = shearedcube([0*scl, (friclen+45)*scl, 50*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-30*scl, 0*scl, 0])
+    c = translate(v=[-60*scl,0*scl,(20)*scl]).add(c)
+    d += c
     c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(d)
     t = hinge_translate(scl).add(c)
     u += t
@@ -2063,7 +2073,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
         c = translate([(300)*scl, 212.0*scl, -50*scl]).add(c)
         v -= c
-        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
+        c = cube([(boxlength-300+60)*scl, (ht+100)*scl, 400*scl])
         c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
         v -= c
 
@@ -2881,7 +2891,7 @@ def friction_hinge2(scl, ht):
     a += c
 
     # hinge hole
-    r = cylinder(r=(16)*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
+    r = cylinder(r=(17)*scl, h=(ht*5+0.3)*scl, segments=50, center=True)
     r = rotate([180, 90, 90]).add(r)
     t = translate(v=[0, (-ht/2+16.5)*scl, 0*scl]).add(r)
     a -= t
@@ -2889,7 +2899,10 @@ def friction_hinge2(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl, fill=True)
-        h = translate([(0)*scl, (-7.2)*scl, 0*scl]).add(h)
+        h = translate([(0)*scl, (12)*scl, 0*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
+        h = translate([(-20)*scl, (12)*scl, 0*scl]).add(h)
         c += h
         a += c
 
@@ -4089,7 +4102,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
