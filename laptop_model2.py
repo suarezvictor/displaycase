@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2011,6 +2011,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = pin(B0, scl, fill=True)
         h = translate([(ht-52)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
+        h = translate([(-75)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
         h = pin(B0, scl, fill=True)
         h = translate([(ht+25)*scl, (-3)*scl, -25*scl]).add(h)
         c += h
@@ -2018,41 +2020,52 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = translate([(ht+25)*scl, (-3)*scl, 65*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
-        h = translate([(ht+102)*scl, (-3)*scl, 45*scl]).add(h)
+        h = translate([(ht+102)*scl, (-3)*scl, 85*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
+        h = translate([(ht+102)*scl, (-3)*scl, 5*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
         h = translate([(ht-47)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
+        h = translate([(-75)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
         h = pin(B0, scl, fill=True)
         h = translate([(ht-47+75)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
-        for of in [0]:
+        for of in [-35, 35]:
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.53+of)*scl, (-3)*scl, -3*scl]).add(h)
+            h = translate([(ht*0.53+of)*scl, (-3)*scl, -23*scl]).add(h)
             c += h
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.53+of)*scl, (-3)*scl, 120*scl]).add(h)
+            h = translate([(ht*0.53+of)*scl, (-3)*scl, 140*scl]).add(h)
             c += h
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.75+of)*scl, (-3)*scl, -3*scl]).add(h)
+            h = translate([(ht*0.75+of)*scl, (-3)*scl, -23*scl]).add(h)
             c += h
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.75+of)*scl, (-3)*scl, 120*scl]).add(h)
+            h = translate([(ht*0.75+of)*scl, (-3)*scl, 140*scl]).add(h)
             c += h
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.3+of)*scl, (-3)*scl, -3*scl]).add(h)
+            h = translate([(ht*0.3+of)*scl, (-3)*scl, -23*scl]).add(h)
             c += h
             h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.3+of)*scl, (-3)*scl, 120*scl]).add(h)
+            h = translate([(ht*0.3+of)*scl, (-3)*scl, 140*scl]).add(h)
             c += h
         h = pin(B0, scl, fill=True)
-        h = translate([(-30)*scl, (-3)*scl, 62*scl]).add(h)
+        h = translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
+        c += h
+        h = translate([(0)*scl, (0)*scl, 75*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
         h = translate([(77)*scl, (-3)*scl, 153*scl]).add(h)
         c += h
+        h = translate([(75)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
         h = pin(B0, scl, fill=True)
         h = translate([(77)*scl, (-3)*scl, -30*scl]).add(h)
+        c += h
+        h = translate([(75)*scl, (0)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
         h = translate([(0)*scl, (-3)*scl, 140*scl]).add(h)
