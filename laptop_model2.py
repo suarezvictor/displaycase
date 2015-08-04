@@ -3144,10 +3144,13 @@ def screen_hinge(scl, ht):
         h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-50)*scl, (ht-3)*scl, 175*scl]).add(h)
+        h = translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-130)*scl, (ht-3)*scl, 91.9*scl]).add(h)
+        h = translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
+        c += h
+        h = pin(B0, scl, fill=True)
+        h = translate([(boxlength-110)*scl, (ht-3)*scl, 83.9*scl]).add(h)
         c += h
         h = pin(B0, scl, fill=True)
         h = translate([(boxlength+20)*scl, (ht-3)*scl,
@@ -4127,7 +4130,7 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [165]
+        angles = [0]
 
     for i in range(rpt):
         for angle in angles:
@@ -4137,7 +4140,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -4150,7 +4153,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
