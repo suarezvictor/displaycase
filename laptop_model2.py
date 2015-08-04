@@ -1840,7 +1840,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     c = base_cutout(scl, fthick, arch=True)
     c = resize([(236)*scl, 0, (boxheight-hthick*2+7)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (208)*scl, (-5)*scl]).add(c)
+    c = translate(v=[boxlength*scl, (208)*scl, (1)*scl]).add(c)
     u += c
     # put in series of cutouts
     step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
