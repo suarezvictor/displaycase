@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -3923,10 +3923,10 @@ def create_laptop(t, scl, part, angle):
         b.add(se)
 
     if part == BASE_BACK:
+        bh = base_back_ht+scrn_hinge_ht
+        print "base back height", bh/10., (scrn_hinge_ht)/10.
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
-            bh = base_back_ht+scrn_hinge_ht
-            print "base back height", bh/10., (scrn_hinge_ht)/10.
             se = base_back_bot(scl, bh, scrn_hinge_ht+2,
                                     tpanel_offset)
             m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
