@@ -1941,12 +1941,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = cube([35*scl, (friclen+45)*scl, 100*scl])
     c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
     d += c
-    c = shearedcube([30*scl, (friclen+45)*scl, 50*scl],
+    c = shearedcube([31*scl, (friclen+45)*scl, 50*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[30*scl, 0*scl, 0])
     c = translate(v=[-90*scl,0*scl,(-35)*scl]).add(c)
     d += c
-    c = shearedcube([0*scl, (friclen+45)*scl, 50*scl],
+    c = shearedcube([1*scl, (friclen+45)*scl, 50*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-30*scl, 0*scl, 0])
     c = translate(v=[-60*scl,0*scl,(20)*scl]).add(c)
@@ -2089,16 +2089,28 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
             c = union()
 
             h = pin(B0, scl)
-            h = translate([(245)*scl, (0)*scl, 45*scl]).add(h)
+            h = translate([(150)*scl, (0)*scl, 15*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(0)*scl, (0)*scl, 74*scl]).add(h)
+            h = translate([(150)*scl, (0)*scl, 104*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
+            h = translate([(240)*scl, (0)*scl, 15*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(245)*scl, (0)*scl, 74*scl]).add(h)
+            h = translate([(70)*scl, (0)*scl, 104*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(70)*scl, (0)*scl, 15*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(0)*scl, (0)*scl, 104*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(0)*scl, (0)*scl, 15*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(240)*scl, (0)*scl, 104*scl]).add(h)
             c += h
             c = rotate([0, 0, 90]).add(c)
             c = translate([(w-30)*scl, (0)*scl, 55*scl]).add(c)
