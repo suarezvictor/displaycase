@@ -1756,18 +1756,26 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w+20)*scl,hthick*scl,(5)*scl]).add(c)
     u += c
 
+    w = boxlength-112
+    # special indent which pushes cable in
+    c = shearedcube([(72)*scl, (48)*scl, 60*scl],
+                shear=[0*scl, 0, 0],
+                innershear=[65*scl, 0, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = translate(v=[(w-back_top_width+200)*scl,29*scl,
+                    (boxheight-hthick-55)*scl]).add(c)
+    u += c
     rad=35.0 + 12
     # cut down for hinge, but allow a stop at 150 degrees
-    w = boxlength-112
     d = union()
     c = cube([rad*3*scl, (scrn_hinge_ht+2)*scl, boxheight*1.1*scl])
     d += c
     c = cube([rad*4*scl, (scrn_hinge_ht+3)*scl, boxheight*1.2*scl])
-    c = rotate([0, 4, 0]).add(c)
-    c = translate(v=[(-181)*scl,-1*scl,(100)*scl]).add(c)
+    c = rotate([0, 16, 0]).add(c)
+    c = translate(v=[(-185)*scl,-1*scl,(90)*scl]).add(c)
     d -= c
     
-    c = translate(v=[(w+23)*scl,-1*scl,(0)*scl]).add(d)
+    c = translate(v=[(w+10)*scl,-1*scl,(0)*scl]).add(d)
     u -= c
 
     # cut-off for screen
@@ -1816,14 +1824,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w-back_top_width+112)*scl,-10*scl,
                     (53)*scl]).add(c)
     u += c
-    # special indent which pushes cable in
-    c = shearedcube([(72)*scl, (48)*scl, 60*scl],
-                shear=[0*scl, 0, 0],
-                innershear=[65*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+200)*scl,29*scl,
-                    (boxheight-hthick-55)*scl]).add(c)
-    u += c
 
     fthick = 6
     offs = scrn_hinge_ht+40-hthick+fthick
@@ -1834,7 +1834,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     c = base_cutout(scl, fthick, arch=True)
     c = resize([(236)*scl, 0, (boxheight-hthick*2+7)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (209)*scl, (-5)*scl]).add(c)
+    c = translate(v=[boxlength*scl, (208)*scl, (-5)*scl]).add(c)
     u += c
     # put in series of cutouts
     step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
@@ -1994,9 +1994,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
     # cutout for nut to poke through
-    c = cylinder(r=27*scl, h=(90)*scl, center=True, segments=50)
+    c = cylinder(r=31*scl, h=(300)*scl, center=True, segments=50)
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[0*scl,250*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,320*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -3000,7 +3000,7 @@ def screen_hinge(scl, ht):
     rad=35.0
     # add hinge
     #u += t
-    c = cylinder(r=(rad+14)*scl, h=(ht)*scl, segments=50)
+    c = cylinder(r=(rad+15)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,0*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
@@ -3008,12 +3008,12 @@ def screen_hinge(scl, ht):
     u += t
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
-    c = shearedcube([(rad*2)*scl, ht*scl, (hinge_offs)*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[-15*scl, 0, 0])
+    c = shearedcube([(87)*scl, ht*scl, (hinge_offs-10)*scl],
+                shear=[44*scl, 0, 0],
+                innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w-15)*scl,0*scl,(30+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w)*scl,0*scl,(37+hinge_offs)*scl]).add(c)
     u += c
 
     # hex indentation
@@ -3087,15 +3087,15 @@ def screen_hinge(scl, ht):
     u -= c
 
     # hollow hinge out
-    c = cylinder(r=(61/2.)*scl, h=(ht+15)*scl, segments=50)
+    c = cylinder(r=(60/2.)*scl, h=(ht+15)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-30*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
     t = translate(v=[0*scl,0*scl,lid_offset*scl]).add(t)
     u -= t
 
-    # hollow hinge out
-    c = cylinder(r=(60.9/2.)*scl, r1=(80/2.)*scl, h=(15)*scl, segments=50)
+    # rim round hinge, fits with base_end
+    c = cylinder(r=(59.9/2.)*scl, r1=(84/2.)*scl, h=(15)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-1*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -4118,7 +4118,7 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
