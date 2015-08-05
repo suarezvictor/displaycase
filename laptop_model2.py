@@ -2718,7 +2718,7 @@ def screen_front_edge(scl, ht):
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
+    d = shearedcube([(24)*scl, (ht+2)*scl, (32.6)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[-23*scl, 0*scl, 0])
     c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
@@ -4161,7 +4161,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4169,7 +4169,7 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
