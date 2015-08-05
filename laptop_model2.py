@@ -414,8 +414,8 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     if end:
         walls[B] = 20
         curverads.update({ R|T: (ld-hthick, 0),R|D: (hthick, 0),})
-        rh = ht
-        roff = -10
+        rh = ht + 10
+        roff = -20
     elif not front:
         walls[B] = -1
         curverads.update({ R|T: (ld-hthick, 0) })
@@ -992,7 +992,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(45)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
-        c = translate([(0)*scl, (3)*scl, 0*scl]).add(c)
+        c = translate([(0)*scl, (-1.2)*scl, 0*scl]).add(c)
 
         u += c
 
@@ -3827,13 +3827,15 @@ def pcb1(scl):
 def screen_adjust(b, scl, angle):
 
     u = union()
-    p = lcd_panel(scl, offs=3)
+    p = lcd_panel(scl, offs=2)
     p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
     u += p
 
     p = lcd_view_area(scl, offs=3)
     p = translate(v=[155.5*scl,61*scl,(lcd_doff+lcd_ht)*scl]).add(p)
     u += p
+
+    u = translate(v=[0*scl,0*scl,(-lid_offset+2)*scl]).add(u)
 
     b -= u
 
