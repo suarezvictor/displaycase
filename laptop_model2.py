@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -2565,9 +2565,10 @@ def screen_end(scl, ht, lcd_end_ht):
         t = lid_bolthole(scl, end=end).add(c)
         u -= t
 
+    screw_holes = [120.0, 790.0, lcd_w-120.0, lcd_w-790.0]
     if not test:
         # lcd screw holes
-        for sht in [120.0, 790.0, lcd_w-120.0, lcd_w-790.0]:
+        for sht in screw_holes:
             c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
             c = rotate([0, -90, 90]).add(c)
             c = translate(v=[(sht+lcd_inset_top+40)*scl, 0*scl,
@@ -2642,12 +2643,22 @@ def screen_end(scl, ht, lcd_end_ht):
         h = translate([(47)*scl, (3)*scl, 80*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
-        h = translate([(boxlength/2)*scl, (3)*scl, 60*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
-        c += h
+        if not test:
+            # lcd screw holes
+            for sht in screw_holes:
+                h = pin(B0, scl)
+                h = translate([(sht+80)*scl, (3)*scl, 88*scl]).add(h)
+                c += h
+                h = translate([0*scl, (0)*scl, -145*scl]).add(h)
+                c += h
+        else:
+            h = pin(B0, scl)
+            h = translate([(boxlength/2)*scl, (3)*scl, 60*scl]).add(h)
+            c += h
+            h = pin(B0, scl)
+            h = translate([(boxlength/2)*scl, (3)*scl, -45*scl]).add(h)
+            c += h
+
 
         c = translate([0, (-14.2)*scl, 0*scl]).add(c)
         u += c
@@ -4137,10 +4148,10 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
