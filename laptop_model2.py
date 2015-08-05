@@ -698,18 +698,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     d -= c
     u += d
 
-    # add bit for hinge part to rest against when over 120 degrees
-    # XXX: this might not be necessary when the spring is in place
-    # have to see... also it could complicate the injection mold.
-    c = shearedcube([(20)*scl, (12)*scl, (20)*scl],
-                shear=[0*scl, 15*scl, 0*scl],
-                innershear=[0*scl, 0*scl, 0*scl])
-    c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(20)*scl,(10)*scl,(0)*scl]).add(c)
-    c = translate(v=[(-10)*scl,(ht-10)*scl,(28)*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u += t
-
     # hollow hinge out
     c = cylinder(r=(rad-12)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
