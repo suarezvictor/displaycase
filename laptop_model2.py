@@ -936,7 +936,13 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(120)*scl, (0)*scl, 25*scl]).add(h)
+        h = translate([(60)*scl, (0)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(180)*scl, (0)*scl, 45*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(120)*scl, (0)*scl, 45*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(255)*scl, (0)*scl, 45*scl]).add(h)
@@ -948,6 +954,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(120)*scl, (0)*scl, 205*scl]).add(h)
         c += h
         h = pin(B0, scl)
+        h = translate([(180)*scl, (0)*scl, 205*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
         h = translate([(45)*scl, (0)*scl, 195*scl]).add(h)
         c += h
         h = pin(B0, scl)
@@ -955,7 +964,22 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = pin(B0, scl)
+        h = translate([(tpanel_l_b-20)*scl, (0)*scl, 40*scl]).add(h)
+        c += h
+        h = translate([0*scl, (0)*scl, 150*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = translate([(w-640)*scl, (0)*scl, 40*scl]).add(h)
+        c += h
+        h = translate([0*scl, (0)*scl, 160*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
         h = translate([(w-120)*scl, (0)*scl, 40*scl]).add(h)
+        c += h
+        h = pin(B0, scl)
+        h = translate([(w-60)*scl, (0)*scl, 40*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(w)*scl, (0)*scl, 50*scl]).add(h)
@@ -4147,8 +4171,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
-                        SCREEN_END,
+                        BASE_END,
+                        #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
