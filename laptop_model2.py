@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -3503,9 +3503,10 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
 
     u = union()
     w = boxlength-back_top_width
+    l = boxheight-hthick-3
 
-    b = hollowbox(scl, 18, ht-2, boxheight-hthick,
-                {T:14, L:10, R:-1, F:10, D:12, B:10},
+    b = hollowbox(scl, 18, ht-2, l,
+                {T:14, L:14, R:-1, F:10, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
@@ -3521,7 +3522,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
                     innershear=[0, 0*scl, 0])
     #c = rotate([0, 0, 180]).add(c)
     c = rotate([90, 0, 0]).add(c)
-    b = translate(v=[(w-20)*scl, (3)*scl, (36)*scl]).add(c)
+    b = translate(v=[(w-20)*scl, (3)*scl, (38)*scl]).add(c)
     u += b
     c = rotate([0, 0, 180]).add(c)
     b = translate(v=[(w-2)*scl, (ht-3)*scl, (55)*scl]).add(c)
@@ -3537,14 +3538,14 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
 
     # add set of interlocks into back_base to hold it down
     c = union()
-    d = cube([(15)*scl, (16)*scl, (boxheight-hthick-22)*scl])
+    d = cube([(15)*scl, (16)*scl, (l-22)*scl])
     c += d
-    d = shearedcube([(boxheight-hthick-29)*scl, (16)*scl, (15)*scl],
+    d = shearedcube([(l-29)*scl, (16)*scl, (15)*scl],
                     shear=[0*scl, 0, 0],
                     innershear=[-7*scl, 0, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    d = translate(v=[(29)*scl, (16)*scl, (boxheight-hthick-29)*scl]).add(d)
+    d = translate(v=[(29)*scl, (16)*scl, (l-29)*scl]).add(d)
     c += d
     for h in [ht-162, 102, offs+35, offs+119]:
         b = translate(v=[(w-17)*scl, h*scl, (hthick+2)*scl]).add(c)
@@ -3570,10 +3571,10 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     c = cube([(18)*scl, (86)*scl, (boxheight-31)*scl])
     b = translate(v=[(w-20)*scl, (offs+42)*scl, (10+2)*scl]).add(c)
     u += b
-    c = cube([(90)*scl, (36)*scl, (boxheight-hthick-23)*scl])
+    c = cube([(90)*scl, (36)*scl, (l-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
     u -= b
-    c = cube([(30)*scl, (36)*scl, (boxheight-hthick-23)*scl])
+    c = cube([(30)*scl, (36)*scl, (l-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (20+1)*scl]).add(c)
     u -= b
 
@@ -3621,7 +3622,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         c = rotate([90, 0, 0]).add(c)
         c = rotate([0, 0, 90]).add(c)
 
-        c = translate([(w-10)*scl, (0)*scl, (boxheight-12)*scl]).add(c)
+        c = translate([(w-10)*scl, (0)*scl, (l)*scl]).add(c)
         u += c
         c = translate([(-70)*scl, (0)*scl, 0*scl]).add(c)
         u += c
