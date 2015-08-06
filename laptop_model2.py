@@ -3506,7 +3506,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     l = boxheight-hthick-3
 
     b = hollowbox(scl, 18, ht-2, l,
-                {T:14, L:14, R:-1, F:10, D:12, B:10},
+                {T:14, L:8, R:-1, F:10, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
@@ -3626,6 +3626,18 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         u += c
         c = translate([(-70)*scl, (0)*scl, 0*scl]).add(c)
         u += c
+
+        h = cube([(76)*scl, (6)*scl, (l-22)*scl])
+        b = translate(v=[(w-80)*scl, (offs+62)*scl, (20+2)*scl]).add(h)
+        u += b
+        b = translate(v=[(w-80)*scl, (ht-6)*scl, (20+2)*scl]).add(h)
+        u += b
+        b = translate(v=[(w-80)*scl, (0)*scl, (20+2)*scl]).add(h)
+        u += b
+        b = translate(v=[(w-20)*scl, (0)*scl, (20+2)*scl]).add(h)
+        u += b
+        b = translate(v=[(w-20)*scl, (ht-6)*scl, (20+2)*scl]).add(h)
+        u += b
 
     v = union()
     u = translate(v=[0, 0, (55)*scl]).add(u)
