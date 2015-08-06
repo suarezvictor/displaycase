@@ -2904,7 +2904,7 @@ def screen_back_edge(scl, ht):
         h = translate([(lcd_w+80)*scl, (0)*scl, -18*scl]).add(h)
         c += h
         h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (50)*scl, -18*scl]).add(h)
+        h = translate([(lcd_w+80)*scl, (70)*scl, -18*scl]).add(h)
         c += h
         h = cube([25*scl, 6*scl, 60*scl])
         h = translate([(lcd_w+80)*scl, (ht/2-20)*scl, -18*scl]).add(h)
@@ -3510,11 +3510,11 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
     c = cube([(11)*scl, (ht-2)*scl, (9)*scl])
-    c = shearedcube([(4.0)*scl, (ht-2)*scl, (13)*scl],
+    c = shearedcube([(4.0)*scl, (ht-50)*scl, (13)*scl],
                     shear=[0*scl, 0, 0],
                     innershear=[-12*scl, 0, 0])
     c = rotate([0, 90, 0]).add(c)
-    b = translate(v=[(w-32)*scl, (1)*scl, (42.0)*scl]).add(c)
+    b = translate(v=[(w-32)*scl, (25)*scl, (42.0)*scl]).add(c)
     u += b
     c = shearedcube([(18)*scl, (17)*scl, (14)*scl],
                     shear=[0, -12*scl, 0, 0],
@@ -4169,7 +4169,7 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
@@ -4177,7 +4177,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
-                        #BACK_KBD_RUNNER,
+                        BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
