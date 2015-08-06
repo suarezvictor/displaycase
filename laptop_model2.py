@@ -2672,7 +2672,7 @@ def screen_end(scl, ht, lcd_end_ht):
             c += h
 
 
-        c = translate([0, (-14.2)*scl, 0*scl]).add(c)
+        c = translate([0, (-24.2)*scl, 0*scl]).add(c)
         u += c
 
     if cutdown:
@@ -4195,7 +4195,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
@@ -4210,7 +4210,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
-                        BACK_KBD_RUNNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
