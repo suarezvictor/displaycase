@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -3536,35 +3536,39 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
 
     offs = ht + toffs - tpanel_l_b/2
 
+    if not mirrored:
+        locks = [140, ht-658+170]
+    else:
+        locks = [130, ht-899+70]
+
     # add set of interlocks into back_base to hold it down
     c = union()
     d = cube([(15)*scl, (16)*scl, (l-22)*scl])
     c += d
-    d = shearedcube([(l-29)*scl, (16)*scl, (15)*scl],
+    d = shearedcube([(l-14)*scl, (16)*scl, (22)*scl],
                     shear=[0*scl, 0, 0],
-                    innershear=[-7*scl, 0, 0])
+                    innershear=[0*scl, 0, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    d = translate(v=[(29)*scl, (16)*scl, (l-29)*scl]).add(d)
+    d = translate(v=[(34)*scl, (16)*scl, (l-14)*scl]).add(d)
     c += d
-    for h in [ht-162, 102, offs+35, offs+119]:
+    supports = [ht-162, 102, offs+35, offs+119]
+    for s in locks:
+        supports.append(s+35)
+    for h in supports:
         b = translate(v=[(w-17)*scl, h*scl, (hthick+2)*scl]).add(c)
         u += b
 
     # add series of keyboard locks
     c = union()
-    b = shearedcube([(18.5)*scl, (88)*scl, (10)*scl],
+    b = shearedcube([(19.5)*scl, (88)*scl, (10)*scl],
                     shear=[-9*scl, 0, 0],
-                    innershear=[8*scl, 0, 0])
+                    innershear=[10*scl, 0, 0])
     b = rotate([0, -90, 0]).add(b)
     c.add(b)
 
-    if not mirrored:
-        locks = [140, ht-658+170]
-    else:
-        locks = [130, ht-899+70]
     for h in locks:
-        b = translate(v=[(w-19)*scl, (h)*scl, (hthick+6)*scl]).add(c)
+        b = translate(v=[(w-17)*scl, (h)*scl, (hthick+4)*scl]).add(c)
         u += b
 
     # remove bit for pcb1/battery support
@@ -4195,7 +4199,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
@@ -4210,8 +4214,8 @@ if __name__ == '__main__':
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
-                        #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BACK_KBD_RUNNER,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
