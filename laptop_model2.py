@@ -725,8 +725,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     if kbd_numpad_indent == 0:
         t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b+735)*scl, 0, (55+1)*scl]).add(c)
-        u += t
         t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # between usb ports
@@ -740,6 +738,13 @@ def base_end(scl, ht, kbd_numpad_indent):
         # end pcb marker, also supports bamboo panels top and bottom
         c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
         t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
+        u += t
+
+        # support either side of EOMA68 cpu card
+        d = cube([(50)*scl, (60)*scl, (boxheight-2)*scl])
+        t = translate(v=[(tpanel_l_b+85)*scl, 0, (55+1)*scl]).add(d)
+        u += t
+        t = translate(v=[(tpanel_l_b+680)*scl, 0, (55+1)*scl]).add(d)
         u += t
     else:
         # next to the reset switch and moving on towards the keyboard tray
@@ -2554,6 +2559,9 @@ def screen_mid(scl, ht):
 
         u += c
 
+    # shift up a bit
+    u = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(u)
+
     return u
 
 def screen_end(scl, ht, lcd_end_ht):
@@ -3279,7 +3287,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     else:
-        b = cube([(76)*scl, (l-6)*scl, (18)*scl])
+        b = cube([(62)*scl, (l-6)*scl, (18)*scl])
         b = translate(v=[(w-1+woffs-40)*scl, 3*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
@@ -3552,7 +3560,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     d = rotate([0, 0, 180]).add(d)
     d = translate(v=[(34)*scl, (16)*scl, (l-14)*scl]).add(d)
     c += d
-    supports = [ht-162, 102, offs+35, offs+119]
+    supports = [ht-162, ht*0.35, 102, offs+35, offs+119]
     for s in locks:
         supports.append(s+35)
     for h in supports:
@@ -3781,35 +3789,39 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1610*scl, 1155*scl, (12)*scl])
+    b = cube([1630*scl, 1255*scl, (12)*scl])
     b = translate([(40)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
     b = translate([(1580)*scl, 440*scl, -10*scl]).add(b)
-    pcb -= b
+    #pcb -= b
     b = cube([581*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
-    b = cube([60*scl, 130*scl, (30)*scl])
-    b = translate([(570)*scl, (1200-100)*scl, -10*scl]).add(b)
+    b = cube([60*scl, 230*scl, (30)*scl])
+    b = translate([(570)*scl, (1200-110)*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([775*scl, (91)*scl, 30*scl])
     b = translate(v=[(570)*scl, (-1)*scl, (-10)*scl]).add(b)
     pcb -= b
 
-    r = translate([(30)*scl, 15*scl, 0]).add(pcb)
+    r = translate([(0)*scl, 15*scl, 0]).add(pcb)
     t.add(r)
 
     s = union()
-    b = cube([700*scl, 986*scl, (58)*scl])
+    b = cube([710*scl, 986*scl, (58)*scl])
     s += b
     b = cube([540*scl, 861*scl, (60)*scl])
     b = translate([(110)*scl, -1*scl,
                 (-1)*scl]).add(b)
     s -= b
+    b = cube([900*scl, 100*scl, (60)*scl])
+    b = translate([(55)*scl, -1*scl,
+                (-1)*scl]).add(b)
+    s -= b
 
-    cpu_offs = 660
+    cpu_offs = 630
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -3821,44 +3833,47 @@ def pcb1(scl):
                 (-19)*scl]).add(r)
     t.add(r)
 
-    if False:
-        # XXX DC Jack to move onto pcb2, on other side, with PMIC and charger
-        # DC Jack
-        j = cube([80*scl, 93*scl, (52)*scl])
-        r = translate([(870)*scl, 0*scl,
-                    (-52)*scl]).add(j)
-        t.add(r)
-
     # Micro SD
-    j = cube([160.7*scl, 151.1*scl, (18)*scl])
-    r = translate([(1400)*scl, 0*scl,
+    j = cube([165.0*scl, 151.1*scl, (18)*scl])
+    r = translate([(1480)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
     # LVDS IC
     j = cube([141*scl, 83*scl, (12)*scl])
-    r = translate([(1400)*scl, 700*scl,
+    r = translate([(1370)*scl, 700*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # Headphone jack
-    j = cube([60*scl, 93*scl, (52)*scl])
-    r = translate([(1590)*scl, 0*scl,
-                (-52)*scl]).add(j)
+    j = union()
+    c = cube([100*scl, 100*scl, (1)*scl])
+    c = translate([(0)*scl, 40*scl, (-1)*scl]).add(c)
+    j += c
+    c = cube([50*scl, 120*scl, (52)*scl])
+    c = translate([(25)*scl, 20*scl, (-52)*scl]).add(c)
+    j += c
+    c = cylinder(r=40/2.*scl, h=40*scl, segments=50, center=True)
+    c = rotate([90, 0, 0]).add(c)
+    c = translate([(50)*scl, 20*scl, (-27)*scl]).add(c)
+    j += c
+    r = translate([(1360)*scl, 0*scl,
+                (0)*scl]).add(j)
     t.add(r)
 
     # USB x 2
     u = cube([132*scl, 137*scl, (61.5)*scl])
-    r = translate([(115)*scl, 130*scl, (-61.5)*scl]).add(u)
+    r = translate([(85)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(260)*scl, 0*scl, (-61.5)*scl]).add(u)
+    r = translate([(230)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(405)*scl, 130*scl, (-61.5)*scl]).add(u)
+    r = translate([(375)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
 
     v = union()
-    t = translate([(320)*scl, 0*scl, (150)*scl]).add(t)
+    t = translate([(350)*scl, 10*scl, (150)*scl]).add(t)
     v.add(t)
+
     return t
 
 def screen_adjust(b, scl, angle):
@@ -4198,7 +4213,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4209,14 +4224,14 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        #PCB1,
+                        FRONT_KBD_TRAY,
+                        PCB1,
                         #PCB2,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
-                        BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        #PCB1_SUPPORT,
+                        #BACK_KBD_RUNNER,
+                        #BASE_BACK,
+                        PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
