@@ -3764,23 +3764,46 @@ def pcb2(scl):
 
     # PCB
     pcb = union()
-    b = cube([800*scl, 820*scl, (12)*scl])
-    b = translate([(-160)*scl, 0*scl, 0*scl]).add(b)
+    b = cube([870*scl, 620*scl, (12)*scl])
     pcb += b
-    b = cube([581*scl, 300*scl, (30)*scl])
-    b = translate([(230)*scl, 320*scl, -10*scl]).add(b)
-    pcb -= b
-    b = cube([581*scl, 400*scl, (30)*scl])
-    b = translate([(280)*scl, -1*scl, -10*scl]).add(b)
-    pcb -= b
-    b = cube([550*scl, 200*scl, (30)*scl])
-    b = translate([(-180)*scl, (780)*scl, -10*scl]).add(b)
+    b = cube([981*scl, 500*scl, (30)*scl])
+    b = translate([(190)*scl, 380*scl, -10*scl]).add(b)
     pcb -= b
 
-    r = translate([(tpanel_l_b-360)*scl, (lcd_l/2-500)*scl,
-                    (40+55)*scl]).add(pcb)
+    # touchpanel connector
+    j = cube([90*scl, 60*scl, (12)*scl])
+    r = translate([(50)*scl, 570*scl,
+                (-12)*scl]).add(j)
     t.add(r)
 
+    # lcd connector
+    j = cube([40*scl, 140*scl, (12)*scl])
+    r = translate([(260)*scl, (130)*scl,
+                (-12)*scl]).add(j)
+    t.add(r)
+
+    # keyboard connector
+    j = cube([330*scl, 70*scl, (12)*scl])
+    r = translate([(480)*scl, (270)*scl,
+                (-12)*scl]).add(j)
+    t.add(r)
+
+    # STM32F0
+    j = cube([100*scl, 100*scl, (12)*scl])
+    r = translate([(470)*scl, (70)*scl,
+                (-12)*scl]).add(j)
+    t.add(r)
+
+    # SIP-14
+    j = cube([20*scl, 320*scl, (30)*scl])
+    r = translate([(370)*scl, (30)*scl,
+                (12)*scl]).add(j)
+    t.add(r)
+
+    t.add(pcb)
+
+    t = translate([(tpanel_l_b-360-90)*scl, (lcd_l/2-480)*scl,
+                    (52+55)*scl]).add(t)
     return t
 
 def pcb1(scl):
@@ -3790,20 +3813,19 @@ def pcb1(scl):
     # PCB
     pcb = union()
     b = cube([1630*scl, 1255*scl, (12)*scl])
-    b = translate([(40)*scl, 0*scl, 0*scl]).add(b)
     pcb += b
     b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1580)*scl, 440*scl, -10*scl]).add(b)
+    b = translate([(1540)*scl, 440*scl, -10*scl]).add(b)
     #pcb -= b
-    b = cube([581*scl, 1200*scl, (30)*scl])
+    b = cube([541*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
     b = cube([60*scl, 230*scl, (30)*scl])
-    b = translate([(570)*scl, (1200-110)*scl, -10*scl]).add(b)
+    b = translate([(530)*scl, (1200-110)*scl, -10*scl]).add(b)
     pcb -= b
-    b = cube([775*scl, (91)*scl, 30*scl])
-    b = translate(v=[(570)*scl, (-1)*scl, (-10)*scl]).add(b)
+    b = cube([835*scl, (101)*scl, 30*scl])
+    b = translate(v=[(470)*scl, (-1)*scl, (-10)*scl]).add(b)
     pcb -= b
 
     r = translate([(0)*scl, 15*scl, 0]).add(pcb)
@@ -3821,7 +3843,7 @@ def pcb1(scl):
                 (-1)*scl]).add(b)
     s -= b
 
-    cpu_offs = 630
+    cpu_offs = 590
     r = translate([(cpu_offs)*scl, 0*scl,
                 (-58)*scl]).add(s)
     t.add(r)
@@ -3835,13 +3857,13 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([165.0*scl, 151.1*scl, (18)*scl])
-    r = translate([(1480)*scl, 0*scl,
+    r = translate([(1450)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
     # LVDS IC
     j = cube([141*scl, 83*scl, (12)*scl])
-    r = translate([(1370)*scl, 700*scl,
+    r = translate([(1340)*scl, 700*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
@@ -3857,21 +3879,21 @@ def pcb1(scl):
     c = rotate([90, 0, 0]).add(c)
     c = translate([(50)*scl, 20*scl, (-27)*scl]).add(c)
     j += c
-    r = translate([(1360)*scl, 0*scl,
+    r = translate([(1320)*scl, 0*scl,
                 (0)*scl]).add(j)
     t.add(r)
 
     # USB x 2
     u = cube([132*scl, 137*scl, (61.5)*scl])
-    r = translate([(85)*scl, 130*scl, (-61.5)*scl]).add(u)
+    r = translate([(45)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(230)*scl, 0*scl, (-61.5)*scl]).add(u)
+    r = translate([(190)*scl, 0*scl, (-61.5)*scl]).add(u)
     t.add(r)
-    r = translate([(375)*scl, 130*scl, (-61.5)*scl]).add(u)
+    r = translate([(335)*scl, 130*scl, (-61.5)*scl]).add(u)
     t.add(r)
 
     v = union()
-    t = translate([(350)*scl, 10*scl, (150)*scl]).add(t)
+    t = translate([(390)*scl, 10*scl, (150)*scl]).add(t)
     v.add(t)
 
     return t
@@ -4213,7 +4235,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4224,11 +4246,11 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         PCB1,
-                        #PCB2,
+                        PCB2,
                         TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         PCB1_SUPPORT,
