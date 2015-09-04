@@ -721,7 +721,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += c
 
     # front keyboard tray indentation support, surrounds microsd
-    c = cube([(29)*scl, (60)*scl, (boxheight-2)*scl])
+    c = cube([(29)*scl, (35)*scl, (boxheight-2)*scl])
     if kbd_numpad_indent == 0:
         t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
         u += t
@@ -736,7 +736,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
 
         # end pcb marker, also supports bamboo panels top and bottom
-        c = cube([(30)*scl, (60)*scl, (boxheight-2)*scl])
+        c = cube([(30)*scl, (35)*scl, (boxheight-2)*scl])
         t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
         u += t
 
@@ -3764,39 +3764,44 @@ def pcb2(scl):
 
     # PCB
     pcb = union()
-    b = cube([870*scl, 620*scl, (12)*scl])
+    b = cube([870*scl, 640*scl, (12)*scl])
     pcb += b
     b = cube([981*scl, 500*scl, (30)*scl])
-    b = translate([(190)*scl, 380*scl, -10*scl]).add(b)
+    b = translate([(190)*scl, 400*scl, -10*scl]).add(b)
     pcb -= b
 
     # touchpanel connector
     j = cube([90*scl, 60*scl, (12)*scl])
-    r = translate([(50)*scl, 570*scl,
+    r = translate([(50)*scl, 590*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # lcd connector
     j = cube([40*scl, 140*scl, (12)*scl])
-    r = translate([(260)*scl, (130)*scl,
+    r = translate([(260)*scl, (150)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # keyboard connector
     j = cube([330*scl, 70*scl, (12)*scl])
-    r = translate([(480)*scl, (270)*scl,
+    r = translate([(480)*scl, (290)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # STM32F0
     j = cube([100*scl, 100*scl, (12)*scl])
-    r = translate([(470)*scl, (70)*scl,
+    r = translate([(470)*scl, (90)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
-    # SIP-14
-    j = cube([20*scl, 320*scl, (30)*scl])
-    r = translate([(370)*scl, (30)*scl,
+    # SIP-8 1
+    j = cube([20*scl, 100*scl, (30)*scl])
+    r = translate([(370)*scl, (50)*scl,
+                (12)*scl]).add(j)
+    t.add(r)
+    # SIP-8 2
+    j = cube([20*scl, 100*scl, (30)*scl])
+    r = translate([(370)*scl, (250)*scl,
                 (12)*scl]).add(j)
     t.add(r)
 
@@ -3814,18 +3819,19 @@ def pcb1(scl):
     pcb = union()
     b = cube([1630*scl, 1255*scl, (12)*scl])
     pcb += b
-    b = cube([901*scl, 1100*scl, (30)*scl])
-    b = translate([(1540)*scl, 440*scl, -10*scl]).add(b)
-    #pcb -= b
-    b = cube([541*scl, 1200*scl, (30)*scl])
+    b = cube([521*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
     pcb -= b
     # extra small cutout to fit pcb1_support at corner
-    b = cube([60*scl, 230*scl, (30)*scl])
-    b = translate([(530)*scl, (1200-110)*scl, -10*scl]).add(b)
+    b = cube([80*scl, 280*scl, (30)*scl])
+    b = translate([(510)*scl, (1090)*scl, -10*scl]).add(b)
     pcb -= b
     b = cube([835*scl, (101)*scl, 30*scl])
     b = translate(v=[(470)*scl, (-1)*scl, (-10)*scl]).add(b)
+    pcb -= b
+    # cutout around USB connector
+    b = cube([483*scl, 25*scl, (30)*scl])
+    b = translate([(-1)*scl, (-1)*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(0)*scl, 15*scl, 0]).add(pcb)
@@ -3863,7 +3869,7 @@ def pcb1(scl):
 
     # LVDS IC
     j = cube([141*scl, 83*scl, (12)*scl])
-    r = translate([(1340)*scl, 700*scl,
+    r = translate([(1040)*scl, 1000*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
@@ -4151,7 +4157,7 @@ def create_laptop(t, scl, part, angle):
     if part == PCB1_SUPPORT:
         se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
-                         (tpanel_ht)*scl,
+                         (tpanel_ht+100)*scl,
                          0]).add(se)
         b.add(m)
 
@@ -4235,7 +4241,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4248,12 +4254,12 @@ if __name__ == '__main__':
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         PCB1,
-                        PCB2,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #PCB2,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
