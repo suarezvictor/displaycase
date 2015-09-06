@@ -95,7 +95,7 @@ lcd_ht = 10.0
 lcd_doff = 5
 scl = 0.1
 hthick = 12 # horizontal pieces not as thick
-pcbthick = 12
+pcbthick = 16
 bwid = 17 # 24
 lcd_inset_top = 40
 lcd_inset_bot = 180
@@ -114,7 +114,7 @@ base_end_ht = 110
 lcdscrewrad = 28 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
 screwrad = 28 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
-boxheight = 120
+boxheight = 124
 backboxheight = boxheight+bwid*2-10
 boxtopoffs = 2
 boxinset = 55
@@ -2363,7 +2363,7 @@ def base_mid(scl, ht):
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
     c = translate(v=[(boxlength-back_top_width-46)*scl,
-                (1)*scl, (53+50)*scl]).add(d)
+                (1)*scl, (boxheight-17)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
     c = translate(v=[(boxlength-back_top_width-46+25)*scl,
@@ -3817,7 +3817,7 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1630*scl, 1255*scl, (12)*scl])
+    b = cube([1630*scl, 1255*scl, (pcbthick)*scl])
     pcb += b
     b = cube([521*scl, 1200*scl, (30)*scl])
     b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
@@ -4256,9 +4256,9 @@ if __name__ == '__main__':
                         PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
