@@ -896,7 +896,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     else:
         c = cube([(60)*scl, (ht+20)*scl, (33)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
-                            (55+boxheight-24-33)*scl]).add(c)
+                            (55+boxheight-pcbthick-45)*scl]).add(c)
         u -= t
 
     clasp = False
@@ -1216,18 +1216,19 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
     # first part is flush with main strut
-    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, sdep*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+    bhht = holder_ht+110.0
+    c = cube([(tpanel_box_l+20)*scl, bhht*scl, sdep*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (-110)*scl,
                 (kbd_inset)*scl]).add(c)
     u += c
     # second part goes up to underside of tpanel
-    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, 10*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+    c = cube([(tpanel_box_l+20)*scl, bhht*scl, 10*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (-110)*scl,
                 (tpanel_h+1)*scl]).add(c)
     u += c
     # third part goes down to bamboo panel
-    c = cube([(tpanel_box_l+20)*scl, holder_ht*scl, 20*scl])
-    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
+    c = cube([(tpanel_box_l+20)*scl, bhht*scl, 20*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (-110)*scl,
                 (boxheight-20-hthick)*scl]).add(c)
     u += c
 
@@ -1235,16 +1236,16 @@ def pcb1_support(scl, ht, tpanel_offset):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    t = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (50)*scl]).add(d)
+    t = translate(v=[(tpanel_l_b-75)*scl, (40-110)*scl, (50)*scl]).add(d)
     u -= t
 
     # cut-out for front kbd tray
     w = tpanel_b_w
-    b = cube([(84)*scl, (68)*scl, (27)*scl])
-    b = translate(v=[(w-200)*scl, (-1)*scl, (68)*scl]).add(b)
+    b = cube([(84)*scl, (bhht+2)*scl, (27)*scl])
+    b = translate(v=[(w-200)*scl, (-1-110)*scl, (68)*scl]).add(b)
     u -= b
-    b = cube([(50)*scl, (68)*scl, (37)*scl])
-    b = translate(v=[(w-200)*scl, (-1)*scl, (48)*scl]).add(b)
+    b = cube([(50)*scl, (bhht+2)*scl, (37)*scl])
+    b = translate(v=[(w-200)*scl, (-1-110)*scl, (48)*scl]).add(b)
     u -= b
 
     v = union()
@@ -1337,14 +1338,16 @@ def tpanel_mid(scl, ht, ht_offset):
     # cut-out to match pcb1_support
     w = tpanel_b_w
     l = 0
-    c = cube([(160)*scl, (90)*scl, (20)*scl])
+    c = cube([(160)*scl, (90+110)*scl, (20)*scl])
     b = translate(v=[(w-260)*scl, (0)*scl, (tpanel_h-3)*scl]).add(c)
     u += b
+    c = cube([(160)*scl, (90)*scl, (20)*scl])
     b = translate(v=[(w-260)*scl, (ht-90)*scl, (tpanel_h-3)*scl]).add(c)
     u += b
-    c = cube([(160)*scl, (82)*scl, (93)*scl])
+    c = cube([(160)*scl, (82+110)*scl, (93)*scl])
     b = translate(v=[(w-250)*scl, (-1)*scl, (tpanel_h-3)*scl]).add(c)
     u -= b
+    c = cube([(160)*scl, (82)*scl, (93)*scl])
     b = translate(v=[(w-250)*scl, (ht-82+1)*scl, (tpanel_h-3)*scl]).add(c)
     u -= b
 
@@ -4036,7 +4039,7 @@ def create_laptop(t, scl, part, angle):
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
             se = base_back_bot(scl, bh, scrn_hinge_ht+2,
-                                    tpanel_offset)
+                                    tpanel_offset+110)
             m = translate(v=[0, (base_adjust_ht-scrn_hinge_ht)*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
@@ -4157,7 +4160,7 @@ def create_laptop(t, scl, part, angle):
     if part == PCB1_SUPPORT:
         se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
         m = translate(v=[0,
-                         (tpanel_ht+100)*scl,
+                         (tpanel_ht+110)*scl,
                          0]).add(se)
         b.add(m)
 
@@ -4252,13 +4255,13 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        PCB1,
+                        FRONT_KBD_TRAY,
+                        #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
