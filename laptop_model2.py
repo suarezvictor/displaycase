@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -45,8 +45,11 @@ CLASP_NIB = 25
 if not test:
     lcd_l = 3598.0
     lcd_w = 2100.0
+    # dimensions from datasheet.  reality-adjustment is needed..
     lcd_la = lcd_l-98.0
     lcd_wa = lcd_w-129.9
+    lcd_la -= 25
+    #lcd_wa -= 20
     lcd_d = 50
     lcd_cable_depth = 1000
     kbd_d = 60
@@ -198,7 +201,7 @@ def lcd_view_area(scl, offs=0):
     c = cube(size=[(w+offs*2)*scl,(h+offs*2)*scl,(d+offs*2)*scl])
     c = rotate([00, 0, 0 ]).add(c)
     r.add(c)
-    t = translate(v=[(-93-offs+wo)*scl, (-40-offs+do)*scl, (32.5-offs)*scl])
+    t = translate(v=[(-83-offs+wo)*scl, (-40-offs+do)*scl, (32.5-offs)*scl])
     t.add(r)
     a.add(t)
 
@@ -397,7 +400,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     u = union()
 
     lth = 15
-    ld = lcd_d+lth+5.4+9
+    ld = lcd_d+lth+5.4+9+8
     rh = ht
     roff = 0
 
@@ -420,10 +423,10 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         walls[B] = -1
         curverads.update({ R|T: (ld-hthick, 0) })
     if back:
-        slen = lcd_inset_bot - 30
+        slen = lcd_inset_bot + 40
         offs = boxlength - slen
     elif front:
-        slen = 90
+        slen = 130
         offs = 0
     else:
         slen = boxlength
@@ -2594,8 +2597,8 @@ def screen_end(scl, ht, lcd_end_ht):
         for sht in screw_holes:
             c = chamfered_backbox_screwholes(scl, 60, 25, lcdscrewrad)
             c = rotate([0, -90, 90]).add(c)
-            c = translate(v=[(sht+lcd_inset_top+40)*scl, 0*scl,
-                       16*scl]).add(c)
+            c = translate(v=[(sht+lcd_inset_top+35)*scl, 0*scl,
+                       14*scl]).add(c)
             u -= c
 
     #b = screen_edge_complete(scl, lcd_end_ht)
@@ -2729,7 +2732,7 @@ def screen_front_edge(scl, ht):
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(24)*scl, (ht+2)*scl, (32.6)*scl],
+    d = shearedcube([(44)*scl, (ht+2)*scl, (32.6)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[-23*scl, 0*scl, 0])
     c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
@@ -2837,11 +2840,11 @@ def screen_back_edge(scl, ht):
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(24)*scl, (ht+2)*scl, (31)*scl],
+    d = shearedcube([(60)*scl, (ht+4)*scl, (32)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[-43*scl, 0*scl, 0])
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+54)*scl, (ht+10)*scl, (-37)*scl]).add(d)
+    c = translate(v=[(lcd_w+54)*scl, (ht+1)*scl, (-37)*scl]).add(d)
     b -= c
 
     # TODO: this is going to need some underside supports
@@ -3049,6 +3052,13 @@ def screen_hinge(scl, ht):
     u = union()
     b = screen_box(scl, ht, end=False, back=True, hingewall=False)
     u += b
+    # take a bit out for the bamboo panel
+    d = shearedcube([(70)*scl, (ht+4)*scl, (32)*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[0*scl, 0*scl, 0])
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(lcd_w+60)*scl, (ht+1)*scl, (-37)*scl]).add(d)
+    u -= c
 
     rad=35.0
     # add hinge
@@ -4244,8 +4254,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
-                        #SCREEN_END,
+                        #BASE_END,
+                        SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
@@ -4255,7 +4265,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
@@ -4296,7 +4306,7 @@ if __name__ == '__main__':
                 # Keyboard
                 kbd = kbd_part(scl)
                 r = translate([(lcd_w-kbd_w/2+25-79)*scl, total_width/2*scl,
-                                (62)*scl]).add(kbd)
+                                (62+5)*scl]).add(kbd)
                 c = [0.3, 0.8, 0.5, 0.2]
                 r = union().add(r)
                 c = color(c)
@@ -4305,8 +4315,8 @@ if __name__ == '__main__':
 
                 # LCD Panel
                 b = union()
-                p = lcd_panel(scl, offs=3)
-                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht)*scl]).add(p)
+                p = lcd_panel(scl, offs=2)
+                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht-6)*scl]).add(p)
                 b += p
 
                 r = hinge_rotate(scl, b, angle)
