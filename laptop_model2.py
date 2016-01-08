@@ -590,25 +590,25 @@ def base_end(scl, ht, kbd_numpad_indent):
             # remove holes for connectors
 
             # Headphones
-            c = cylinder(r=26*scl, h=(40)*scl, center=True, segments=50)
+            c = cylinder(r=28*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
             c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
             u -= c
             # MicroSD
-            c = cube([175*scl, 60*scl, 28*scl])
-            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (126)*scl]).add(c)
+            c = cube([165*scl, 60*scl, 30*scl])
+            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (124)*scl]).add(c)
             u -= c
             # EOMA68
-            c = cube([550*scl, 60*scl, 55*scl])
-            c = translate(v=[(1085)*scl, (-1)*scl, (97)*scl]).add(c)
+            c = cube([550*scl, 60*scl, 59*scl])
+            c = translate(v=[(1085)*scl, (-1)*scl, (95)*scl]).add(c)
             u -= c
             # EOMA68 eject
-            c = cube([70*scl, 60*scl, 50*scl])
-            c = translate(v=[(975)*scl, (-1)*scl, (97+5)*scl]).add(c)
+            c = cube([70*scl, 60*scl, 55*scl])
+            c = translate(v=[(975)*scl, (-1)*scl, (97)*scl]).add(c)
             u -= c
             # USB2
-            c = cube([160*scl, 180*scl, 80*scl])
-            c = translate(v=[(usb_pos)*scl, (-1)*scl, (91-5)*scl]).add(c)
+            c = cube([160*scl, 180*scl, 85*scl])
+            c = translate(v=[(usb_pos)*scl, (-1)*scl, (81)*scl]).add(c)
             u -= c
 
             # add bottom strut, along EOMA68 and USB
@@ -752,10 +752,10 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
 
         # support either side of EOMA68 cpu card
-        d = cube([(40)*scl, (60)*scl, (boxheight-2)*scl])
-        t = translate(v=[(tpanel_l_b+85)*scl, 0, (55+1)*scl]).add(d)
+        d = cube([(35)*scl, (60)*scl, (boxheight-2)*scl])
+        t = translate(v=[(tpanel_l_b+98)*scl, 0, (55+1)*scl]).add(d)
         u += t
-        t = translate(v=[(tpanel_l_b+680)*scl, 0, (55+1)*scl]).add(d)
+        t = translate(v=[(tpanel_l_b+683)*scl, 0, (55+1)*scl]).add(d)
         u += t
     else:
         # next to the reset switch and moving on towards the keyboard tray
