@@ -583,35 +583,44 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
+    usb_pos = 560
+
     if not test:
         if kbd_numpad_indent == 0:
             # remove holes for connectors
 
             # Headphones
-            c = cube([60*scl, 60*scl, 55*scl])
-            c = translate(v=[(lcd_w-190)*scl, (-1)*scl, (95)*scl]).add(c)
+            c = cylinder(r=26*scl, h=(40)*scl, center=True, segments=50)
+            c = rotate([0, 90, 90]).add(c)
+            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
             u -= c
             # MicroSD
-            c = cube([165*scl, 60*scl, 25*scl])
-            c = translate(v=[(lcd_w-382)*scl, (-1)*scl, (128)*scl]).add(c)
+            c = cube([175*scl, 60*scl, 28*scl])
+            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (126)*scl]).add(c)
             u -= c
             # EOMA68
             c = cube([550*scl, 60*scl, 55*scl])
             c = translate(v=[(1085)*scl, (-1)*scl, (97)*scl]).add(c)
             u -= c
             # EOMA68 eject
-            c = cube([60*scl, 60*scl, 55*scl])
-            c = translate(v=[(985)*scl, (-1)*scl, (97)*scl]).add(c)
+            c = cube([70*scl, 60*scl, 50*scl])
+            c = translate(v=[(975)*scl, (-1)*scl, (97+5)*scl]).add(c)
             u -= c
             # USB2
-            c = cube([130*scl, 60*scl, 60*scl])
-            c = translate(v=[(580)*scl, (-1)*scl, (91)*scl]).add(c)
+            c = cube([160*scl, 180*scl, 80*scl])
+            c = translate(v=[(usb_pos)*scl, (-1)*scl, (91-5)*scl]).add(c)
             u -= c
 
             # add bottom strut, along EOMA68 and USB
             b = cube([765*scl, (ht)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
                     (boxheight-hthick-12+55)*scl]).add(b)
+            u += b
+
+            # and along USB
+            b = cube([200*scl, (40)*scl, 10*scl])
+            b = translate(v=[(usb_pos-30)*scl, (0)*scl,
+                    (boxheight-hthick-12+60)*scl]).add(b)
             u += b
 
         else:
@@ -724,14 +733,14 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += c
 
     # front keyboard tray indentation support, surrounds microsd
-    c = cube([(29)*scl, (35)*scl, (boxheight-2)*scl])
+    c = cube([(29)*scl, (40)*scl, (boxheight-2)*scl])
     if kbd_numpad_indent == 0:
         t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
         u += t
         t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # between usb ports
-        t = translate(v=[(730)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(usb_pos+160)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # at end of PCB
         t = translate(v=[(boxlength-back_top_width-50)*scl, 0,
@@ -739,12 +748,11 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
 
         # end pcb marker, also supports bamboo panels top and bottom
-        c = cube([(30)*scl, (35)*scl, (boxheight-2)*scl])
-        t = translate(v=[(540)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(usb_pos-30)*scl, 0, (55+1)*scl]).add(c)
         u += t
 
         # support either side of EOMA68 cpu card
-        d = cube([(50)*scl, (60)*scl, (boxheight-2)*scl])
+        d = cube([(40)*scl, (60)*scl, (boxheight-2)*scl])
         t = translate(v=[(tpanel_l_b+85)*scl, 0, (55+1)*scl]).add(d)
         u += t
         t = translate(v=[(tpanel_l_b+680)*scl, 0, (55+1)*scl]).add(d)
@@ -769,7 +777,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent == 0:
         c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
-        t = translate(v=[(540)*scl, 0, (55+21)*scl]).add(c)
+        t = translate(v=[(usb_pos-30)*scl, 0, (55+21)*scl]).add(c)
         u += t
         t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+21)*scl]).add(c)
         u += t
@@ -960,7 +968,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = pin(B0, scl)
-        h = translate([(tpanel_l_b-20)*scl, (0)*scl, 40*scl]).add(h)
+        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 40*scl]).add(h)
         c += h
         h = translate([0*scl, (0)*scl, 150*scl]).add(h)
         c += h
@@ -4254,8 +4262,8 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
-                        SCREEN_END,
+                        BASE_END,
+                        #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
