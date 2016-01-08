@@ -677,7 +677,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                   angle=0)
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
-    c = resize([(150-hthick)*scl, 0, 0], False).add(c)
+    c = resize([(150-hthick-4)*scl, 0, 0], False).add(c)
     c = translate(v=[(lcd_w+66)*scl, (hthick)*scl, (boxheight-25)*scl]).add(c)
     u -= c
 
