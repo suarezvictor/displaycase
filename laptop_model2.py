@@ -672,7 +672,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += c
 
     # add bits for screws through to base front
-    c = touch_arc(0, (ht+1), (boxheight-40-hthick),
+    c = touch_arc(0, (ht+1), (boxheight-44-hthick),
                         25, scl,
                   angle=0)
     c = rotate([90, 0, 0]).add(c)
