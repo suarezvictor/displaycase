@@ -583,32 +583,32 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
-    usb_pos = 560
+    usb_pos = 570
 
     if not test:
         if kbd_numpad_indent == 0:
             # remove holes for connectors
 
             # Headphones
-            c = cylinder(r=28*scl, h=(40)*scl, center=True, segments=50)
+            c = cylinder(r=30*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
-            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
+            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (125)*scl]).add(c)
             u -= c
             # MicroSD
-            c = cube([165*scl, 60*scl, 30*scl])
-            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (124)*scl]).add(c)
+            c = cube([165*scl, 60*scl, 32*scl])
+            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (123)*scl]).add(c)
             u -= c
             # EOMA68
             c = cube([550*scl, 60*scl, 59*scl])
             c = translate(v=[(1085)*scl, (-1)*scl, (95)*scl]).add(c)
             u -= c
             # EOMA68 eject
-            c = cube([70*scl, 60*scl, 55*scl])
-            c = translate(v=[(975)*scl, (-1)*scl, (97)*scl]).add(c)
+            c = cube([77*scl, 60*scl, 58*scl])
+            c = translate(v=[(973)*scl, (-1)*scl, (97)*scl]).add(c)
             u -= c
             # USB2
             c = cube([160*scl, 180*scl, 85*scl])
-            c = translate(v=[(usb_pos)*scl, (-1)*scl, (81)*scl]).add(c)
+            c = translate(v=[(usb_pos)*scl, (-1)*scl, (73)*scl]).add(c)
             u -= c
 
             # add bottom strut, along EOMA68 and USB
@@ -618,9 +618,9 @@ def base_end(scl, ht, kbd_numpad_indent):
             u += b
 
             # and along USB
-            b = cube([200*scl, (40)*scl, 10*scl])
+            b = cube([200*scl, (50)*scl, 20*scl])
             b = translate(v=[(usb_pos-30)*scl, (0)*scl,
-                    (boxheight-hthick-12+60)*scl]).add(b)
+                    (boxheight-hthick-20+60)*scl]).add(b)
             u += b
 
         else:
