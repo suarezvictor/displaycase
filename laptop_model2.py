@@ -967,17 +967,18 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 120*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
-        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 40*scl]).add(h)
-        c += h
-        h = translate([0*scl, (0)*scl, 150*scl]).add(h)
+        h = union()
+        h += pin(B0, scl)
+        h += translate([0, 0, -60*scl]).add(pin(B0, scl))
+        h += translate([0, 1.5*scl, -105*scl]).add(cube([10*scl, 40*scl, 150*scl]))
+        h += translate([0*scl, (0)*scl, 260*scl]).add(h)
+        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 15*scl]).add(h)
         c += h
 
-        h = pin(B0, scl)
-        h = translate([(w-640)*scl, (0)*scl, 40*scl]).add(h)
-        c += h
-        h = translate([0*scl, (0)*scl, 160*scl]).add(h)
-        c += h
+        c += translate([(-450)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(400)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(800)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(1100)*scl, (0)*scl, 0*scl]).add(h)
 
         h = pin(B0, scl)
         h = translate([(w-120)*scl, (0)*scl, 40*scl]).add(h)
@@ -999,13 +1000,17 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = cube([150*scl, 60*scl, 7*scl])
-        h = translate([(130)*scl, (-3)*scl, 55*scl]).add(h)
+        h = translate([(130)*scl, (-0)*scl, 55*scl]).add(h)
         c += h
 
         h = cube([6*scl, (base_end_ht-15)*scl, boxheight*scl])
-        h = translate([(180)*scl, (-3)*scl, 55*scl]).add(h)
+        h = translate([(180)*scl, (0)*scl, 55*scl]).add(h)
         c += h
         h = translate([(45)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = cube([w*scl, 1.8*scl, (boxheight+20)*scl*1.5])
+        h = translate([(0)*scl, (0)*scl, 12*scl]).add(h)
         c += h
 
         c = translate([(0)*scl, (-1.2)*scl, 0*scl]).add(c)
