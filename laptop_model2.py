@@ -626,7 +626,7 @@ def base_end(scl, ht, kbd_numpad_indent):
             u -= c
 
             # add bottom strut, along EOMA68 and USB
-            b = cube([765*scl, (ht)*scl, 15*scl])
+            b = cube([765*scl, (ht+10)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
                     (boxheight-hthick-12+55)*scl]).add(b)
             u += b
@@ -844,7 +844,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += v
 
     # remove runner for panel
-    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (8)*scl],
+    c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (10)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
@@ -853,8 +853,16 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
 
     # add interlock down behind base_back_bot
-    b = cube([48*scl, (ht-10)*scl, (hthick+1)*scl])
+    b = union()
+    c = cube([48*scl, (ht-10)*scl, (hthick+1)*scl])
+    b += c
+    c = cube([48*scl, (21)*scl, (hthick)*scl])
+    c = translate(v=[0*scl, (ht-11)*scl, 0*scl]).add(c)
+    b += c
     t = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
+                    (55+boxheight-hthick*2)*scl]).add(b)
+    u += t
+    t = translate(v=[(220)*scl, (0)*scl,
                     (55+boxheight-hthick*2)*scl]).add(b)
     u += t
 
@@ -869,11 +877,6 @@ def base_end(scl, ht, kbd_numpad_indent):
             t = translate(v=[l*scl, (0)*scl,
                             (55+boxheight-hthick*2-6)*scl]).add(b)
             u += t
-
-    b = cube([48*scl, (21)*scl, (hthick)*scl])
-    b = translate(v=[(boxlength-back_top_width-50)*scl, (ht-11)*scl,
-                    (55+boxheight-hthick*2)*scl]).add(b)
-    u += b
 
     # inset for base_front
     c = cube([(115)*scl, (40)*scl, (63)*scl])
