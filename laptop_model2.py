@@ -583,12 +583,12 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
-    usb_pos = 570
+    usb_pos = 565
 
     if not test:
         if kbd_numpad_indent == 0:
             # add PCB traps that keep it down
-            c = shearedcube([(boxheight-41)*scl, (15)*scl, 101*scl],
+            c = shearedcube([(boxheight-45)*scl, (15)*scl, 101*scl],
                         shear=[5*scl, 0, 0],
                         innershear=[0*scl, 0, 0])
             c = rotate([180, -90, -90]).add(c)
@@ -606,7 +606,7 @@ def base_end(scl, ht, kbd_numpad_indent):
             # Headphones
             c = cylinder(r=30*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
-            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (125)*scl]).add(c)
+            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
             u -= c
             # MicroSD
             c = cube([165*scl, 60*scl, 32*scl])
@@ -626,7 +626,7 @@ def base_end(scl, ht, kbd_numpad_indent):
             u -= c
 
             # add bottom strut, along EOMA68 and USB
-            b = cube([765*scl, (ht+10)*scl, 15*scl])
+            b = cube([765*scl, (ht+5)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
                     (boxheight-hthick-12+55)*scl]).add(b)
             u += b
