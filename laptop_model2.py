@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -584,6 +584,20 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += c
 
     usb_pos = 570
+
+    if not test:
+        if kbd_numpad_indent == 0:
+            # add PCB traps that keep it down
+            c = shearedcube([(boxheight-41)*scl, (15)*scl, 101*scl],
+                        shear=[5*scl, 0, 0],
+                        innershear=[0*scl, 0, 0])
+            c = rotate([180, -90, -90]).add(c)
+            u += translate(v=[(lcd_w-77)*scl, (102)*scl,
+                    (boxheight-55)*scl]).add(c)
+            u += translate(v=[(lcd_w-400)*scl, (102)*scl,
+                    (boxheight-55)*scl]).add(c)
+            u += translate(v=[(usb_pos-181)*scl, (102)*scl,
+                    (boxheight-55)*scl]).add(c)
 
     if not test:
         if kbd_numpad_indent == 0:
