@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -993,9 +993,11 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         c += translate([(-450)*scl, (0)*scl, 0*scl]).add(h)
-        c += translate([(400)*scl, (0)*scl, 0*scl]).add(h)
-        c += translate([(800)*scl, (0)*scl, 0*scl]).add(h)
-        c += translate([(1100)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(-820)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(350)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(700)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(1000)*scl, (0)*scl, 0*scl]).add(h)
+        c += translate([(1280)*scl, (0)*scl, 0*scl]).add(h)
 
         h = pin(B0, scl)
         h = translate([(w-120)*scl, (0)*scl, 40*scl]).add(h)
@@ -1027,7 +1029,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = cube([w*scl, 1.8*scl, (boxheight+20)*scl*1.5])
-        h = translate([(0)*scl, (0)*scl, 12*scl]).add(h)
+        h = translate([(0)*scl, (1.2)*scl, 12*scl]).add(h)
         c += h
 
         c = translate([(0)*scl, (-1.2)*scl, 0*scl]).add(c)
