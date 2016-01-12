@@ -146,6 +146,23 @@ pdept =  130
 
 hinge_offs = 70
 
+def pin_t(ht=242):
+    d = union()
+    h = pin(B0, scl, fill=True)
+    h = translate([0, (-3)*scl, -85*scl]).add(h)
+    d += h
+    h = translate([0, 0, ht*scl]).add(h)
+    d += h
+    d += translate([0, 0, 50*scl]).add(d)
+    d += translate([70*scl, 0, 0*scl]).add(d)
+    d = translate([-35*scl, 0, 0*scl]).add(d)
+    h = cube([6*scl, 30*scl, 140*scl])
+    h = translate([0*scl, -30*scl, -130*scl]).add(h)
+    d += h
+    h = translate([0*scl, 0*scl, ht*scl]).add(h)
+    d += h
+    return d
+
 def hinge_translate(scl):
     return translate(v=[+(+lcd_inset_bot+lcd_w-50+lcd_inset_top)*scl,
                        0,
@@ -984,12 +1001,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 120*scl]).add(h)
         c += h
 
-        h = union()
-        h += pin(B0, scl)
-        h += translate([0, 0, -60*scl]).add(pin(B0, scl))
-        h += translate([0, 1.5*scl, -105*scl]).add(cube([10*scl, 40*scl, 150*scl]))
-        h += translate([0*scl, (0)*scl, 260*scl]).add(h)
-        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 15*scl]).add(h)
+        h = pin_t(250)
+        h = rotate([180, 0, 0]).add(h)
+        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 182*scl]).add(h)
         c += h
 
         c += translate([(-450)*scl, (0)*scl, 0*scl]).add(h)
@@ -2089,20 +2103,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = translate([(ht-47+75)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
 
-        d = union()
-        h = pin(B0, scl, fill=True)
-        h = translate([0, (-3)*scl, -85*scl]).add(h)
-        d += h
-        h = translate([0, 0, 240*scl]).add(h)
-        d += h
-        d += translate([0, 0, 50*scl]).add(d)
-        d += translate([70*scl, 0, 0*scl]).add(d)
-        d = translate([-35*scl, 0, 0*scl]).add(d)
-        h = cube([6*scl, 30*scl, 122*scl])
-        h = translate([0*scl, -30*scl, -120*scl]).add(h)
-        d += h
-        h = translate([0*scl, 0*scl, 242*scl]).add(h)
-        d += h
+        d = pin_t()
 
         c += translate([(110)*scl, 0, 0]).add(d)
         c += translate([(ht*0.53)*scl, 0, 0]).add(d)
@@ -4289,7 +4290,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4306,7 +4307,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
