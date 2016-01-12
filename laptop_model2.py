@@ -2088,25 +2088,28 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = pin(B0, scl, fill=True)
         h = translate([(ht-47+75)*scl, (-3)*scl, 140*scl]).add(h)
         c += h
-        for of in [-35, 35]:
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.53+of)*scl, (-3)*scl, -23*scl]).add(h)
-            c += h
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.53+of)*scl, (-3)*scl, 140*scl]).add(h)
-            c += h
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.75+of)*scl, (-3)*scl, -23*scl]).add(h)
-            c += h
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.75+of)*scl, (-3)*scl, 140*scl]).add(h)
-            c += h
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.3+of)*scl, (-3)*scl, -23*scl]).add(h)
-            c += h
-            h = pin(B0, scl, fill=True)
-            h = translate([(ht*0.3+of)*scl, (-3)*scl, 140*scl]).add(h)
-            c += h
+
+        d = union()
+        h = pin(B0, scl, fill=True)
+        h = translate([0, (-3)*scl, -85*scl]).add(h)
+        d += h
+        h = translate([0, 0, 240*scl]).add(h)
+        d += h
+        d += translate([0, 0, 50*scl]).add(d)
+        d += translate([70*scl, 0, 0*scl]).add(d)
+        d = translate([-35*scl, 0, 0*scl]).add(d)
+        h = cube([6*scl, 30*scl, 122*scl])
+        h = translate([0*scl, -30*scl, -120*scl]).add(h)
+        d += h
+        h = translate([0*scl, 0*scl, 242*scl]).add(h)
+        d += h
+
+        c += translate([(110)*scl, 0, 0]).add(d)
+        c += translate([(ht*0.53)*scl, 0, 0]).add(d)
+        c += translate([(ht*0.74)*scl, 0, 0]).add(d)
+        c += translate([(ht*0.3)*scl, 0, 0]).add(d)
+        c += translate([(ht-85)*scl, 0, 0]).add(d)
+
         h = pin(B0, scl, fill=True)
         h = translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
         c += h
@@ -2131,11 +2134,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         offs = ht + toffs - tpanel_l_b/2 +8
         if toffs > 0:
             offs -= 50
-        h = cube([(offs-45)*scl, 1.8*scl, boxheight*scl])
-        h = translate([(100)*scl, (-1.8)*scl, 0*scl]).add(h)
+        h = cube([(offs-45)*scl, 1.8*scl, boxheight*1.5*scl])
+        h = translate([(100)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
         c += h
-        h = cube([(ht-offs-235)*scl, 1.8*scl, boxheight*scl])
-        h = translate([(offs+100)*scl, (-1.8)*scl, 0*scl]).add(h)
+        h = cube([(ht-offs-235)*scl, 1.8*scl, boxheight*1.5*scl])
+        h = translate([(offs+100)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58-79)*scl, (0)*scl, 0*scl]).add(c)
@@ -4286,7 +4289,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4303,7 +4306,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
