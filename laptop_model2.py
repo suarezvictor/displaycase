@@ -2593,11 +2593,11 @@ def screen_mid(scl, ht):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    u -= translate(v=[(boxlength+8-140)*scl, (ht)*scl,
+    u -= translate(v=[(boxlength+10-140)*scl, (ht)*scl,
                                 (-28)*scl]).add(c)
     c = rotate([0, 180, 0]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    u -= translate(v=[(78)*scl, (0)*scl,
+    u -= translate(v=[(80)*scl, (0)*scl,
                                 (-28)*scl]).add(c)
 
     if pin_parts_3d:
