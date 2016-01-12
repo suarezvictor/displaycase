@@ -1731,7 +1731,7 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(-75)*scl, (-3)*scl, 55*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
-        c = translate([(front_top_width-6)*scl, (0)*scl, 0*scl]).add(c)
+        c = translate([(front_top_width-6+4.2)*scl, (0)*scl, 0*scl]).add(c)
 
         h = cube([30*scl, 7*scl, (boxheight-2)*scl])
         h = translate([(front_top_width-30)*scl, (0)*scl, 1*scl]).add(h)
@@ -1745,9 +1745,27 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-7)*scl]).add(h)
         c += h
 
-        h = cube([(6)*scl, (ht+ht_offset-tpanel_l-70)*scl,
-                            (12)*scl])
-        h = translate(v=[(180-6)*scl, (100)*scl,
+        v = union()
+        d = pin_t(257)
+        v += translate([(70)*scl, 0, 0]).add(d)
+        v += translate([(ht*0.53)*scl, 0, 0]).add(d)
+        v += translate([(ht*0.3)*scl, 0, 0]).add(d)
+        d = pin_t(214)
+        v += translate([(ht*0.74)*scl, 0, 0]).add(d)
+        v += translate([(ht-65)*scl, 0, 0]).add(d)
+        d = pin_t(ht+100)
+        d = rotate([0, 90, 0]).add(d)
+        d = translate([0, 0, boxheight*0.5*scl]).add(d)
+        v += d
+        v = rotate([0, 0, 90]).add(v)
+        v = rotate([0, 180, 0]).add(v)
+        v = translate(v=[(front_top_width)*scl, (0)*scl,
+                    (boxheight+5)*scl]).add(v)
+        c += v
+
+        h = cube([(1.2)*scl, (ht+ht_offset-tpanel_l-70)*scl,
+                            (boxheight-35)*scl])
+        h = translate(v=[(180-1.2)*scl, (100)*scl,
                             (21)*scl]).add(h)
         c += h
 
@@ -4300,14 +4318,14 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
