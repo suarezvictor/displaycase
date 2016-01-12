@@ -146,7 +146,7 @@ pdept =  130
 
 hinge_offs = 70
 
-def pin_t(ht=242):
+def pin_t(ht=244):
     d = union()
     h = pin(B0, scl, fill=True)
     h = translate([0, (-3)*scl, -85*scl]).add(h)
@@ -4290,7 +4290,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4307,7 +4307,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
