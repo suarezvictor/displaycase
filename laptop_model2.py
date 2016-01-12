@@ -2585,7 +2585,7 @@ def screen_mid(scl, ht):
     c = translate(v=[(lcd_w+159)*scl, (-2)*scl, (-6)*scl]).add(d)
     u -= c
     d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
-    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-8.5)*scl]).add(d)
+    c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-5)*scl]).add(d)
     u -= c
 
     # remove runner for top panel
@@ -2606,9 +2606,9 @@ def screen_mid(scl, ht):
         c += translate([(boxlength-62)*scl, (0)*scl, -60*scl]).add(h)
         c += translate([(boxlength-140)*scl, (0)*scl, -60*scl]).add(h)
         c += translate([(boxlength+15)*scl, (0)*scl, 3*scl]).add(h)
-        c += translate([(boxlength-18)*scl, (0)*scl, 80*scl]).add(h)
-        c += translate([(boxlength-95)*scl, (0)*scl, 80*scl]).add(h)
-        c += translate([(boxlength-165)*scl, (0)*scl, 80*scl]).add(h)
+        c += translate([(boxlength-18)*scl, (0)*scl, 85*scl]).add(h)
+        c += translate([(boxlength-95)*scl, (0)*scl, 85*scl]).add(h)
+        c += translate([(boxlength-165)*scl, (0)*scl, 85*scl]).add(h)
 
         c += translate([(210)*scl, (0)*scl, -60*scl]).add(h)
         c += translate([(127)*scl, (0)*scl, -60*scl]).add(h)
