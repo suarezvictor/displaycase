@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -146,21 +146,23 @@ pdept =  130
 
 hinge_offs = 70
 
-def pin_t(ht=244):
+def pin_t(ht=244, mirror=True):
     d = union()
     h = pin(B0, scl, fill=True)
     h = translate([0, (-3)*scl, -85*scl]).add(h)
     d += h
-    h = translate([0, 0, ht*scl]).add(h)
-    d += h
+    if mirror:
+        h = translate([0, 0, ht*scl]).add(h)
+        d += h
     d += translate([0, 0, 50*scl]).add(d)
     d += translate([70*scl, 0, 0*scl]).add(d)
     d = translate([-35*scl, 0, 0*scl]).add(d)
     h = cube([6*scl, 30*scl, 140*scl])
     h = translate([0*scl, -30*scl, -130*scl]).add(h)
     d += h
-    h = translate([0*scl, 0*scl, ht*scl]).add(h)
-    d += h
+    if mirror:
+        h = translate([0*scl, 0*scl, ht*scl]).add(h)
+        d += h
     return d
 
 def hinge_translate(scl):
@@ -3020,6 +3022,13 @@ def screen_back_edge(scl, ht):
         h = rotate([90, 0, 0]).add(h)
         for l in [ht-45, ht/2, 45]:
             c += translate([(lcd_w+235)*scl, l*scl, (7.4+37)*scl]).add(h)
+
+        h = pin_t(mirror=False)
+        h = rotate([90, 0, 0]).add(h)
+        c += translate([(lcd_w+80)*scl, (-95)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+80)*scl, (ht-35)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+200)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+200)*scl, (ht-5)*scl, (7.4+37+3)*scl]).add(h)
 
         c = translate([0, 0, (8)*scl]).add(c)
         b += c
