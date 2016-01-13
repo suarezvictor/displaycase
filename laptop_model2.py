@@ -2978,24 +2978,19 @@ def screen_back_edge(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (0)*scl, -18*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (70)*scl, -18*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (ht/2-20)*scl, -18*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (ht/4-10)*scl, -18*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (420)*scl, -18*scl]).add(h)
-        c += h
-        h = cube([25*scl, 6*scl, 60*scl])
-        h = translate([(lcd_w+80)*scl, (ht-6)*scl, -18*scl]).add(h)
-        c += h
+        h = union()
+        h += cube([40*scl, 6*scl, 70*scl])
+        d = shearedcube([15*scl, 6*scl, 25*scl],
+            shear=[0*scl, 0*scl, 0],
+            innershear=[15*scl, 0*scl, 0])
+        h += translate([-15*scl, 0*scl, -10*scl]).add(d)
+        l = []
+        i = 170
+        while i < ht:
+            l.append(i)
+            i += step * 2
+        for l in [0, 70, ht-6] + l:
+            c += translate([(lcd_w+80)*scl, (l)*scl, -28*scl]).add(h)
 
         h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
         h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
@@ -3005,23 +3000,28 @@ def screen_back_edge(scl, ht):
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+175)*scl, (ht-4)*scl, (7.4+37)*scl]).add(h)
+        h = translate([(lcd_w+175)*scl, (ht+25)*scl, (7.4+37)*scl]).add(h)
         c += h
         h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+        h = translate([(-70)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+175)*scl, (4)*scl, (7.4+37)*scl]).add(h)
+        h = translate([(lcd_w+175)*scl, (-25)*scl, (7.4+37)*scl]).add(h)
         c += h
         h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+        h = translate([(-70)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+235)*scl, (ht/2)*scl, (7.4+37)*scl]).add(h)
-        c += h
+        for l in [ht, ht/2, 0]:
+            c += translate([(lcd_w+235)*scl, l*scl, (7.4+37)*scl]).add(h)
 
+        c = translate([0, 0, (8)*scl]).add(c)
         b += c
 
     # shift up a bit
@@ -4325,10 +4325,10 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        #SCREEN_MID,
+                        ##BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
