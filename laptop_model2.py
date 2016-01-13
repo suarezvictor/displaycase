@@ -14,7 +14,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1578,15 +1578,15 @@ def base_front_top(scl, ht, ht_offset):
         # add fill-ins
         b = base_cutout(scl, fthick, arch=True, doffs=doffs)
         b = resize([(234-doffs)*scl, 0,
-                    pow(2, 0.5)*(boxheight-hthick*2+10)*scl], False).add(b)
+                    pow(2, 0.5)*(boxheight-hthick*2)*scl], False).add(b)
         b = rotate([0, 0, 180]).add(b)
         c = rotate([-43, 0, 0]).add(b)
-        c = translate(v=[0*scl, (offs-fthick+step)*scl, (-12)*scl]).add(c)
+        c = translate(v=[0*scl, (offs-fthick+step+5)*scl, (-6)*scl]).add(c)
         u += c
         offs += step
         c = rotate([43, 0, 0]).add(b)
-        c = translate(v=[0*scl, (offs-fthick+30)*scl,
-                (-9)*scl]).add(c)
+        c = translate(v=[0*scl, (offs-fthick+25)*scl,
+                (-3)*scl]).add(c)
         u += c
 
         offs += step
@@ -1830,7 +1830,7 @@ def base_cutout(scl, ht, loffs=0, arch=False, doffs=0):
         c = cylinder(r=dep/2.0*scl, h=ht*4*scl, segments=90, center=True)
         c = resize([(dep*2.2)*scl, 0, 0], False).add(c)
         c = rotate([90, 0, 0]).add(c)
-        c = translate(v=[(-160-dep+loffs+doffs)*scl, 0*scl, (dep/2+7)*scl]).add(c)
+        c = translate(v=[(-160-dep+loffs+doffs)*scl, 0*scl, (dep/2+12)*scl]).add(c)
         u -= c
 
     return u
@@ -4349,16 +4349,16 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
