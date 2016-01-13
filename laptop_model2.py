@@ -1591,6 +1591,26 @@ def base_front_top(scl, ht, ht_offset):
 
         offs += step
 
+    mholderw = 139+fthick*4
+    mholdero = 229
+
+    # add a support for magnet
+    c = shearedcube([(mholderw+40)*scl, 186*scl, 40*scl],
+            shear=[-40*scl, -10*scl, 0],
+            innershear=[40*scl, -8*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[180*scl, (mholdero-19)*scl, (6)*scl]).add(c)
+    u += c
+
+    print "magholder width", mholderw-fthick*4
+    # add a hole for a magnet.  quite low down
+    c = shearedcube([(mholderw-30)*scl, 180*scl, 30*scl],
+            shear=[-10*scl, 10*scl, 0],
+            innershear=[10*scl, 8*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[201*scl, (mholdero+10)*scl, (6)*scl]).add(c)
+    u -= c
+
     # remove bit more from base
     c = base_front_arc(scl, tpanel_b_w/2-65)
     c = translate(v=[(151)*scl, (tpanel_ht-80)*scl, (39.5)*scl]).add(c)
@@ -2829,10 +2849,19 @@ def screen_front_edge(scl, ht):
     b -= c
 
     fthick = 6
-    offs = 70-hthick+fthick
-    step = (ht-160-offs) / (8.0 if test else 24.0)
+    offs = 90-hthick+fthick
+    step = (ht-160-offs) / (8.0 if test else 19.0)
+    count = 0
     while offs < (ht-step):
-        c = touch_arc(0, fthick, 45,
+        count += 1
+        if count == 3 or count == 4:
+            t = step+fthick # this is to act as support for a magnet holder
+            if count == 3:
+                mholdero = offs
+                mholderw = t*2
+        else:
+            t = fthick
+        c = touch_arc(0, t, 45,
                             25, scl,
                       angle=0)
         c = rotate([-90, 0, 0]).add(c)
@@ -2842,6 +2871,15 @@ def screen_front_edge(scl, ht):
         b += c
 
         offs += step
+
+    print "magholder width", mholderw-fthick*4
+    # add a hole for a magnet.  quite low down
+    c = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
+            shear=[10*scl, 10*scl, 0],
+            innershear=[-10*scl, 8*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[175*scl, (mholdero+5)*scl, (lcd_d-32)*scl]).add(c)
+    b -= c
 
     c = cylinder(r=29.5*scl, h=(24)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
@@ -4349,16 +4387,16 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
