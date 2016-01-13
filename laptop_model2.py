@@ -14,7 +14,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1560,7 +1560,7 @@ def base_front_top(scl, ht, ht_offset):
         num_steps = 4.0
     else:
         if ht_offset > 0:
-            num_steps = 8.0
+            num_steps = 12.0
         else:
             num_steps = 8.0
     step = (tpanel_ht-tpanel_b_w/2-100-offs) / num_steps
