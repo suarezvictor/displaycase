@@ -2980,7 +2980,7 @@ def screen_back_edge(scl, ht):
         c = union()
         h = union()
         h += cube([40*scl, 6*scl, 70*scl])
-        d = shearedcube([15*scl, 6*scl, 25*scl],
+        d = shearedcube([20*scl, 6*scl, 25*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[15*scl, 0*scl, 0])
         h += translate([-15*scl, 0*scl, -10*scl]).add(d)
@@ -3000,25 +3000,25 @@ def screen_back_edge(scl, ht):
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+175)*scl, (ht+25)*scl, (7.4+37)*scl]).add(h)
+        h = translate([(lcd_w+210)*scl, (ht+35)*scl, (7.4+37)*scl]).add(h)
         c += h
-        h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
+        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
         c += h
-        h = translate([(-70)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-
-        h = pin(B0, scl)
-        h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+175)*scl, (-25)*scl, (7.4+37)*scl]).add(h)
-        c += h
-        h = translate([(-50)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-        h = translate([(-70)*scl, (0)*scl, 0*scl]).add(h)
+        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
         c += h
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
-        for l in [ht, ht/2, 0]:
+        h = translate([(lcd_w+210)*scl, (-35)*scl, (7.4+37)*scl]).add(h)
+        c += h
+        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
+        c += h
+
+        h = pin(B0, scl)
+        h = rotate([90, 0, 0]).add(h)
+        for l in [ht-45, ht/2, 45]:
             c += translate([(lcd_w+235)*scl, l*scl, (7.4+37)*scl]).add(h)
 
         c = translate([0, 0, (8)*scl]).add(c)
