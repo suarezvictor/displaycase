@@ -2979,7 +2979,7 @@ def screen_back_edge(scl, ht):
     if pin_parts_3d:
         c = union()
         h = union()
-        h += cube([40*scl, 6*scl, 70*scl])
+        h += cube([20*scl, 6*scl, 70*scl])
         d = shearedcube([20*scl, 6*scl, 25*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[15*scl, 0*scl, 0])
