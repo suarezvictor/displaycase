@@ -14,7 +14,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -3312,27 +3312,15 @@ def screen_hinge(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength-110)*scl, (ht-3)*scl, 83.9*scl]).add(h)
-        c += h
-        h = pin(B0, scl, fill=True)
-        h = translate([(boxlength+20)*scl, (ht-3)*scl,
+        c += translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
+        c += translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
+        c += translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
+        c += translate([(boxlength-110)*scl, (ht-3)*scl, 83.9*scl]).add(h)
+        c += translate([(boxlength-165)*scl, (ht-3)*scl, 83.9*scl]).add(h)
+        c += translate([(boxlength+20)*scl, (ht-3)*scl,
                         (88-lid_offset)*scl]).add(h)
-        c += h
         u += c
 
     return u
@@ -4395,7 +4383,7 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
@@ -4404,7 +4392,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
