@@ -2145,14 +2145,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += c
 
     w = boxlength-112
-    # special indent which pushes cable in
-    c = shearedcube([(72)*scl, (48)*scl, 60*scl],
-                shear=[0*scl, 0, 0],
-                innershear=[65*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+200)*scl,29*scl,
-                    (boxheight-hthick-55)*scl]).add(c)
-    u += c
     rad=35.0 + 12
     # cut down for hinge, but allow a stop at 150 degrees
     d = union()
@@ -2166,129 +2158,89 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w+10)*scl,-1*scl,(0)*scl]).add(d)
     u -= c
 
-    # cut-off for screen
-    c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[-15*scl, 0, 0])
-    c = rotate([180, 0, 0]).add(c)
-    c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(w+223)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
-    u -= c
-
-    # cable access and interlock with base_end
-    c = shearedcube([(41)*scl, (boxheight-hthick*2)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+110)*scl,59*scl,(hthick)*scl]).add(c)
-    u -= c
-    c = shearedcube([(61)*scl, (40)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+140)*scl,29*scl,
-                    (boxheight-hthick-45)*scl]).add(c)
-    u -= c
-    c = shearedcube([(61)*scl, (43)*scl, 14*scl],
-                shear=[10*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+180)*scl,13*scl,
-                    (20)*scl]).add(c)
-    u -= c
-    c = cube([(80)*scl, (50)*scl, 63*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,13*scl,
-                    (50)*scl]).add(c)
-    u += c
-    c = cube([(15)*scl, (70)*scl, 41*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,0*scl,
-                    (hthick)*scl]).add(c)
-    u += c
-    c = cube([(140)*scl, (80)*scl, 10*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
-                    (boxheight-hthick-10)*scl]).add(c)
-    u += c
-    c = shearedcube([(10)*scl, (16)*scl, 5*scl],
-                shear=[5*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = translate(v=[(w-back_top_width+112)*scl,-16*scl,
-                    (boxheight-hthick-4)*scl]).add(c)
-    u -= c
-    c = cube([(140)*scl, (75)*scl, 10*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,-10*scl,
-                    (53)*scl]).add(c)
-    u += c
+    # calculate pcb / battery support locations, needed to jump cutouts
+    boffs = ht + toffs - tpanel_l_b/2 +8
+    if toffs < 0:
+        boffs += 50
 
     fthick = 6
-    offs = scrn_hinge_ht+40-hthick+fthick
+    offs = scrn_hinge_ht+hthick+fthick+60
     c = base_cutout(scl, ht-wthick-offs-2)
-    c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
+    c = resize([(238)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
     c = translate(v=[boxlength*scl, (offs-fthick)*scl, (0)*scl]).add(c)
     u -= c
 
-    c = base_cutout(scl, fthick, arch=True)
-    c = resize([(236)*scl, 0, (boxheight-hthick*2+7)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (208)*scl, (1)*scl]).add(c)
-    u += c
     # put in series of cutouts
-    step = (ht-wthick-offs-2) / (4.0 if test else 15.0)
-    offs += step - 10
+    offs -= 105 
+    step = (ht-wthick-offs) / (4.0 if test else 14.0)
+    offs += step 
     while offs < (ht-step-90):
         # add fill-ins
         b = base_cutout(scl, fthick, arch=True)
         b = resize([(236)*scl, 0,
                     pow(2, 0.5)*(boxheight-hthick*2+10)*scl], False).add(b)
-        c = rotate([-43, 0, 0]).add(b)
-        c = translate(v=[boxlength*scl, (offs-fthick)*scl, (-5)*scl]).add(c)
+        c = rotate([43, 0, 0]).add(b)
+        c = translate(v=[boxlength*scl, (offs-fthick+step+35)*scl, (-9)*scl]).add(c)
         u += c
         offs += step
-        c = rotate([43, 0, 0]).add(b)
-        c = translate(v=[boxlength*scl, (offs-fthick+35+step)*scl,
-                (-9)*scl]).add(c)
+        if abs(offs - boffs+step) < 90:
+            if toffs < 0:
+                offs += 50
+            else:
+                offs += 80
+        c = rotate([-43, 0, 0]).add(b)
+        c = translate(v=[boxlength*scl, (offs-fthick)*scl,
+                (-5)*scl]).add(c)
         u += c
 
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    for h in [ht*0.285, ht*0.515, ht*0.74]:
+    for h in [ht*0.310, ht*0.515, ht*0.74]:
         c = shearedcube([(back_top_width-78)*scl, (40)*scl, (15)*scl])
         c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
                                     (boxheight-hthick-13)*scl]).add(c)
         u += c
     # ok these are for the pcb1_support and battery_support1
     # they extend all the way to the back (for injection molding)
-    offs = ht + toffs - tpanel_l_b/2 +8
-    if toffs < 0:
-        offs += 50
     c = base_cutout(scl, 54)
     c = resize([(236)*scl, 0, (boxheight-hthick*2+2)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (offs)*scl, (-1)*scl]).add(c)
+    c = translate(v=[boxlength*scl, (boffs)*scl, (-1)*scl]).add(c)
     u += c
 
     # ... cutout for the actual support, the rest was housing for the cutout
     c = cube([30*scl, 37*scl, (boxheight-47)*scl])
     c = translate(v=[-22*scl, (9)*scl, (-3)*scl]).add(c)
-    c = translate(v=[(lcd_w+69-79)*scl, (offs)*scl, (39.5)*scl]).add(c)
+    c = translate(v=[(lcd_w+69-79)*scl, (boffs)*scl, (39.5)*scl]).add(c)
     u -= c
+
+    # fits into back base hinge
+    c = shearedcube([(35)*scl, 90*scl, (29)*scl], center=True,
+                shear=[5*scl, 0*scl, 0],
+                innershear=[-5*scl, 0*scl, 0])
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[-64*scl, (-13)*scl, (boxheight-55)*scl]).add(c)
+    c = case_bolthole(scl, 2).add(c)
+    u += c
 
     # slot to fit a nut into
     # XXX TODO: fill this all the way back (for mold purposes)
     c = cube([(40+73)*scl, 40*scl, (boxheight-10)*scl], center=True)
-    c = translate(v=[(lcd_w+85-79/2.)*scl, (88)*scl, (boxheight/2)*scl]).add(c)
-    u += c
-    c = cube([200*scl, 24*scl, 46*scl], center=True)
-    c = translate(v=[(-100)*scl, (87)*scl, (boxheight-55)*scl]).add(c)
+    c = translate(v=[(lcd_w+85-79/2.)*scl, (68)*scl, (boxheight/2)*scl]).add(c)
+    #u += c
+    c = cube([200*scl, 34*scl, 62*scl], center=True)
+    c = translate(v=[(-100)*scl, (67)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
-    c = cube([200*scl, 52*scl, 46*scl], center=True)
+    c = cube([200*scl, 52*scl, 60*scl], center=True)
     c = translate(v=[(-140)*scl, (101)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
-    c = cylinder(r=27.0*scl, h=24*scl, center=True, segments=6)
+    c = cylinder(r=36.0*scl, h=34*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 2).add(c)
-    t = translate(v=[(0)*scl, (87)*scl, (boxheight-55)*scl]).add(t)
+    t = translate(v=[(0)*scl, (67)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # screw holes in box
@@ -2324,73 +2276,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
-    rad=35.0 + 15
-    # add hinge
-    d = union()
-    c = cylinder(r=rad*scl, h=(friclen+45)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    d += c
-    c = cube([55*scl, (friclen+45)*scl, 93*scl])
-    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
-    d += c
-    c = cube([35*scl, (friclen+45)*scl, 100*scl])
-    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
-    d += c
-    c = shearedcube([31*scl, (friclen+45)*scl, 50*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[30*scl, 0*scl, 0])
-    c = translate(v=[-90*scl,0*scl,(-35)*scl]).add(c)
-    d += c
-    c = shearedcube([1*scl, (friclen+45)*scl, 50*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[-30*scl, 0*scl, 0])
-    c = translate(v=[-60*scl,0*scl,(20)*scl]).add(c)
-    d += c
-    c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(d)
-    t = hinge_translate(scl).add(c)
-    u += t
+    rad=35.0 + 12
 
     # hollow hinge out
-    c = cylinder(r=(rad-12)*scl, h=(friclen+50)*scl, segments=50)
+    c = cylinder(r=(rad-12)*scl, h=(friclen+80)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
-    c = cylinder(r=(rad+2)*scl, h=(scrn_hinge_ht+2+40)*scl,
-                    segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(-1-40)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
-
-    # capture channel in hinge
-    hd = 25
-    v = union()
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
-                shear=[-3*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[5*scl,-40*scl,0*scl]).add(c)
-    v += c
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
-                shear=[0*scl, 0*scl, 0],
-                innershear=[3*scl, 0*scl, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[-5*scl,-40*scl, 0*scl]).add(c)
-    v += c
-    c = cylinder(r=30*scl, r1=27*scl, h=(hd+5)*scl, center=True, segments=50)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[0*scl,21*scl,0*scl]).add(c)
-    #v -= c
-    v = rotate([90, 0, 0]).add(v)
-    v = rotate([0, 90, 0]).add(v)
-    c = translate(v=[0*scl,((scrn_hinge_ht+friclen)/2+30)*scl,-55*scl]).add(v)
-    t = hinge_translate(scl).add(c)
-    u -= t
-    # cutout for nut to poke through
-    c = cylinder(r=31*scl, h=(300)*scl, center=True, segments=50)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[0*scl,320*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-70)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -4446,17 +4337,17 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
 
     if part == BASE_BACK:
-        bh = base_back_ht+scrn_hinge_ht-base_back_hinge_ht
-        off = base_adjust_ht-scrn_hinge_ht + base_back_hinge_ht
+        bh = base_back_ht-base_back_hinge_ht+5
+        off = base_adjust_ht+ base_back_hinge_ht-5
         print "base back height", bh/10., (scrn_hinge_ht)/10.
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
-            se = base_back_bot(scl, bh, scrn_hinge_ht+2,
+            se = base_back_bot(scl, bh, 0,
                                     tpanel_offset+110)
             m = translate(v=[0, off*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
-            se = base_back_bot(scl, bh, scrn_hinge_ht+2,
+            se = base_back_bot(scl, bh, 0,
                                     -tpanel_offset)
             m = mirror_part(se, scl, total_width-off)
             b.add(m)
@@ -4674,8 +4565,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
