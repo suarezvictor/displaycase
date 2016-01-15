@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2320,6 +2320,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c += translate([(ht*0.74)*scl, 0, 0]).add(d)
         c += translate([(ht*0.3)*scl, 0, 0]).add(d)
         c += translate([(ht-85)*scl, 0, 0]).add(d)
+
+        d = pin_t(ht=ht+220)
+        d = rotate([0, 90, 0]).add(d)
+        c += translate([(-30)*scl, 0, 35*scl]).add(d)
 
         h = pin(B0, scl, fill=True)
         h = translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
