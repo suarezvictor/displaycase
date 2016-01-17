@@ -2644,10 +2644,10 @@ def base_mid(scl, ht):
 
     # remove runner along bottom of base, for lower panel
     # these are along the back wings
-    c = shearedcube([10*scl, (90)*scl, (8)*scl],
+    c = shearedcube([10*scl, (140)*scl, (8)*scl],
                 shear=[-8*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
-    t = translate(v=[(boxlength-180+8)*scl, (+1-90)*scl,
+    t = translate(v=[(boxlength-180+8)*scl, (+1-140)*scl,
                                 (boxheight-hthick-1)*scl]).add(c)
     u -= t
     t = translate(v=[(boxlength-180+8)*scl, (ht-1)*scl,
