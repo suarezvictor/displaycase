@@ -1254,6 +1254,12 @@ def pcb1_support(scl, ht, tpanel_offset):
                     (kbd_inset+40)*scl]).add(c)
     u += c
 
+    # cut-out for LVDS cable
+    c = cube([(400)*scl, (holder_ht-ht+1)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+180+350)*scl, (-1)*scl,
+                    (kbd_inset)*scl]).add(c)
+    u -= c
+
     # cut-out for back kbd runner
     c = cube([(26)*scl, (150)*scl, (15)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
@@ -4563,15 +4569,15 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        #PCB1,
+                        FRONT_KBD_TRAY,
+                        PCB1,
                         #PCB2,
                         TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
