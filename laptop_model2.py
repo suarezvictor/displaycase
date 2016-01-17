@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2599,9 +2599,9 @@ def base_mid(scl, ht):
     t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
     u -= t
 
-    # cutout for pcb2 to fit into.  cutout is 12mm deep and 31mm wide
-    c = cube([410*scl, (base_centre_ht+4)*scl, (52)*scl])
-    c = translate(v=[(tpanel_l_b-530)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+    # cutout for pcb2 to fit into.  cutout is 30mm deep and 31mm wide
+    c = cube([440*scl, (base_centre_ht+4)*scl, (80)*scl])
+    c = translate(v=[(tpanel_l_b-550)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
@@ -4566,10 +4566,10 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
