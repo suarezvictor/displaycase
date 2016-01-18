@@ -10,7 +10,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2558,7 +2558,7 @@ def base_mid(scl, ht):
     u -= b
 
     # diagonal cross-walls for internal stiffness
-    fthick = 6
+    fthick = 7
     offs = 190#tpanel_l_b+40
     step = (w-160-offs) / (8.0 if test else 16.0)
     steps = []
@@ -4569,15 +4569,15 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
-                        PCB1,
+                        #FRONT_KBD_TRAY,
+                        #PCB1,
                         #PCB2,
-                        TPANEL_MID,
-                        #BASE_MID,
+                        #TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
