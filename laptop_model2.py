@@ -1460,6 +1460,7 @@ def tpanel_mid(scl, ht, ht_offset):
         c = translate(v=[(100+13)*scl, ((ht-tpanel_w)/2+13)*scl,
                         (-1)*scl]).add(c)
         u -= c
+
         c = union()
         h = pin(B0, scl)
         h = translate([(152)*scl, (0)*scl, -102*scl]).add(h)
@@ -1501,7 +1502,7 @@ def tpanel_mid(scl, ht, ht_offset):
         c += h
 
         c = rotate([90, 0, 0]).add(c)
-        c = translate([(0)*scl, (0)*scl, 3*scl]).add(c)
+        c = translate([(0)*scl, (0)*scl, -1.2*scl]).add(c)
 
         h = cube([6*scl, 86*scl, 50*scl])
         h = translate([(197)*scl, (ht-1)*scl, 0*scl]).add(h)
@@ -4572,8 +4573,8 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        #TPANEL_MID,
-                        BASE_MID,
+                        TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
