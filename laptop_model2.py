@@ -1307,9 +1307,32 @@ def pcb1_support(scl, ht, tpanel_offset):
     b = translate(v=[(w-200)*scl, (-1-110)*scl, (48)*scl]).add(b)
     u -= b
 
+    if pin_parts_3d:
+
+        v = union()
+        d = pin_t(257)
+        #v += translate([(70)*scl, 0, 0]).add(d)
+        #v += translate([(ht*0.53)*scl, 0, 0]).add(d)
+        #v += translate([(ht*0.3)*scl, 0, 0]).add(d)
+        d = pin_t(190)
+        v += translate([(tpanel_l_b-30)*scl, 0, 0]).add(d)
+        v += translate([(tpanel_l_b/2-30)*scl, 0, 0]).add(d)
+        v += translate([(-165)*scl, 0, 0]).add(d)
+        d = pin_t(tpanel_l_b+410)
+        d = rotate([0, 90, 0]).add(d)
+        d = translate([-250*scl, 0, 40*scl]).add(d)
+        v += d
+        #v = rotate([0, 0, 90]).add(v)
+        v = translate(v=[(tpanel_b_w)*scl, (80)*scl,
+                    (35)*scl]).add(v)
+        c += v
+
+        u += c
+
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
+
     return v
 
 def tpanel_mid(scl, ht, ht_offset):
@@ -4573,12 +4596,12 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
