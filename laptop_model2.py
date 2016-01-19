@@ -3604,15 +3604,19 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u -= c
 
     # floor L-piece, stabilise and allow sticking to PCB
-    b = cube([(36)*scl, (l)*scl, (hthick)*scl])
-    b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
     if woffs < 0:
         b = cube([(36)*scl, (l)*scl, (hthick)*scl])
         b = translate(v=[(w-1+woffs)*scl, 0*scl, (h-hthick)*scl]).add(b)
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     else:
-        b = cube([(62)*scl, (l-6)*scl, (18)*scl])
-        b = translate(v=[(w-1+woffs-40)*scl, 3*scl, (h-18)*scl]).add(b)
+        b = union()
+        d = cube([(62)*scl, (l-6-250)*scl, (18)*scl])
+        d = translate(v=[(0)*scl, (250)*scl, 0*scl]).add(d)
+        b += d
+        d = cube([(42)*scl, (260)*scl, (18)*scl])
+        d = translate(v=[(20)*scl, (0)*scl, 0*scl]).add(d)
+        b += d
+        b = translate(v=[(w-1+woffs-40)*scl, (3)*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
         b = cube([(60)*scl, (l-100)*scl, (40-hthick)*scl])
@@ -4600,7 +4604,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
