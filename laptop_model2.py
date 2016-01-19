@@ -3614,7 +3614,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         d = translate(v=[(0)*scl, (250)*scl, 0*scl]).add(d)
         b += d
         d = cube([(42)*scl, (260)*scl, (18)*scl])
-        d = translate(v=[(20)*scl, (0)*scl, 0*scl]).add(d)
+        d = translate(v=[(20)*scl, (3)*scl, 0*scl]).add(d)
         b += d
         b = translate(v=[(w-1+woffs-40)*scl, (3)*scl, (h-18)*scl]).add(b)
     u += b
@@ -4593,7 +4593,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
