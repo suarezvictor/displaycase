@@ -10,11 +10,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -604,12 +604,12 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
-    usb_pos = 565
+    usb_pos = 562
 
     if not test:
         if kbd_numpad_indent == 0:
             # add PCB traps that keep it down
-            c = shearedcube([(boxheight-45)*scl, (15)*scl, 101*scl],
+            c = shearedcube([(boxheight-49)*scl, (15)*scl, 101*scl],
                         shear=[5*scl, 0, 0],
                         innershear=[0*scl, 0, 0])
             c = rotate([180, -90, -90]).add(c)
@@ -634,16 +634,16 @@ def base_end(scl, ht, kbd_numpad_indent):
             c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (123)*scl]).add(c)
             u -= c
             # EOMA68
-            c = cube([550*scl, 60*scl, 59*scl])
-            c = translate(v=[(1085)*scl, (-1)*scl, (95)*scl]).add(c)
+            c = cube([550*scl, 68*scl, 65*scl])
+            c = translate(v=[(1085)*scl, (-1)*scl, (90)*scl]).add(c)
             u -= c
             # EOMA68 eject
             c = cube([77*scl, 60*scl, 58*scl])
             c = translate(v=[(973)*scl, (-1)*scl, (97)*scl]).add(c)
             u -= c
             # USB2
-            c = cube([160*scl, 180*scl, 85*scl])
-            c = translate(v=[(usb_pos)*scl, (-1)*scl, (73)*scl]).add(c)
+            c = cube([160*scl, 180*scl, 86*scl])
+            c = translate(v=[(usb_pos)*scl, (-1)*scl, (71)*scl]).add(c)
             u -= c
 
             # add bottom strut, along EOMA68 and USB
@@ -3867,11 +3867,13 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     u += b
 
     offs = ht + toffs - tpanel_l_b/2
+    if not mirrored:
+        offs += 110
 
     if not mirrored:
-        locks = [140, ht-658+170]
+        locks = [140, ht-658+175]
     else:
-        locks = [130, ht-899+70]
+        locks = [130, ht-899+75]
 
     # add set of interlocks into back_base to hold it down
     c = union()
@@ -3884,16 +3886,18 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     d = rotate([0, 0, 180]).add(d)
     d = translate(v=[(34)*scl, (16)*scl, (l-14)*scl]).add(d)
     c += d
-    supports = [ht-162, ht*0.35, 102, offs+35, offs+119]
-    for s in locks:
-        supports.append(s+35)
+    supports = [ht-162, ht*0.35, 280, offs+35, offs+119]
+    if mirrored:
+        supports.append(ht*0.55)
+    #for s in locks:
+    #   supports.append(s+35)
     for h in supports:
         b = translate(v=[(w-17)*scl, h*scl, (hthick+2)*scl]).add(c)
         u += b
 
     # add series of keyboard locks
     c = union()
-    b = shearedcube([(19.5)*scl, (88)*scl, (10)*scl],
+    b = shearedcube([(19.5)*scl, (78)*scl, (10)*scl],
                     shear=[-9*scl, 0, 0],
                     innershear=[10*scl, 0, 0])
     b = rotate([0, -90, 0]).add(b)
@@ -3907,6 +3911,9 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     c = cube([(18)*scl, (86)*scl, (boxheight-31)*scl])
     b = translate(v=[(w-20)*scl, (offs+42)*scl, (10+2)*scl]).add(c)
     u += b
+    #c = cube([(28)*scl, (86)*scl, (boxheight-105)*scl])
+    #b = translate(v=[(w-20)*scl, (offs+42)*scl, (10+4)*scl]).add(c)
+    #u += b
     c = cube([(90)*scl, (36)*scl, (l-23)*scl])
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
     u -= b
@@ -4582,7 +4589,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4601,7 +4608,7 @@ if __name__ == '__main__':
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
