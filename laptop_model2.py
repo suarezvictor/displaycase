@@ -573,6 +573,9 @@ def case_clasp(scl):
 
 
 def base_end(scl, ht, kbd_numpad_indent):
+    """ TODO:
+        * add back_kbd_runner nibs that stop it moving about, left and right
+    """
     u = union()
     w = boxlength-3
 
