@@ -575,6 +575,7 @@ def case_clasp(scl):
 def base_end(scl, ht, kbd_numpad_indent):
     """ TODO:
         * add back_kbd_runner nibs that stop it moving about, left and right
+        * RIGHTPART: sort out PCB3 supports, power and switch holes
     """
     u = union()
     w = boxlength-3
