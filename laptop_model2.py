@@ -1,6 +1,22 @@
 # Copyright (C) 2014, 2015 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 # License: GPLv3+
 
+""" TODO:
+    * sort out gaps between base end, base hinge end, and screen edge
+    * move pcb1_support in slightly because PCB1 is jamming (appx 1.5mm)
+      probably related to base end / screen edge gaps.
+    * parameterise plastic join-point gaps/sizes so it can be varied
+    * add in one extra magnet holder (so there are 2)
+    * remove need for screen front edge screws, use "nibs" concept
+      remove screen front screw holes they're not needed (nibs will do)
+    * allow [flat] cable access through to screen connector
+    * sort out all runner triangles for panels: they're not printing properly
+    * remove / reduce protrusion in EOMA68 PCB1 cutout area, PCB1 is jamming.
+    * sort out splitting between back base hinge and back base: stagger join
+    * drop PCB1 fake headphone jack down a bit to match base_end hole
+    * increase all crew hole sizes on base_end back_edge and front_edge
+"""
+
 import time
 import itertools
 from pyopenscad import *
