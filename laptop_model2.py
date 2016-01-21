@@ -14,7 +14,8 @@
     * remove / reduce protrusion in EOMA68 PCB1 cutout area, PCB1 is jamming.
     * sort out splitting between back base hinge and back base: stagger join
     * drop PCB1 fake headphone jack down a bit to match base_end hole
-    * increase all crew hole sizes on base_end back_edge and front_edge
+    * move PCB1 fake USB socket over to match base_end hole
+    * increase all screw hole sizes on base_end back_edge and front_edge
 """
 
 import time
@@ -4619,7 +4620,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
