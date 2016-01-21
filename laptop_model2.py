@@ -1260,6 +1260,12 @@ def pcb1_support(scl, ht, tpanel_offset):
                     (kbd_inset)*scl]).add(c)
     u -= c
 
+    # cut-out for power / signal cables
+    c = cube([(250)*scl, (holder_ht-ht+1)*scl, (16)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+180+740)*scl, (30)*scl,
+                    (kbd_inset-1)*scl]).add(c)
+    u -= c
+
     # cut-out for back kbd runner
     c = cube([(26)*scl, (150)*scl, (15)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
