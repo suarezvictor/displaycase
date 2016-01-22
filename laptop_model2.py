@@ -3,8 +3,6 @@
 
 """ TODO:
     * sort out gaps between base end, base hinge end, and screen edge
-    * move pcb1_support in slightly because PCB1 is jamming (appx 1.5mm)
-      probably related to base end / screen edge gaps.
     * parameterise plastic join-point gaps/sizes so it can be varied
     * add in one extra magnet holder (so there are 2)
     * remove need for screen front edge screws, use "nibs" concept
@@ -1255,11 +1253,11 @@ def battery_support1(scl, ht, tpanel_offset):
     v.add(u)
     return v
 
-def pcb1_support(scl, ht, tpanel_offset):
+def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     u = union()
     kbd_inset = 38.0
     sdep = (boxheight-hthick-pcbthick-kbd_inset-3)
-    holder_ht = 80.0
+    holder_ht = pcb1_support_offset - ht
     w = (boxlength - tpanel_l_b - back_top_width)
     tpanel_box_l = 150
     # main strut going from back base to tpanel
@@ -1362,7 +1360,7 @@ def pcb1_support(scl, ht, tpanel_offset):
 
     return v
 
-def tpanel_mid(scl, ht, ht_offset):
+def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset):
     """
     TODO:
     * put screwhole down into base_mid
@@ -1447,17 +1445,17 @@ def tpanel_mid(scl, ht, ht_offset):
     # cut-out to match pcb1_support
     w = tpanel_b_w
     l = 0
-    c = cube([(160)*scl, (90+110)*scl, (20)*scl])
-    b = translate(v=[(w-260)*scl, (0)*scl, (tpanel_h-3)*scl]).add(c)
+    c = cube([(163)*scl, (95+pcb1_support_offset)*scl, (50)*scl])
+    b = translate(v=[(w-263)*scl, (0)*scl, (tpanel_h-33)*scl]).add(c)
     u += b
     c = cube([(160)*scl, (90)*scl, (20)*scl])
     b = translate(v=[(w-260)*scl, (ht-90)*scl, (tpanel_h-3)*scl]).add(c)
     u += b
-    c = cube([(160)*scl, (82+110)*scl, (93)*scl])
-    b = translate(v=[(w-250)*scl, (-1)*scl, (tpanel_h-3)*scl]).add(c)
+    c = cube([(160)*scl, (85+pcb1_support_offset)*scl, (95)*scl])
+    b = translate(v=[(w-253)*scl, (-1)*scl, (tpanel_h-3)*scl]).add(c)
     u -= b
-    c = cube([(160)*scl, (82)*scl, (93)*scl])
-    b = translate(v=[(w-250)*scl, (ht-82+1)*scl, (tpanel_h-3)*scl]).add(c)
+    c = cube([(160)*scl, (85)*scl, (93)*scl])
+    b = translate(v=[(w-250)*scl, (ht-85+1)*scl, (tpanel_h-3)*scl]).add(c)
     u -= b
 
     # cut-out to match right kbd tray
@@ -4311,6 +4309,7 @@ def create_laptop(t, scl, part, angle):
     lid_adjust_ht += scrn_end_ht
     lid_adjust_ht += lcd_end_ht
 
+    pcb1_support_offset = 120
     tpanel_offset = -190
     kbd_numpad_indent = 79
 
@@ -4415,7 +4414,7 @@ def create_laptop(t, scl, part, angle):
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
             se = base_back_bot(scl, bh, 0,
-                                    tpanel_offset+110)
+                                    tpanel_offset+pcb1_support_offset)
             m = translate(v=[0, off*scl,0]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
@@ -4512,7 +4511,7 @@ def create_laptop(t, scl, part, angle):
     tpanel_ht = (base_adjust_ht + tpanel_offset + base_centre_ht/2 -
                             (tpanel_b_w)/2)
     if part == TPANEL_MID:
-        se = tpanel_mid(scl, tpanel_b_w, tpanel_offset)
+        se = tpanel_mid(scl, tpanel_b_w, tpanel_offset, pcb1_support_offset)
         m = translate(v=[0, tpanel_ht*scl, 0]).add(se)
         b.add(m)
 
@@ -4534,7 +4533,8 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == PCB1_SUPPORT:
-        se = pcb1_support(scl, pcb1_support_ht, tpanel_offset)
+        se = pcb1_support(scl, pcb1_support_ht,
+                            tpanel_offset, pcb1_support_offset)
         m = translate(v=[0,
                          (tpanel_ht+110)*scl,
                          0]).add(se)
@@ -4620,7 +4620,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4634,10 +4634,10 @@ if __name__ == '__main__':
                         FRONT_KBD_TRAY,
                         PCB1,
                         #PCB2,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
