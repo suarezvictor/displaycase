@@ -5,8 +5,6 @@
     * sort out gaps between base end, base hinge end, and screen edge
     * parameterise plastic join-point gaps/sizes so it can be varied
     * add in one extra magnet holder (so there are 2)
-    * remove need for screen front edge screws, use "nibs" concept
-      remove screen front screw holes they're not needed (nibs will do)
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
     * remove / reduce protrusion in EOMA68 PCB1 cutout area, PCB1 is jamming.
@@ -2892,14 +2890,8 @@ def screen_end(scl, ht, lcd_end_ht):
     b = screen_box(scl, ht, end=True)
     u += b
 
-    c = cylinder(r1=28*scl, r=26.5*scl, h=(15)*scl, center=True, segments=6)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0, (ht-6)*scl,0]).add(c)
-    t = lid_bolthole(scl, end=True).add(c)
-    u += t
-
     # bolt-hole
-    for end in [True, False]:
+    for end in [False]:
         c = chamfered_backbox_screwholes(scl, 60+ht, 25, lcdscrewrad)
         c = rotate([0, -90, 90]).add(c)
         c = translate(v=[0, 12*scl, 0]).add(c)
@@ -2916,9 +2908,10 @@ def screen_end(scl, ht, lcd_end_ht):
                        14*scl]).add(c)
             u -= c
 
-    #b = screen_edge_complete(scl, lcd_end_ht)
-    #b = translate(v=[0, ht*scl,0]).add(b)
-    #u += b
+    # indentation to fit screen front edge lockin
+    d = cube([(32)*scl, (50)*scl, (39)*scl])
+    c = translate(v=[24*scl, (ht-48)*scl, (-1)*scl]).add(d)
+    u -= c
 
     # hex indentation
     c = cylinder(r=28.5*scl, r1=27*scl, h=(30)*scl, center=True, segments=6)
@@ -3054,7 +3047,7 @@ def screen_front_edge(scl, ht):
     b -= c
 
     # remove interior
-    c = touch_arc(0, ht-115, 45,
+    c = touch_arc(0, ht-30, 45,
                         25, scl,
                   angle=0)
     c = rotate([-90, 0, 0]).add(c)
@@ -3064,14 +3057,15 @@ def screen_front_edge(scl, ht):
     b -= c
 
     fthick = 6
-    offs = 90-hthick+fthick
-    step = (ht-160-offs) / (8.0 if test else 19.0)
+    offs = 15-hthick+fthick
+    step = (ht-160-offs) / (8.0 if test else 20.0)
     count = 0
+    print offs, step
     while offs < (ht-step):
         count += 1
-        if count == 3 or count == 4:
+        if count == 4 or count == 5:
             t = step+fthick # this is to act as support for a magnet holder
-            if count == 3:
+            if count == 4:
                 mholdero = offs
                 mholderw = t*2
         else:
@@ -3096,35 +3090,14 @@ def screen_front_edge(scl, ht):
     c = translate(v=[175*scl, (mholdero+5)*scl, (lcd_d-32)*scl]).add(c)
     b -= c
 
-    c = cylinder(r=29.5*scl, h=(24)*scl, center=True, segments=6)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0, 3*scl,0]).add(c)
-    t = lid_bolthole(scl, end=True).add(c)
-    b -= t
-
-    # bolt-hole
-    c = cylinder(r=lcdscrewrad*scl, h=(140)*scl, center=True, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    t = lid_bolthole(scl, end=True).add(c)
-    b -= t
-
-    # slot to fit a nut into
-    c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(45)*scl, (70)*scl, (0)*scl]).add(c)
-    t = lid_bolthole(scl, end=True).add(c)
-    b -= t
-    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
-    c = rotate([0, 90, 90]).add(c)
-    c = rotate([0, 30, 0]).add(c)
-    t = lid_bolthole(scl, end=True).add(c)
-    t = translate(v=[(0)*scl, (70)*scl, (0)*scl]).add(t)
-    b -= t
-
     # matching screen mid (front)
     d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
             shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[28.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
+    b += c
+    d = rotate([0, 0, 180]).add(d)
+    c = translate(v=[(28.5+23)*scl, (4)*scl, (3.5)*scl]).add(d)
     b += c
 
     if pin_parts_3d:
@@ -4621,25 +4594,25 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
-                        PCB1,
+                        #FRONT_KBD_TRAY,
+                        #PCB1,
                         #PCB2,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
