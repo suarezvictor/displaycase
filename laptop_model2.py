@@ -24,10 +24,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -678,12 +678,13 @@ def base_end(scl, ht, kbd_numpad_indent):
         else:
             # Power Jack
             c = cube([60*scl, 60*scl, 60*scl])
-            c = translate(v=[(230)*scl, (-1)*scl, (91)*scl]).add(c)
+            c = translate(v=[(280)*scl, (-1)*scl, (91)*scl]).add(c)
             u -= c
 
             # Reset switch
-            c = cube([50*scl, 60*scl, 60*scl])
-            c = translate(v=[(340)*scl, (-1)*scl, (91)*scl]).add(c)
+            c = cylinder(r=30*scl, h=(40)*scl, center=True, segments=50)
+            c = rotate([0, 90, 90]).add(c)
+            c = translate(v=[(430)*scl, (-1)*scl, (121)*scl]).add(c)
             u -= c
 
     # add keyboard left support
@@ -810,9 +811,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         t = translate(v=[(tpanel_l_b+683)*scl, 0, (55+1)*scl]).add(d)
         u += t
     else:
-        # next to the reset switch and moving on towards the keyboard tray
-        t = translate(v=[(410)*scl, 0, (55+1)*scl]).add(c)
-        u += t
+        # next to PCB3
         t = translate(v=[(650)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # roughly along the keyboard edge
@@ -911,7 +910,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([48*scl, (ht-10)*scl, (hthick+7)*scl])
         b += c
         for l in [(boxlength-back_top_width-200),
-                 (boxlength*0.45), (boxlength*0.64), 500, 789]:
+                 (boxlength*0.45), (boxlength*0.64), 530, 789]:
             t = translate(v=[l*scl, (0)*scl,
                             (55+boxheight-hthick*2-6)*scl]).add(b)
             u += t
@@ -4587,21 +4586,21 @@ if __name__ == '__main__':
         angles = [0, max_open*0.25, max_open*0.5, max_open*0.75, max_open]
     else:
         rpt = 1
-        angles = [0]
+        angles = [120]
 
     for i in range(rpt):
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
-                        SCREEN_END,
+                        BASE_END,
+                        #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
