@@ -2064,6 +2064,13 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,(-1-40)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
+    # add lock-in to base_back_hinge
+    c = cylinder(r=(rad-8)*scl, r1 = (rad-12)*scl, h=(14)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,(ht+scrn_hinge_ht-25.5)*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+
 
     # capture channel in hinge
     hd = 25
@@ -2352,14 +2359,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     rad=35.0 + 12
 
     # add lock-in to base_back_hinge
-    c = cylinder(r=(rad-14)*scl, r1 = (rad-20)*scl, h=(14)*scl, segments=50)
+    c = cylinder(r=(rad-9)*scl, r1 = (rad-13)*scl, h=(14)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-13)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
     # hollow hinge out
-    c = cylinder(r=(rad-25)*scl, h=(friclen+80)*scl, segments=50)
+    c = cylinder(r=(rad-16)*scl, h=(friclen+80)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-70)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -4637,8 +4644,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
