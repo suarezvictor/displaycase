@@ -4247,9 +4247,9 @@ def pcb1(scl):
     c = cube([50*scl, 120*scl, (52)*scl])
     c = translate([(25)*scl, 20*scl, (-52)*scl]).add(c)
     j += c
-    c = cylinder(r=40/2.*scl, h=40*scl, segments=50, center=True)
+    c = cylinder(r=50/2.*scl, h=40*scl, segments=50, center=True)
     c = rotate([90, 0, 0]).add(c)
-    c = translate([(50)*scl, 20*scl, (-27)*scl]).add(c)
+    c = translate([(50)*scl, 20*scl, (-20)*scl]).add(c)
     j += c
     r = translate([(1320)*scl, 0*scl,
                 (0)*scl]).add(j)
@@ -4638,7 +4638,7 @@ if __name__ == '__main__':
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
