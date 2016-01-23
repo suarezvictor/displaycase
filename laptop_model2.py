@@ -2012,12 +2012,14 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[boxlength*scl, (206)*scl, (1)*scl]).add(c)
     u += c
 
-    # slot to fit a nut into
-    # XXX TODO: fill this all the way back (for mold purposes)
-    c = cube([(40+73)*scl, 40*scl, (boxheight-10)*scl], center=True)
-    c = translate(v=[(lcd_w+85-79/2.)*scl, (88)*scl, (boxheight/2)*scl]).add(c)
-    u += c
-    c = cube([200*scl, 30*scl, 49*scl], center=True)
+    # lock-in slot to base_back_bot
+    c = union()
+    d = cube([110*scl, 35*scl, 49*scl], center=True)
+    d = translate(v=[(90)*scl, (0)*scl, (0)*scl]).add(d)
+    c += d
+    d = cube([200*scl, 35*scl, 40*scl], center=True)
+    d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
+    c += d
     c = translate(v=[(-65)*scl, (198)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
@@ -4591,7 +4593,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4601,14 +4603,14 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
