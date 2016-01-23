@@ -7,7 +7,6 @@
     * add in one extra magnet holder (so there are 2)
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
-    * drop PCB1 fake headphone jack down a bit to match base_end hole
     * move PCB1 fake USB socket over to match base_end hole
 """
 
@@ -862,9 +861,9 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[0, 0, boxheight*scl]).add(t)
     u -= t
 
-    s = chamfered_backbox_screwholes(scl, 20, 25)
+    s = chamfered_backbox_screwholes(scl, 20, 28)
     s = rotate([90, 0, 0]).add(s)
-    s = translate(v=[0, 30*scl, boxheight*scl]).add(s)
+    s = translate(v=[0, 10*scl, boxheight*scl]).add(s)
     for hole in [0,2]:
         t = case_bolthole(scl, hole).add(s)
         u -= t
