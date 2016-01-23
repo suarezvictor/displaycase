@@ -11,7 +11,6 @@
     * sort out splitting between back base hinge and back base: stagger join
     * drop PCB1 fake headphone jack down a bit to match base_end hole
     * move PCB1 fake USB socket over to match base_end hole
-    * increase all screw hole sizes on base_end back_edge and front_edge
 """
 
 import time
