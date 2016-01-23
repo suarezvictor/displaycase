@@ -4255,12 +4255,12 @@ def pcb1(scl):
     t.add(r)
 
     # USB x 2
-    u = cube([132*scl, 137*scl, (61.5)*scl])
-    r = translate([(45)*scl, 130*scl, (-61.5)*scl]).add(u)
+    u = cube([132*scl, 137*scl, (66.5)*scl])
+    r = translate([(40)*scl, 130*scl, (-66.5)*scl]).add(u)
     t.add(r)
-    r = translate([(190)*scl, 0*scl, (-61.5)*scl]).add(u)
+    r = translate([(185)*scl, 0*scl, (-66.5)*scl]).add(u)
     t.add(r)
-    r = translate([(335)*scl, 130*scl, (-61.5)*scl]).add(u)
+    r = translate([(330)*scl, 130*scl, (-66.5)*scl]).add(u)
     t.add(r)
 
     v = union()
