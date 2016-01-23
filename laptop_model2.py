@@ -24,10 +24,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1687,16 +1687,16 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[0], h=130)
+    t = box_screwholes(scl, hthick, holes=[0], h=130, rad=35./2)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
     # add hexagonal bolt hole support for a nut to sit in
-    c = cube([100*scl, 40*scl, 46*scl], center=True)
+    c = cube([100*scl, 40*scl, 60*scl], center=True)
     c = translate(v=[(50)*scl, (110)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 0).add(c)
     u -= t
-    c = cylinder(r=27.0*scl, h=40*scl, center=True, segments=6)
+    c = cylinder(r=34.0*scl, h=40*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 0).add(c)
@@ -2296,7 +2296,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= t
 
     # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[2], h=120)
+    t = box_screwholes(scl, hthick, holes=[2], h=120, rad=35./2)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
@@ -4602,15 +4602,15 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
