@@ -873,7 +873,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     t = translate(v=[(149)*scl, 0, (55)*scl]).add(c)
     u += t
     v = front_tray_corner(scl, 200)
-    v = translate([0, scl*(ht-hthick), 0]).add(v)
+    v = translate([0, scl*(ht-hthick), -4*scl]).add(v)
     u += v
 
     # remove runner for panel
@@ -912,8 +912,8 @@ def base_end(scl, ht, kbd_numpad_indent):
             u += t
 
     # inset for base_front
-    c = cube([(115)*scl, (40)*scl, (63)*scl])
-    c = translate(v=[14*scl,(ht-20)*scl,(4)*scl]).add(c)
+    c = cube([(118)*scl, (40)*scl, (63)*scl])
+    c = translate(v=[14*scl,(ht-25)*scl,(4)*scl]).add(c)
     c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
 
@@ -3849,15 +3849,15 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = cube([30.1*scl, 70*scl, (boxheight-hthick-22)*scl])
-    b = translate(v=[(-8.1)*scl, 0*scl, (21)*scl]).add(b)
+    b = cube([25.1*scl, 70*scl, (boxheight-hthick-22)*scl])
+    b = translate(v=[(-3.1)*scl, 0*scl, (21)*scl]).add(b)
     u += b
 
-    t = shearedcube([(boxheight-hthick*2-22)*scl, (71)*scl, (20)*scl],
-            shear=[6*scl, 0*scl, 0],
-            innershear=[-6*scl, 0*scl, 0])
+    t = shearedcube([(boxheight-hthick*2-26)*scl, (71)*scl, (25)*scl],
+            shear=[8*scl, 0*scl, 0],
+            innershear=[-8*scl, 0*scl, 0])
     t = rotate([0, 90, 0]).add(t)
-    b = translate(v=[(-28)*scl, (-1)*scl, (boxheight-19)*scl]).add(t)
+    b = translate(v=[(-28)*scl, (-1)*scl, (boxheight-21)*scl]).add(t)
     u += b
 
     v = union()
@@ -4635,7 +4635,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         PCB1,
                         #PCB2,
