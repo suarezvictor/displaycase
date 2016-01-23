@@ -8,7 +8,6 @@
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
     * remove / reduce protrusion in EOMA68 PCB1 cutout area, PCB1 is jamming.
-    * sort out splitting between back base hinge and back base: stagger join
     * drop PCB1 fake headphone jack down a bit to match base_end hole
     * move PCB1 fake USB socket over to match base_end hole
 """
@@ -2014,8 +2013,8 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # lock-in slot to base_back_bot
     c = union()
-    d = cube([110*scl, 35*scl, 49*scl], center=True)
-    d = translate(v=[(90)*scl, (0)*scl, (0)*scl]).add(d)
+    d = cube([110*scl, 35*scl, (boxheight-30)*scl], center=True)
+    d = translate(v=[(90)*scl, (0)*scl, (19)*scl]).add(d)
     c += d
     d = cube([200*scl, 35*scl, 40*scl], center=True)
     d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
@@ -2268,13 +2267,34 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u -= c
 
     # fits into back base hinge
-    c = shearedcube([(35)*scl, 90*scl, (29)*scl], center=True,
-                shear=[5*scl, 0*scl, 0],
-                innershear=[-5*scl, 0*scl, 0])
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[-64*scl, (-13)*scl, (boxheight-55)*scl]).add(c)
+    c = union()
+    d = shearedcube([(50)*scl, (boxheight-35)*scl, (33)*scl], center=True,
+                shear=[3*scl, 0*scl, 0],
+                innershear=[-3*scl, 0*scl, 0])
+    d = rotate([0, 90, 90]).add(d)
+    d = rotate([0, 90, 0]).add(d)
+    d = translate(v=[(64)*scl, (0)*scl, 19*scl]).add(d)
+    c += d
+    d = shearedcube([(30)*scl, 130*scl, (33)*scl], center=True,
+                shear=[3*scl, 0*scl, 0],
+                innershear=[-3*scl, 0*scl, 0])
+    d = rotate([0, 90, 90]).add(d)
+    d = translate(v=[(20)*scl, (0)*scl, (20)*scl]).add(d)
+    c += d
+    c = translate(v=[-64*scl, (-15.5)*scl, (boxheight-55)*scl]).add(c)
     c = case_bolthole(scl, 2).add(c)
     u += c
+
+    # lock-in slot to base_back_bot
+    d = cube([110*scl, 35*scl, 58*scl], center=True)
+    d = translate(v=[(90)*scl, (0)*scl, (0)*scl]).add(d)
+    c += d
+    d = cube([200*scl, 35*scl, 40*scl], center=True)
+    d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
+    c += d
+    c = translate(v=[(-65)*scl, (198)*scl, (boxheight-55)*scl]).add(c)
+    t = case_bolthole(scl, 2).add(c)
+    #u -= t
 
     # slot to fit a nut into
     # XXX TODO: fill this all the way back (for mold purposes)
@@ -2298,7 +2318,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[2], h=120, rad=35./2)
-    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
+    t = translate(v=[0, -10*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # fit base_mid
@@ -4610,8 +4630,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
