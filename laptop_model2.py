@@ -7,7 +7,6 @@
     * add in one extra magnet holder (so there are 2)
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
-    * remove / reduce protrusion in EOMA68 PCB1 cutout area, PCB1 is jamming.
     * drop PCB1 fake headphone jack down a bit to match base_end hole
     * move PCB1 fake USB socket over to match base_end hole
 """
@@ -662,7 +661,7 @@ def base_end(scl, ht, kbd_numpad_indent):
             u -= c
 
             # add bottom strut, along EOMA68 and USB
-            b = cube([765*scl, (ht+5)*scl, 15*scl])
+            b = cube([765*scl, (ht+2)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
                     (boxheight-hthick-12+55)*scl]).add(b)
             u += b
@@ -4627,7 +4626,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4644,8 +4643,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
