@@ -2351,8 +2351,15 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     rad=35.0 + 12
 
+    # add lock-in to base_back_hinge
+    c = cylinder(r=(rad-14)*scl, r1 = (rad-20)*scl, h=(14)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-13)*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u += t
+
     # hollow hinge out
-    c = cylinder(r=(rad-12)*scl, h=(friclen+80)*scl, segments=50)
+    c = cylinder(r=(rad-25)*scl, h=(friclen+80)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-70)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
