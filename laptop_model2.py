@@ -4228,7 +4228,7 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([165.0*scl, 151.1*scl, (18)*scl])
-    r = translate([(1450)*scl, 0*scl,
+    r = translate([(1440)*scl, 0*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
