@@ -2013,8 +2013,8 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # lock-in slot to base_back_bot
     c = union()
-    d = cube([110*scl, 35*scl, (boxheight-30)*scl], center=True)
-    d = translate(v=[(90)*scl, (0)*scl, (19)*scl]).add(d)
+    d = cube([70*scl, 35*scl, (boxheight-30)*scl], center=True)
+    d = translate(v=[(70)*scl, (0)*scl, (19)*scl]).add(d)
     c += d
     d = cube([200*scl, 35*scl, 40*scl], center=True)
     d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
