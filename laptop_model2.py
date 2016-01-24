@@ -2702,24 +2702,25 @@ def base_mid(scl, ht, base_screwholes=False):
                 innershear=[8*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(boxlength-back_top_width-46)*scl,
+    bl = boxlength - back_top_width - 47
+    c = translate(v=[(bl)*scl,
                 (1)*scl, (boxheight-17)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(boxlength-back_top_width-46+25)*scl,
+    c = translate(v=[(bl+25)*scl,
                 (ht-1)*scl, (53+50)*scl]).add(d)
     u += c
     d = cube([(32)*scl, ht*scl, (boxheight-40)*scl])
     c = translate(v=[(boxlength-back_top_width-27)*scl,
                 (0)*scl, (40)*scl]).add(d)
     u += c
-    d = shearedcube([(20)*scl, 22*scl, 20*scl],
+    d = shearedcube([(90)*scl, 22*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[16*scl, 0*scl, 0])
+                innershear=[17*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 90]).add(d)
     c = translate(v=[(boxlength-back_top_width+0)*scl,
-                (-5)*scl, (74)*scl]).add(d)
+                (-5)*scl, (75)*scl]).add(d)
     u -= c
     d = rotate([0, 0, 180]).add(d)
     c = translate(v=[(boxlength-back_top_width-22)*scl,
@@ -3872,12 +3873,14 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     w = boxlength-back_top_width
     l = boxheight-hthick-3
 
-    b = hollowbox(scl, 18, ht-2, l,
-                {T:14, L:8, R:-1, F:10, D:12, B:10},
+    b = hollowbox(scl, 18, ht-2+12, l,
+                {T:14, L:8, R:-1, F:30, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
     u += b
-    c = cube([(11)*scl, (ht-2)*scl, (9)*scl])
+    c = cube([(31)*scl, (30)*scl, (boxheight*2)*scl])
+    b = translate(v=[(w-21)*scl, (ht-2)*scl, (55)*scl]).add(c)
+    u -= b
     c = shearedcube([(4.0)*scl, (ht-50)*scl, (13)*scl],
                     shear=[0*scl, 0, 0],
                     innershear=[-12*scl, 0, 0])
@@ -4626,7 +4629,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
@@ -4636,13 +4639,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         BASE_MID,
-                        #BACK_KBD_RUNNER,
+                        BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
