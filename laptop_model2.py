@@ -496,7 +496,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    #u += b
+    u += b
 
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
@@ -513,15 +513,15 @@ def base_end(scl, ht, kbd_numpad_indent):
     if not test:
         if kbd_numpad_indent == 0:
             # add PCB traps that keep it down
-            c = shearedcube([(boxheight-49)*scl, (15)*scl, 101*scl],
+            c = shearedcube([(boxheight-49)*scl, (15)*scl, 81*scl],
                         shear=[5*scl, 0, 0],
                         innershear=[0*scl, 0, 0])
             c = rotate([180, -90, -90]).add(c)
-            u += translate(v=[(lcd_w-77)*scl, (102)*scl,
+            u += translate(v=[(lcd_w-77)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
-            u += translate(v=[(lcd_w-400)*scl, (102)*scl,
+            u += translate(v=[(lcd_w-400)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
-            u += translate(v=[(usb_pos-181)*scl, (102)*scl,
+            u += translate(v=[(usb_pos-181)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
 
     if not test:
@@ -4576,15 +4576,15 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
-                        SCREEN_END,
+                        BASE_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_BACK_EDGE,
+                        #SCREEN_FRONT_EDGE,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
