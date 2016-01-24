@@ -2573,7 +2573,7 @@ def base_mid(scl, ht, base_screwholes=False):
     # end wall for tpanel_mid to lock into
     v = union()
     # wings for screw-holes to fit with front base
-    d = cube([(boxheight-40)*scl, (49)*scl, (100)*scl])
+    d = cube([(boxheight-40-2)*scl, (48)*scl, (100)*scl])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 90]).add(d)
     c = translate(v=[(180-1)*scl, (-68)*scl, (boxheight)*scl]).add(d)
@@ -2620,7 +2620,7 @@ def base_mid(scl, ht, base_screwholes=False):
 
     # dovetail cuts to fit into front base
     # XXX height is magic constant
-    b = shearedcube([(50)*scl, (ht+2+80*2)*scl, (31)*scl],
+    b = shearedcube([(50)*scl, (ht+2+80*2)*scl, (32)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
