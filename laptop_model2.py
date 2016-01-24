@@ -19,10 +19,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=True
+add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1350,7 +1350,7 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
 
     return v
 
-def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset):
+def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     """
     TODO:
     * put screwhole down into base_mid
@@ -1454,8 +1454,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset):
     u -= b
 
     # matches screw-hole in front base
-    u = indented_screwhole(scl, u, (182), -40, 75, -90)
-    u = indented_screwhole(scl, u, (182), ht+40, 75, -90)
+    u = indented_screwhole(scl, u, (182), -40, 75, -90, base_screwholes)
+    u = indented_screwhole(scl, u, (182), ht+40, 75, -90, base_screwholes)
 
     # screw-holes into front base
     s = chamfered_backbox_screwholes(scl, 50)
@@ -2546,7 +2546,7 @@ def base_back_joiner(scl, ht):
     v.add(u)
     return v
 
-def base_mid(scl, ht):
+def base_mid(scl, ht, base_screwholes=False):
     u = union()
     w = boxlength-150
 
@@ -2600,13 +2600,15 @@ def base_mid(scl, ht):
 
     u += v
 
-    # chamfered screw hole through to base_front
-    s = chamfered_backbox_screwholes(scl, 50)
-    s = rotate([0, 90, 0]).add(s)
-    t = translate(v=[(200-50)*scl, (-30)*scl, (80)*scl]).add(s)
-    u -= t
-    t = translate(v=[(200-50)*scl, (base_centre_ht+30)*scl, (80)*scl]).add(s)
-    u -= t
+    if base_screwholes:
+        # chamfered screw hole through to base_front
+        s = chamfered_backbox_screwholes(scl, 50)
+        s = rotate([0, 90, 0]).add(s)
+        t = translate(v=[(200-50)*scl, (-30)*scl, (80)*scl]).add(s)
+        u -= t
+        t = translate(v=[(200-50)*scl, (base_centre_ht+30)*scl, (80)*scl])
+        t.add(s)
+        u -= t
 
     # hole for back screw-support to poke through
     # XXX height is magic constant
@@ -3542,7 +3544,7 @@ def screen_hinge(scl, ht):
 
     return u
 
-def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
+def indented_screwhole(scl, u, x, y, z, rot=0, depth=16, base_screwholes=True):
     d = cylinder(r=topscrewrad*1.2*scl, r1=28*scl,
                     h=17*scl,
                     segments=50, center=True)
@@ -3551,6 +3553,8 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16):
     s = rotate([0, 0, rot]).add(s)
     s = translate(v=[(x)*scl, (y)*scl, (z)*scl]).add(s)
     u += s
+    if not base_screwholes:
+        return u
     s = chamfered_backbox_screwholes(scl, depth)
     s = translate(v=[(0)*scl, (0)*scl, (3)*scl]).add(s)
     s = rotate([90, 0, 0]).add(s)
@@ -4622,22 +4626,22 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
