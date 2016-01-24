@@ -50,6 +50,7 @@ FRICTION_HINGE2 = 23
 CASE_CLASP = 24
 CLASP_NIB = 25
 BASE_BACK_HINGE = 26
+CABLE_PROTECTOR = 27
 
 if not test:
     lcd_l = 3598.0
@@ -602,7 +603,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
     b = translate(v=[0, 0, (55)*scl]).add(b)
-    u += b
+    #u += b
 
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
@@ -3401,6 +3402,69 @@ def friction_hinge1(scl, ht):
 
     return a
 
+def cable_exit_xform(c):
+    c = translate(v=[0*scl,-20*scl,0*scl]).add(c)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, 130, 0]).add(c)
+    return c
+
+def cable_protector(scl, ht):
+    u = union()
+
+    rad=20.0
+    # add hinge
+    c = cylinder(r=(rad+15)*scl, h=(ht)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,0*scl,0]).add(c)
+    u += c
+
+    # exit hole support
+    c = union()
+    d = cube([(42)*scl, (50)*scl, (ht)*scl])
+    u += cable_exit_xform(d)
+    d = cube([(42)*scl, (30)*scl, (ht-10)*scl])
+    d = translate(v=[1*scl,10*scl,-1*scl]).add(d)
+    u -= cable_exit_xform(d)
+
+    # hollow hinge out
+    c = cylinder(r=(50/2.)*scl, r1=39*scl, h=(20)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,-8*scl,0*scl]).add(c)
+    u -= c
+
+    # cable hole
+    c = cylinder(r=22*scl,
+                    h=(1000)*scl, center=True, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    u -= c
+
+    # cable access
+    c = cube([(45)*scl, (50)*scl, (ht+2)*scl])
+    c = translate(v=[-10*scl,-10*scl,-1*scl]).add(c)
+    c = rotate([0, 90, 90]).add(c)
+    c = rotate([0, -120, 0]).add(c)
+    u -= c
+    c = rotate([0, 70, 0]).add(c)
+    u -= c
+
+    u = hinge_translate(scl).add(u)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl, fill=True)
+        c += translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
+        c += translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
+        c += translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
+        c += translate([(boxlength-110)*scl, (ht-3)*scl, 83.9*scl]).add(h)
+        c += translate([(boxlength-165)*scl, (ht-3)*scl, 83.9*scl]).add(h)
+        c += translate([(boxlength+20)*scl, (ht-3)*scl,
+                        (88-lid_offset)*scl]).add(h)
+        u += c
+
+    return u
+
 def screen_hinge(scl, ht):
     u = union()
     b = screen_box(scl, ht, end=False, back=True, hingewall=False)
@@ -4357,6 +4421,12 @@ def create_laptop(t, scl, part, angle):
 
         b = screen_adjust(b, scl, angle)
 
+    if part == CABLE_PROTECTOR:
+        se = cable_protector(scl, 30)
+        m = translate(v=[0, (lid_adjust_ht-40)*scl,0]).add(se)
+        if mirroring & LEFTPART:
+            b.add(m)
+
     lid_adjust_ht += scrn_hinge_ht
 
     if part == CLASP_NIB:
@@ -4633,7 +4703,8 @@ if __name__ == '__main__':
                         #SCREEN_END,
                         #CASE_CLASP,
                         #CLASP_NIB,
-                        #SCREEN_HINGE,
+                        CABLE_PROTECTOR,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -4644,8 +4715,8 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
-                        BACK_KBD_RUNNER,
+                        #BASE_MID,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
