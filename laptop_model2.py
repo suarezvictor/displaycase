@@ -7,7 +7,6 @@
     * add in one extra magnet holder (so there are 2)
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
-    * move PCB1 fake USB socket over to match base_end hole
 """
 
 import time
@@ -4635,14 +4634,14 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        PCB1,
+                        #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
