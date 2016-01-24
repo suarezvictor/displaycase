@@ -189,11 +189,6 @@ def hinge_rotate(scl, o, angle):
 hinge_x = -20
 hinge_y = -20
 
-def ethernet(scl):
-    # ethernet, amphenol RJCSE-538X-01
-    eth = cube([157.5*scl, 165.5*scl, (134.8+13.0)*scl])
-    return translate(v=[(lcd_w+190)*scl,130*scl,(4+23)*scl]).add(eth)
-
 def lcd_panel(scl, offs=0):
 
     w = lcd_w
