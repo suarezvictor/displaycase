@@ -644,7 +644,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                 shear=[70*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
+    c = translate(v=[(w-back_top_width+18)*scl,(ht+10)*scl,
                         (hthick+55+11)*scl]).add(c)
     d += c
     c = cube([(50)*scl, (150)*scl, 50*scl])
@@ -1842,11 +1842,11 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # cut-off for screen
     c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
-                shear=[50*scl, 0, 0],
+                shear=[56*scl, 0, 0],
                 innershear=[-15*scl, 0, 0])
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(w+223)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w+220)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
     # cable access and interlock with base_end
@@ -1867,7 +1867,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
                 shear=[10*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+180)*scl,13*scl,
+    c = translate(v=[(w-back_top_width+177)*scl,13*scl,
                     (20)*scl]).add(c)
     u -= c
     c = cube([(80)*scl, (50)*scl, 63*scl])
@@ -4572,7 +4572,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
