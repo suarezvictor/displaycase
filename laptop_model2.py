@@ -479,6 +479,9 @@ def base_end(scl, ht, kbd_numpad_indent):
     """
     u = union()
     w = boxlength-3
+    kbd_ht = ht+20
+
+    print "BASE_END height", ht, kbd_ht
 
     topcurve = 30
     walls = {T:25, L:hthick, R:hthick, F:-1, D:hthick}
@@ -576,7 +579,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140-79)-2+kbd_numpad_indent, ht+20, 35,
+                        (back_top_width-140-79)-2+kbd_numpad_indent, kbd_ht, 35,
                 {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent-79)*scl, (0)*scl,
@@ -1799,7 +1802,9 @@ def base_cutout(scl, ht, loffs=0, arch=False, doffs=0):
 def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
+    bht = ht+base_centre_ht/2
 
+    print "BASE_BACK_HINGE ht", bht
     wthick = 130
     walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick+base_centre_ht/2,
                                         D:hthick, B:110}
@@ -1810,7 +1815,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, ht+base_centre_ht/2, boxheight,
+    b = hollowbox(scl, back_top_width, bht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
@@ -2071,6 +2076,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
+    bht = ht+base_centre_ht/2
+
+    print "BASE_BACK ht", bht
 
     wthick = 130
     walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick+base_centre_ht/2,
@@ -2082,7 +2090,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, ht+base_centre_ht/2, boxheight,
+    b = hollowbox(scl, back_top_width, bht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
@@ -4576,7 +4584,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4593,7 +4601,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
