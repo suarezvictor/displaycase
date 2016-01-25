@@ -1846,7 +1846,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
                 innershear=[-15*scl, 0, 0])
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(w+220)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w+217)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
     # cable access and interlock with base_end
@@ -4572,10 +4572,10 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
