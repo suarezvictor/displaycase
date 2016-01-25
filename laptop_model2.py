@@ -4,7 +4,6 @@
 """ TODO:
     * sort out gaps between base end, base hinge end, and screen edge
     * parameterise plastic join-point gaps/sizes so it can be varied
-    * add in one extra magnet holder (so there are 2)
     * allow [flat] cable access through to screen connector
     * sort out all runner triangles for panels: they're not printing properly
 """
@@ -72,7 +71,6 @@ if not test:
     tpanel_h = 40
 
     lcd_indent = 61
-    friclen = 84
 
 else:
     # HSD070PWW1
@@ -1538,30 +1536,31 @@ def base_front_top(scl, ht, ht_offset):
 
         offs += step
 
-    mholderw = 139+fthick*4
-    mholdero = 229
+    mholderw = 220+fthick*4
+    mholdero = 152
 
     # add a support for magnet
-    c = shearedcube([(mholderw+40)*scl, 186*scl, 40*scl],
+    c = shearedcube([(mholderw+60)*scl, 186*scl, 40*scl],
             shear=[-40*scl, -10*scl, 0],
             innershear=[40*scl, -8*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[180*scl, (mholdero-19)*scl, (6)*scl]).add(c)
+    c = translate(v=[180*scl, (mholdero-34)*scl, (6)*scl]).add(c)
     u += c
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
-    c = shearedcube([(mholderw-30)*scl, 180*scl, 30*scl],
-            shear=[-10*scl, 10*scl, 0],
-            innershear=[10*scl, 8*scl, 0])
+    c = shearedcube([(mholderw)*scl, 180*scl, 30*scl],
+            shear=[-20*scl, 10*scl, 0],
+            innershear=[20*scl, 8*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[201*scl, (mholdero+10)*scl, (6)*scl]).add(c)
+    c = translate(v=[201*scl, (mholdero-5)*scl, (6)*scl]).add(c)
     u -= c
 
-    # remove bit more from base
-    c = base_front_arc(scl, tpanel_b_w/2-65)
-    c = translate(v=[(151)*scl, (tpanel_ht-80)*scl, (39.5)*scl]).add(c)
-    #u -= c
+    # add a mid-support back into magnet hole
+    c = cube([(fthick)*scl, 170*scl, 32*scl])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[180*scl, (mholdero+mholderw/2-10)*scl, (5)*scl]).add(c)
+    u += c
 
     # add runner support
     c = shearedcube([75*scl, (ht)*scl, (8)*scl])
@@ -1805,11 +1804,12 @@ def base_cutout(scl, ht, loffs=0, arch=False, doffs=0):
 def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
-    bht = ht+base_centre_ht/2
+    bht = ht
+    friclen = scrn_hinge_ht+3
 
     print "BASE_BACK_HINGE ht", bht
     wthick = 130
-    walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick+base_centre_ht/2,
+    walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick,
                                         D:hthick, B:110}
     curverads={
                 R|D: (boxheight-40, 0),
@@ -1904,7 +1904,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     d = cube([200*scl, 35*scl, 40*scl], center=True)
     d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
     c += d
-    c = translate(v=[(-65)*scl, (198)*scl, (boxheight-55)*scl]).add(c)
+    c = translate(v=[(-65)*scl, (ht-16)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
 
@@ -1956,35 +1956,25 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
 
-
     # capture channel in hinge
     hd = 25
     v = union()
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
+    c = shearedcube([24*scl, (friclen+scrn_hinge_ht+40)*scl, hd*scl], center=True,
                 shear=[-3*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[5*scl,-40*scl,0*scl]).add(c)
+    c = translate(v=[5*scl,-40*scl,20*scl]).add(c)
     v += c
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht)*scl, hd*scl], center=True,
+    c = shearedcube([24*scl, (friclen+scrn_hinge_ht+40)*scl, hd*scl], center=True,
                 shear=[0*scl, 0*scl, 0],
                 innershear=[3*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[-5*scl,-40*scl, 0*scl]).add(c)
+    c = translate(v=[-5*scl,-40*scl, 20*scl]).add(c)
     v += c
-    c = cylinder(r=30*scl, r1=27*scl, h=(hd+5)*scl, center=True, segments=50)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[0*scl,21*scl,0*scl]).add(c)
-    #v -= c
+
     v = rotate([90, 0, 0]).add(v)
     v = rotate([0, 90, 0]).add(v)
     c = translate(v=[0*scl,((scrn_hinge_ht+friclen)/2+30)*scl,-55*scl]).add(v)
-    t = hinge_translate(scl).add(c)
-    u -= t
-    # cutout for nut to poke through
-    c = cylinder(r=31*scl, h=(300)*scl, center=True, segments=50)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[0*scl,320*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2253,8 +2243,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u += t
 
-    # hollow hinge out
-    c = cylinder(r=(rad-16)*scl, h=(friclen+80)*scl, segments=50)
+    # hollow hinge out, screw from friction hinge pokes through here
+    c = cylinder(r=(rad-16)*scl, h=(150)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-70)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2992,32 +2982,38 @@ def screen_front_edge(scl, ht):
     print offs, step
     while offs < (ht-step):
         count += 1
-        if count == 4 or count == 5:
+        if count in [3,4,5]:
             t = step+fthick # this is to act as support for a magnet holder
-            if count == 4:
+            if count == 3:
                 mholdero = offs
-                mholderw = t*2
+                mholderw = t*3
         else:
             t = fthick
-        c = touch_arc(0, t, 45,
-                            25, scl,
+        c = touch_arc(0, t, 70,
+                            28, scl,
                       angle=0)
         c = rotate([-90, 0, 0]).add(c)
         c = rotate([0, -90, 0]).add(c)
         c = resize([(60)*scl, 0, 0], False).add(c)
-        c = translate(v=[(76)*scl, (offs+step-fthick)*scl, (lcd_d-15)*scl]).add(c)
+        c = translate(v=[(73)*scl, (offs+step-fthick)*scl, (lcd_d)*scl]).add(c)
         b += c
+        if (count == 1):
+            mc = c
+        if (count == 4):
+            mc = translate(v=[(0)*scl, (step/2+step*2)*scl, (0)*scl]).add(mc)
 
         offs += step
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
-    c = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
+    d = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
             shear=[10*scl, 10*scl, 0],
             innershear=[-10*scl, 8*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[175*scl, (mholdero+5)*scl, (lcd_d-32)*scl]).add(c)
-    b -= c
+    d = rotate([0, 0, 90]).add(d)
+    d = translate(v=[175*scl, (mholdero+2)*scl, (lcd_d-32)*scl]).add(d)
+    b -= d
+
+    b += mc
 
     # matching screen mid (front)
     d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
@@ -4354,7 +4350,7 @@ def create_laptop(t, scl, part, angle):
         b.add(se)
 
     if part == BASE_BACK_HINGE:
-        bh = base_back_hinge_ht
+        bh = base_back_hinge_ht+scrn_hinge_ht-9
         print "base back hinge", bh/10., (scrn_hinge_ht)/10.
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
@@ -4582,15 +4578,15 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
