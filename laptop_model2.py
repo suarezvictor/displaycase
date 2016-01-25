@@ -1893,18 +1893,6 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
                     (53)*scl]).add(c)
     u += c
 
-    fthick = 6
-    offs = scrn_hinge_ht+40-hthick+fthick
-    c = base_cutout(scl, ht-wthick-offs-2)
-    c = resize([(236)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (offs-fthick)*scl, (0)*scl]).add(c)
-    u -= c
-
-    c = base_cutout(scl, fthick, arch=True)
-    c = resize([(236)*scl, 0, (boxheight-hthick*2+7)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (206)*scl, (1)*scl]).add(c)
-    u += c
-
     # lock-in slot to base_back_bot
     c = union()
     d = cube([70*scl, 35*scl, (boxheight-30)*scl], center=True)
