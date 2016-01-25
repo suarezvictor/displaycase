@@ -457,6 +457,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
     else:
         slen = boxlength
         offs = 0
+    print "screen box ht", rh, slen, ld
     b = hollowbox(scl, slen, rh, ld, walls,
                     curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[offs*scl, 0, -(lcd_d-18)*scl]).add(b)
@@ -1454,6 +1455,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     return u
 
 def base_front_top(scl, ht, ht_offset):
+    print "BASE_FRONT_TOP ht", ht
+
     u = union()
 
     tpanel_ht = ht+ht_offset
@@ -2744,6 +2747,7 @@ def base_mid(scl, ht, base_screwholes=False):
     return v
 
 def screen_mid(scl, ht):
+    print "SCREEN_MID ht", ht
 
     u = union()
     b = screen_box(scl, ht, end=False)
@@ -2808,6 +2812,7 @@ def screen_mid(scl, ht):
 def screen_end(scl, ht, lcd_end_ht):
 
     ht = ht + lcd_end_ht
+    print "SCREEN_END ht", ht
     u = union()
     b = screen_box(scl, ht, end=True)
     u += b
@@ -2956,6 +2961,8 @@ def screen_edge_complete(scl, ht):
     return u
 
 def screen_front_edge(scl, ht):
+    print "SCREEN_FRONT_EDGE ht", ht
+
     # main box
     b = screen_box(scl, ht, end=False, front=True)
 
@@ -3355,6 +3362,8 @@ def cable_protector(scl, ht):
     return u
 
 def screen_hinge(scl, ht):
+    print "SCREEN_HINGE ht", ht
+
     u = union()
     b = screen_box(scl, ht, end=False, back=True, hingewall=False)
     u += b
@@ -4573,9 +4582,9 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -4589,7 +4598,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
