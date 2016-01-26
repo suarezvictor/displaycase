@@ -1845,11 +1845,11 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # cut-off for screen
     c = shearedcube([(100*2)*scl, (scrn_hinge_ht+2)*scl, (hinge_offs)*scl],
-                shear=[56*scl, 0, 0],
+                shear=[58*scl, 0, 0],
                 innershear=[-15*scl, 0, 0])
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 0, 180]).add(c)
-    c = translate(v=[(w+217)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w+215)*scl,-1*scl,(-25+hinge_offs)*scl]).add(c)
     u -= c
 
     # cable access and interlock with base_end
@@ -3383,7 +3383,7 @@ def screen_hinge(scl, ht):
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
     c = shearedcube([(87)*scl, ht*scl, (hinge_offs-10)*scl],
-                shear=[44*scl, 0, 0],
+                shear=[41*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
@@ -4580,13 +4580,13 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4594,7 +4594,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
