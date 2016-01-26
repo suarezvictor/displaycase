@@ -18,7 +18,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
+add_internal_parts=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
@@ -109,7 +109,7 @@ bwid = 17 # 24
 lcd_inset_top = 40
 lcd_inset_bot = 180
 lcd_gap = 3
-lid_offset = 8
+lid_offset = 16
 lcd_hinge_inner_rad=70
 lcd_hinge_inside_rad=70
 lcd_ext_rot_angle=250
@@ -2846,9 +2846,9 @@ def screen_end(scl, ht, lcd_end_ht):
 
     rad=54.0
     # remove hinge
-    c = cylinder(r=rad*scl, h=(ht+30)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(ht+50)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,-12*scl,0]).add(c)
+    c = translate(v=[0*scl,-32*scl,0]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -3382,12 +3382,12 @@ def screen_hinge(scl, ht):
     u += t
 
     w = lcd_w+lcd_inset_top+lcd_inset_bot
-    c = shearedcube([(87)*scl, ht*scl, (hinge_offs-10)*scl],
+    c = shearedcube([(87)*scl, ht*scl, (hinge_offs-18+lid_offset)*scl],
                 shear=[41*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([0, 0, 180]).add(c)
     c = rotate([180, 0, 0]).add(c)
-    c = translate(v=[(w)*scl,0*scl,(37+hinge_offs)*scl]).add(c)
+    c = translate(v=[(w)*scl,0*scl,(30+hinge_offs+lid_offset)*scl]).add(c)
     u += c
 
     # hex indentation
@@ -3427,7 +3427,7 @@ def screen_hinge(scl, ht):
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 31, 0]).add(c)
     c = translate(v=[(w-rad-4)*scl,-(ht+hthick)*scl,
-                     (10+hinge_offs)*scl]).add(c)
+                     (2+hinge_offs+lid_offset)*scl]).add(c)
     u -= c
     # put a bit back
     c = cube([(42)*scl, (14)*scl, (51)*scl])
@@ -3435,7 +3435,7 @@ def screen_hinge(scl, ht):
     c = rotate([180, 0, 0]).add(c)
     c = rotate([0, 31, 0]).add(c)
     c = translate(v=[(w-rad-3)*scl,(ht-26)*scl,
-                     (10+hinge_offs)*scl]).add(c)
+                     (2+hinge_offs+lid_offset)*scl]).add(c)
     u += c
 
     c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick)*scl])
@@ -4578,7 +4578,7 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         SCREEN_HINGE,
                         #FRICTION_HINGE1,
@@ -4593,7 +4593,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
