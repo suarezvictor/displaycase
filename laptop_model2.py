@@ -3461,7 +3461,7 @@ def screen_hinge(scl, ht):
     u -= c
 
     # hollow hinge out
-    c = cylinder(r=(60/2.)*scl, h=(ht+15)*scl, segments=50)
+    c = cylinder(r=(62/2.)*scl, h=(ht+15)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-30*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
