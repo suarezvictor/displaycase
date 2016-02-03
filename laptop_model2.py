@@ -2877,7 +2877,7 @@ def screen_end(scl, ht, lcd_end_ht):
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, -90]).add(c)
     t = translate(v=[(80)*scl, (ht)*scl,
-                                (-27)*scl]).add(c)
+                                (-28)*scl]).add(c)
     u -= t
 
     if pin_parts_3d:
