@@ -2832,7 +2832,7 @@ def screen_end(scl, ht, lcd_end_ht):
     u -= c
 
     # hex indentation
-    c = cylinder(r=28.5*scl, r1=27*scl, h=(30)*scl, center=True, segments=6)
+    c = cylinder(r=29.5*scl, r1=27*scl, h=(31)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
