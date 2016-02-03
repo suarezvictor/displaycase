@@ -17,8 +17,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
-add_internal_parts=True
+pin_parts_3d=True
+add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
@@ -1979,28 +1979,29 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u -= t
 
     if pin_parts_3d:
-        c = union()
+        v = union()
 
         d = pin_t()
 
-        c += translate([(40)*scl, 0, 0]).add(d)
-        c += translate([(120)*scl, 0, 0]).add(d)
+        v += translate([(40)*scl, 0, 0]).add(d)
+        v += translate([(120)*scl, 0, 0]).add(d)
         d = pin_t(ht=240)
         d = rotate([0, 90, 0]).add(d)
-        c += translate([130*scl, 0, (50)*scl]).add(d)
+        v += translate([130*scl, 0, (50)*scl]).add(d)
 
         h = pin(B0, scl, fill=True)
-        c += translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
-        c += translate([(-30)*scl, (-3)*scl, 97*scl]).add(h)
-        c += translate([(77)*scl, (-3)*scl, 153*scl]).add(h)
-        c += translate([(202)*scl, (-3)*scl, 113*scl]).add(h)
-        c += translate([(77)*scl, (-3)*scl, -30*scl]).add(h)
-        c += translate([(202)*scl, (-3)*scl, -30*scl]).add(h)
-        c += translate([(-10)*scl, (-3)*scl, 140*scl]).add(h)
-        c += translate([(-10)*scl, (-3)*scl, -16*scl]).add(h)
-        c = translate([(w-58-79)*scl, (ht+70)*scl, 0*scl]).add(c)
+        v += translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
+        v += translate([(-30)*scl, (-3)*scl, 97*scl]).add(h)
+        v += translate([(77)*scl, (-3)*scl, 153*scl]).add(h)
+        v += translate([(202)*scl, (-3)*scl, 113*scl]).add(h)
+        v += translate([(77)*scl, (-3)*scl, -30*scl]).add(h)
+        v += translate([(202)*scl, (-3)*scl, -30*scl]).add(h)
+        v += translate([(-10)*scl, (-3)*scl, 140*scl]).add(h)
+        v += translate([(-10)*scl, (-3)*scl, -16*scl]).add(h)
+        v = translate([(w-58-79)*scl, (ht)*scl, 0*scl]).add(v)
 
-        u += c
+        u += v
+
 
         c = cube([6*scl, 30*scl, 70*scl])
         c = translate([(w-79)*scl, (179)*scl, 5*scl]).add(c)
@@ -4580,7 +4581,7 @@ if __name__ == '__main__':
                         #BASE_END,
                         SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
@@ -4593,8 +4594,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
@@ -4639,7 +4640,7 @@ if __name__ == '__main__':
                 # LCD Panel
                 b = union()
                 p = lcd_panel(scl, offs=2)
-                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht-6)*scl]).add(p)
+                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht+2-lid_offset)*scl]).add(p)
                 b += p
 
                 r = hinge_rotate(scl, b, angle)
