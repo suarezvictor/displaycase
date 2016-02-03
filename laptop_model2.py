@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2872,8 +2872,8 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # remove runner along bottom of base, for lower panel
     # these are along the back wings
-    c = shearedcube([10*scl, (lcd_w)*scl, (8)*scl],
-                shear=[8*scl, 0*scl, 0],
+    c = shearedcube([10*scl, (lcd_w)*scl, (10)*scl],
+                shear=[10*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, -90]).add(c)
     t = translate(v=[(80)*scl, (ht)*scl,
