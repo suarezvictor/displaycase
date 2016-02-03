@@ -2862,8 +2862,8 @@ def screen_end(scl, ht, lcd_end_ht):
     c = translate(v=[(lcd_w+84)*scl, (ht-10)*scl,
                     (lcd_d-hthick-8.6)*scl]).add(c)
     u -= c
-    d = shearedcube([72*scl, 16*scl, 13*scl],
-            shear=[0,12*scl,0],
+    d = shearedcube([72*scl, 17*scl, 14*scl],
+            shear=[0,13*scl,0],
             innershear=[0,0*scl,0])
     c = rotate([0, 0, 180]).add(d)
     c = translate(v=[(32)*scl, (2)*scl, (-8)*scl]).add(c)
