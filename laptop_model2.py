@@ -2812,7 +2812,7 @@ def screen_end(scl, ht, lcd_end_ht):
     for end in [False]:
         c = chamfered_backbox_screwholes(scl, 60+ht, 25, lcdscrewrad)
         c = rotate([0, -90, 90]).add(c)
-        c = translate(v=[0, 12*scl, 0]).add(c)
+        #c = translate(v=[0, 0*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
         u -= t
 
