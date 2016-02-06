@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -3706,9 +3706,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
 
     if woffs >= 0:
         c = compartment_lockin(scl)
-        t = translate(v=[(w-45)*scl, 58*scl, -2*scl]).add(c)
+        t = translate(v=[(w-48)*scl, 58*scl, -2*scl]).add(c)
         u += t
-        t = translate(v=[(w-45)*scl, (l-120)*scl, -2*scl]).add(c)
+        t = translate(v=[(w-48)*scl, (l-120)*scl, -2*scl]).add(c)
         u += t
         c = cube([10*scl, 94*scl, 49*scl])
         t = translate(v=[(w-26)*scl, 41*scl, 0]).add(c)
@@ -4619,7 +4619,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
