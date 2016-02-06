@@ -3999,22 +3999,22 @@ def compartment_lockin_cutout(scl):
     u = union()
 
     # screwdriver access
-    c = cube([8*scl, 60*scl, 51*scl])
-    c = translate(v=[0*scl, 0*scl, (0)*scl]).add(c)
+    c = cube([21*scl, 80*scl, 51*scl])
+    c = translate(v=[-5*scl, -10*scl, (0)*scl]).add(c)
     u.add(c)
 
     # hide lockin under a slope
-    c = shearedcube(size=[12*scl,
-                        70*scl, 26*scl],
-                    shear=[45*scl, 0, 0],
+    c = shearedcube(size=[17*scl,
+                        80*scl, 26*scl],
+                    shear=[13*scl, 0, 0],
                     innershear=[0*scl, 0, 0])
-    c = translate(v=[2*scl, -5*scl, (3)*scl]).add(c)
+    c = translate(v=[-1*scl, -10*scl, (3)*scl]).add(c)
     u.add(c)
 
     # remove bit for clip to lock into
-    c = cube([(12)*scl, (60)*scl, (12)*scl])
-    c = rotate([0, 55, 0]).add(c)
-    c = translate(v=[(-7)*scl, (0)*scl, (13)*scl]).add(c)
+    c = cube([(15)*scl, (80)*scl, (15)*scl])
+    c = rotate([0, 50, 0]).add(c)
+    c = translate(v=[(-14)*scl, (-10)*scl, (12)*scl]).add(c)
     u.add(c)
 
     return u
@@ -4029,7 +4029,7 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = cube([(w-6)*scl, (ht-6)*scl, (20)*scl])
     b = translate(v=[3*scl, 3*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(w-30-kbd_offs)*scl, (ht-60)*scl, (13)*scl])
+    b = cube([(w-30-kbd_offs)*scl, (ht-60)*scl, (16)*scl])
     b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
     u -= b
     b = cube([(w-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
@@ -4047,7 +4047,7 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     # cut off edge so that lid can drop down without catching
     c = shearedcube([2*scl, (ht+2)*scl, (22)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[-5*scl, 0*scl, 0])
+                innershear=[-6*scl, 0*scl, 0])
     c = translate(v=[(w-1.5)*scl, -1*scl,
                                 (-1)*scl]).add(c)
     u -= c
@@ -4071,27 +4071,48 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        h = translate([(-20)*scl, (0)*scl, 20*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(17)*scl, (0)*scl, (-ht-8)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+26)*scl, (0)*scl, 4*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w-20)*scl, (0)*scl, -156*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w+26)*scl, (0)*scl, (-ht+10)*scl]).add(h)
-        c += h
-        h = pin(B0, scl)
-        h = translate([(w-20)*scl, (0)*scl, (-ht+170)*scl]).add(h)
-        c += h
+        c += translate([(-20)*scl, (0)*scl, 20*scl]).add(h)
+        c += translate([(0)*scl, (0)*scl, (-ht-42)*scl]).add(h)
+        c += translate([(-41.7)*scl, (0)*scl, (-ht+47)*scl]).add(h)
+        c += translate([(w+26)*scl, (0)*scl, 13*scl]).add(h)
+        c += translate([(w-20)*scl, (0)*scl, -165*scl]).add(h)
+        c += translate([(w+35)*scl, (0)*scl, -76*scl]).add(h)
+        c += translate([(w+26)*scl, (0)*scl, (-ht+1)*scl]).add(h)
+        c += translate([(w-20)*scl, (0)*scl, (-ht+179)*scl]).add(h)
+        c += translate([(w+35)*scl, (0)*scl, (-ht+90)*scl]).add(h)
 
         c = translate([(180)*scl, (55-3+20)*scl, 0*scl]).add(c)
         c = rotate([90,0,0]).add(c)
         v += c
+
+        b = cube([50*scl, 6*scl, (10)*scl])
+        b = translate(v=[(180)*scl, (ht-3.2)*scl, (9+55)*scl]).add(b)
+        v += b
+
+        b = cube([6*scl, 28*scl, (10)*scl])
+        b = translate(v=[(177.5)*scl, (ht-25)*scl, (9+55)*scl]).add(b)
+        v += b
+        b = translate(v=[(25)*scl, 0*scl, 0*scl]).add(b)
+        v += b
+
+        # mid-supports in clip holes
+        b = union()
+        d = cube([35*scl, 6*scl, (17)*scl])
+        d = translate(v=[(-39)*scl, (38)*scl, (-8)*scl]).add(d)
+        b.add(d)
+        c = translate(v=[(w+175)*scl, (ht-130)*scl, (11+55)*scl]).add(b)
+        #v += c
+        c = translate(v=[(w+175)*scl, (35)*scl, (11+55)*scl]).add(b)
+        #v += c
+
+    if False: # test single clip hole
+        b = cube([(w-6+30)*scl, (ht+200)*scl, (40)*scl])
+        b = translate(v=[82*scl, -100*scl, (45)*scl]).add(b)
+        v -= b
+
+        b = cube([(w-6+300)*scl, (ht)*scl, (40)*scl])
+        b = translate(v=[82*scl, -200*scl, (45)*scl]).add(b)
+        v -= b
 
     return v
 
@@ -4589,12 +4610,12 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        i#SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4608,7 +4629,7 @@ if __name__ == '__main__':
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
