@@ -716,10 +716,10 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
 
     if kbd_numpad_indent == 0:
-        c = cube([(30)*scl, (ht+20)*scl, (50)*scl])
-        t = translate(v=[(usb_pos-30)*scl, 0, (55+21)*scl]).add(c)
+        c = cube([(30)*scl, (ht+20)*scl, (47)*scl])
+        t = translate(v=[(usb_pos-30)*scl, 0, (55+24)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+21)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+24)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
@@ -4609,7 +4609,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4619,7 +4619,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
@@ -4629,7 +4629,7 @@ if __name__ == '__main__':
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
