@@ -21,7 +21,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -3626,8 +3626,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs-40)*scl, (3)*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
-        b = cube([(60)*scl, (l-100)*scl, (40-hthick)*scl])
-        b = translate(v=[(w-1+woffs-80)*scl, 40*scl, (h-40+hthick)*scl]).add(b)
+        b = cube([(60)*scl, (l-100)*scl, (40-hthick-3)*scl])
+        b = translate(v=[(w-1+woffs-80)*scl, 40*scl, (h-40+hthick+3)*scl]).add(b)
         u += b
 
     # screw holes in top for base_end
@@ -3642,10 +3642,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
         u -= b
     else:
-        b = cube([(55)*scl, (100)*scl, (39-hthick)*scl])
-        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-39+hthick)*scl]).add(b)
+        b = cube([(55)*scl, (100)*scl, (39-hthick-2)*scl])
+        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-39+hthick+2)*scl]).add(b)
         u += b
-        b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
+        b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick+2)*scl]).add(d)
         u -= b
 
     # extra bit for kbd corner support
@@ -3662,7 +3662,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     u -= b
 
     if woffs < 0:
-        cutht = hthick+1
+        cutht = hthick+1+3
     else:
         cutht = 21
     # cutouts for bamboo panel
@@ -4625,8 +4625,8 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        PCB1,
+                        FRONT_KBD_TRAY,
+                        #PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
@@ -4634,8 +4634,8 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        BATTERY_SUPPORT1,
+                        #COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
