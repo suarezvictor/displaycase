@@ -1165,9 +1165,12 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
                     (kbd_inset)*scl]).add(c)
     u -= c
 
-    c = cube([(200)*scl, (holder_ht-ht+1)*scl, (50)*scl])
+    c = shearedcube([(200)*scl, (30)*scl, (50)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, 23*scl, 0])
+    c = rotate([-90, 0, 0]).add(c)
     c = translate(v=[(tpanel_l_b-tpanel_box_l+180+400)*scl, (-1+50)*scl,
-                    (kbd_inset+40)*scl]).add(c)
+                    (kbd_inset+80)*scl]).add(c)
     u -= c
 
     d = union()
