@@ -780,16 +780,16 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # add interlock down behind base_back_bot
     b = union()
-    c = cube([48*scl, (ht-10)*scl, (hthick+1)*scl])
+    c = cube([48*scl, (ht-10)*scl, (hthick+5)*scl])
     b += c
     c = cube([48*scl, (21)*scl, (hthick)*scl])
     c = translate(v=[0*scl, (ht-11)*scl, 0*scl]).add(c)
     b += c
     t = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
-                    (55+boxheight-hthick*2)*scl]).add(b)
+                    (55+boxheight-hthick*2-3)*scl]).add(b)
     u += t
     t = translate(v=[(220)*scl, (0)*scl,
-                    (55+boxheight-hthick*2)*scl]).add(b)
+                    (55+boxheight-hthick*2-3)*scl]).add(b)
     u += t
 
     if kbd_numpad_indent != 0:
@@ -4615,7 +4615,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4628,8 +4628,8 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
