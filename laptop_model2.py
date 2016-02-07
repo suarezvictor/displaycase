@@ -523,7 +523,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                     (boxheight-55)*scl]).add(c)
             u += translate(v=[(lcd_w-400)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
-            u += translate(v=[(usb_pos-181)*scl, (82)*scl,
+            u += translate(v=[(usb_pos-160)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
 
     if not test:
@@ -4626,7 +4626,7 @@ if __name__ == '__main__':
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
@@ -4635,7 +4635,7 @@ if __name__ == '__main__':
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
