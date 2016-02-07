@@ -2585,14 +2585,14 @@ def base_mid(scl, ht, base_screwholes=False):
     u -= t
 
     # cutout for cable from PCB2 to PCB3
-    c = cube([200*scl, (base_centre_ht+4)*scl, (55)*scl])
-    c = translate(v=[(tpanel_l_b-550)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+    c = cube([250*scl, (base_centre_ht+4)*scl, (55)*scl])
+    c = translate(v=[(tpanel_l_b-480)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
     # cutout for cable from PCB1 to PCB3
     c = cube([200*scl, (base_centre_ht+4)*scl, (55)*scl])
-    c = translate(v=[(tpanel_l_b+100)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
+    c = translate(v=[(tpanel_l_b+700)*scl, (ht/2-(base_centre_ht+4.)/2)*scl,
                 (0)*scl]).add(c)
     u -= c
 
@@ -4632,7 +4632,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4642,11 +4642,11 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
-                        PCB1,
-                        #PCB2,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        #FRONT_KBD_TRAY,
+                        #PCB1,
+                        PCB2,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
