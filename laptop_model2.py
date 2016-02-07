@@ -770,12 +770,12 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += v
 
     # remove runner for panel
-    c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (10)*scl],
+    c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (13)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
+                innershear=[11*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
-                                (boxheight-hthick-1+55)*scl]).add(c)
+                                (boxheight-hthick-4+55)*scl]).add(c)
     u -= c
 
     # add interlock down behind base_back_bot
