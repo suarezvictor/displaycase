@@ -1311,14 +1311,14 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     c = translate(v=[(tpanel_l_b-180)*scl, (ht/2-ht_offset-40)*scl, (0)*scl]).add(c)
     u += c
 
-    # remove cutout for pcb2 and base_mid
+    # remove cutout for base_mid
     c = cube([470*scl, (347)*scl, (150)*scl])
     c = translate(v=[(tpanel_l_b-80)*scl, (ht-440)*scl, (40)*scl]).add(c)
     u -= c
 
-    # remove cutout for pcb2 touch panel cable
-    c = cube([170*scl, (167)*scl, (150)*scl])
-    c = translate(v=[(tpanel_l_b-191)*scl, (ht/2-200)*scl, (36)*scl]).add(c)
+    # remove cutout for pcb2 
+    c = cube([470*scl, (391)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-280)*scl, (ht-830)*scl, (30)*scl]).add(c)
     u -= c
 
     # lengthways support (keeps tpanel from bending)
@@ -4644,13 +4644,13 @@ if __name__ == '__main__':
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
+                        #PCB2,
                         TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
