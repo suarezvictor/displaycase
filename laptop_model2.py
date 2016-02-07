@@ -21,7 +21,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1165,8 +1165,22 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
                     (kbd_inset)*scl]).add(c)
     u -= c
 
-    # cut-out for power / signal cables
-    c = cube([(250)*scl, (holder_ht-ht+1)*scl, (16)*scl])
+    c = cube([(200)*scl, (holder_ht-ht+1)*scl, (50)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+180+400)*scl, (-1+50)*scl,
+                    (kbd_inset+40)*scl]).add(c)
+    u -= c
+
+    d = union()
+    c = cube([(480)*scl, (holder_ht-ht+1)*scl, (20)*scl])
+    d += c
+    c = cube([(40)*scl, (holder_ht-ht+1)*scl, (50)*scl])
+    d += c
+    d += translate([440*scl, 0, 0]).add(c)
+    u += translate(v=[(tpanel_l_b-tpanel_box_l+180+300-40)*scl, (-1+30)*scl,
+                    (kbd_inset)*scl]).add(d)
+
+    # cut-out for power / signal cables and for re-routing LVDS cable back
+    c = cube([(250)*scl, (holder_ht-ht+1)*scl, (24)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l+180+740)*scl, (30)*scl,
                     (kbd_inset-1)*scl]).add(c)
     u -= c
@@ -4626,15 +4640,15 @@ if __name__ == '__main__':
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
                 t = union()
