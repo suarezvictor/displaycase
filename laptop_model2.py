@@ -794,7 +794,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         b = union()
-        c = cube([48*scl, (ht+10)*scl, (hthick+5)*scl])
+        c = cube([48*scl, (ht+10)*scl, (hthick+2)*scl])
         b += c
         c = cube([48*scl, (ht-10)*scl, (hthick+7)*scl])
         b += c
@@ -809,21 +809,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = translate(v=[14*scl,(ht-25)*scl,(4)*scl]).add(c)
     c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
     u -= c
-
-    if kbd_numpad_indent != 0:
-        # remove runner for top panel
-        c = shearedcube([2*scl, (tpanel_l_b-180-114)*scl, (8)*scl],
-                    shear=[0*scl, 0*scl, 0],
-                    innershear=[-8*scl, 0*scl, 0])
-        c = rotate([0, 0, 90]).add(c)
-        c = translate(v=[(tpanel_l_b+8-100)*scl, (ht)*scl,
-                                    (55+4)*scl]).add(c)
-        u -= c
-        # add an underside support
-        c = cube([(tpanel_l_b-190-134)*scl, 11*scl, (14)*scl])
-        c = translate(v=[(202)*scl, (ht-1)*scl,
-                                    (55+12)*scl]).add(c)
-        u += c
 
     if kbd_numpad_indent != 0:
         doffs = 75
@@ -853,6 +838,21 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+boxheight-pcbthick-45)*scl]).add(c)
         u -= t
 
+    if kbd_numpad_indent != 0:
+        # add an underside support
+        c = cube([(tpanel_l_b-190-134)*scl, 11*scl, (14)*scl])
+        c = translate(v=[(202)*scl, (ht-1)*scl,
+                                    (55+12)*scl]).add(c)
+        u += c
+
+        # remove runner for top panel
+        c = shearedcube([22*scl, (tpanel_l_b-180-114)*scl, (11)*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[-11*scl, 0*scl, 0])
+        c = rotate([0, 0, 90]).add(c)
+        c = translate(v=[(tpanel_l_b+8-100)*scl, (ht)*scl,
+                                    (55+4)*scl]).add(c)
+        u -= c
     clasp = False
     if clasp:
         # add spring-loaded clasp
