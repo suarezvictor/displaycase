@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2262,9 +2262,16 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     u += t
 
     # hollow hinge out, screw from friction hinge pokes through here
-    c = cylinder(r=(rad-16)*scl, h=(150)*scl, segments=50)
+    c = union()
+    d = cylinder(r=(18)*scl, r1=(rad-10)*scl, h=(12)*scl, segments=50)
+    c.add(d)
+    d = cylinder(r=(18)*scl, h=(70)*scl, segments=50)
+    c.add(d)
+    d = cylinder(r=(rad-10)*scl, h=(30)*scl, segments=50)
+    d = translate(v=[0*scl,0*scl,-29*scl]).add(d)
+    c.add(d)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht-70)*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht+15)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2306,7 +2313,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
         d = pin_t(ht=ht+220)
         d = rotate([0, 90, 0]).add(d)
-        c += translate([(-30)*scl, 0, 35*scl]).add(d)
+        c += translate([(-40)*scl, 0, 65*scl]).add(d)
+        d = cube([(30)*scl, 90*scl, 6*scl])
+        c += translate([(-30)*scl, -90*scl, 16.5*scl]).add(d)
+        c += translate([(-30)*scl, -90*scl, 99.5*scl]).add(d)
 
         h = pin(B0, scl, fill=True)
         h = translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
@@ -2341,10 +2351,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58-79)*scl, (0)*scl, 0*scl]).add(c)
 
-        u += c
-
-        c = cube([100*scl, 6*scl, 70*scl])
-        c = translate([(w-58-79)*scl, (99)*scl, 5*scl]).add(c)
         u += c
 
     v = union()
@@ -4637,7 +4643,7 @@ if __name__ == '__main__':
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        FRICTION_HINGE2,
+                        #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
@@ -4648,7 +4654,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
