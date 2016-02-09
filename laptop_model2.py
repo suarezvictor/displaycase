@@ -4337,7 +4337,7 @@ def create_laptop(t, scl, part, angle):
 
     if part == FRICTION_HINGE2:
         se = friction_hinge2(scl, 12)
-        h = lid_adjust_ht+scrn_hinge_ht+friclen+10
+        h = lid_adjust_ht+scrn_hinge_ht+3+10
         m = translate(v=[0, h*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -4637,20 +4637,20 @@ if __name__ == '__main__':
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
-                        #FRICTION_HINGE2,
+                        FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #PCB2,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                     ]:
