@@ -25,7 +25,7 @@ mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2359,11 +2359,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     if cutdown:
         # cut down
-        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 212.0*scl, -50*scl]).add(c)
+        c = cube([(boxlength-300+80)*scl, (ht+300)*scl, 500*scl])
+        c = translate([(300)*scl, 70.0*scl, -100*scl]).add(c)
         v -= c
-        c = cube([(boxlength-300+60)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
+        c = cube([(boxlength-300+60)*scl, (413)*scl, 500*scl])
+        c = translate([(130)*scl, -250*scl, -100*scl]).add(c)
         v -= c
 
         if pin_parts_3d:
@@ -2371,31 +2371,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
             c = union()
 
             h = pin(B0, scl)
-            h = translate([(150)*scl, (0)*scl, 15*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(150)*scl, (0)*scl, 104*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(240)*scl, (0)*scl, 15*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(70)*scl, (0)*scl, 104*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(70)*scl, (0)*scl, 15*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(0)*scl, (0)*scl, 104*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(0)*scl, (0)*scl, 15*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(240)*scl, (0)*scl, 104*scl]).add(h)
-            c += h
+            c += translate([(70)*scl, (0)*scl, 104*scl]).add(h)
+            c += translate([(70)*scl, (0)*scl, 15*scl]).add(h)
+            c += translate([(-15)*scl, (0)*scl, 104*scl]).add(h)
+            c += translate([(-15)*scl, (0)*scl, 15*scl]).add(h)
             c = rotate([0, 0, 90]).add(c)
-            c = translate([(w-30)*scl, (0)*scl, 55*scl]).add(c)
+            c = translate([(w+5)*scl, (0)*scl, 55*scl]).add(c)
 
             v += c
 
