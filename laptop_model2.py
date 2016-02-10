@@ -2152,7 +2152,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # add runner support, has to be done before pcb/battery support
     for h in [ht*0.310, ht*0.515, ht*0.74]:
-        c = shearedcube([(back_top_width-78)*scl, (40)*scl, (15)*scl])
+        c = shearedcube([(back_top_width-80)*scl, (40)*scl, (15)*scl])
         c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
                                     (boxheight-hthick-13)*scl]).add(c)
         u += c
