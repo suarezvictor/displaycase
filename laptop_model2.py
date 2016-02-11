@@ -21,7 +21,7 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -510,7 +510,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
-    usb_pos = 562
+    usb_pos = 512
 
     if not test:
         if kbd_numpad_indent == 0:
@@ -679,7 +679,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     if kbd_numpad_indent == 0:
         t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
         u += t
-        t = translate(v=[(360)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(310)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # between usb ports
         t = translate(v=[(usb_pos+160)*scl, 0, (55+1)*scl]).add(c)
@@ -717,7 +717,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent == 0:
         c = cube([(30)*scl, (ht+20)*scl, (47)*scl])
-        t = translate(v=[(usb_pos-30)*scl, 0, (55+24)*scl]).add(c)
+        t = translate(v=[(usb_pos-31)*scl, 0, (55+24)*scl]).add(c)
         u += t
         t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+24)*scl]).add(c)
         u += t
@@ -737,6 +737,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+12)*scl]).add(c)
         u += t
 
+    return u 
     # add bits for case bolthole at front
     c = cube([(90)*scl, (ht)*scl, (70)*scl])
     c = translate(v=[(60)*scl,
@@ -4188,6 +4189,8 @@ def pcb2(scl):
     return t
 
 def pcb1(scl):
+    """ TODO: extend PCB1 by 5mm, move all USB ports up.
+    """
 
     t = union()
 
@@ -4626,7 +4629,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4637,16 +4640,16 @@ if __name__ == '__main__':
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
