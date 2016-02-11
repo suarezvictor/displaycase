@@ -3915,6 +3915,18 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     else:
         locks = [130, ht-899+75]
 
+    # add interlocks for base panel
+    d = union()
+    d += shearedcube([(25)*scl, (50)*scl, (12)*scl],
+                    shear=[0, 20*scl, 0],
+                    innershear=[0, 0*scl, 0, 0])
+    b = cube([(25)*scl, (70)*scl, (3.1)*scl])
+    d += translate(v=[(0)*scl, (0)*scl, (11.9)*scl]).add(b)
+    d = rotate([0, 0, 180]).add(d)
+    u += translate(v=[(w-15)*scl, (130)*scl, (l-15)*scl]).add(d)
+    u += translate(v=[(w-15)*scl, (ht/2)*scl, (l-15)*scl]).add(d)
+    u += translate(v=[(w-15)*scl, (ht-30)*scl, (l-15)*scl]).add(d)
+
     # add set of interlocks into back_base to hold it down
     c = union()
     d = cube([(15)*scl, (16)*scl, (l-22)*scl])
@@ -3926,9 +3938,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     d = rotate([0, 0, 180]).add(d)
     d = translate(v=[(34)*scl, (16)*scl, (l-14)*scl]).add(d)
     c += d
-    supports = [ht-162, ht*0.35, 280, offs+35, offs+119]
-    if mirrored:
-        supports.append(ht*0.55)
+    supports = [ht-162, ht*0.35, 305, ht*0.55, offs+35, offs+119]
     #for s in locks:
     #   supports.append(s+35)
     for h in supports:
@@ -4452,7 +4462,7 @@ def create_laptop(t, scl, part, angle):
     if part == BACK_KBD_RUNNER:
         if mirroring & LEFTPART:
             se = back_kbd_runner(scl, base_back_ht+scrn_hinge_ht-back_kbd_offs,
-                                      tpanel_offset)
+                                      tpanel_offset+10)
             m = translate(v=[0,
                             (base_adjust_ht-scrn_hinge_ht+back_kbd_offs)*scl,
                              0]).add(se)
@@ -4654,7 +4664,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4663,19 +4673,19 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
-                        #BACK_KBD_RUNNER,
+                        #BASE_MID,
+                        BACK_KBD_RUNNER,
                         BASE_BACK,
-                        #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        BASE_BACK_HINGE,
+                        PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        BASE_PANEL,
+                        #BASE_PANEL,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
