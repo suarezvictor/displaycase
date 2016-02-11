@@ -21,7 +21,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART|RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -1082,13 +1082,13 @@ def battery_support1(scl, ht, tpanel_offset):
     tpanel_box_l = 150
     # main strut going from back base to tpanel
     c = cube([(boxlength - tpanel_l_b - back_top_width+30+18)*scl,
-                    ht*scl, (boxheight-hthick-kbd_inset)*scl])
+                    ht*scl, (boxheight-hthick-kbd_inset-3)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
     u += c
 
     # cut-out for back kbd runner
-    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = cube([(26)*scl, (150)*scl, (18)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
     u -= c
@@ -1114,7 +1114,7 @@ def battery_support1(scl, ht, tpanel_offset):
     # third part goes down to bamboo panel
     c = cube([(tpanel_box_l)*scl, holder_ht*scl, 20*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (0)*scl,
-                (boxheight-20-hthick)*scl]).add(c)
+                (boxheight-20-hthick-3)*scl]).add(c)
     u += c
     # finally a cut-out for the kbd tray slot
     c = cube([(104)*scl, 70*scl, (20)*scl])
@@ -1153,7 +1153,7 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     tpanel_box_l = 150
     # main strut going from back base to tpanel
     c = cube([(w+30+18)*scl,
-                    ht*scl, (boxheight-hthick-kbd_inset)*scl])
+                    ht*scl, (boxheight-hthick-kbd_inset-3)*scl])
     c = translate(v=[(tpanel_l_b-30)*scl, (holder_ht-ht)*scl,
                     (kbd_inset)*scl]).add(c)
     u += c
@@ -1194,9 +1194,15 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     u -= c
 
     # cut-out for back kbd runner
-    c = cube([(26)*scl, (150)*scl, (15)*scl])
+    c = cube([(26)*scl, (150)*scl, (18)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
+    u -= c
+
+    # cut-out for PCB1 
+    c = cube([(w+18-70)*scl, (holder_ht-ht+1)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+170)*scl, (10)*scl,
+                    (boxheight-kbd_inset+7)*scl]).add(c)
     u -= c
 
     # shape end of support so it fits in slot
@@ -1221,7 +1227,7 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     # third part goes down to bamboo panel
     c = cube([(tpanel_box_l+20)*scl, bhht*scl, 20*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l)*scl, (-110)*scl,
-                (boxheight-20-hthick)*scl]).add(c)
+                (boxheight-20-hthick-3)*scl]).add(c)
     u += c
 
     # screw holes in top for touchpanel
@@ -4680,10 +4686,10 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        #BASE_BACK_HINGE,
                         PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                     ]:
