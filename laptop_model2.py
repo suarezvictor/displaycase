@@ -21,11 +21,11 @@ pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -2151,7 +2151,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    for h in [ht*0.310, ht*0.515, ht*0.74]:
+    for h in [ht*0.310, ht*0.515, ht*0.74, 62]:
         c = shearedcube([(back_top_width-80)*scl, (40)*scl, (15)*scl])
         c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
                                     (boxheight-hthick-13)*scl]).add(c)
@@ -2244,14 +2244,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = translate(v=[(w+50)*scl, (ht-85)*scl, (16)*scl]).add(s)
     u -= b
 
-    # remove runner along bottom of base, for lower panel
-    c = shearedcube([14*scl, (ht+30)*scl, (14)*scl],
-                shear=[-12*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    c = translate(v=[(boxlength-back_top_width-5)*scl, (-21-0)*scl,
-                                (boxheight-hthick-4)*scl]).add(c)
-    u -= c
-
     rad=35.0 + 12
 
     # add lock-in to base_back_hinge
@@ -2274,6 +2266,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[0*scl,(scrn_hinge_ht+15)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
+
+    # XXX: base panel runner is removed after pinning
 
     if pin_parts_3d:
         c = union()
@@ -2357,6 +2351,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c = translate(v=[-15*scl,(scrn_hinge_ht+10)*scl,-55*scl]).add(c)
         t = hinge_translate(scl).add(c)
         u += t
+
+    # remove runner along bottom of base, for lower panel
+    c = shearedcube([15*scl, (ht+2)*scl, (14)*scl],
+                shear=[-12*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = translate(v=[(boxlength-back_top_width-5)*scl, (-1)*scl,
+                                (boxheight-hthick-5)*scl]).add(c)
+    u -= c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
