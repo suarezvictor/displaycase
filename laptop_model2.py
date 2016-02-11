@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -49,6 +49,7 @@ FRICTION_HINGE1 = 22
 FRICTION_HINGE2 = 23
 BASE_BACK_HINGE = 26
 CABLE_PROTECTOR = 27
+BASE_PANEL = 28
 
 if not test:
     lcd_l = 3598.0
@@ -741,7 +742,6 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+12)*scl]).add(c)
         u += t
 
-    return u 
     # add bits for case bolthole at front
     c = cube([(90)*scl, (ht)*scl, (70)*scl])
     c = translate(v=[(60)*scl,
@@ -1472,6 +1472,17 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
+    return u
+
+def base_panel(scl, ht, ht_offset):
+    print "BASE_PANEL ht", ht
+
+    u = union()
+    bl = boxlength - front_top_width - back_top_width
+    c = cube([bl*scl, (ht-base_centre_ht/2)*scl, (15)*scl])
+    c = translate(v=[front_top_width*scl, 0, (55+boxheight-15)*scl]).add(c)
+    u += c
+
     return u
 
 def base_front_top(scl, ht, ht_offset):
@@ -4492,6 +4503,16 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width-compartment_ht)
             b.add(m)
 
+    if part == BASE_PANEL:
+        if mirroring & LEFTPART:
+            se = base_panel(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
+            m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_panel(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
+            m = mirror_part(se, scl, total_width-compartment_ht)
+            b.add(m)
+
     if part == FRONT_KBD_TRAY:
         if mirroring & LEFTPART:
             se = front_kbd_tray(scl, base_front_ht+scrn_hinge_ht+tpanel_offset,
@@ -4642,23 +4663,26 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        PCB1,
+                        #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
+                        BASE_PANEL,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
-                if i == PCB1: # pcb1
+                if i == BASE_PANEL:
+                    c = [0.8, 0.8, 0.3, 0.25]
+                elif i == PCB1: # pcb1
                     c = [0.8, 0.3, 0.8, 0.5]
                 elif i == PCB2: # pcb1
                     c = [0.3, 0.8, 0.3, 0.25]
