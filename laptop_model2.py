@@ -26,6 +26,7 @@ mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART
 test = False
 single = True
 cutdown = False
+revision_1_pcb = False
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -510,7 +511,10 @@ def base_end(scl, ht, kbd_numpad_indent):
         b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
         u += c
 
-    usb_pos = 512
+    if revision_1_pcb:
+        usb_pos = 562
+    else:
+        usb_pos = 512
 
     if not test:
         if kbd_numpad_indent == 0:
