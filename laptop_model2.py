@@ -17,11 +17,11 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART|RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -154,7 +154,7 @@ pdept =  130
 
 hinge_offs = 70
 
-def pin_t(ht=244, mirror=True):
+def pin_t(ht=244, mirror=True, pht=140):
     d = union()
     h = pin(B0, scl, fill=True)
     h = translate([0, (-3)*scl, -85*scl]).add(h)
@@ -165,8 +165,8 @@ def pin_t(ht=244, mirror=True):
     d += translate([0, 0, 50*scl]).add(d)
     d += translate([70*scl, 0, 0*scl]).add(d)
     d = translate([-35*scl, 0, 0*scl]).add(d)
-    h = cube([6*scl, 30*scl, 140*scl])
-    h = translate([0*scl, -30*scl, -130*scl]).add(h)
+    h = cube([6*scl, 30*scl, pht*scl])
+    h = translate([0*scl, -30*scl, -(pht-10)*scl]).add(h)
     d += h
     if mirror:
         h = translate([0*scl, 0*scl, ht*scl]).add(h)
@@ -4026,16 +4026,16 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
         c = translate([(-70)*scl, (0)*scl, 0*scl]).add(c)
         u += c
 
-        h = cube([(76)*scl, (6)*scl, (l-22)*scl])
-        b = translate(v=[(w-80)*scl, (offs+62)*scl, (20+2)*scl]).add(h)
+        h = cube([(76)*scl, (6)*scl, (l)*scl])
+        b = translate(v=[(w-80)*scl, (offs+62)*scl, (0)*scl]).add(h)
         u += b
-        b = translate(v=[(w-80)*scl, (ht-6)*scl, (20+2)*scl]).add(h)
+        b = translate(v=[(w-80)*scl, (ht-6)*scl, (0)*scl]).add(h)
         u += b
-        b = translate(v=[(w-80)*scl, (0)*scl, (20+2)*scl]).add(h)
+        b = translate(v=[(w-80)*scl, (0)*scl, (0)*scl]).add(h)
         u += b
-        b = translate(v=[(w-20)*scl, (0)*scl, (20+2)*scl]).add(h)
+        b = translate(v=[(w-20)*scl, (0)*scl, (0)*scl]).add(h)
         u += b
-        b = translate(v=[(w-20)*scl, (ht-6)*scl, (20+2)*scl]).add(h)
+        b = translate(v=[(w-20)*scl, (ht-6)*scl, (0)*scl]).add(h)
         u += b
 
     v = union()
@@ -4688,8 +4688,8 @@ if __name__ == '__main__':
                         BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #PCB1_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                     ]:
