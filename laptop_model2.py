@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -50,6 +50,7 @@ FRICTION_HINGE2 = 23
 BASE_BACK_HINGE = 26
 CABLE_PROTECTOR = 27
 BASE_PANEL = 28
+BASE_PANEL_BACK_CLIPS = 29
 
 if not test:
     lcd_l = 3598.0
@@ -1478,6 +1479,38 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
     v.add(u)
+    return u
+
+def base_panel_back_clips(scl, ht, ht_offset):
+    print "BASE_PANEL_BACK_CLIPS ht", ht
+
+    u = union()
+    boff = boxlength - back_top_width - 50
+
+    e = union()
+    c = cube([25*scl, (85)*scl, (30)*scl])
+    e += translate(v=[(00)*scl, (0)*scl, (0)*scl]).add(c)
+
+    d = union()
+    d += shearedcube([(35)*scl, (62)*scl, (18)*scl],
+                    shear=[0, 30*scl, 0],
+                    innershear=[0, 0*scl, 0, 0])
+    b = cube([(35)*scl, (92)*scl, (8.1)*scl])
+    d += translate(v=[(0)*scl, (0)*scl, (17.9)*scl]).add(b)
+    d = rotate([0, 0, 180]).add(d)
+    e -= translate(v=[(30)*scl, (135+12)*scl, (8)*scl]).add(d)
+
+    u += translate(v=[boff*scl, 15*scl, (55+boxheight-30-15)*scl]).add(e)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        c += translate([(0)*scl, (0)*scl, -40*scl]).add(h)
+
+        c = rotate([90, 0, 0]).add(c)
+        u += translate([(boff+10)*scl, (-10)*scl, (boxheight+8.8)*scl]).add(c)
+        u += translate([(boff+10)*scl, (50)*scl, (boxheight+8.8)*scl]).add(c)
+
     return u
 
 def base_panel(scl, ht, ht_offset):
@@ -4519,6 +4552,16 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width-compartment_ht)
             b.add(m)
 
+    if part == BASE_PANEL_BACK_CLIPS:
+        if mirroring & LEFTPART:
+            se = base_panel_back_clips(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
+            m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_panel_back_clips(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
+            m = mirror_part(se, scl, total_width-compartment_ht)
+            b.add(m)
+
     if part == BASE_PANEL:
         if mirroring & LEFTPART:
             se = base_panel(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -4679,19 +4722,20 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
+                        PCB1,
                         #PCB2,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
-                        BACK_KBD_RUNNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        #BASE_PANEL,
+                        BASE_PANEL,
+                        #BASE_PANEL_BACK_CLIPS,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
