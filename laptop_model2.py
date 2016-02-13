@@ -51,6 +51,7 @@ BASE_BACK_HINGE = 26
 CABLE_PROTECTOR = 27
 BASE_PANEL = 28
 BASE_PANEL_BACK_CLIPS = 29
+BASE_PANEL_FRONT_CLIPS = 30
 
 if not test:
     lcd_l = 3598.0
@@ -1481,6 +1482,31 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     v.add(u)
     return u
 
+def base_panel_front_clips(scl, ht, ht_offset):
+    print "BASE_PANEL_FRONT_CLIPS ht", ht
+
+    u = union()
+    boff = front_top_width - 30
+
+    e = union()
+    c = cube([100*scl, (50)*scl, (15)*scl])
+    e += translate(v=[(00)*scl, (0)*scl, (0)*scl]).add(c)
+    c = cube([100*scl, (55)*scl, (15)*scl])
+    e -= translate(v=[(-65)*scl, (-1)*scl, (8)*scl]).add(c)
+
+    u += translate(v=[boff*scl, 120*scl, (55+boxheight-15-15)*scl]).add(e)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        c += translate([(0)*scl, (0)*scl, -40*scl]).add(h)
+
+        c = rotate([90, 0, 0]).add(c)
+        u += translate([(boff+10)*scl, (-10)*scl, (boxheight+8.8)*scl]).add(c)
+        u += translate([(boff+10)*scl, (50)*scl, (boxheight+8.8)*scl]).add(c)
+
+    return u
+
 def base_panel_back_clips(scl, ht, ht_offset):
     print "BASE_PANEL_BACK_CLIPS ht", ht
 
@@ -1635,9 +1661,9 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # add runner support
-    c = shearedcube([75*scl, (ht)*scl, (8)*scl])
+    c = shearedcube([75*scl, (ht)*scl, (10)*scl])
     c = translate(v=[(180-75)*scl, (0)*scl,
-                                (boxheight-hthick-6)*scl]).add(c)
+                                (boxheight-hthick-8)*scl]).add(c)
     u += c
     # add fillin for touchpanel
     c = base_front_fillin(scl, 95)
@@ -1741,14 +1767,6 @@ def base_front_top(scl, ht, ht_offset):
                                 (dropoffs)*scl]).add(c)
     u -= c
 
-    # remove runner along bottom of base, for lower panel
-    c = shearedcube([10*scl, (ht+2)*scl, (8)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
-    c = translate(v=[(180-7)*scl, (-1-doffs)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
-    u -= c
-
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
@@ -1824,6 +1842,14 @@ def base_front_top(scl, ht, ht_offset):
         c += h
 
         u += c
+
+    # remove runner along bottom of base, for lower panel
+    c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[14*scl, 0*scl, 0])
+    c = translate(v=[(front_top_width-11)*scl, (-1-doffs)*scl,
+                                (boxheight-hthick-4)*scl]).add(c)
+    u -= c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4562,6 +4588,16 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width-compartment_ht)
             b.add(m)
 
+    if part == BASE_PANEL_FRONT_CLIPS:
+        if mirroring & LEFTPART:
+            se = base_panel_front_clips(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
+            m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+            b.add(m)
+        if mirroring & RIGHTPART:
+            se = base_panel_front_clips(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
+            m = mirror_part(se, scl, total_width-compartment_ht)
+            b.add(m)
+
     if part == BASE_PANEL:
         if mirroring & LEFTPART:
             se = base_panel(scl, base_front_ht+scrn_hinge_ht, tpanel_offset)
@@ -4736,6 +4772,7 @@ if __name__ == '__main__':
                         #COMPARTMENT_LID,
                         BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
+                        BASE_PANEL_FRONT_CLIPS,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
