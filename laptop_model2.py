@@ -2538,6 +2538,11 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(150)*scl, 0*scl, 40*scl]).add(b)
     u += b
 
+    # fillin for tpanel_mid screwhole
+    c = cube([(170)*scl, (ht)*scl, (boxheight-42)*scl])
+    c = translate(v=[(tpanel_l_b-160)*scl, (0)*scl, (40)*scl]).add(c)
+    u += c
+
     # cutout sides
     d = cube([(boxlength-180-back_top_width-82)*scl, (32)*scl, (boxheight)*scl])
     u -= translate(v=[(180+35)*scl, -10*scl, -20*scl]).add(d)
@@ -2645,11 +2650,6 @@ def base_mid(scl, ht, base_screwholes=False):
     # fill in end for diagonals to mesh to
     c = cube([(140)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
     c = translate(v=[(w-120)*scl, (0)*scl, (40)*scl]).add(c)
-    u += c
-
-    # fillin for tpanel_mid screwhole
-    c = cube([(95)*scl, (ht)*scl, (boxheight-42)*scl])
-    c = translate(v=[(tpanel_l_b-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
 
     # screw holes in top for back_box_base
