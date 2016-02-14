@@ -1647,31 +1647,25 @@ def base_front_top(scl, ht, ht_offset):
 
         offs += step
 
-    mholderw = 220+fthick*4
-    mholdero = 152
+    mholderw = 139+fthick*4
+    mholdero = 229
 
     # add a support for magnet
-    c = shearedcube([(mholderw+60)*scl, 186*scl, 40*scl],
-            shear=[-40*scl, -10*scl, 0],
-            innershear=[40*scl, -8*scl, 0])
+    c = shearedcube([(mholderw+40)*scl, 186*scl, 70*scl],
+            shear=[-65*scl, -20*scl, 0],
+            innershear=[65*scl, -8*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[180*scl, (mholdero-34)*scl, (6)*scl]).add(c)
+    c = translate(v=[180*scl, (mholdero-19)*scl, (6)*scl]).add(c)
     u += c
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
-    c = shearedcube([(mholderw)*scl, 180*scl, 30*scl],
-            shear=[-20*scl, 10*scl, 0],
-            innershear=[20*scl, 8*scl, 0])
+    c = shearedcube([(65)*scl, 167*scl, 57*scl],
+            shear=[-2*scl, 15*scl, 0],
+            innershear=[2*scl, 8*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[201*scl, (mholdero-5)*scl, (6)*scl]).add(c)
+    c = translate(v=[201*scl, (mholdero+42)*scl, (6)*scl]).add(c)
     u -= c
-
-    # add a mid-support back into magnet hole
-    c = cube([(fthick)*scl, 170*scl, 32*scl])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[180*scl, (mholdero+mholderw/2-10)*scl, (5)*scl]).add(c)
-    u += c
 
     # add runner support
     c = shearedcube([75*scl, (ht)*scl, (10)*scl])
@@ -3087,38 +3081,32 @@ def screen_front_edge(scl, ht):
     print offs, step
     while offs < (ht-step):
         count += 1
-        if count in [3,4,5]:
+        if count in [4, 5]:
             t = step+fthick # this is to act as support for a magnet holder
-            if count == 3:
+            if count == 4:
                 mholdero = offs
-                mholderw = t*3
+                mholderw = t*2
         else:
             t = fthick
-        c = touch_arc(0, t, 70,
-                            28, scl,
+        c = touch_arc(0, t, 45,
+                            25, scl,
                       angle=0)
         c = rotate([-90, 0, 0]).add(c)
         c = rotate([0, -90, 0]).add(c)
         c = resize([(60)*scl, 0, 0], False).add(c)
-        c = translate(v=[(73)*scl, (offs+step-fthick)*scl, (lcd_d)*scl]).add(c)
+        c = translate(v=[(76)*scl, (offs+step-fthick)*scl, (lcd_d-15)*scl]).add(c)
         b += c
-        if (count == 1):
-            mc = c
-        if (count == 4):
-            mc = translate(v=[(0)*scl, (step/2+step*2)*scl, (0)*scl]).add(mc)
 
         offs += step
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
-    d = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
+    c = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
             shear=[10*scl, 10*scl, 0],
             innershear=[-10*scl, 8*scl, 0])
-    d = rotate([0, 0, 90]).add(d)
-    d = translate(v=[175*scl, (mholdero+2)*scl, (lcd_d-32)*scl]).add(d)
-    b -= d
-
-    b += mc
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[175*scl, (mholdero+5)*scl, (lcd_d-32)*scl]).add(c)
+    b -= c
 
     # matching screen mid (front)
     d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
@@ -4752,14 +4740,14 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
@@ -4768,7 +4756,7 @@ if __name__ == '__main__':
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
-                        BASE_PANEL_FRONT_CLIPS,
+                        #BASE_PANEL_FRONT_CLIPS,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
