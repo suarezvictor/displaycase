@@ -2562,11 +2562,11 @@ def base_mid(scl, ht, base_screwholes=False):
     v += c
     # remove runner along bottom of base, for lower panel
     d = union()
-    c = shearedcube([10*scl, (ht+2+80*2)*scl, (8)*scl],
+    c = shearedcube([14*scl, (ht+2+80*2)*scl, (14)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
-    c = translate(v=[(180-8)*scl, (-1-80)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
+                innershear=[14*scl, 0*scl, 0])
+    c = translate(v=[(180-12)*scl, (-1-80)*scl,
+                                (boxheight-hthick-4)*scl]).add(c)
     d += c
     c = cube([40*scl, (base_centre_ht)*scl, (30)*scl])
     c = translate(v=[(180-9)*scl, (0)*scl,
@@ -2709,46 +2709,35 @@ def base_mid(scl, ht, base_screwholes=False):
                 (ht+5)*scl, (74)*scl]).add(d)
     u -= c
 
-    # remove runner along bottom of base, for lower panel
-    # these are along the back wings
-    c = shearedcube([10*scl, (140)*scl, (8)*scl],
-                shear=[-8*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    t = translate(v=[(boxlength-180+8)*scl, (+1-140)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
-    u -= t
-    t = translate(v=[(boxlength-180+8)*scl, (ht-1)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
-    u -= t
     # add internal runners because walls get too thin
-    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (12)*scl],
-                shear=[8*scl, 0*scl, 0],
+    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (14)*scl],
+                shear=[12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8)*scl, (7)*scl,
-                                (boxheight-hthick-6)*scl]).add(c)
+                                (boxheight-hthick-8)*scl]).add(c)
     u += c
-    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (12)*scl],
+    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (14)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[-8*scl, 0*scl, 0])
+                innershear=[-12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8)*scl, (ht-12)*scl,
-                                (boxheight-hthick-6)*scl]).add(c)
+                                (boxheight-hthick-8)*scl]).add(c)
     u += c
     # now remove along length of base
-    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (8)*scl],
-                shear=[-8*scl, 0*scl, 0],
+    c = shearedcube([14*scl, (boxlength-180-150-5-8-6)*scl, (14)*scl],
+                shear=[-14*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8)*scl, (-1)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
+    c = translate(v=[(boxlength-180+8+8-6)*scl, (-3)*scl,
+                                (boxheight-hthick-4)*scl]).add(c)
     u -= c
-    c = shearedcube([10*scl, (boxlength-180-150-5)*scl, (8)*scl],
+    c = shearedcube([14*scl, (boxlength-180-150-5-7-4)*scl, (12)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[8*scl, 0*scl, 0])
+                innershear=[12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
-                                (boxheight-hthick-1)*scl]).add(c)
+    c = translate(v=[(boxlength-180+8+8-6)*scl, (ht-10)*scl,
+                                (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
     if pin_parts_3d:
@@ -4763,7 +4752,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
@@ -4772,7 +4761,7 @@ if __name__ == '__main__':
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
-                        BASE_PANEL_FRONT_CLIPS,
+                        #BASE_PANEL_FRONT_CLIPS,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
