@@ -2526,7 +2526,7 @@ def base_mid(scl, ht, base_screwholes=False):
     u = union()
     w = boxlength-150
 
-    walls = {T:-1, L:-1, R:hthick, F:hthick, D:8, B:hthick}
+    walls = {T:-1, L:-1, R:hthick, F:32, D:8, B:32}
     curverads={
                 R|D: (boxheight-40, 0),
                 }
@@ -2538,6 +2538,11 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(150)*scl, 0*scl, 40*scl]).add(b)
     u += b
 
+    # cutout sides
+    d = cube([(boxlength-180-back_top_width-82)*scl, (32)*scl, (boxheight)*scl])
+    u -= translate(v=[(180+35)*scl, -10*scl, -20*scl]).add(d)
+    u -= translate(v=[(180+35)*scl, (ht-22)*scl, -20*scl]).add(d)
+    
     # couple of wings on the side for back base to screw into
     walls[F] = 110
     walls[B] = 110
@@ -2562,15 +2567,15 @@ def base_mid(scl, ht, base_screwholes=False):
     v += c
     # remove runner along bottom of base, for lower panel
     d = union()
-    c = shearedcube([14*scl, (ht+2+80*2)*scl, (14)*scl],
+    c = shearedcube([15*scl, (ht+2+80*2)*scl, (14)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[14*scl, 0*scl, 0])
     c = translate(v=[(180-12)*scl, (-1-80)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     d += c
-    c = cube([40*scl, (base_centre_ht)*scl, (30)*scl])
-    c = translate(v=[(180-9)*scl, (0)*scl,
-                                (boxheight-hthick-2)*scl]).add(c)
+    c = cube([40*scl, (base_centre_ht)*scl, (40)*scl])
+    c = translate(v=[(180-12)*scl, (0)*scl,
+                                (boxheight-hthick-5)*scl]).add(c)
     d -= c
     v -= d
 
@@ -2614,7 +2619,7 @@ def base_mid(scl, ht, base_screwholes=False):
     # diagonal cross-walls for internal stiffness
     fthick = 7
     offs = 190#tpanel_l_b+40
-    step = (w-160-offs) / (8.0 if test else 16.0)
+    step = (w-160-offs) / (8.0 if test else 22.0)
     steps = []
     while offs < (w-step*2):
         steps.append((offs+20, boxheight-39-2))
@@ -2623,15 +2628,19 @@ def base_mid(scl, ht, base_screwholes=False):
     #steps.append((210, boxheight-39-2))
     #steps.append((280, boxheight-59-2))
 
+    alternate = True
     for (offs, ch) in steps:
         hoff = (boxheight-39-2) - ch
-        d = cube([fthick*scl, 180*scl, ch*scl])
-        c = rotate([0, 0, -45]).add(d)
-        c = translate(v=[(offs)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
-        u += c
-        c = rotate([0, 0, 45]).add(d)
-        c = translate(v=[(offs+127)*scl, (hthick/2)*scl, (40+hoff)*scl]).add(c)
-        u += c
+        d = cube([fthick*scl, 125*scl, ch*scl])
+        if alternate:
+            c = rotate([0, 0, -45]).add(d)
+            c = translate(v=[(offs)*scl, (29)*scl, (40+hoff)*scl]).add(c)
+            u += c
+        else:
+            c = rotate([0, 0, 45]).add(d)
+            c = translate(v=[(offs+88)*scl, (24)*scl, (40+hoff)*scl]).add(c)
+            u += c
+        alternate = not alternate
 
     # fill in end for diagonals to mesh to
     c = cube([(140)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
@@ -2709,30 +2718,15 @@ def base_mid(scl, ht, base_screwholes=False):
                 (ht+5)*scl, (74)*scl]).add(d)
     u -= c
 
-    # add internal runners because walls get too thin
-    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (14)*scl],
-                shear=[12*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8)*scl, (7)*scl,
-                                (boxheight-hthick-8)*scl]).add(c)
-    u += c
-    c = shearedcube([5*scl, (boxlength-180-150-5)*scl, (14)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[-12*scl, 0*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8)*scl, (ht-12)*scl,
-                                (boxheight-hthick-8)*scl]).add(c)
-    u += c
     # now remove along length of base
-    c = shearedcube([14*scl, (boxlength-180-150-5-8-6)*scl, (14)*scl],
-                shear=[-14*scl, 0*scl, 0],
+    c = shearedcube([14*scl, (boxlength-180-150-5-8-6)*scl, (12)*scl],
+                shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8-6)*scl, (-3)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
-    c = shearedcube([14*scl, (boxlength-180-150-5-7-4)*scl, (12)*scl],
+    c = shearedcube([14*scl, (boxlength-180-150-5-7-6)*scl, (12)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
