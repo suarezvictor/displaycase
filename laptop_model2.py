@@ -1499,11 +1499,11 @@ def base_panel_front_clips(scl, ht, ht_offset):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl)
-        c += translate([(0)*scl, (0)*scl, -40*scl]).add(h)
+        c += translate([(0)*scl, (0)*scl, -95*scl]).add(h)
+        c += translate([(70)*scl, (0)*scl, -95*scl]).add(h)
 
         c = rotate([90, 0, 0]).add(c)
-        u += translate([(boff+10)*scl, (-10)*scl, (boxheight+8.8)*scl]).add(c)
-        u += translate([(boff+10)*scl, (50)*scl, (boxheight+8.8)*scl]).add(c)
+        u += translate([(boff+10)*scl, (50)*scl, (boxheight+15+8.8)*scl]).add(c)
 
     return u
 
@@ -4758,11 +4758,11 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        PCB1,
+                        #PCB1,
                         #PCB2,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4770,7 +4770,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        BASE_PANEL,
+                        #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         BASE_PANEL_FRONT_CLIPS,
                     ]:
