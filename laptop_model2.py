@@ -1482,11 +1482,9 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     v.add(u)
     return u
 
-def base_panel_front_clips(scl, ht, ht_offset):
-    print "BASE_PANEL_FRONT_CLIPS ht", ht
+def base_panel_front_clip(scl):
 
     u = union()
-    boff = front_top_width - 30
 
     e = union()
     c = cube([100*scl, (50)*scl, (15)*scl])
@@ -1494,7 +1492,7 @@ def base_panel_front_clips(scl, ht, ht_offset):
     c = cube([100*scl, (55)*scl, (15)*scl])
     e -= translate(v=[(-65)*scl, (-1)*scl, (8)*scl]).add(c)
 
-    u += translate(v=[boff*scl, 120*scl, (55+boxheight-15-15)*scl]).add(e)
+    u += translate(v=[0*scl, 0*scl, (55+boxheight-15-16)*scl]).add(e)
 
     if pin_parts_3d:
         c = union()
@@ -1503,7 +1501,22 @@ def base_panel_front_clips(scl, ht, ht_offset):
         c += translate([(70)*scl, (0)*scl, -95*scl]).add(h)
 
         c = rotate([90, 0, 0]).add(c)
-        u += translate([(boff+10)*scl, (50)*scl, (boxheight+15+8.8)*scl]).add(c)
+        u += translate([(10)*scl, (-70)*scl, (boxheight+16+8.8)*scl]).add(c)
+
+    return u
+
+def base_panel_front_clips(scl, ht, ht_offset):
+    print "BASE_PANEL_FRONT_CLIPS ht", ht
+
+    u = union()
+    boff = front_top_width - 30
+
+    c = base_panel_front_clip(scl)
+    u += translate(v=[boff*scl, 120*scl, 0*scl]).add(c)
+
+    if False: # XXX TEST to see if clips work for base_mid... they do
+        c = rotate([0, 0, -90]).add(c)
+        u += translate(v=[(boff+120)*scl, (ht-50)*scl, 0*scl]).add(c)
 
     return u
 
@@ -4741,7 +4754,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4755,7 +4768,7 @@ if __name__ == '__main__':
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
-                        #BASE_PANEL_FRONT_CLIPS,
+                        BASE_PANEL_FRONT_CLIPS,
                     ]:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
