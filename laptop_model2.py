@@ -18,10 +18,15 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+
+BATTERY = 0x1
+KEYBOARD = 0x2
+USB_WIFI = 0x4
+LCD_PANEL = 0x8
+add_internal_parts = BATTERY # 0
 
 test = False
 single = True
@@ -52,6 +57,7 @@ CABLE_PROTECTOR = 27
 BASE_PANEL = 28
 BASE_PANEL_BACK_CLIPS = 29
 BASE_PANEL_FRONT_CLIPS = 30
+PCB3 = 31
 
 if not test:
     lcd_l = 3598.0
@@ -120,7 +126,7 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 72
 lcd_end_offs = 20
-pcb3_lock_offs = 700
+pcb3_lock_offs = 839+15
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
@@ -1668,20 +1674,22 @@ def base_front_top(scl, ht, ht_offset):
     c = translate(v=[201*scl, (mholdero+42)*scl, (6)*scl]).add(c)
     u -= c
 
-    boffs = pcb3_lock_offs
-    # ok these are for the pcb1_support and battery_support1
-    # they extend all the way to the back (for injection molding)
-    c = base_cutout(scl, 54, doffs=doffs)
-    c = rotate([0, 0, 180]).add(c)
-    c = resize([(234-doffs)*scl, 0, (boxheight-hthick*2+2)*scl], False).add(c)
-    c = translate(v=[0*scl, (boffs)*scl, (-1)*scl]).add(c)
-    u += c
+    if ht_offset > 0:
+        boffs = pcb3_lock_offs-52
+        # ok these are for the pcb3 support
+        # they extend all the way to the back (for injection molding)
+        c = base_cutout(scl, 54, doffs=doffs)
+        c = rotate([0, 0, 180]).add(c)
+        c = resize([(234-doffs)*scl, 0, (boxheight-hthick*2+2)*scl],
+                    False).add(c)
+        c = translate(v=[0*scl, (boffs)*scl, (-1)*scl]).add(c)
+        u += c
 
-    # ... cutout for the actual support, the rest was housing for the cutout
-    c = cube([30*scl, 37*scl, (boxheight-47)*scl])
-    c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
-    c = translate(v=[(180+5)*scl, (boffs)*scl, (39.5)*scl]).add(c)
-    u -= c
+        # ... cutout for the actual support, the rest was housing for the cutout
+        c = cube([30*scl, 37*scl, (40)*scl])
+        c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
+        c = translate(v=[(180+5)*scl, (boffs)*scl, (19.5)*scl]).add(c)
+        u -= c
 
     # add runner support
     c = shearedcube([75*scl, (ht)*scl, (10)*scl])
@@ -3814,6 +3822,14 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         t = translate(v=[(w-26)*scl, (l-132)*scl, 0]).add(c)
         u -= t
 
+    if woffs < 0:
+        boffs = pcb3_lock_offs-52
+        # ... cutout for the actual support, the rest was housing for the cutout
+        c = cube([75*scl, 37*scl, (boxheight-47)*scl])
+        c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
+        c = translate(v=[(w-hoffs)*scl, (boffs)*scl, (0)*scl]).add(c)
+        u -= c
+
     if pin_parts_3d:
         if woffs >= 0:
             c = union()
@@ -4278,6 +4294,13 @@ def pcb2(scl):
                     (52+55)*scl]).add(t)
     return t
 
+def pcb3(scl):
+
+    c = cube([327.66*scl, 849.63*scl, (pcbthick)*scl])
+    c = translate(v=[(front_top_width+25)*scl, 0, (55+26)*scl]).add(c)
+    return c
+
+
 def pcb1(scl):
     """ TODO: extend PCB1 by 5mm, move all USB ports up.
     """
@@ -4522,6 +4545,12 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width-off)
             b.add(m)
 
+    if part == PCB3:
+        se = pcb3(scl)
+        m = translate(v=[0, (total_width-pcb3_lock_offs)*scl,0])
+        m.add(se)
+        b.add(m)
+
     back_kbd_offs = 20
 
     if part == BACK_KBD_RUNNER:
@@ -4749,7 +4778,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4762,6 +4791,7 @@ if __name__ == '__main__':
                         FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
+                        PCB3,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
@@ -4781,8 +4811,10 @@ if __name__ == '__main__':
                     c = [0.8, 0.8, 0.3, 0.25]
                 elif i == PCB1: # pcb1
                     c = [0.8, 0.3, 0.8, 0.5]
-                elif i == PCB2: # pcb1
+                elif i == PCB2: # pcb2
                     c = [0.3, 0.8, 0.3, 0.25]
+                elif i == PCB3: # pcb3
+                    c = [0.1, 0.8, 0.3, 0.25]
                 #elif i == CASE_CLASP: # pcb1
                     #c = [0.3, 0.8, 0.3, 0.2]
                 else:
@@ -4793,49 +4825,55 @@ if __name__ == '__main__':
 
             if add_internal_parts:
 
-                # USB WIFI dongle
-                wifi = usb_wifi(scl)
-                r = translate([(665)*scl, 150*scl,
-                                (85)*scl]).add(wifi)
-                c = [0.2, 0.8, 0.8, 0.2]
-                r = union().add(r)
-                c = color(c)
-                c.add(r)
-                u.add(c)
+                if add_internal_parts & USB_WIFI:
+                    # USB WIFI dongle
+                    wifi = usb_wifi(scl)
+                    r = translate([(665)*scl, 150*scl,
+                                    (85)*scl]).add(wifi)
+                    c = [0.2, 0.8, 0.8, 0.2]
+                    r = union().add(r)
+                    c = color(c)
+                    c.add(r)
+                    u.add(c)
 
-                # Keyboard
-                kbd = kbd_part(scl)
-                r = translate([(lcd_w-kbd_w/2+25-79)*scl, total_width/2*scl,
-                                (62+5)*scl]).add(kbd)
-                c = [0.3, 0.8, 0.5, 0.2]
-                r = union().add(r)
-                c = color(c)
-                c.add(r)
-                u.add(c)
+                if add_internal_parts & KEYBOARD:
+                    # Keyboard
+                    kbd = kbd_part(scl)
+                    r = translate([(lcd_w-kbd_w/2+25-79)*scl, total_width/2*scl,
+                                    (62+5)*scl]).add(kbd)
+                    c = [0.3, 0.8, 0.5, 0.2]
+                    r = union().add(r)
+                    c = color(c)
+                    c.add(r)
+                    u.add(c)
 
-                # LCD Panel
-                b = union()
-                p = lcd_panel(scl, offs=2)
-                p = translate(v=[155.5*scl, lcd_indent*scl,(lcd_ht+2-lid_offset)*scl]).add(p)
-                b += p
+                if add_internal_parts & LCD_PANEL:
+                    # LCD Panel
+                    b = union()
+                    p = lcd_panel(scl, offs=2)
+                    p = translate(v=[155.5*scl,
+                            lcd_indent*scl,(lcd_ht+2-lid_offset)*scl]).add(p)
+                    b += p
 
-                r = hinge_rotate(scl, b, angle)
-                c = [0.8, 0.8, 0.2, 0.2]
-                c = color(c)
-                c.add(r)
-                u.add(c)
+                    r = hinge_rotate(scl, b, angle)
+                    c = [0.8, 0.8, 0.2, 0.2]
+                    c = color(c)
+                    c.add(r)
+                    u.add(c)
 
-                # Battery
-                b = union()
-                p = cube([1620*scl, 1360*scl, 65*scl])
-                p = translate(v=[(500.0-80)*scl, (lcd_l-1360-70)*scl,(97)*scl]).add(p)
-                b += p
-                r = b
+                if add_internal_parts & BATTERY:
+                    # Battery
+                    b = union()
+                    p = cube([1620*scl, 1360*scl, 65*scl])
+                    p = translate(v=[(500.0-80)*scl,
+                                (lcd_l-1360-70)*scl,(97)*scl]).add(p)
+                    b += p
+                    r = b
 
-                c = [0.8, 0.2, 0.2, 0.2]
-                c = color(c)
-                c.add(r)
-                u.add(c)
+                    c = [0.8, 0.2, 0.2, 0.2]
+                    c = color(c)
+                    c.add(r)
+                    u.add(c)
 
 
             scad_render_to_file(u, "laptop_prog2.scad")
