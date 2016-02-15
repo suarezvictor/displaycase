@@ -2314,8 +2314,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = cube([(288)*scl, (123)*scl, (43)*scl])
-    b = translate(v=[(w-wd+78)*scl, (ht-112)*scl, (boxheight-42)*scl]).add(b)
+    b = cube([(288)*scl, (123)*scl, (80)*scl])
+    b = translate(v=[(w-wd+78)*scl, (ht-112)*scl, (boxheight-46)*scl]).add(b)
     u -= b
     b = cube([(288)*scl, (base_centre_ht/2+123)*scl, (boxheight+50)*scl])
     b = translate(v=[(w-61+75)*scl, (ht-112)*scl, (38)*scl]).add(b)
@@ -4740,16 +4740,16 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #BATTERY_SUPPORT1,
