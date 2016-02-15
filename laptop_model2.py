@@ -26,7 +26,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = BATTERY # 0
+add_internal_parts = 0 # BATTERY 
 
 test = False
 single = True
@@ -58,6 +58,7 @@ BASE_PANEL = 28
 BASE_PANEL_BACK_CLIPS = 29
 BASE_PANEL_FRONT_CLIPS = 30
 PCB3 = 31
+PCB3_SUPPORT = 32
 
 if not test:
     lcd_l = 3598.0
@@ -127,6 +128,7 @@ lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 72
 lcd_end_offs = 20
 pcb3_lock_offs = 839+15
+kbd_numpad_indent = 79
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
@@ -1153,6 +1155,43 @@ def battery_support1(scl, ht, tpanel_offset):
     v.add(u)
     return v
 
+def pcb3_support(scl, ht):
+    u = union()
+    w = tpanel_l_b - front_top_width - kbd_numpad_indent - 53
+
+    # main strut
+    u += cube([(w)*scl, ht*scl, (25)*scl])
+
+    # top pcb3 slot support, also strengthens strut
+    c = cube([(w-35)*scl, 21*scl, (8)*scl])
+    u += translate([12*scl, (ht-1)*scl, 0]).add(c)
+
+    # stabiliser in front base slot
+    u += cube([(30)*scl, ht*scl, (39)*scl])
+
+    # underside of slot for pcb3
+    v = union()
+    c = cube([(30)*scl, 21*scl, (8)*scl])
+    v += translate([0*scl, (ht-1)*scl, 29*scl]).add(c)
+    c = cube([(30)*scl, ht*scl, (13)*scl])
+    v += translate([0*scl, 0*scl, 24*scl]).add(c)
+
+    u += translate([25*scl, 0, 0]).add(v)
+    u += translate([340*scl, 0, 0]).add(v)
+
+    # end-stop for pcb, extends down to base panel
+    c = cube([(20)*scl, (ht+20)*scl, (boxheight-30)*scl])
+    u += translate([365*scl, 0*scl, 0]).add(c)
+    
+    # other end-stop for pcb
+    c = cube([(20)*scl, 21*scl, (35)*scl])
+    u += translate([12*scl, (ht-1)*scl, 0]).add(c)
+    
+    u = translate(v=[(front_top_width-10)*scl, (-36)*scl,
+                    (55+15)*scl]).add(u)
+
+    return u
+
 def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     u = union()
     kbd_inset = 38.0
@@ -1686,8 +1725,8 @@ def base_front_top(scl, ht, ht_offset):
         u += c
 
         # ... cutout for the actual support, the rest was housing for the cutout
-        c = cube([30*scl, 37*scl, (40)*scl])
-        c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
+        c = cube([30*scl, 37*scl, (44)*scl])
+        c = translate(v=[-22*scl, (9-54)*scl, (-7)*scl]).add(c)
         c = translate(v=[(180+5)*scl, (boffs)*scl, (19.5)*scl]).add(c)
         u -= c
 
@@ -4443,7 +4482,6 @@ def create_laptop(t, scl, part, angle):
 
     pcb1_support_offset = 120
     tpanel_offset = -190
-    kbd_numpad_indent = 79
 
     if part == FRICTION_HINGE2:
         se = friction_hinge2(scl, 12)
@@ -4690,6 +4728,11 @@ def create_laptop(t, scl, part, angle):
                          0]).add(se)
         b.add(m)
 
+    if part == PCB3_SUPPORT:
+        se = pcb3_support(scl, 30)
+        m = translate(v=[0, (total_width-pcb3_lock_offs)*scl,0]).add(se)
+        b.add(m)
+
     if part == PCB1_SUPPORT:
         se = pcb1_support(scl, pcb1_support_ht,
                             tpanel_offset, pcb1_support_offset)
@@ -4778,7 +4821,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4787,18 +4830,19 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
-                        PCB3,
+                        #PCB3,
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        PCB3_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
