@@ -21,7 +21,7 @@ pin_parts_3d=False
 add_internal_parts=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 test = False
 single = True
@@ -120,6 +120,7 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 72
 lcd_end_offs = 20
+pcb3_lock_offs = 700
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
@@ -1665,6 +1666,21 @@ def base_front_top(scl, ht, ht_offset):
             innershear=[2*scl, 8*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[201*scl, (mholdero+42)*scl, (6)*scl]).add(c)
+    u -= c
+
+    boffs = pcb3_lock_offs
+    # ok these are for the pcb1_support and battery_support1
+    # they extend all the way to the back (for injection molding)
+    c = base_cutout(scl, 54, doffs=doffs)
+    c = rotate([0, 0, 180]).add(c)
+    c = resize([(234-doffs)*scl, 0, (boxheight-hthick*2+2)*scl], False).add(c)
+    c = translate(v=[0*scl, (boffs)*scl, (-1)*scl]).add(c)
+    u += c
+
+    # ... cutout for the actual support, the rest was housing for the cutout
+    c = cube([30*scl, 37*scl, (boxheight-47)*scl])
+    c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
+    c = translate(v=[(180+5)*scl, (boffs)*scl, (39.5)*scl]).add(c)
     u -= c
 
     # add runner support
@@ -4742,17 +4758,17 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
