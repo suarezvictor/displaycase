@@ -3821,7 +3821,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if woffs >= 0:
         b = cube([(hthick+52)*scl, (hthick+3)*scl, (66)*scl])
     else:
-        b = cube([(hthick+52)*scl, (hthick+3)*scl, (14)*scl])
+        b = cube([(hthick+52)*scl, (hthick+3)*scl, (16)*scl])
     b = translate(v=[(w-hthick-41+woffs)*scl, -1*scl, (-1)*scl]).add(b)
     u -= b
 
