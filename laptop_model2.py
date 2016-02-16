@@ -3746,13 +3746,17 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     l = ht-tpanel_b_w/2+hthick
     if woffs < 0:
         h = 40
+        d = 30
+        doff = 5
     else:
         h = boxheight - hthick - pcbthick - 2
+        d = 25
+        doff = 0
 
-    b = hollowbox(scl, 25, l-2, h,
-                {T:-1, L:-1, R:25, F:hthick, D:-1, B:hthick*2},
+    b = hollowbox(scl, d, l-2, h,
+                {T:-1, L:-1, R:d, F:hthick, D:-1, B:hthick*2},
                 curverads={ T|R: (hthick, 0)})
-    b = translate(v=[(w-25+woffs)*scl, 1*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-25+woffs-doff)*scl, 1*scl, (0)*scl]).add(b)
     u += b
 
     if woffs < 0:
@@ -3822,12 +3826,21 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     u -= b
 
     if woffs < 0:
-        cutht = hthick+1+3
+        cutht = hthick
+        shr = cutht
+        doff = 4
+        wo = 18
     else:
         cutht = 21
+        shr = 0
+        doff = 0
+        wo = 0
     # cutouts for bamboo panel
-    b = cube([(25)*scl, (2+l)*scl, cutht*scl])
-    b = translate(v=[(w-25-hthick+woffs)*scl, (hthick)*scl, (-1)*scl]).add(b)
+    b = shearedcube([(25)*scl, (2+l)*scl, cutht*scl],
+            shear=[shr*scl, 0*scl, 0],
+            innershear=[-shr*scl, 0*scl, 0])
+    b = translate(v=[(w-25-hthick+woffs-wo)*scl,
+                        (hthick)*scl, (-1+doff)*scl]).add(b)
     u -= b
 
     # screw holes in top for touchpanel
@@ -3928,34 +3941,25 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             u += c
         else:
             c = union()
-            h = pin(B0, scl)
-            h = translate([(w-70)*scl, (-3)*scl, 32*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-140)*scl, (-3)*scl, 32*scl]).add(h)
-            c += h
+            h = pin_t(mirror=False, dep=25)
+            c += translate([(w-86)*scl, (0)*scl, 85*scl]).add(h)
+
+            h = pin_t(mirror=False, dep=18)
+            c += translate([(w-49)*scl, (0)*scl, (-l)*scl]).add(h)
+            h = pin_t(mirror=False, dep=25)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w-89)*scl, (0)*scl, (-l+66)*scl]).add(h)
+            h = pin_t(mirror=False, dep=40, half=True, pht=70)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w+50)*scl, (0)*scl, (-l+166)*scl]).add(h)
+            h = pin_t(mirror=False, dep=40, half=True, pht=270)
+            c += translate([(w-40)*scl, (0)*scl, (-l+266)*scl]).add(h)
 
             h = pin(B0, scl)
-            h = translate([(w)*scl, (-3)*scl, (-l-32)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-84)*scl, (-3)*scl, (-l-92)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w+32)*scl, (-3)*scl, (-l+182)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-150)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-200)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-l+470)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-46)*scl, (-3)*scl, (-l+440)*scl]).add(h)
-            c += h
+            c += translate([(w-46)*scl, (-3)*scl, (-150)*scl]).add(h)
+            c += translate([(w-46)*scl, (-3)*scl, (-200)*scl]).add(h)
+            c += translate([(w-46)*scl, (-3)*scl, (-l+470)*scl]).add(h)
+            c += translate([(w-46)*scl, (-3)*scl, (-l+440)*scl]).add(h)
 
             v = cube([12*scl, 30*scl, 6*scl])
             h = translate([(w-12+woffs)*scl, (-30)*scl, (-l+470)*scl]).add(v)
@@ -4852,7 +4856,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4862,7 +4866,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        PCB3_SUPPORT,
+                        #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
