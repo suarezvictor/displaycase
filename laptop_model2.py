@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -165,19 +165,20 @@ pdept =  130
 
 hinge_offs = 70
 
-def pin_t(ht=244, mirror=True, pht=140):
+def pin_t(ht=244, mirror=True, pht=140, dep=30, half=False):
     d = union()
     h = pin(B0, scl, fill=True)
-    h = translate([0, (-3)*scl, -85*scl]).add(h)
+    h = translate([0, (-3)*scl, -35*scl]).add(h)
     d += h
     if mirror:
         h = translate([0, 0, ht*scl]).add(h)
         d += h
-    d += translate([0, 0, 50*scl]).add(d)
     d += translate([70*scl, 0, 0*scl]).add(d)
+    if not half:
+        d += translate([0, 0, -50*scl]).add(d)
     d = translate([-35*scl, 0, 0*scl]).add(d)
-    h = cube([6*scl, 30*scl, pht*scl])
-    h = translate([0*scl, -30*scl, -(pht-10)*scl]).add(h)
+    h = cube([6*scl, dep*scl, pht*scl])
+    h = translate([0*scl, -dep*scl, -(pht-10)*scl]).add(h)
     d += h
     if mirror:
         h = translate([0*scl, 0*scl, ht*scl]).add(h)
@@ -1171,9 +1172,9 @@ def pcb3_support(scl, ht):
 
     # underside of slot for pcb3
     v = union()
-    c = cube([(30)*scl, 21*scl, (8)*scl])
+    c = cube([(30)*scl, 21*scl, (10)*scl])
     v += translate([0*scl, (ht-1)*scl, 29*scl]).add(c)
-    c = cube([(30)*scl, ht*scl, (13)*scl])
+    c = cube([(30)*scl, ht*scl, (15)*scl])
     v += translate([0*scl, 0*scl, 24*scl]).add(c)
 
     u += translate([25*scl, 0, 0]).add(v)
@@ -1184,11 +1185,31 @@ def pcb3_support(scl, ht):
     u += translate([365*scl, 0*scl, 0]).add(c)
     
     # other end-stop for pcb
-    c = cube([(20)*scl, 21*scl, (35)*scl])
+    c = cube([(20)*scl, 21*scl, (39)*scl])
     u += translate([12*scl, (ht-1)*scl, 0]).add(c)
     
     u = translate(v=[(front_top_width-10)*scl, (-36)*scl,
                     (55+15)*scl]).add(u)
+
+    if pin_parts_3d:
+
+        v = union()
+        d = pin_t(0, mirror=False, dep=50, half=True, pht=80)
+        d = rotate([180, 0, 0]).add(d)
+        v += translate([(219)*scl, (boxheight-160)*scl, 115*scl]).add(d)
+        d = pin_t(0, mirror=False, dep=50)
+        d = rotate([180, 0, 0]).add(d)
+        v += translate([(549)*scl, (boxheight-160)*scl, 80*scl]).add(d)
+        d = rotate([0, 90, 0]).add(d)
+        v += translate([(95)*scl, (boxheight-160)*scl, 109*scl]).add(d)
+        d = pin_t(0, mirror=False)
+        d = rotate([180, 0, 0]).add(d)
+        v += translate([(170)*scl, (boxheight-160)*scl, 30*scl]).add(d)
+        v += translate([(w+164)*scl, (boxheight-160)*scl, 30*scl]).add(d)
+        d = rotate([0, 90, 0]).add(d)
+        v += translate([(w+104)*scl, (boxheight-160)*scl, 94*scl]).add(d)
+
+        u += v
 
     return u
 
