@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -3804,14 +3804,14 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
                     segments=50, center=True)
 
     if woffs >= 0:
-        b = cube([(55)*scl, (100)*scl, (41-hthick)*scl])
-        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-41+hthick)*scl]).add(b)
+        b = cube([(50)*scl, (100)*scl, (41-hthick)*scl])
+        b = translate(v=[(w-1+woffs-53)*scl, -55*scl, (h-41+hthick)*scl]).add(b)
         u += b
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
         u -= b
     else:
-        b = cube([(55)*scl, (100)*scl, (39-hthick-2)*scl])
-        b = translate(v=[(w-1+woffs-55)*scl, -55*scl, (h-39+hthick+2)*scl]).add(b)
+        b = cube([(50)*scl, (100)*scl, (39-hthick-2)*scl])
+        b = translate(v=[(w-1+woffs-53)*scl, -55*scl, (h-39+hthick+2)*scl]).add(b)
         u += b
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick+2)*scl]).add(d)
         u -= b
@@ -4850,7 +4850,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4860,7 +4860,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
