@@ -785,6 +785,16 @@ def base_end(scl, ht, kbd_numpad_indent):
     v = front_tray_corner(scl, 200)
     v = translate([0, scl*(ht-hthick), -4*scl]).add(v)
     u += v
+    # remove extra weight from front tray
+    c = shearedcube([(boxheight-66)*scl, (ht+60)*scl, (25)*scl],
+            shear=[8*scl, 0*scl, 0],
+            innershear=[-8*scl, 0*scl, 0])
+    c = rotate([0, 90, 0]).add(c)
+    v = translate([(front_top_width-19)*scl, scl*(hthick), (55+91)*scl]).add(c)
+    u -= v
+    c = cube([70*scl, (ht+60)*scl, (boxheight-50)*scl])
+    v = translate([(front_top_width+5.9)*scl, scl*(hthick), (55+25)*scl]).add(c)
+    u -= v
 
     # remove runner for panel
     c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (13)*scl],
@@ -816,7 +826,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([48*scl, (ht-10)*scl, (hthick+7)*scl])
         b += c
         for l in [(boxlength-back_top_width-200),
-                 (boxlength*0.45), (boxlength*0.64), 530, 789]:
+                 (boxlength*0.45), (boxlength*0.64), 530, 794]:
             t = translate(v=[l*scl, (0)*scl,
                             (55+boxheight-hthick*2-6)*scl]).add(b)
             u += t
@@ -829,13 +839,13 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         doffs = 75
-        wd = 120
+        wd = 100
     else:
         doffs = boxheight-12
-        wd = 110
+        wd = 100
     # top screwhole into front kbd tray
     s = cube([wd*scl, (ht-8)*scl, boxheight*scl])
-    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-60)*scl,
+    s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-50)*scl,
                     (0)*scl, (+55)*scl]).add(s)
     u += s
     s = chamfered_backbox_screwholes(scl, 60, 25)
@@ -857,7 +867,7 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     if kbd_numpad_indent != 0:
         # add an underside support
-        c = cube([(tpanel_l_b-190-134)*scl, 11*scl, (14)*scl])
+        c = cube([(tpanel_l_b-190-150)*scl, 11*scl, (14)*scl])
         c = translate(v=[(202)*scl, (ht-1)*scl,
                                     (55+12)*scl]).add(c)
         u += c
@@ -927,9 +937,9 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(0)*scl, (0)*scl, 120*scl]).add(h)
         c += h
 
-        h = pin_t(250)
+        h = pin_t(250, dep=20)
         h = rotate([180, 0, 0]).add(h)
-        h = translate([(tpanel_l_b-30)*scl, (0)*scl, 182*scl]).add(h)
+        h = translate([(tpanel_l_b-30)*scl, (1.2)*scl, 182*scl]).add(h)
         c += h
 
         c += translate([(-450)*scl, (0)*scl, 0*scl]).add(h)
@@ -962,14 +972,8 @@ def base_end(scl, ht, kbd_numpad_indent):
         h = translate([(130)*scl, (-0)*scl, 55*scl]).add(h)
         c += h
 
-        h = cube([6*scl, (base_end_ht-15)*scl, boxheight*scl])
-        h = translate([(180)*scl, (0)*scl, 55*scl]).add(h)
-        c += h
-        h = translate([(45)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-
-        h = cube([w*scl, 1.8*scl, (boxheight+20)*scl*1.5])
-        h = translate([(0)*scl, (1.2)*scl, 12*scl]).add(h)
+        h = cube([w*scl, 1.2*scl, (boxheight+20)*scl*1.1])
+        h = translate([(0)*scl, (1.2)*scl, 40*scl]).add(h)
         c += h
 
         c = translate([(0)*scl, (-1.2)*scl, 0*scl]).add(c)
@@ -4869,7 +4873,7 @@ if __name__ == '__main__':
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        BASE_PANEL,
+                        #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
                     ]:
