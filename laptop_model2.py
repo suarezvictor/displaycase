@@ -17,10 +17,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1680,7 +1680,7 @@ def base_front_top(scl, ht, ht_offset):
                         (38)*scl]).add(c)
     u -= c
 
-    # put in series of cutouts
+    # prepare series of cutouts
     fthick = 6
     offs = 110-hthick+fthick
     if test:
@@ -1833,20 +1833,20 @@ def base_front_top(scl, ht, ht_offset):
 
     # dovetail cuts to fit base_mid
     # XXX height is magic constant
-    doffs = 37
-    offs = base_centre_ht / 2.0 + 70 - doffs
+    doffs = 36
+    offs = base_centre_ht / 2.0 + 73 - doffs
     b = shearedcube([(50)*scl, (offs+1)*scl, (33)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, -90, 0]).add(b)
-    c = translate(v=[(161)*scl, (ht-offs+1-doffs)*scl,
-                                    (50)*scl]).add(b)
+    c = translate(v=[(158)*scl, (ht-offs+1-doffs)*scl,
+                                    (45)*scl]).add(b)
     u -= c
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(161)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
+    b = translate(v=[(158)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
     u -= b
     b = cube([(31)*scl, (offs)*scl, (150)*scl])
-    c = translate(v=[(159)*scl, (ht-offs+1-doffs)*scl,
+    c = translate(v=[(157)*scl, (ht-offs+1-doffs)*scl,
                                     (40)*scl]).add(b)
     u -= c
 
@@ -1871,10 +1871,10 @@ def base_front_top(scl, ht, ht_offset):
         h = translate([(ht+75)*scl, (-3)*scl, 80*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht)*scl, (-3)*scl, 150*scl]).add(h)
+        h = translate([(ht)*scl, (-3)*scl, 155*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(ht-76)*scl, (-3)*scl, 150*scl]).add(h)
+        h = translate([(ht-76)*scl, (-3)*scl, 155*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(ht/2-38+100)*scl, (-3)*scl, 0*scl]).add(h)
@@ -1911,6 +1911,8 @@ def base_front_top(scl, ht, ht_offset):
         h = cube([30*scl, 60*scl, (7)*scl])
         h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-7)*scl]).add(h)
         c += h
+        h = translate([0, 0*scl, (-boxheight+49)*scl]).add(h)
+        c += h
 
         v = union()
         d = pin_t(257)
@@ -1919,7 +1921,7 @@ def base_front_top(scl, ht, ht_offset):
         v += translate([(ht*0.3)*scl, 0, 0]).add(d)
         d = pin_t(214)
         v += translate([(ht*0.74)*scl, 0, 0]).add(d)
-        v += translate([(ht-65)*scl, 0, 0]).add(d)
+        v += translate([(ht-89)*scl, 0, 0]).add(d)
         d = pin_t(ht+100)
         d = rotate([0, 90, 0]).add(d)
         d = translate([0, 0, boxheight*0.5*scl]).add(d)
@@ -4859,8 +4861,8 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
