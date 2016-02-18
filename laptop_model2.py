@@ -20,7 +20,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1803,7 +1803,7 @@ def base_front_top(scl, ht, ht_offset):
                         (50)*scl]).add(d)
     u -= t
     t = rotate([0, 90, 0]).add(d)
-    t = translate(v=[(140)*scl, (ht-base_centre_ht/2-30)*scl,
+    t = translate(v=[(135)*scl, (ht-base_centre_ht/2-30)*scl,
                         (80)*scl]).add(t)
     u -= t
 
@@ -1836,15 +1836,20 @@ def base_front_top(scl, ht, ht_offset):
             shear=[0*scl, 0*scl, 0],
             innershear=[10*scl, 0*scl, 0])
     b = rotate([0, -90, 0]).add(b)
-    c = translate(v=[(158)*scl, (ht-offs+1-doffs)*scl,
+    c = translate(v=[(160)*scl, (ht-offs+1-doffs)*scl,
                                     (45)*scl]).add(b)
     u -= c
     b = rotate([180, 0, 0]).add(b)
-    b = translate(v=[(158)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
+    b = translate(v=[(160)*scl, (ht+1-doffs)*scl, (boxheight-3)*scl]).add(b)
     u -= b
     b = cube([(31)*scl, (offs)*scl, (150)*scl])
-    c = translate(v=[(157)*scl, (ht-offs+1-doffs)*scl,
+    c = translate(v=[(159)*scl, (ht-offs+1-doffs)*scl,
                                     (40)*scl]).add(b)
+    u -= c
+    # XXX secondary cutout
+    b = cube([(31)*scl, (offs)*scl, (boxheight-44-24)*scl])
+    c = translate(v=[(105)*scl, (ht-offs+1-doffs)*scl,
+                                    (55)*scl]).add(b)
     u -= c
 
     # remove runner along top of base, for panel and compartment lid to fit
@@ -1897,18 +1902,18 @@ def base_front_top(scl, ht, ht_offset):
         c = rotate([0, 0, 90]).add(c)
         c = translate([(front_top_width-6+4.2)*scl, (0)*scl, 0*scl]).add(c)
 
-        h = cube([30*scl, 7*scl, (boxheight-2)*scl])
+        h = cube([30*scl, 6*scl, (boxheight-2)*scl])
         h = translate([(front_top_width-30)*scl, (0)*scl, 1*scl]).add(h)
         c += h
 
-        h = cube([60*scl, 7*scl, (boxheight-44)*scl])
-        h = translate([(front_top_width-60)*scl, (ht-90)*scl, 42*scl]).add(h)
+        h = cube([90*scl, 85*scl, (6)*scl])
+        h = translate([(front_top_width-90)*scl, (ht-130)*scl, 81*scl]).add(h)
         c += h
 
-        h = cube([30*scl, 60*scl, (7)*scl])
-        h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-7)*scl]).add(h)
+        h = cube([30*scl, 60*scl, (6)*scl])
+        h = translate([(front_top_width-30)*scl, (ht-120)*scl, (boxheight-6)*scl]).add(h)
         c += h
-        h = translate([0, 0*scl, (-boxheight+49)*scl]).add(h)
+        h = translate([0, 0*scl, (-boxheight+48)*scl]).add(h)
         c += h
 
         v = union()
@@ -4881,7 +4886,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4891,7 +4896,7 @@ if __name__ == '__main__':
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
