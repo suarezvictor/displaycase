@@ -1322,20 +1322,17 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     if pin_parts_3d:
 
         v = union()
-        d = pin_t(257)
-        #v += translate([(70)*scl, 0, 0]).add(d)
-        #v += translate([(ht*0.53)*scl, 0, 0]).add(d)
-        #v += translate([(ht*0.3)*scl, 0, 0]).add(d)
         d = pin_t(190)
         v += translate([(tpanel_l_b-30)*scl, 0, 0]).add(d)
-        v += translate([(tpanel_l_b/2-30)*scl, 0, 0]).add(d)
         v += translate([(-165)*scl, 0, 0]).add(d)
+        d = pin_t(mirror=False, dep=20)
+        v += translate([(tpanel_l_b/2-20)*scl, 0, 90*scl]).add(d)
         d = pin_t(tpanel_l_b+410)
         d = rotate([0, 90, 0]).add(d)
         d = translate([-250*scl, 0, 40*scl]).add(d)
         v += d
         #v = rotate([0, 0, 90]).add(v)
-        v = translate(v=[(tpanel_b_w)*scl, (80)*scl,
+        v = translate(v=[(tpanel_b_w)*scl, (90)*scl,
                     (35)*scl]).add(v)
         c += v
 
@@ -4885,7 +4882,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4894,7 +4891,7 @@ if __name__ == '__main__':
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
