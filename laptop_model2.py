@@ -3895,7 +3895,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += t
         t = translate(v=[(w-48)*scl, (l-120)*scl, -2*scl]).add(c)
         u += t
-        c = cube([10*scl, 94*scl, 49*scl])
+        c = cube([14*scl, 94*scl, 49*scl])
         t = translate(v=[(w-26)*scl, 41*scl, 0]).add(c)
         u -= t
         t = translate(v=[(w-26)*scl, (l-132)*scl, 0]).add(c)
@@ -3912,6 +3912,29 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     if pin_parts_3d:
         if woffs >= 0:
             c = union()
+            h = pin_t(mirror=False, dep=boxheight-30)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w+50)*scl, (0)*scl, -14*scl]).add(h)
+
+            h = pin_t(mirror=False, dep=29)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w+35)*scl, (0)*scl, 55*scl]).add(h)
+
+            h = pin_t(mirror=False, dep=43)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w-20)*scl, (0)*scl, -(l+56)*scl]).add(h)
+
+            h = pin_t(mirror=False, pht=72, dep=boxheight-30, half=True)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w+50)*scl, (0)*scl, (-l+7)*scl]).add(h)
+
+            h = pin_t(mirror=False, pht=90, dep=boxheight-33, half=True)
+            h = rotate([0, 90, 0]).add(h)
+            c += translate([(w-19)*scl, (0)*scl, -112*scl]).add(h)
+            c += translate([(w-19)*scl, (0)*scl, -58*scl]).add(h)
+            c += translate([(w-19)*scl, (0)*scl, (-l+120)*scl]).add(h)
+            c += translate([(w-19)*scl, (0)*scl, (-l+66)*scl]).add(h)
+
             h = pin(B0, scl)
             h = translate([(w-50)*scl, (-3)*scl, 10*scl]).add(h)
             c += h
@@ -4861,8 +4884,8 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
