@@ -1855,7 +1855,7 @@ def base_front_top(scl, ht, ht_offset):
         dropoffs = 1
     else:
         dropoffs = 9
-    c = shearedcube([10*scl, (ht+2)*scl, (hthick)*scl],
+    c = shearedcube([14*scl, (ht+2)*scl, (hthick)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-8*scl, 0*scl, 0])
     c = translate(v=[(180)*scl, -1*scl,
@@ -1941,7 +1941,7 @@ def base_front_top(scl, ht, ht_offset):
         u += c
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
+    c = shearedcube([15*scl, (ht+2)*scl, (14)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[14*scl, 0*scl, 0])
     c = translate(v=[(front_top_width-11)*scl, (-1-doffs)*scl,
