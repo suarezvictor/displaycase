@@ -20,7 +20,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3789,10 +3789,10 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(-49)*scl, 0*scl, (0)*scl]).add(b)
     else:
         b = union()
-        d = cube([(62)*scl, (l-6-250)*scl, (18)*scl])
-        d = translate(v=[(0)*scl, (250)*scl, 0*scl]).add(d)
+        d = cube([(62)*scl, (l-6-400)*scl, (18)*scl])
+        d = translate(v=[(0)*scl, (400)*scl, 0*scl]).add(d)
         b += d
-        d = cube([(42)*scl, (260)*scl, (18)*scl])
+        d = cube([(42)*scl, (410)*scl, (18)*scl])
         d = translate(v=[(20)*scl, (3)*scl, 0*scl]).add(d)
         b += d
         b = translate(v=[(w-1+woffs-40)*scl, (3)*scl, (h-18)*scl]).add(b)
@@ -3924,18 +3924,18 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
 
             h = pin_t(mirror=False, dep=43)
             h = rotate([0, 90, 0]).add(h)
-            c += translate([(w-20)*scl, (0)*scl, -(l+56)*scl]).add(h)
+            c += translate([(w-31)*scl, (0)*scl, -(l+56)*scl]).add(h)
 
             h = pin_t(mirror=False, pht=72, dep=boxheight-30, half=True)
             h = rotate([0, 90, 0]).add(h)
             c += translate([(w+50)*scl, (0)*scl, (-l+7)*scl]).add(h)
 
-            h = pin_t(mirror=False, pht=90, dep=boxheight-33, half=True)
-            h = rotate([0, 90, 0]).add(h)
-            c += translate([(w-19)*scl, (0)*scl, -112*scl]).add(h)
-            c += translate([(w-19)*scl, (0)*scl, -58*scl]).add(h)
-            c += translate([(w-19)*scl, (0)*scl, (-l+120)*scl]).add(h)
-            c += translate([(w-19)*scl, (0)*scl, (-l+66)*scl]).add(h)
+            h = pin_t(mirror=False, pht=70, dep=boxheight-33, half=True)
+            h = rotate([0, -90, 0]).add(h)
+            c += translate([(w-102)*scl, (0)*scl, -118*scl]).add(h)
+            c += translate([(w-102)*scl, (0)*scl, -64*scl]).add(h)
+            c += translate([(w-102)*scl, (0)*scl, (-l+114)*scl]).add(h)
+            c += translate([(w-102)*scl, (0)*scl, (-l+60)*scl]).add(h)
 
             h = pin(B0, scl)
             h = translate([(w-50)*scl, (-3)*scl, 10*scl]).add(h)
@@ -4886,8 +4886,8 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
