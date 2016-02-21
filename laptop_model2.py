@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1312,11 +1312,11 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
 
     # cut-out for front kbd tray
     w = tpanel_b_w
-    b = cube([(84)*scl, (bhht+2)*scl, (27)*scl])
-    b = translate(v=[(w-200)*scl, (-1-110)*scl, (68)*scl]).add(b)
+    b = cube([(87)*scl, (bhht+4)*scl, (31)*scl])
+    b = translate(v=[(w-202)*scl, (-1-110)*scl, (66)*scl]).add(b)
     u -= b
-    b = cube([(50)*scl, (bhht+2)*scl, (37)*scl])
-    b = translate(v=[(w-200)*scl, (-1-110)*scl, (48)*scl]).add(b)
+    b = cube([(54)*scl, (bhht+4)*scl, (40)*scl])
+    b = translate(v=[(w-202)*scl, (-1-110)*scl, (47)*scl]).add(b)
     u -= b
 
     if pin_parts_3d:
@@ -3757,7 +3757,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         d = 30
         doff = 5
     else:
-        h = boxheight - hthick - pcbthick - 2
+        h = boxheight - hthick - pcbthick - 3
         d = 25
         doff = 0
 
@@ -3808,8 +3808,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
                     segments=50, center=True)
 
     if woffs >= 0:
-        b = cube([(50)*scl, (100)*scl, (41-hthick)*scl])
-        b = translate(v=[(w-1+woffs-53)*scl, -55*scl, (h-41+hthick)*scl]).add(b)
+        b = cube([(50)*scl, (100)*scl, (40-hthick)*scl])
+        b = translate(v=[(w-1+woffs-52)*scl, -55*scl, (h-40+hthick)*scl]).add(b)
         u += b
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
         u -= b
@@ -4887,7 +4887,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4896,7 +4896,7 @@ if __name__ == '__main__':
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
