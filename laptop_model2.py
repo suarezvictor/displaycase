@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1822,10 +1822,10 @@ def base_front_top(scl, ht, ht_offset):
 
     # cut-in for base_end lock
     t = shearedcube([(boxheight-hthick*2-22)*scl, (60)*scl, (33)*scl],
-            shear=[10*scl, 0*scl, 0],
-            innershear=[-10*scl, 0*scl, 0])
+            shear=[11*scl, 0*scl, 0],
+            innershear=[-11*scl, 0*scl, 0])
     t = rotate([0, 90, 0]).add(t)
-    b = translate(v=[(151)*scl, (-1)*scl, (55+hthick+34)*scl]).add(t)
+    b = translate(v=[(146)*scl, (-1)*scl, (55+hthick+34)*scl]).add(t)
     u -= b
     # screw hole for tpanel_mid
     t = holed_support(scl, 50, inverse=True)
@@ -1908,8 +1908,9 @@ def base_front_top(scl, ht, ht_offset):
         c = rotate([0, 0, 90]).add(c)
         c = translate([(front_top_width-6+4.2)*scl, (0)*scl, 0*scl]).add(c)
 
-        h = cube([30*scl, 6*scl, (boxheight-2)*scl])
-        h = translate([(front_top_width-30)*scl, (0)*scl, 1*scl]).add(h)
+
+        h = cube([40*scl, 6*scl, (boxheight-2)*scl])
+        h = translate([(front_top_width-40)*scl, (0)*scl, 1*scl]).add(h)
         c += h
 
         h = cube([90*scl, 85*scl, (6)*scl])
@@ -1930,9 +1931,9 @@ def base_front_top(scl, ht, ht_offset):
         d = pin_t(214)
         v += translate([(ht*0.74)*scl, 0, 0]).add(d)
         v += translate([(ht-89)*scl, 0, 0]).add(d)
-        d = pin_t(ht+100)
+        d = pin_t(ht+100, dep=35)
         d = rotate([0, 90, 0]).add(d)
-        d = translate([0, 0, boxheight*0.5*scl]).add(d)
+        d = translate([50*scl, 0, boxheight*0.55*scl]).add(d)
         v += d
         v = rotate([0, 0, 90]).add(v)
         v = rotate([0, 180, 0]).add(v)
@@ -1955,6 +1956,10 @@ def base_front_top(scl, ht, ht_offset):
     c = translate(v=[(front_top_width-11)*scl, (-1-doffs)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
+
+    if cutdown:
+        c = cube([300*scl, ht*scl, 200*scl])
+        u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4892,7 +4897,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4902,7 +4907,7 @@ if __name__ == '__main__':
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
