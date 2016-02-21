@@ -1303,6 +1303,12 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
                 (boxheight-20-hthick-3)*scl]).add(c)
     u += c
 
+    # cut-out for PCB1
+    c = cube([(50)*scl, (31)*scl, (150)*scl])
+    c = translate(v=[(tpanel_l_b-tpanel_box_l+145)*scl, (-110-1)*scl,
+                    (0)*scl]).add(c)
+    u -= c
+
     # screw holes in top for touchpanel
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
