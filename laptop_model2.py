@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -782,8 +782,8 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([53*scl, ht*scl, boxheight*scl])
     t = translate(v=[(149)*scl, 0, (55)*scl]).add(c)
     u += t
-    v = front_tray_corner(scl, 200)
-    v = translate([0, scl*(ht-hthick), -4*scl]).add(v)
+    v = front_tray_corner(scl, 195)
+    v = translate([0, scl*(ht-hthick-5), -4*scl]).add(v)
     u += v
     # remove extra weight from front tray
     c = shearedcube([(boxheight-66)*scl, (ht+60)*scl, (25)*scl],
@@ -1658,14 +1658,13 @@ def base_front_top(scl, ht, ht_offset):
     u += b
 
     # add bits for screws through to base front
-    c = cube([(120)*scl, (22)*scl, (64)*scl])
-    c = shearedcube([115*scl, (60)*scl, (20)*scl],
-                shear=[-17*scl, 0*scl, 0],
-                innershear=[17*scl, 0*scl, 0])
+    c = shearedcube([110*scl, (54)*scl, (21)*scl],
+                shear=[-16*scl, 0*scl, 0],
+                innershear=[16*scl, 0*scl, 0])
     c = rotate([0, -90, 0]).add(c)
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(35)*scl,(1)*scl,(18)*scl]).add(c)
+    c = translate(v=[(37)*scl,(1)*scl,(21)*scl]).add(c)
     u += c
 
     # tpanel cutout
@@ -1821,7 +1820,7 @@ def base_front_top(scl, ht, ht_offset):
     u -= c
 
     # cut-in for base_end lock
-    t = shearedcube([(boxheight-hthick*2-22)*scl, (60)*scl, (33)*scl],
+    t = shearedcube([(boxheight-hthick*2-22)*scl, (60)*scl, (34.2)*scl],
             shear=[11*scl, 0*scl, 0],
             innershear=[-11*scl, 0*scl, 0])
     t = rotate([0, 90, 0]).add(t)
