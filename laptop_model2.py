@@ -1767,8 +1767,8 @@ def base_front_top(scl, ht, ht_offset):
         u += c
 
         # ... cutout for the actual support, the rest was housing for the cutout
-        c = cube([30*scl, 37*scl, (44)*scl])
-        c = translate(v=[-22*scl, (9-54)*scl, (-7)*scl]).add(c)
+        c = cube([40*scl, 37*scl, (45)*scl])
+        c = translate(v=[-32*scl, (9-54)*scl, (-7)*scl]).add(c)
         c = translate(v=[(180+5)*scl, (boffs)*scl, (19.5)*scl]).add(c)
         u -= c
 
@@ -3924,9 +3924,9 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u -= t
 
     if woffs < 0:
-        boffs = pcb3_lock_offs-52
+        boffs = pcb3_lock_offs-40
         # ... cutout for the actual support, the rest was housing for the cutout
-        c = cube([75*scl, 37*scl, (boxheight-47)*scl])
+        c = cube([75*scl, 36*scl, (boxheight-47)*scl])
         c = translate(v=[-22*scl, (9-54)*scl, (-3)*scl]).add(c)
         c = translate(v=[(w-hoffs)*scl, (boffs)*scl, (0)*scl]).add(c)
         u -= c
@@ -4907,7 +4907,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4917,7 +4917,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        #PCB3_SUPPORT,
+                        PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
