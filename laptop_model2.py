@@ -20,7 +20,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1707,10 +1707,10 @@ def base_front_top(scl, ht, ht_offset):
         # add fill-ins
         b = base_cutout(scl, fthick, arch=True, doffs=doffs)
         b = resize([(234-doffs)*scl, 0,
-                    pow(2, 0.5)*(boxheight-hthick*2)*scl], False).add(b)
+                    pow(2, 0.5)*(boxheight-hthick*2+6)*scl], False).add(b)
         b = rotate([0, 0, 180]).add(b)
         c = rotate([-43, 0, 0]).add(b)
-        c = translate(v=[0*scl, (offs-fthick+step+5)*scl, (-6)*scl]).add(c)
+        c = translate(v=[0*scl, (offs-fthick+step+1)*scl, (-6)*scl]).add(c)
         u += c
         offs += step
         c = rotate([43, 0, 0]).add(b)
@@ -1720,16 +1720,31 @@ def base_front_top(scl, ht, ht_offset):
 
         offs += step
 
+    # add runner support, has to be done before pcb/battery support
+    if ht_offset > 0:
+        lst = [480, 1070]
+    else:
+        lst = [490, 690]
+    for h in lst:
+        c = shearedcube([(front_top_width-80)*scl, (40)*scl, (15)*scl])
+        c = translate(v=[(80)*scl, h*scl,
+                                    (boxheight-hthick-13)*scl]).add(c)
+        u += c
     mholderw = 139+fthick*4
     mholdero = 229
 
     # add a support for magnet
-    c = shearedcube([(mholderw+40)*scl, 186*scl, 70*scl],
-            shear=[-65*scl, -20*scl, 0],
-            innershear=[65*scl, -8*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[180*scl, (mholdero-19)*scl, (6)*scl]).add(c)
-    u += c
+    d = union()
+    c = shearedcube([(mholderw+40)*scl, 186*scl, 110*scl],
+            shear=[-95*scl, -20*scl, 0],
+            innershear=[95*scl, -8*scl, 0])
+    d += rotate([0, 0, 90]).add(c)
+    c = shearedcube([(mholderw+40)*scl, 186*scl, 110*scl],
+            shear=[-180*scl, -20*scl, 0],
+            innershear=[0*scl, -8*scl, 0])
+    c = rotate([180, 0, 0]).add(c)
+    d -= translate(v=[-264*scl, 180*scl, (130)*scl]).add(c)
+    u += translate(v=[180*scl, (mholdero-25)*scl, (6)*scl]).add(d)
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
@@ -1757,11 +1772,6 @@ def base_front_top(scl, ht, ht_offset):
         c = translate(v=[(180+5)*scl, (boffs)*scl, (19.5)*scl]).add(c)
         u -= c
 
-    # add runner support
-    c = shearedcube([75*scl, (ht)*scl, (10)*scl])
-    c = translate(v=[(180-75)*scl, (0)*scl,
-                                (boxheight-hthick-8)*scl]).add(c)
-    u += c
     # add fillin for touchpanel
     c = base_front_fillin(scl, 95)
     c = translate(v=[(0)*scl, (tpanel_ht-tpanel_b_w/2-95)*scl, (0)*scl]).add(c)
