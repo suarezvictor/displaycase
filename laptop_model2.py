@@ -133,7 +133,7 @@ kbd_numpad_indent = 79
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
 
-lcdscrewrad = 28 / 2.0 # XXX: 2mm diameter thread, why 0.9mm extra????
+lcdscrewrad = 30 / 2.0 # XXX: 2.5mm diameter thread, why 0.9mm extra????
 screwrad = 28 / 2.0 # XXX: 2mm thread diameter, needs 0.7mm extra!!!
 topscrewrad = 20 / 2.0 # supposed to be 3mm screw holes but 3d baaad....
 boxheight = 124
@@ -3617,7 +3617,7 @@ def screen_hinge(scl, ht):
     u += d
 
     # add cutout to screen_edge
-    c = cube([102*scl, 35*scl, 35*scl], center=True)
+    c = cube([128*scl, 35*scl, 35*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[25*scl,(ht)*scl,0*scl]).add(t)
@@ -3655,9 +3655,12 @@ def screen_hinge(scl, ht):
     u += c
 
     c = cube([(80)*scl, (ht+30)*scl, (lcd_d-hthick-3)*scl])
-    c = translate(v=[(w-170)*scl,-(20)*scl,
-                     (-5)*scl]).add(c)
-    u -= c
+    u -= translate(v=[(w-170)*scl,-(20)*scl, (-5)*scl]).add(c)
+    c = shearedcube([(80)*scl, (ht+30)*scl, (lcd_d-hthick-3)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, 30*scl, 0])
+    c = rotate([0, 0, 180]).add(c)
+    u -= translate(v=[(w-90)*scl,(ht*2)*scl, (-8+hthick)*scl]).add(c)
 
     # remove runner along bottom of base, for lower panel
     # these are along the back wings
@@ -3694,7 +3697,6 @@ def screen_hinge(scl, ht):
     c = rotate([0, 90, 90]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-
 
     if pin_parts_3d:
         c = union()
@@ -4907,10 +4909,10 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
