@@ -3040,9 +3040,9 @@ def screen_end(scl, ht, lcd_end_ht):
     u -= t
 
     # lock-in to screen_hinge part
-    d = cube([45*scl, 20*scl, 37*scl])
+    d = cube([48*scl, 20*scl, 34*scl])
     c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl,
-                (hthick-3.6-16)*scl]).add(d)
+                (hthick-3.6-14)*scl]).add(d)
     u += c
 
     rad=54.0
