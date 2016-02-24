@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -3032,11 +3032,10 @@ def screen_end(scl, ht, lcd_end_ht):
     u -= c
 
     # hex indentation
-    c = cylinder(r=30*scl, r1=27*scl, h=(31)*scl, center=True, segments=6)
-    c = rotate([0, 90, 90]).add(c)
-    c = rotate([0, 30, 0]).add(c)
+    c = cube([102*scl, 45*scl, 45*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[0*scl,(ht-24)*scl,0*scl]).add(t)
+    t = translate(v=[10*scl,(ht-10)*scl,0*scl]).add(t)
     u -= t
 
     # lock-in to screen_hinge part
@@ -3059,8 +3058,8 @@ def screen_end(scl, ht, lcd_end_ht):
                 shear=[14*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, -90]).add(c)
-    t = translate(v=[(80)*scl, (ht)*scl,
-                                (-28)*scl]).add(c)
+    t = translate(v=[(80)*scl, (ht+4)*scl,
+                                (-27)*scl]).add(c)
     u -= t
 
     if pin_parts_3d:
@@ -3111,18 +3110,18 @@ def screen_end(scl, ht, lcd_end_ht):
     if cutdown:
         # cut down
         c = cube([(boxlength+500)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(-640)*scl, -20*scl, -150*scl]).add(c)
+        c = translate([(-700)*scl, -30*scl, -150*scl]).add(c)
         u -= c
 
         if pin_parts_3d:
             c = union()
             h = pin(B0, scl)
-            h = translate([(boxlength-125)*scl, (3)*scl, 30*scl]).add(h)
+            h = translate([(boxlength-225)*scl, (3)*scl, 30*scl]).add(h)
             c += h
             h = pin(B0, scl)
-            h = translate([(boxlength-125)*scl, (3)*scl, -40*scl]).add(h)
+            h = translate([(boxlength-225)*scl, (3)*scl, -40*scl]).add(h)
             c += h
-            c = translate([0, (-14.2)*scl, 0*scl]).add(c)
+            c = translate([0, (-24.2)*scl, 0*scl]).add(c)
             u += c
 
     # shift up a bit
@@ -3621,7 +3620,7 @@ def screen_hinge(scl, ht):
                 innershear=[0*scl, 0*scl, 0])
     #c = rotate([0, 0, -90]).add(c)
     t = translate(v=[(lcd_w+46)*scl, (-1)*scl,
-                                (-28)*scl]).add(c)
+                                (-27)*scl]).add(c)
     u -= t
 
     # hollow hinge out
@@ -4859,7 +4858,7 @@ if __name__ == '__main__':
                         #BASE_END,
                         SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
