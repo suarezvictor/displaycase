@@ -3343,26 +3343,28 @@ def screen_back_edge(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = union()
-        h += cube([30*scl, 6*scl, 60*scl])
-        l = []
-        i = 137
-        while i < ht:
-            l.append(i)
-            i += step * 1.5
-        for l in [2, 70, ht-6] + l:
-            c += translate([(lcd_w+60)*scl, (l)*scl, -18*scl]).add(h)
 
-        h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
-        h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
-        c += h
-        h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
+        if False: # XXX use repsnapper "support" instead
+            h = union()
+            h += cube([24*scl, 6*scl, 60*scl])
+            l = []
+            i = 137
+            while i < ht:
+                l.append(i)
+                i += step * 1.5
+            for l in [2, 70, ht-6] + l:
+                c += translate([(lcd_w+60)*scl, (l)*scl, -18*scl]).add(h)
 
-        h = cube([6*scl, (ht-2)*scl, 60*scl])
-        h = translate([(lcd_w+60)*scl, (2)*scl, -15*scl]).add(h)
-        c += h
-        c += translate([(24)*scl, (0)*scl, 0*scl]).add(h)
+            h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
+            h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
+            c += h
+            h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
+            c += h
+
+            h = cube([6*scl, (ht-2)*scl, 60*scl])
+            h = translate([(lcd_w+60)*scl, (2)*scl, -15*scl]).add(h)
+            c += h
+            #c += translate([(24)*scl, (0)*scl, 0*scl]).add(h)
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
