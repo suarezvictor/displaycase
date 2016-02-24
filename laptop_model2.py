@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -3052,8 +3052,7 @@ def screen_end(scl, ht, lcd_end_ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
-    # remove runner along bottom of base, for lower panel
-    # these are along the back wings
+    # remove runner along top screen edge
     c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
                 shear=[14*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
@@ -3262,16 +3261,22 @@ def screen_front_edge(scl, ht):
     return b
 
 def screen_back_edge(scl, ht):
-    b = screen_box(scl, ht, end=False, back=True)
+    b = screen_box(scl, ht-2, end=False, back=True)
+    b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(60)*scl, (ht+4)*scl, (32)*scl],
+    d = shearedcube([(70)*scl, (ht+4)*scl, (32)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-43*scl, 0*scl, 0])
+            innershear=[0*scl, 0*scl, 0])
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+54)*scl, (ht+1)*scl, (-37)*scl]).add(d)
+    c = translate(v=[(lcd_w+60)*scl, (ht+1)*scl, (-37)*scl]).add(d)
     b -= c
+
+    # add cutin to screen_end
+    d = screen_cutin(scl, ht, diam=35, length=83)
+    d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
+    b += d
 
     # TODO: this is going to need some underside supports
     # TODO: length of the cable run doesn't have to be this long
@@ -3287,15 +3292,17 @@ def screen_back_edge(scl, ht):
         c = resize([(70)*scl, 0, 0], False).add(c)
         c = translate(v=[(lcd_w+140)*scl, (offs)*scl, (lcd_d-15)*scl]).add(c)
         b -= c
-        c = cube([100*scl, (step-fthick)*scl, 50*scl])
-        c = translate(v=[(lcd_w+41)*scl, (offs)*scl, (lcd_d-15-50)*scl]).add(c)
+        c = cube([140*scl, (step-fthick)*scl, 45*scl])
+        c = translate(v=[(lcd_w+41)*scl, (offs)*scl, (lcd_d-10-46)*scl]).add(c)
         b -= c
         offs += step
-    c = hollowbox(scl, 100, (ht+2), 50,
+    v = union()
+    v += hollowbox(scl, 100, (ht+2), 45,
                 {T:50, L:40, R:30, F:1, D:18, B:1},
                 curverads={ T|R: (35, 0)})
-    c = translate(v=[(lcd_w+20)*scl, (-1)*scl, (lcd_d-15-46)*scl]).add(c)
-    b -= c
+    c = cube([95*scl, (ht+2)*scl, 20*scl])
+    v += translate(v=[0, 0, 23*scl]).add(c)
+    b -= translate(v=[(lcd_w+20)*scl, (-1)*scl, (lcd_d-10-46)*scl]).add(v)
 
     # bolt-hole
     c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
@@ -3322,21 +3329,14 @@ def screen_back_edge(scl, ht):
     c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
     b += c
 
-    # lock-in to screen_hinge part
-    d = shearedcube([30*scl, 15*scl, 9*scl],
-            shear=[0,-9*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(30)*scl, (10)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+90)*scl, (-6)*scl, (lcd_d-hthick-9.6)*scl]).add(c)
-    b += c
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(30)*scl, (10)*scl, (-6)*scl]).add(c)
-    c = translate(v=[(lcd_w+80)*scl, (-6)*scl, (-12)*scl]).add(c)
-    b += c
-    d = cube([30*scl, 8*scl, 15*scl])
-    c = translate(v=[(lcd_w+90)*scl, (0)*scl, (lcd_d-hthick-9.6)*scl]).add(d)
-    b += c
+    # remove runner along top screen edge
+    c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
+                shear=[14*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    #c = rotate([0, 0, -90]).add(c)
+    t = translate(v=[(lcd_w+46)*scl, (-1)*scl,
+                                (-27)*scl]).add(c)
+    b -= t
 
     if pin_parts_3d:
         c = union()
@@ -3544,7 +3544,7 @@ def cable_protector(scl, ht):
 
     return u
 
-def screen_cutin(scl, ht):
+def screen_cutin(scl, ht, diam=45, length=99):
     # indentation - has to be done this way (recreate screen_box) so
     # that the profile of the indentation fits with screen_end curvature
     d = intersection()
@@ -3552,7 +3552,7 @@ def screen_cutin(scl, ht):
     r = union()
     r += b
     d.add(r)
-    c = cube([99*scl, 45*scl, 45*scl], center=True)
+    c = cube([length*scl, diam*scl, diam*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[10*scl,(ht)*scl,0*scl]).add(t)
@@ -4889,7 +4889,7 @@ if __name__ == '__main__':
                         SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
