@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -3338,27 +3338,31 @@ def screen_back_edge(scl, ht):
                                 (-27)*scl]).add(c)
     b -= t
 
+    c = lcd_screen_removeparts(scl)
+    b -= translate([0*scl, -180*scl, 16*scl]).add(c)
+
     if pin_parts_3d:
         c = union()
         h = union()
-        h += cube([20*scl, 6*scl, 70*scl])
-        d = shearedcube([20*scl, 6*scl, 25*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[15*scl, 0*scl, 0])
-        h += translate([-15*scl, 0*scl, -10*scl]).add(d)
+        h += cube([30*scl, 6*scl, 60*scl])
         l = []
-        i = 170
+        i = 137
         while i < ht:
             l.append(i)
-            i += step * 2
-        for l in [0, 70, ht-6] + l:
-            c += translate([(lcd_w+80)*scl, (l)*scl, -28*scl]).add(h)
+            i += step * 1.5
+        for l in [2, 70, ht-6] + l:
+            c += translate([(lcd_w+60)*scl, (l)*scl, -18*scl]).add(h)
 
         h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
         h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
         c += h
         h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
         c += h
+
+        h = cube([6*scl, (ht-2)*scl, 60*scl])
+        h = translate([(lcd_w+60)*scl, (2)*scl, -15*scl]).add(h)
+        c += h
+        c += translate([(24)*scl, (0)*scl, 0*scl]).add(h)
 
         h = pin(B0, scl)
         h = rotate([90, 0, 0]).add(h)
@@ -3385,13 +3389,25 @@ def screen_back_edge(scl, ht):
 
         h = pin_t(mirror=False)
         h = rotate([90, 0, 0]).add(h)
-        c += translate([(lcd_w+80)*scl, (-95)*scl, (7.4+37+3)*scl]).add(h)
-        c += translate([(lcd_w+80)*scl, (ht-35)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+80)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+80)*scl, (ht+5)*scl, (7.4+37+3)*scl]).add(h)
         c += translate([(lcd_w+200)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
         c += translate([(lcd_w+200)*scl, (ht-5)*scl, (7.4+37+3)*scl]).add(h)
 
         c = translate([0, 0, (8)*scl]).add(c)
         b += c
+
+    if cutdown:
+        # cut down
+        c = cube([(boxlength+500)*scl, (ht+100)*scl, 400*scl])
+        c = translate([(-300)*scl, 350*scl, -150*scl]).add(c)
+        b -= c
+
+        if pin_parts_3d:
+            h = pin_t(mirror=False)
+            h = rotate([90, 0, 0]).add(h)
+            b += translate([(lcd_w+80)*scl, (350)*scl, (7.4+37+11)*scl]).add(h)
+            b += translate([(lcd_w+200)*scl, (350)*scl, (7.4+37+11)*scl]).add(h)
 
     # shift up a bit
     b = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(b)
@@ -4497,7 +4513,7 @@ def pcb1(scl):
 
     return t
 
-def screen_adjust(b, scl, angle):
+def lcd_screen_removeparts(scl):
 
     u = union()
     p = lcd_panel(scl, offs=2)
@@ -4510,8 +4526,11 @@ def screen_adjust(b, scl, angle):
 
     u = translate(v=[0*scl,0*scl,(-lid_offset+2)*scl]).add(u)
 
-    b -= u
+    return u
 
+def screen_adjust(b, scl, angle):
+
+    b -= lcd_screen_removeparts(scl)
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
@@ -4693,7 +4712,7 @@ def create_laptop(t, scl, part, angle):
         if mirroring & RIGHTPART:
             m = mirror_part(se, scl, total_width-adj)
             b.add(m)
-        b = screen_adjust(b, scl, angle)
+        b = hinge_rotate(scl, b, angle)
 
     compartment_ht = base_adjust_ht-scrn_hinge_ht
 
@@ -4886,7 +4905,7 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         SCREEN_BACK_EDGE,
