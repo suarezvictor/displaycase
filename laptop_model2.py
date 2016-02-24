@@ -20,7 +20,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3053,27 +3053,10 @@ def screen_end(scl, ht, lcd_end_ht):
     t = hinge_translate(scl).add(c)
     u -= t
 
-    # lock-in cutout to screen_hinge part
-    d = shearedcube([42*scl, 14*scl, 14*scl],
-            shear=[0,-11*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (1)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+84)*scl, (ht-10)*scl,
-                    (lcd_d-hthick-8.6)*scl]).add(c)
-    u -= c
-    d = shearedcube([72*scl, 17*scl, 14*scl],
-            shear=[0,13*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (2)*scl, (-8)*scl]).add(c)
-    c = translate(v=[(lcd_w+108)*scl, (ht-2)*scl, (-13)*scl]).add(c)
-    u -= c
-
     # remove runner along bottom of base, for lower panel
     # these are along the back wings
-    c = shearedcube([10*scl, (lcd_w)*scl, (10)*scl],
-                shear=[10*scl, 0*scl, 0],
+    c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
+                shear=[14*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, -90]).add(c)
     t = translate(v=[(80)*scl, (ht)*scl,
@@ -3609,23 +3592,6 @@ def screen_hinge(scl, ht):
     t = lid_bolthole(scl, end=False).add(c)
     u -= t
 
-    # lock-in cutin to screen_end part
-    d = shearedcube([42*scl, 13*scl, 13*scl],
-            shear=[0,-11*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (11)*scl, (0.5)*scl]).add(c)
-    c = translate(v=[(lcd_w+84)*scl, (-8.5)*scl,
-                    (lcd_d-hthick-8.6)*scl]).add(c)
-    u += c
-    d = shearedcube([66*scl, 14*scl, 13*scl],
-            shear=[0,11*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (12)*scl, (-7)*scl]).add(c)
-    c = translate(v=[(lcd_w+104)*scl, (-1)*scl, (-13)*scl]).add(c)
-    u += c
-
     # cable cutout
     c = cube([(40)*scl, (ht*2)*scl, (30+hinge_offs)*scl])
     c = rotate([0, 0, 180]).add(c)
@@ -3648,22 +3614,15 @@ def screen_hinge(scl, ht):
                      (-8)*scl]).add(c)
     u -= c
 
-    # lock-in cutout to screen_hinge part
-    d = shearedcube([42*scl, 13*scl, 11*scl],
-            shear=[0,-11*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (11)*scl, (0)*scl]).add(c)
-    c = translate(v=[(lcd_w+89)*scl, (ht-10)*scl,
-                    (lcd_d-hthick-8.6)*scl]).add(c)
-    u -= c
-    d = shearedcube([42*scl, 14*scl, 11*scl],
-            shear=[0,11*scl,0],
-            innershear=[0,0*scl,0])
-    c = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(32)*scl, (12)*scl, (-6)*scl]).add(c)
-    c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl, (-12)*scl]).add(c)
-    u -= c
+    # remove runner along bottom of base, for lower panel
+    # these are along the back wings
+    c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
+                shear=[14*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    #c = rotate([0, 0, -90]).add(c)
+    t = translate(v=[(lcd_w+46)*scl, (-1)*scl,
+                                (-28)*scl]).add(c)
+    u -= t
 
     # hollow hinge out
     c = cylinder(r=(62/2.)*scl, h=(ht+15)*scl, segments=50)
@@ -4898,16 +4857,16 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4917,7 +4876,7 @@ if __name__ == '__main__':
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        PCB3_SUPPORT,
+                        #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #BASE_PANEL,
