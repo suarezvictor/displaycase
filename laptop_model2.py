@@ -3636,8 +3636,8 @@ def screen_hinge(scl, ht):
                      (2+hinge_offs+lid_offset)*scl]).add(c)
     u += c
 
-    c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick-3)*scl])
-    c = translate(v=[(w-170)*scl,-(1)*scl,
+    c = cube([(80)*scl, (ht+30)*scl, (lcd_d-hthick-3)*scl])
+    c = translate(v=[(w-170)*scl,-(20)*scl,
                      (-5)*scl]).add(c)
     u -= c
 
