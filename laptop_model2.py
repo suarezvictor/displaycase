@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -3311,11 +3311,11 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # slot to fit a nut into
-    c = cube([100*scl, 20*scl, 46*scl], center=True)
-    c = translate(v=[(-45)*scl, (55)*scl, (0)*scl]).add(c)
+    c = cube([120*scl, 22*scl, 52*scl], center=True)
+    c = translate(v=[(-55)*scl, (55)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
-    c = cylinder(r=27.0*scl, h=20*scl, center=True, segments=6)
+    c = cylinder(r=30.0*scl, h=22*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -3344,15 +3344,15 @@ def screen_back_edge(scl, ht):
     if pin_parts_3d:
         c = union()
 
-        if False: # XXX use repsnapper "support" instead
+        if True: # XXX use repsnapper "support" instead
             h = union()
-            h += cube([24*scl, 6*scl, 60*scl])
+            h += cube([6*scl, 15*scl, 60*scl])
             l = []
             i = 137
             while i < ht:
                 l.append(i)
                 i += step * 1.5
-            for l in [2, 70, ht-6] + l:
+            for l in [2, 70, ht-15] + l:
                 c += translate([(lcd_w+60)*scl, (l)*scl, -18*scl]).add(h)
 
             h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
@@ -3361,8 +3361,9 @@ def screen_back_edge(scl, ht):
             h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
             c += h
 
+        if False:
             h = cube([6*scl, (ht-2)*scl, 60*scl])
-            h = translate([(lcd_w+60)*scl, (2)*scl, -15*scl]).add(h)
+            h = translate([(lcd_w+55)*scl, (2)*scl, -15*scl]).add(h)
             c += h
             #c += translate([(24)*scl, (0)*scl, 0*scl]).add(h)
 
@@ -3389,10 +3390,10 @@ def screen_back_edge(scl, ht):
         for l in [ht-45, ht/2, 45]:
             c += translate([(lcd_w+235)*scl, l*scl, (7.4+37)*scl]).add(h)
 
-        h = pin_t(mirror=False)
+        h = pin_t(mirror=False, dep=15)
         h = rotate([90, 0, 0]).add(h)
-        c += translate([(lcd_w+80)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
-        c += translate([(lcd_w+80)*scl, (ht+5)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+90)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
+        c += translate([(lcd_w+90)*scl, (ht+5)*scl, (7.4+37+3)*scl]).add(h)
         c += translate([(lcd_w+200)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
         c += translate([(lcd_w+200)*scl, (ht-5)*scl, (7.4+37+3)*scl]).add(h)
 
@@ -3406,10 +3407,10 @@ def screen_back_edge(scl, ht):
         b -= c
 
         if pin_parts_3d:
-            h = pin_t(mirror=False)
+            h = pin_t(mirror=False, dep=15)
             h = rotate([90, 0, 0]).add(h)
-            b += translate([(lcd_w+80)*scl, (350)*scl, (7.4+37+11)*scl]).add(h)
-            b += translate([(lcd_w+200)*scl, (350)*scl, (7.4+37+11)*scl]).add(h)
+            b += translate([(lcd_w+90)*scl, (359)*scl, (7.4+37+11)*scl]).add(h)
+            b += translate([(lcd_w+200)*scl, (359)*scl, (7.4+37+11)*scl]).add(h)
 
     # shift up a bit
     b = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(b)
@@ -4909,10 +4910,10 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
