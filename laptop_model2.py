@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -3031,7 +3031,7 @@ def screen_end(scl, ht, lcd_end_ht):
     c = translate(v=[24*scl, (ht-48)*scl, (-1)*scl]).add(d)
     u -= c
 
-    # hex indentation
+    # indentation
     c = cube([102*scl, 45*scl, 45*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -3544,6 +3544,22 @@ def cable_protector(scl, ht):
 
     return u
 
+def screen_cutin(scl, ht):
+    # indentation - has to be done this way (recreate screen_box) so
+    # that the profile of the indentation fits with screen_end curvature
+    d = intersection()
+    b = screen_box(scl, ht, end=False, back=True, hingewall=False)
+    r = union()
+    r += b
+    d.add(r)
+    c = cube([99*scl, 45*scl, 45*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    t = translate(v=[10*scl,(ht)*scl,0*scl]).add(t)
+    d.add(t)
+   
+    return d
+    
 def screen_hinge(scl, ht):
     print "SCREEN_HINGE ht", ht
 
@@ -3577,13 +3593,25 @@ def screen_hinge(scl, ht):
     c = translate(v=[(w)*scl,0*scl,(30+hinge_offs+lid_offset)*scl]).add(c)
     u += c
 
+    # add cutin to screen_end
+    d = screen_cutin(scl, ht)
+    d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
+    u += d
+
+    # add cutout to screen_edge
+    c = cube([102*scl, 35*scl, 35*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    t = translate(v=[25*scl,(ht)*scl,0*scl]).add(t)
+    u -= t
+
     # hex indentation
     c = cylinder(r=27*scl, r1=26*scl, h=(30)*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[0*scl,-5*scl,0*scl]).add(t)
-    u += t
+    #u += t
 
     # bolt-hole
     c = cylinder(r=lcdscrewrad*scl, h=(ht+81)*scl, center=True, segments=50)
@@ -3608,9 +3636,9 @@ def screen_hinge(scl, ht):
                      (2+hinge_offs+lid_offset)*scl]).add(c)
     u += c
 
-    c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick)*scl])
+    c = cube([(80)*scl, (ht+2)*scl, (lcd_d-hthick-3)*scl])
     c = translate(v=[(w-170)*scl,-(1)*scl,
-                     (-8)*scl]).add(c)
+                     (-5)*scl]).add(c)
     u -= c
 
     # remove runner along bottom of base, for lower panel
@@ -3624,7 +3652,7 @@ def screen_hinge(scl, ht):
     u -= t
 
     # hollow hinge out
-    c = cylinder(r=(62/2.)*scl, h=(ht+15)*scl, segments=50)
+    c = cylinder(r=(64/2.)*scl, h=(ht+15)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,-30*scl,0*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -3653,8 +3681,8 @@ def screen_hinge(scl, ht):
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl, fill=True)
-        c += translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
-        c += translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
+        c += translate([(boxlength-64)*scl, (ht-3)*scl, -74*scl]).add(h)
+        c += translate([(boxlength-152)*scl, (ht-3)*scl, -66*scl]).add(h)
         c += translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
         c += translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
         c += translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
@@ -4856,9 +4884,9 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
