@@ -52,13 +52,17 @@ def shearedcube(size, center=False, shear=None, innershear=None):
     if innershear is None:
         innershear = shear
     if shear:
-        for i in range(len(points)/4):
-            points[i*2][0] += shear[0]
-            points[i*2+4][0] += innershear[0]
-            points[i*4][1] += shear[1]
-            points[i*4+1][1] += innershear[1]
-            #points[i*4][2] += shear[2]
-            #points[i*4+4][2] += innershear[2]
+        points[0][0] += shear[0]
+        points[2][0] += shear[0]
+
+        points[0][1] += shear[1]
+        points[4][1] += shear[1]
+
+        points[4][0] += innershear[0]
+        points[6][0] += innershear[0]
+
+        points[2][1] += innershear[1]
+        points[6][1] += innershear[1]
     return polyhedron(points, faces)
 
 L=0x1
