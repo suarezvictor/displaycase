@@ -2959,16 +2959,16 @@ def screen_mid(scl, ht):
     u -= c
 
     # remove runner for top panel
-    c = shearedcube([2*scl, (boxlength-210)*scl, (12)*scl],
+    c = shearedcube([2*scl, (boxlength-210)*scl, (14)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[-12*scl, 0*scl, 0])
+                innershear=[-14*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     u -= translate(v=[(boxlength+10-140)*scl, (ht)*scl,
-                                (-28)*scl]).add(c)
+                                (-27)*scl]).add(c)
     c = rotate([0, 180, 0]).add(c)
     c = rotate([180, 0, 0]).add(c)
     u -= translate(v=[(80)*scl, (0)*scl,
-                                (-28)*scl]).add(c)
+                                (-27)*scl]).add(c)
 
     if pin_parts_3d:
         c = union()
@@ -4910,9 +4910,9 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
