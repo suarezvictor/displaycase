@@ -3143,12 +3143,13 @@ def screen_front_edge(scl, ht):
     print "SCREEN_FRONT_EDGE ht", ht
 
     # main box
-    b = screen_box(scl, ht, end=False, front=True)
+    b = screen_box(scl, ht:2, end=False, front=True)
+    b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
 
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
     # (1) so that 3d printing works (too much overhang)
     # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(44)*scl, (ht+2)*scl, (32.6)*scl],
+    d = shearedcube([(44)*scl, (ht+4)*scl, (32.6)*scl],
             shear=[0*scl, 0*scl, 0],
             innershear=[-23*scl, 0*scl, 0])
     c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
