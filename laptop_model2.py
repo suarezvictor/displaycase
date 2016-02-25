@@ -3143,7 +3143,7 @@ def screen_front_edge(scl, ht):
     print "SCREEN_FRONT_EDGE ht", ht
 
     # main box
-    b = screen_box(scl, ht:2, end=False, front=True)
+    b = screen_box(scl, ht-2, end=False, front=True)
     b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
 
     # ok, remove just a tiny bit from the lcd edge, for two reasons:
@@ -3151,9 +3151,18 @@ def screen_front_edge(scl, ht):
     # (2) so that the centre (wooden) laminate has something to hook onto
     d = shearedcube([(44)*scl, (ht+4)*scl, (32.6)*scl],
             shear=[0*scl, 0*scl, 0],
-            innershear=[-23*scl, 0*scl, 0])
+            innershear=[0*scl, 0*scl, 0])
     c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
     b -= c
+
+    # remove runner along top screen edge
+    c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
+                shear=[14*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([0, 0, 180]).add(c)
+    t = translate(v=[(98+14)*scl, (ht+1)*scl,
+                                (-27)*scl]).add(c)
+    b -= t
 
     # remove interior
     c = touch_arc(0, ht-30, 45,
