@@ -129,6 +129,7 @@ lcd_end_ht = 72
 lcd_end_offs = 20
 pcb3_lock_offs = 839+15
 kbd_numpad_indent = 79
+lcd_panel_offs = -10
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
@@ -148,7 +149,7 @@ lcd_front_indent = 108
 back_top_width = 170+79
 front_top_width = 180
 
-scrn_centre_ht = 70.0
+scrn_centre_ht = 90.0
 base_centre_ht = 140.0
 
 bdep = 325
@@ -486,6 +487,45 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         u += c
 
     u = translate(v=[(0)*scl, roff*scl, 0]).add(u)
+
+    if back:
+        # take a bit out for the bamboo panel
+        d = shearedcube([(70)*scl, (ht+4)*scl, (32)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+        d = rotate([0, 0, 180]).add(d)
+        c = translate(v=[(lcd_w+50)*scl, (ht+1)*scl, (-37)*scl]).add(d)
+        u -= c
+
+        # remove runner along bottom of base, for lower panel
+        # these are along the back wings
+        c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
+                    shear=[14*scl, 0*scl, 0],
+                    innershear=[0*scl, 0*scl, 0])
+        #c = rotate([0, 0, -90]).add(c)
+        t = translate(v=[(lcd_w+36)*scl, (-1)*scl,
+                                    (-27)*scl]).add(c)
+        u -= t
+
+    if front:
+        # ok, remove just a tiny bit from the lcd edge, for two reasons:
+        # (1) so that 3d printing works (too much overhang)
+        # (2) so that the centre (wooden) laminate has something to hook onto
+        d = shearedcube([(44)*scl, (ht+4)*scl, (32.6)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+        c = translate(v=[(98+lcd_panel_offs)*scl, (-1)*scl, (-38)*scl]).add(d)
+        u -= c
+
+        # remove runner along top screen edge
+        c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
+                    shear=[14*scl, 0*scl, 0],
+                    innershear=[0*scl, 0*scl, 0])
+        c = rotate([0, 0, 180]).add(c)
+        t = translate(v=[(98+14+lcd_panel_offs)*scl, (ht+1)*scl,
+                                    (-27)*scl]).add(c)
+        u -= t
+
     return u
 
 
@@ -3146,24 +3186,6 @@ def screen_front_edge(scl, ht):
     b = screen_box(scl, ht-2, end=False, front=True)
     b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
 
-    # ok, remove just a tiny bit from the lcd edge, for two reasons:
-    # (1) so that 3d printing works (too much overhang)
-    # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(44)*scl, (ht+4)*scl, (32.6)*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[0*scl, 0*scl, 0])
-    c = translate(v=[98*scl, (-1)*scl, (-38)*scl]).add(d)
-    b -= c
-
-    # remove runner along top screen edge
-    c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
-                shear=[14*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    c = rotate([0, 0, 180]).add(c)
-    t = translate(v=[(98+14)*scl, (ht+1)*scl,
-                                (-27)*scl]).add(c)
-    b -= t
-
     # remove interior
     c = touch_arc(0, ht-30, 45,
                         25, scl,
@@ -3209,7 +3231,7 @@ def screen_front_edge(scl, ht):
     b -= c
 
     # matching screen mid (front)
-    d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
+    d = shearedcube([(23)*scl, (28)*scl, (30)*scl],
             shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[30.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
@@ -3270,15 +3292,6 @@ def screen_front_edge(scl, ht):
 def screen_back_edge(scl, ht):
     b = screen_box(scl, ht-2, end=False, back=True)
     b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
-    # ok, remove just a tiny bit from the lcd edge, for two reasons:
-    # (1) so that 3d printing works (too much overhang)
-    # (2) so that the centre (wooden) laminate has something to hook onto
-    d = shearedcube([(70)*scl, (ht+4)*scl, (32)*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[0*scl, 0*scl, 0])
-    d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+60)*scl, (ht+1)*scl, (-37)*scl]).add(d)
-    b -= c
 
     # add cutin to screen_end
     d = screen_cutin(scl, ht, diam=35, length=83)
@@ -3330,20 +3343,11 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # matching screen mid (back)
-    d = shearedcube([(26)*scl, ((scrn_centre_ht/2-3))*scl, (31)*scl],
+    d = shearedcube([(26)*scl, ((28))*scl, (31)*scl],
             shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
     c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
     b += c
-
-    # remove runner along top screen edge
-    c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
-                shear=[14*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    #c = rotate([0, 0, -90]).add(c)
-    t = translate(v=[(lcd_w+46)*scl, (-1)*scl,
-                                (-27)*scl]).add(c)
-    b -= t
 
     c = lcd_screen_removeparts(scl)
     b -= translate([0*scl, -180*scl, 16*scl]).add(c)
@@ -3592,13 +3596,6 @@ def screen_hinge(scl, ht):
     u = union()
     b = screen_box(scl, ht, end=False, back=True, hingewall=False)
     u += b
-    # take a bit out for the bamboo panel
-    d = shearedcube([(70)*scl, (ht+4)*scl, (32)*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[0*scl, 0*scl, 0])
-    d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(lcd_w+60)*scl, (ht+1)*scl, (-37)*scl]).add(d)
-    u -= c
 
     rad=35.0
     # add hinge
@@ -3669,16 +3666,6 @@ def screen_hinge(scl, ht):
                 innershear=[0*scl, 30*scl, 0])
     c = rotate([0, 0, 180]).add(c)
     u -= translate(v=[(w-90)*scl,(ht*2)*scl, (-8+hthick)*scl]).add(c)
-
-    # remove runner along bottom of base, for lower panel
-    # these are along the back wings
-    c = shearedcube([14*scl, (ht+2)*scl, (14)*scl],
-                shear=[14*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    #c = rotate([0, 0, -90]).add(c)
-    t = translate(v=[(lcd_w+46)*scl, (-1)*scl,
-                                (-27)*scl]).add(c)
-    u -= t
 
     # hollow hinge out
     c = cylinder(r=(64/2.)*scl, h=(ht+15)*scl, segments=50)
@@ -4917,11 +4904,11 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
