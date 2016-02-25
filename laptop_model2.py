@@ -494,7 +494,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
         d = rotate([0, 0, 180]).add(d)
-        c = translate(v=[(lcd_w+50)*scl, (ht+1)*scl, (-37)*scl]).add(d)
+        c = translate(v=[(lcd_w+50+lcd_panel_offs)*scl, (ht+1)*scl, (-37)*scl]).add(d)
         u -= c
 
         # remove runner along bottom of base, for lower panel
@@ -503,7 +503,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
                     shear=[14*scl, 0*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
         #c = rotate([0, 0, -90]).add(c)
-        t = translate(v=[(lcd_w+36)*scl, (-1)*scl,
+        t = translate(v=[(lcd_w+36+lcd_panel_offs)*scl, (-1)*scl,
                                     (-27)*scl]).add(c)
         u -= t
 
@@ -3364,7 +3364,7 @@ def screen_back_edge(scl, ht):
                 l.append(i)
                 i += step * 1.5
             for l in [2, 70, ht-15] + l:
-                c += translate([(lcd_w+60)*scl, (l)*scl, -18*scl]).add(h)
+                c += translate([(lcd_w+50+lcd_panel_offs)*scl, (l)*scl, -18*scl]).add(h)
 
             h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
             h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
@@ -4904,10 +4904,10 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
