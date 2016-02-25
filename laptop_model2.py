@@ -3094,7 +3094,7 @@ def screen_end(scl, ht, lcd_end_ht):
                 shear=[14*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, -90]).add(c)
-    t = translate(v=[(80)*scl, (ht+4)*scl,
+    t = translate(v=[(70)*scl, (ht+4)*scl,
                                 (-27)*scl]).add(c)
     u -= t
 
@@ -4902,13 +4902,13 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
