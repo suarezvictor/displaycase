@@ -4271,25 +4271,29 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
 
-    w = tpanel_l_b-180-hthick
+    w = tpanel_l_b-180-20
 
+    indent = 50
     # main panel, create staggered part for bamboo panel fill-in
-    b = cube([(w-6)*scl, (ht-6)*scl, (20)*scl])
+    b = cube([(w-6)*scl, (ht-6)*scl, (15)*scl])
     b = translate(v=[3*scl, 3*scl, (0)*scl]).add(b)
     u += b
-    b = cube([(w-30-kbd_offs)*scl, (ht-60)*scl, (16)*scl])
-    b = translate(v=[30*scl, 30*scl, (-1)*scl]).add(b)
+    b = cube([(w-indent*2)*scl, (ht-indent*2)*scl, (5)*scl])
+    b = translate(v=[indent*scl, indent*scl, (-1)*scl]).add(b)
     u -= b
-    b = cube([(w-50-kbd_offs)*scl, (ht-80)*scl, (22)*scl])
-    b = translate(v=[40*scl, 40*scl, (-1)*scl]).add(b)
+    b = shearedcube([(w-indent*2)*scl, (ht-indent*2)*scl, (15)*scl],
+                shear=[-15*scl, -15*scl, 0],
+                innershear=[15*scl, 15*scl, 0])
+    b = translate(v=[indent*scl, indent*scl, (3)*scl]).add(b)
     u -= b
 
     # add a runner, fits into base_front_top
-    c = shearedcube([2*scl, (ht-260)*scl, (hthick)*scl],
+    c = shearedcube([2*scl, (w-260)*scl, (15)*scl],
                 shear=[0*scl, 0*scl, 0],
-                innershear=[-8*scl, 0*scl, 0])
-    c = translate(v=[(3)*scl, 130*scl,
-                                (8)*scl]).add(c)
+                innershear=[-14*scl, 0*scl, 0])
+    c = rotate([0,0,90]).add(c)
+    c = translate(v=[(w-130)*scl, 3*scl,
+                                (0)*scl]).add(c)
     u += c
 
     # cut off edge so that lid can drop down without catching
@@ -4302,15 +4306,9 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     # cut out corner for tpanel_mid joiner
     b = cube([60*scl, 30*scl, (15)*scl])
-    b = rotate([-25,0,0]).add(b)
-    b = translate(v=[-11*scl, (ht-27)*scl, (21)*scl]).add(b)
+    b = rotate([-22,0,0]).add(b)
+    b = translate(v=[-11*scl, (ht-27)*scl, (20)*scl]).add(b)
     u -= b
-
-    c = compartment_lockin_cutout(scl)
-    t = translate(v=[(w-35)*scl, 46*scl, -1*scl]).add(c)
-    u -= t
-    t = translate(v=[(w-35)*scl, (ht-120)*scl, -1*scl]).add(c)
-    u -= t
 
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
@@ -4915,7 +4913,7 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4923,7 +4921,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4931,7 +4929,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
