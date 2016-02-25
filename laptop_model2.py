@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -244,12 +244,16 @@ def lcd_view_area(scl, offs=0):
 
     return a
 
-def chamfered_backbox_screwholes(scl, sht, r1=22, ri=topscrewrad):
+def chamfered_backbox_screwholes(scl, sht, r1=22, ri=topscrewrad,
+                                 nochamfer=False):
     # chamfered screw holes in top of lid
     c = union()
-    c.add(cylinder(r=topscrewrad*1.2*scl, r1=r1*scl,
-                    h=12*scl,
-                    segments=50, center=True))
+    if not nochamfer:
+        r = topscrewrad*1.2*scl
+        r_1 = r1*scl
+        c.add(cylinder(r=r, r1=r_1,
+                        h=12*scl,
+                        segments=50, center=True))
     d = cylinder(r=ri*scl,
                     h=(bwid+2.5+sht)*scl,
                     segments=50, center=True)
@@ -3010,7 +3014,8 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # bolt-hole
     for end in [False]:
-        c = chamfered_backbox_screwholes(scl, 60+ht, 25, lcdscrewrad)
+        c = chamfered_backbox_screwholes(scl, 60+ht, 27, lcdscrewrad,
+                                         nochamfer=True)
         c = rotate([0, -90, 90]).add(c)
         #c = translate(v=[0, 0*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
@@ -3043,14 +3048,6 @@ def screen_end(scl, ht, lcd_end_ht):
     c = translate(v=[(lcd_w+79)*scl, (ht-10)*scl,
                 (hthick-3.6-14)*scl]).add(d)
     u += c
-
-    rad=54.0
-    # remove hinge
-    c = cylinder(r=rad*scl, h=(ht+50)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,-32*scl,0]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
 
     # remove runner along top screen edge
     c = shearedcube([14*scl, (lcd_w)*scl, (14)*scl],
@@ -4908,12 +4905,12 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
