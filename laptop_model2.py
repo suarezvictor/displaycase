@@ -2949,10 +2949,10 @@ def screen_mid(scl, ht):
     u += b
 
     # cutouts for connectors
-    d = cube([(30)*scl, (ht+4)*scl, (37)*scl])
-    c = translate(v=[25*scl, (-2)*scl, (0)*scl]).add(d)
+    d = cube([(34)*scl, (ht+4)*scl, (39)*scl])
+    c = translate(v=[25*scl, (-2)*scl, (-1)*scl]).add(d)
     u -= c
-    c = translate(v=[(lcd_w+159)*scl, (-2)*scl, (-6)*scl]).add(d)
+    c = translate(v=[(lcd_w+157)*scl, (-2)*scl, (-7)*scl]).add(d)
     u -= c
     d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
     c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-5)*scl]).add(d)
@@ -3202,7 +3202,7 @@ def screen_front_edge(scl, ht):
     d = shearedcube([(23)*scl, (scrn_centre_ht/2-4)*scl, (30)*scl],
             shear=[0, -0*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[28.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
+    c = translate(v=[30.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
     b += c
     d = rotate([0, 0, 180]).add(d)
     c = translate(v=[(28.5+23)*scl, (4)*scl, (3.5)*scl]).add(d)
@@ -4905,14 +4905,14 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_BACK_EDGE,
+                        SCREEN_FRONT_EDGE,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
