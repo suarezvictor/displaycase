@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -3014,15 +3014,15 @@ def screen_mid(scl, ht):
         c = union()
         h = pin(B0, scl)
         c += translate([(boxlength-62)*scl, (0)*scl, -60*scl]).add(h)
-        c += translate([(boxlength-140)*scl, (0)*scl, -60*scl]).add(h)
+        c += translate([(boxlength-140)*scl, (0)*scl, -75*scl]).add(h)
         c += translate([(boxlength+15)*scl, (0)*scl, 3*scl]).add(h)
         c += translate([(boxlength-18)*scl, (0)*scl, 85*scl]).add(h)
         c += translate([(boxlength-95)*scl, (0)*scl, 85*scl]).add(h)
         c += translate([(boxlength-165)*scl, (0)*scl, 85*scl]).add(h)
 
-        c += translate([(210)*scl, (0)*scl, -60*scl]).add(h)
-        c += translate([(127)*scl, (0)*scl, -60*scl]).add(h)
-        c += translate([(47)*scl, (0)*scl, -45*scl]).add(h)
+        c += translate([(190)*scl, (0)*scl, -75*scl]).add(h)
+        c += translate([(107)*scl, (0)*scl, -75*scl]).add(h)
+        c += translate([(30)*scl, (0)*scl, -45*scl]).add(h)
         c += translate([(-30)*scl, (0)*scl, 8*scl]).add(h)
         c += translate([(10)*scl, (0)*scl, 85*scl]).add(h)
         c += translate([(90)*scl, (0)*scl, 85*scl]).add(h)
@@ -4902,14 +4902,14 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        #SCREEN_BACK_EDGE,
+                        #SCREEN_FRONT_EDGE,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
