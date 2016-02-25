@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1787,11 +1787,11 @@ def base_front_top(scl, ht, ht_offset):
 
     # add a support for magnet
     d = union()
-    c = shearedcube([(mholderw+40)*scl, 186*scl, 110*scl],
+    c = shearedcube([(mholderw+40)*scl, 178*scl, 110*scl],
             shear=[-95*scl, -20*scl, 0],
-            innershear=[95*scl, -8*scl, 0])
+            innershear=[95*scl, 0*scl, 0])
     d += rotate([0, 0, 90]).add(c)
-    c = shearedcube([(mholderw+40)*scl, 186*scl, 110*scl],
+    c = shearedcube([(mholderw+40)*scl, 180*scl, 110*scl],
             shear=[-180*scl, -20*scl, 0],
             innershear=[0*scl, -8*scl, 0])
     c = rotate([180, 0, 0]).add(c)
@@ -3231,11 +3231,11 @@ def screen_front_edge(scl, ht):
 
     print "magholder width", mholderw-fthick*4
     # add a hole for a magnet.  quite low down
-    c = shearedcube([(mholderw-40)*scl, 150*scl, 30*scl],
-            shear=[10*scl, 10*scl, 0],
-            innershear=[-10*scl, 8*scl, 0])
+    c = shearedcube([(65)*scl, 145*scl, 57*scl],
+            shear=[2*scl, 20*scl, 0],
+            innershear=[-2*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[175*scl, (mholdero+5)*scl, (lcd_d-32)*scl]).add(c)
+    c = translate(v=[175*scl, (mholdero+35)*scl, (lcd_d-59)*scl]).add(c)
     b -= c
 
     # matching screen mid (front)
@@ -3251,22 +3251,20 @@ def screen_front_edge(scl, ht):
     if pin_parts_3d:
         c = union()
         
-        # support magnet holder
-        h = cube([65*scl, 6*scl, 45*scl])
-        c += translate([(15)*scl, (mholdero+mholderw/2-20)*scl, 0*scl]).add(h)
-        h = cube([6*scl, (mholderw-10)*scl, 45*scl])
-        c += translate([(70)*scl, (mholdero-10)*scl, 0*scl]).add(h)
+        if False: # XXX rely on repsnapper support
+            # support magnet holder
+            h = cube([65*scl, 6*scl, 45*scl])
+            c += translate([(15)*scl, (mholdero+mholderw/2-20)*scl, 0*scl]).add(h)
+            h = cube([6*scl, (mholderw-10)*scl, 45*scl])
+            c += translate([(70)*scl, (mholdero-10)*scl, 0*scl]).add(h)
 
         # support hex bolt hole
-        h = cube([7*scl, 25*scl, 75*scl])
-        c += translate([(45)*scl, (-24)*scl, -28*scl]).add(h)
-        h = cube([7*scl, 45*scl, 62*scl])
-        c += translate([(67)*scl, (-24)*scl, -15*scl]).add(h)
-        h = cube([7*scl, 25*scl, 62*scl])
-        c += translate([(22)*scl, (-24)*scl, -15*scl]).add(h)
+        h = cube([6*scl, 25*scl, 30*scl])
+        c += translate([(45.5)*scl, (-24)*scl, 17*scl]).add(h)
+        c += translate([(28.5)*scl, (-24)*scl, 17*scl]).add(h)
 
         h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
-        h = translate([(45.5)*scl, (ht-4)*scl, 7.4*scl]).add(h)
+        h = translate([(47.5)*scl, (ht-4)*scl, 7.4*scl]).add(h)
         c += h
         h = translate([(-17)*scl, (0)*scl, 0*scl]).add(h)
         c += h
@@ -4914,14 +4912,14 @@ if __name__ == '__main__':
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4929,7 +4927,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
