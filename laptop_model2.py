@@ -3339,11 +3339,11 @@ def screen_back_edge(scl, ht):
     b -= t
 
     # slot to fit a nut into
-    c = cube([120*scl, 22*scl, 52*scl], center=True)
-    c = translate(v=[(-55)*scl, (55)*scl, (0)*scl]).add(c)
+    c = cube([140*scl, 25*scl, 55*scl], center=True)
+    c = translate(v=[(-75)*scl, (55)*scl, (0)*scl]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     b -= t
-    c = cylinder(r=30.0*scl, h=22*scl, center=True, segments=6)
+    c = cylinder(r=32.0*scl, h=25*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
@@ -4909,13 +4909,13 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4923,7 +4923,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4931,7 +4931,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
