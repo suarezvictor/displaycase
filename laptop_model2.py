@@ -17,10 +17,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -2074,9 +2074,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u = union()
     w = boxlength-back_top_width
     bht = ht
-    friclen = scrn_hinge_ht+3
+    friclen = ht-128
 
-    print "BASE_BACK_HINGE ht", bht
+    print "BASE_BACK_HINGE ht", bht, friclen
     wthick = 130
     walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick,
                                         D:hthick, B:110}
@@ -4637,7 +4637,7 @@ def create_laptop(t, scl, part, angle):
 
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
     base_front_ht = total_width / 2 - base_adjust_ht
-    base_back_hinge_ht = 142
+    base_back_hinge_ht = 162
 
     if part == PCB1:
         se = pcb1(scl)
@@ -4923,7 +4923,7 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4935,7 +4935,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
