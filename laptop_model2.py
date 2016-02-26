@@ -20,7 +20,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3294,7 +3294,7 @@ def screen_front_edge(scl, ht):
 
     return b
 
-def screen_back_edge(scl, ht):
+def screen_back_edge(scl, ht, cable_access=False):
     b = screen_box(scl, ht-2, end=False, back=True)
     b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
 
@@ -3346,6 +3346,13 @@ def screen_back_edge(scl, ht):
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[(0)*scl, (55)*scl, (0)*scl]).add(t)
     b -= t
+
+    # cable access
+    d = shearedcube([(26)*scl, ((290))*scl, (41)*scl],
+            shear=[5, -0*scl, 0],
+            innershear=[0, 0*scl, 0])
+    c = translate(v=[(lcd_w+25)*scl, (ht-730)*scl, (-15)*scl]).add(d)
+    b -= c
 
     # matching screen mid (back)
     d = shearedcube([(26)*scl, ((28))*scl, (31)*scl],
@@ -4707,7 +4714,7 @@ def create_laptop(t, scl, part, angle):
     if part == SCREEN_BACK_EDGE:
         sbh = (total_width-scrn_centre_ht)/2-adj
         print "screen back edge", sbh/10., scrn_centre_ht/2./10.
-        se = screen_back_edge(scl, sbh)
+        se = screen_back_edge(scl, sbh, mirroring & RIGHTPART)
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -4905,12 +4912,12 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
