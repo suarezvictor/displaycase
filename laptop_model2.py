@@ -3376,7 +3376,13 @@ def screen_back_edge(scl, ht, cable_access=False):
                 l.append(i)
                 i += step * 1.5
             for l in [2, 70, ht-15] + l:
-                c += translate([(lcd_w+50+lcd_panel_offs)*scl, (l)*scl, -18*scl]).add(h)
+                # two supports under the lvds cable cutout move back
+                if abs(l - (ht-590)) < 150:
+                    offs = 20
+                else:
+                    offs = 0
+                c += translate([(lcd_w+50+lcd_panel_offs+offs)*scl,
+                        (l)*scl, -18*scl]).add(h)
 
             h = cube([6*scl, scrn_centre_ht/2*scl, 40*scl])
             h = translate([(lcd_w+181)*scl, (ht-4)*scl, 7.4*scl]).add(h)
