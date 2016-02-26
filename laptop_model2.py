@@ -2072,14 +2072,13 @@ def base_cutout(scl, ht, loffs=0, arch=False, doffs=0):
 
 def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u = union()
-    w = boxlength-back_top_width
+    w1 = boxlength-back_top_width
     bht = ht
     friclen = ht-128
 
     print "BASE_BACK_HINGE ht", bht, friclen
-    wthick = 130
-    walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick,
-                                        D:hthick, B:110}
+    walls = {T:hthick, L:-1, R:hthick, F:50,
+                                        D:hthick, B:ht-50}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -2089,12 +2088,12 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
             }
     b = hollowbox(scl, back_top_width, bht, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[w*scl, 0, 0]).add(b)
+    b = translate(v=[w1*scl, 0, 0]).add(b)
     u += b
 
     # fill in around hinge before cut-out
     c = cube([120*scl, (scrn_hinge_ht+2)*scl, 40*scl])
-    c = translate(v=[(w+20)*scl,hthick*scl,(5)*scl]).add(c)
+    c = translate(v=[(w1+20)*scl,hthick*scl,(5)*scl]).add(c)
     u += c
 
     w = boxlength-112
@@ -2247,6 +2246,20 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
 
+    # hollow out below screw hole
+    c = shearedcube([150*scl, (ht-140)*scl, (boxheight-95)*scl],
+                shear=[35*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = translate(v=[(w1-1)*scl,90*scl,(70)*scl]).add(c)
+    u -= c
+
+    # hollow out above screw hole
+    c = shearedcube([100*scl, (ht-140)*scl, (40)*scl],
+                shear=[-35*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = translate(v=[(w1-1)*scl,90*scl,(15)*scl]).add(c)
+    u -= c
+    
     if pin_parts_3d:
         v = union()
 
