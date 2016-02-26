@@ -3062,8 +3062,7 @@ def screen_end(scl, ht, lcd_end_ht):
 
     # bolt-hole
     for end in [False]:
-        c = chamfered_backbox_screwholes(scl, 60+ht, 27, lcdscrewrad,
-                                         nochamfer=True)
+        c = chamfered_backbox_screwholes(scl, 60+ht, 25, lcdscrewrad)
         c = rotate([0, -90, 90]).add(c)
         #c = translate(v=[0, 0*scl, 0]).add(c)
         t = lid_bolthole(scl, end=end).add(c)
@@ -4906,13 +4905,13 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
