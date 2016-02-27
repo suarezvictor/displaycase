@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1459,7 +1459,7 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     offs = tpanel_l_b/2
     # half-way point support for top front bamboo panel
     c = union()
-    c += cube([(110)*scl, (82)*scl, (60)*scl])
+    c += cube([(110)*scl, (82)*scl, (50)*scl])
     d = cube([(110)*scl, (52)*scl, (boxheight-38)*scl])
     c += translate(v=[0, (30)*scl, 0*scl]).add(d)
     b = translate(v=[(offs-5)*scl, (-25)*scl, 0*scl]).add(c)
@@ -4245,13 +4245,13 @@ def compartment_lockin_capture(scl, ht, tpanel_offset, kbd_offs):
     v += translate(v=[0, 5*scl, (65)*scl]).add(c)
     c = cube([112*scl, 55*scl, (60)*scl], center=True)
     v -= translate(v=[0*scl, 36*scl, (66)*scl]).add(c)
-    c = cube([147*scl, 86*scl, (boxheight-78)*scl], center=True)
-    v -= translate(v=[0*scl, -46*scl, (46)*scl]).add(c)
+    c = cube([147*scl, 74*scl, (boxheight-78)*scl], center=True)
+    v -= translate(v=[0*scl, -56*scl, (46)*scl]).add(c)
     c = cylinder(r=56.*scl, h=(140)*scl, segments=50, center=True)
     v -= translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([15*scl, 10*scl, 24*scl], center=True)
-    v += translate(v=[52*scl, 2*scl, (boxheight-70)*scl]).add(c)
-    v += translate(v=[-52*scl, 2*scl, (boxheight-70)*scl]).add(c)
+    c = cube([27*scl, 28*scl, 34*scl], center=True)
+    v += translate(v=[59*scl, -5*scl, (boxheight-75)*scl]).add(c)
+    v += translate(v=[-59*scl, -5*scl, (boxheight-75)*scl]).add(c)
 
     c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
     u += c
@@ -4297,7 +4297,7 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
     v -= translate(v=[0, -40*scl, (-11)*scl]).add(c)
 
     v = rotate([0,0,45]).add(v)
-    v = rotate([0,0,45]).add(v)
+    #v = rotate([0,0,45]).add(v)
     c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
     u += c
 
@@ -4365,19 +4365,19 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     # compartment lockin
     offs = tpanel_l_b/2
-    b = shearedcube([(140)*scl, (40)*scl, (50)*scl],
+    b = shearedcube([(140)*scl, (47)*scl, (50)*scl],
                 shear=[0*scl, -5*scl, 0],
                 innershear=[0, 0*scl, 0])
-    c = translate(v=[(offs-180-20)*scl, (ht-43)*scl, (0)*scl]).add(b)
+    c = translate(v=[(offs-180-20)*scl, (ht-50)*scl, (0)*scl]).add(b)
     u += c
     b = cube([(106)*scl, (40)*scl, (90)*scl])
-    c = translate(v=[(offs-180-3)*scl, (ht-28)*scl, (-1)*scl]).add(b)
+    c = translate(v=[(offs-180-3)*scl, (ht-34)*scl, (-1)*scl]).add(b)
     u -= c
-    b = shearedcube([(50)*scl, (60)*scl, (25)*scl],
+    b = shearedcube([(50)*scl, (80)*scl, (28)*scl],
                 shear=[0*scl, -10*scl, 0],
-                innershear=[28*scl, 10*scl, 0])
+                innershear=[30*scl, 10*scl, 0])
     b = rotate([90,90,0]).add(b)
-    c = translate(v=[(offs-180+20)*scl, (ht-10)*scl, (57)*scl]).add(b)
+    c = translate(v=[(offs-180+10)*scl, (ht-20)*scl, (59)*scl]).add(b)
     u -= c
 
     v = union()
@@ -5005,7 +5005,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -5014,7 +5014,7 @@ if __name__ == '__main__':
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        #COMPARTMENT_LOCKIN,
+                        COMPARTMENT_LOCKIN,
                         COMPARTMENT_LOCKIN_CAPTURE,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
