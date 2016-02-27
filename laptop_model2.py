@@ -1413,6 +1413,15 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
             curverads=curverads)
     u += b
 
+    offs = tpanel_l_b/2
+    # half-way point support for top front bamboo panel
+    c = cube([(110)*scl, (82)*scl, (60)*scl])
+    b = translate(v=[(offs-5)*scl, (-25)*scl, 0*scl]).add(c)
+    u += b
+    c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
+    u += b
+
     # inner cut-out for actual touchpanel
     # XXX TODO: add curved edges (use a hollowbox as the cutout)
     crad = 30
@@ -1523,20 +1532,14 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
                      (+20)*scl]).add(s)
     u -= b
 
-    offs = tpanel_l_b/2
-    # half-way point support for top front bamboo panel
-    c = cube([(100)*scl, (70)*scl, (60)*scl])
-    b = translate(v=[offs*scl, (-25)*scl, 0*scl]).add(c)
-    u += b
-    c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
-    u += b
-
     # cutout for circular lock
     c = union()
-    c += cylinder(r=30*scl, h=(110)*scl, segments=50, center=True)
-    d = cylinder(r=25*scl, h=(110)*scl, segments=50, center=True)
+    d = cylinder(r=40*scl, h=(25)*scl, segments=50, center=True)
+    c += translate(v=[0*scl, 0*scl, -44*scl]).add(d)
+    d = cylinder(r=30*scl, h=(110)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
+    d = cylinder(r=30*scl, r1=40*scl, h=(14)*scl, segments=50, center=True)
+    c += translate(v=[0*scl, 0*scl, -25.1*scl]).add(d)
     b = translate(v=[(offs+50)*scl, (-5)*scl, 62*scl]).add(c)
     u -= b
 
@@ -4212,20 +4215,21 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
 
     offs = tpanel_l_b/2
     v = union()
-    c = cylinder(r=22.*scl, h=(boxheight-25)*scl, segments=50, center=True)
+    c = cylinder(r=25.*scl, h=(boxheight-25)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (29.5)*scl]).add(c)
-    c = cylinder(r=28.*scl, h=(22)*scl, segments=50, center=True)
-    v += translate(v=[0, 0*scl, (-1)*scl]).add(c)
-    c = cylinder(r=22.*scl, r1=28.*scl, h=(8)*scl, segments=50, center=True)
-    v += translate(v=[0, 0*scl, (13.9)*scl]).add(c)
+    c = cylinder(r=40.*scl, h=(18)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (1)*scl]).add(c)
+    c = cylinder(r=25.*scl, r1=40.*scl, h=(15)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (16.9)*scl]).add(c)
     c = cylinder(r=45.*scl, h=(20)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([12*scl, 44.01*scl, 15*scl], center=True)
+    c = cube([12*scl, 50.01*scl, 20*scl], center=True)
     v -= translate(v=[0, 0*scl, (-13)*scl]).add(c)
-    c = cube([60*scl, 20*scl, 90*scl], center=True)
+    c = cube([80*scl, 20*scl, 90*scl], center=True)
     v -= translate(v=[0, -30*scl, (-11)*scl]).add(c)
 
-    #v = rotate([0,0,45]).add(v)
+    v = rotate([0,0,45]).add(v)
+    v = rotate([0,0,45]).add(v)
     c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
     u += c
 
@@ -4235,9 +4239,9 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
 
     if pin_parts_3d:
         c = union()
-        h = pin_t(ht=160, dep=108)
+        h = pin_t(ht=185, dep=108)
         h = rotate([0,90,0]).add(h)
-        c += translate([(offs+30)*scl, (91)*scl, -(ht-8)*scl]).add(h)
+        c += translate([(offs+14.9)*scl, (91)*scl, -(ht-8)*scl]).add(h)
         h = pin_t(ht=180.8, dep=108)
         c += translate([(offs+47)*scl, (91)*scl, -(ht+25.9)*scl]).add(h)
 
