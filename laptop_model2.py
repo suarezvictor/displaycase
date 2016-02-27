@@ -17,10 +17,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3337,12 +3337,6 @@ def screen_back_edge(scl, ht, cable_access=False):
     v += translate(v=[0, 0, 23*scl]).add(c)
     b -= translate(v=[(lcd_w+20)*scl, (-1)*scl, (lcd_d-10-46)*scl]).add(v)
 
-    # bolt-hole
-    c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    t = lid_bolthole(scl, end=False).add(c)
-    b -= t
-
     # slot to fit a nut into
     c = cube([140*scl, 25*scl, 55*scl], center=True)
     c = translate(v=[(-75)*scl, (55)*scl, (0)*scl]).add(c)
@@ -3356,10 +3350,10 @@ def screen_back_edge(scl, ht, cable_access=False):
     b -= t
 
     # cable access
-    d = shearedcube([(26)*scl, ((290))*scl, (41)*scl],
-            shear=[5, -0*scl, 0],
+    d = shearedcube([(46)*scl, ((320))*scl, (41)*scl],
+            shear=[50*scl, -0*scl, 0],
             innershear=[0, 0*scl, 0])
-    c = translate(v=[(lcd_w+25)*scl, (ht-730)*scl, (-15)*scl]).add(d)
+    c = translate(v=[(lcd_w+35)*scl, (ht-630)*scl, (-15)*scl]).add(d)
     b -= c
 
     # matching screen mid (back)
@@ -3375,7 +3369,7 @@ def screen_back_edge(scl, ht, cable_access=False):
     if pin_parts_3d:
         c = union()
 
-        if True: # XXX use repsnapper "support" instead
+        if False: # XXX use repsnapper "support" instead
             h = union()
             h += cube([6*scl, 15*scl, 60*scl])
             l = []
@@ -3384,8 +3378,8 @@ def screen_back_edge(scl, ht, cable_access=False):
                 l.append(i)
                 i += step * 1.5
             for l in [2, 70, ht-15] + l:
-                # two supports under the lvds cable cutout move back
-                if abs(l - (ht-590)) < 150:
+                # three supports under the lvds cable cutout move back
+                if abs(l - (ht-470)) < 160:
                     offs = 20
                 else:
                     offs = 0
@@ -3398,44 +3392,25 @@ def screen_back_edge(scl, ht, cable_access=False):
             h = translate([(-20)*scl, (0)*scl, 0*scl]).add(h)
             c += h
 
-        if False:
-            h = cube([6*scl, (ht-2)*scl, 60*scl])
-            h = translate([(lcd_w+55)*scl, (2)*scl, -15*scl]).add(h)
-            c += h
-            #c += translate([(24)*scl, (0)*scl, 0*scl]).add(h)
+        v = union()
+        h = pin_t(mirror=False, dep=209)
+        h = rotate([0, 0, -90]).add(h)
+        v += h
+        h = pin_t(mirror=True, dep=180, ht=100)
+        h = rotate([0, 0, -90]).add(h)
 
-        h = pin(B0, scl)
-        h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+210)*scl, (ht+35)*scl, (7.4+37)*scl]).add(h)
-        c += h
-        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
+        v += translate([(0)*scl, (0)*scl, (-218)*scl]).add(h)
 
-        h = pin(B0, scl)
-        h = rotate([90, 0, 0]).add(h)
-        h = translate([(lcd_w+210)*scl, (-35)*scl, (7.4+37)*scl]).add(h)
-        c += h
-        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-        h = translate([(-80)*scl, (0)*scl, 0*scl]).add(h)
-        c += h
-
-        h = pin(B0, scl)
-        h = rotate([90, 0, 0]).add(h)
-        for l in [ht-45, ht/2, 45]:
-            c += translate([(lcd_w+235)*scl, l*scl, (7.4+37)*scl]).add(h)
-
-        h = pin_t(mirror=False, dep=15)
-        h = rotate([90, 0, 0]).add(h)
-        c += translate([(lcd_w+90)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
-        c += translate([(lcd_w+90)*scl, (ht+5)*scl, (7.4+37+3)*scl]).add(h)
-        c += translate([(lcd_w+200)*scl, (-125)*scl, (7.4+37+3)*scl]).add(h)
-        c += translate([(lcd_w+200)*scl, (ht-5)*scl, (7.4+37+3)*scl]).add(h)
-
-        c = translate([0, 0, (8)*scl]).add(c)
+        c += translate([(lcd_w+220)*scl, (ht)*scl, (179)*scl]).add(v)
+        c += translate([(lcd_w+220)*scl, (ht/2)*scl, (179)*scl]).add(v)
+        c += translate([(lcd_w+220)*scl, (8)*scl, (179)*scl]).add(v)
         b += c
+
+    # bolt-hole (remove afterwards due to complex pinning)
+    c = cylinder(r=lcdscrewrad*scl, h=(100)*scl, center=True, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    b -= t
 
     if cutdown:
         # cut down
@@ -4931,7 +4906,7 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
@@ -4942,8 +4917,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
