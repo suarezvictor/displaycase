@@ -2206,7 +2206,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u += t
 
     # hollow hinge out
-    c = cylinder(r=(rad-12)*scl, h=(friclen+50)*scl, segments=50)
+    c = cylinder(r=(rad-12)*scl, h=(friclen+40)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2221,6 +2221,12 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     c = cylinder(r=(rad-8)*scl, r1 = (rad-12)*scl, h=(14)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(ht+scrn_hinge_ht-25.5)*scl,-55*scl]).add(c)
+    t = hinge_translate(scl).add(c)
+    u -= t
+    # hole for bolt
+    c = cylinder(r=(35./2)*scl, h=(friclen+90)*scl, segments=50)
+    c = rotate([0, 90, 90]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2511,20 +2517,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     rad=35.0 + 12
 
-    # add lock-in to base_back_hinge
-    c = cylinder(r=(rad-5)*scl, r1 = (rad-13)*scl, h=(14)*scl, segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht-13)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u += t
-
-    # hollow hinge out, screw from friction hinge pokes through here
+    # screw from friction hinge pokes through here
     c = union()
-    d = cylinder(r=(18)*scl, r1=(rad-10)*scl, h=(12)*scl, segments=50)
-    c.add(d)
-    d = cylinder(r=(18)*scl, h=(70)*scl, segments=50)
-    c.add(d)
-    d = cylinder(r=(rad-10)*scl, h=(30)*scl, segments=50)
+    d = cylinder(r=(18)*scl, h=(90)*scl, segments=50)
     d = translate(v=[0*scl,0*scl,-29*scl]).add(d)
     c.add(d)
     c = rotate([0, 90, 90]).add(c)
@@ -4650,7 +4645,7 @@ def create_laptop(t, scl, part, angle):
 
     base_back_ht = (total_width - base_centre_ht) / 2 - base_adjust_ht
     base_front_ht = total_width / 2 - base_adjust_ht
-    base_back_hinge_ht = 162
+    base_back_hinge_ht = 172
 
     if part == PCB1:
         se = pcb1(scl)
@@ -4947,7 +4942,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
