@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -1413,30 +1413,6 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
             curverads=curverads)
     u += b
 
-    offs = tpanel_l_b/2
-    # half-way point support for top front bamboo panel
-    c = cube([(110)*scl, (82)*scl, (60)*scl])
-    b = translate(v=[(offs-5)*scl, (-25)*scl, 0*scl]).add(c)
-    u += b
-    c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
-    b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
-    u += b
-
-    # inner cut-out for actual touchpanel
-    # XXX TODO: add curved edges (use a hollowbox as the cutout)
-    crad = 30
-    c = curvebox(scl, tpanel_l+6, tpanel_w+6, 11, crad)
-    c = translate(v=[(100-3)*scl, ((ht-tpanel_w-6)/2)*scl, (-1)*scl]).add(c)
-    u -= c
-    c = curvebox(scl, tpanel_l-16, tpanel_w-16, 42, 22)
-    c = translate(v=[(100+8)*scl, ((ht-tpanel_w)/2+8)*scl, (9)*scl]).add(c)
-    u -= c
-
-    # keyboard tray indent
-    b = kbd_tray_indent(scl)
-    t = translate(v=[(tpanel_l_b-19)*scl, (ht-282)*scl, (16)*scl]).add(b)
-    u -= t
-
     # front cut-out matching base_front_top
     c = cube([181*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(-1)*scl, (-1)*scl, (40)*scl]).add(c)
@@ -1472,6 +1448,33 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     # cutout for underside of panel (reduce plastic usage)
     c = cube([tpanel_l_b*scl, (ht+2)*scl, (150)*scl])
     c = translate(v=[(250)*scl, (-1)*scl, (60)*scl]).add(c)
+    u -= c
+
+    # keyboard tray indent
+    b = kbd_tray_indent(scl)
+    t = translate(v=[(tpanel_l_b-19)*scl, (ht-282)*scl, (16)*scl]).add(b)
+    u -= t
+
+    offs = tpanel_l_b/2
+    # half-way point support for top front bamboo panel
+    c = union()
+    c += cube([(110)*scl, (82)*scl, (60)*scl])
+    d = cube([(110)*scl, (52)*scl, (boxheight-38)*scl])
+    c += translate(v=[0, (30)*scl, 0*scl]).add(d)
+    b = translate(v=[(offs-5)*scl, (-25)*scl, 0*scl]).add(c)
+    u += b
+    c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
+    b = translate(v=[offs*scl, (ht-50)*scl, (hthick)*scl]).add(c)
+    u += b
+
+    # inner cut-out for actual touchpanel
+    # XXX TODO: add curved edges (use a hollowbox as the cutout)
+    crad = 30
+    c = curvebox(scl, tpanel_l+6, tpanel_w+6, 11, crad)
+    c = translate(v=[(100-3)*scl, ((ht-tpanel_w-6)/2)*scl, (-1)*scl]).add(c)
+    u -= c
+    c = curvebox(scl, tpanel_l-16, tpanel_w-16, 42, 22)
+    c = translate(v=[(100+8)*scl, ((ht-tpanel_w)/2+8)*scl, (9)*scl]).add(c)
     u -= c
 
     # wings for screw-holes to fit with front base
@@ -1534,11 +1537,11 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
 
     # cutout for circular lock
     c = union()
-    d = cylinder(r=40*scl, h=(25)*scl, segments=50, center=True)
-    c += translate(v=[0*scl, 0*scl, -44*scl]).add(d)
-    d = cylinder(r=30*scl, h=(110)*scl, segments=50, center=True)
+    d = cylinder(r=50*scl, h=(20)*scl, segments=50, center=True)
+    c += translate(v=[0*scl, 0*scl, -42*scl]).add(d)
+    d = cylinder(r=35*scl, h=(140)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
-    d = cylinder(r=30*scl, r1=40*scl, h=(14)*scl, segments=50, center=True)
+    d = cylinder(r=35*scl, r1=50*scl, h=(14)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -25.1*scl]).add(d)
     b = translate(v=[(offs+50)*scl, (-5)*scl, 62*scl]).add(c)
     u -= b
@@ -1605,6 +1608,28 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
         c += h
 
         u += c
+
+    if cutdown:
+        c = cube([500*scl, (ht+200)*scl, 300*scl])
+        u -= translate([-100*scl, -100*scl, -20*scl]).add(c)
+        c = cube([900*scl, (ht+200)*scl, 300*scl])
+        u -= translate([(offs+120)*scl, -100*scl, -1*scl]).add(c)
+        c = cube([1900*scl, (ht+200)*scl, 300*scl])
+        u -= translate([(-100)*scl, 200*scl, -20*scl]).add(c)
+
+        if pin_parts_3d:
+            c = union()
+            h = pin(B0, scl)
+            c += translate([(tpanel_l_b/2-40)*scl, (0)*scl, 25*scl]).add(h)
+            c += translate([(tpanel_l_b/2-40)*scl, (0)*scl, -40*scl]).add(h)
+            c += translate([(tpanel_l_b/2+40)*scl, (0)*scl, 25*scl]).add(h)
+            c += translate([(tpanel_l_b/2+40)*scl, (0)*scl, -40*scl]).add(h)
+            c += translate([(tpanel_l_b/2+120)*scl, (0)*scl, 25*scl]).add(h)
+            c += translate([(tpanel_l_b/2+120)*scl, (0)*scl, -40*scl]).add(h)
+
+            c = rotate([90, 0, 0]).add(c)
+            c = translate([(0)*scl, (0)*scl, -1.2*scl]).add(c)
+            u += c
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4215,18 +4240,18 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
 
     offs = tpanel_l_b/2
     v = union()
-    c = cylinder(r=25.*scl, h=(boxheight-25)*scl, segments=50, center=True)
+    c = cylinder(r=30.*scl, h=(boxheight-25)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (29.5)*scl]).add(c)
-    c = cylinder(r=40.*scl, h=(18)*scl, segments=50, center=True)
+    c = cylinder(r=46.*scl, h=(18)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (1)*scl]).add(c)
-    c = cylinder(r=25.*scl, r1=40.*scl, h=(15)*scl, segments=50, center=True)
-    v += translate(v=[0, 0*scl, (16.9)*scl]).add(c)
+    c = cylinder(r=30.*scl, r1=46.*scl, h=(19)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (18.9)*scl]).add(c)
     c = cylinder(r=45.*scl, h=(20)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([12*scl, 50.01*scl, 20*scl], center=True)
+    c = cube([15*scl, 60.01*scl, 20*scl], center=True)
     v -= translate(v=[0, 0*scl, (-13)*scl]).add(c)
-    c = cube([80*scl, 20*scl, 90*scl], center=True)
-    v -= translate(v=[0, -30*scl, (-11)*scl]).add(c)
+    c = cube([90*scl, 40*scl, 105*scl], center=True)
+    v -= translate(v=[0, -40*scl, (-11)*scl]).add(c)
 
     v = rotate([0,0,45]).add(v)
     v = rotate([0,0,45]).add(v)
@@ -4931,7 +4956,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4940,7 +4965,7 @@ if __name__ == '__main__':
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        COMPARTMENT_LOCKIN,
+                        #COMPARTMENT_LOCKIN,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
