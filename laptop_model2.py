@@ -149,7 +149,7 @@ lcd_front_indent = 108
 back_top_width = 170+79
 front_top_width = 180
 
-scrn_centre_ht = 90.0
+scrn_centre_ht = 90.0 # XXX +10!
 base_centre_ht = 140.0
 
 bdep = 325
@@ -4587,12 +4587,12 @@ def create_laptop(t, scl, part, angle):
         b = screen_adjust(b, scl, angle)
 
     if part == SCREEN_HINGE:
-        se = screen_hinge(scl, scrn_hinge_ht)
-        m = translate(v=[0, lid_adjust_ht*scl,0]).add(se)
+        se = screen_hinge(scl, scrn_hinge_ht-5)
+        m = translate(v=[0, (lid_adjust_ht-5)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
         if mirroring & RIGHTPART:
-            m = mirror_part(se, scl, total_width-lid_adjust_ht)
+            m = mirror_part(se, scl, total_width-(lid_adjust_ht-5))
             b.add(m)
 
         b = screen_adjust(b, scl, angle)
@@ -4691,6 +4691,7 @@ def create_laptop(t, scl, part, angle):
         sfh = (total_width-scrn_centre_ht)/2-adj
         print "screen front edge", sfh/10., scrn_centre_ht/2./10.
         se = screen_front_edge(scl, sfh)
+        adj -= 10
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -4704,6 +4705,7 @@ def create_laptop(t, scl, part, angle):
         sbh = (total_width-scrn_centre_ht)/2-adj
         print "screen back edge", sbh/10., scrn_centre_ht/2./10.
         se = screen_back_edge(scl, sbh, mirroring & RIGHTPART)
+        adj -= 10
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
@@ -4776,8 +4778,8 @@ def create_laptop(t, scl, part, angle):
         b.add(m)
 
     if part == SCREEN_MID:
-        se = screen_mid(scl, scrn_centre_ht)
-        m = translate(v=[0, (total_width/2-scrn_centre_ht/2)*scl,0]).add(se)
+        se = screen_mid(scl, scrn_centre_ht+10)
+        m = translate(v=[0, (total_width/2-(scrn_centre_ht+10)/2)*scl,0]).add(se)
         b.add(m)
         b = screen_adjust(b, scl, angle)
 
@@ -4906,9 +4908,9 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
