@@ -17,10 +17,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -59,6 +59,7 @@ BASE_PANEL_BACK_CLIPS = 29
 BASE_PANEL_FRONT_CLIPS = 30
 PCB3 = 31
 PCB3_SUPPORT = 32
+COMPARTMENT_LOCKIN = 33
 
 if not test:
     lcd_l = 3598.0
@@ -1536,7 +1537,7 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     c += cylinder(r=30*scl, h=(110)*scl, segments=50, center=True)
     d = cylinder(r=25*scl, h=(110)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
-    b = translate(v=[(offs+50)*scl, (-5)*scl, 60*scl]).add(c)
+    b = translate(v=[(offs+50)*scl, (-5)*scl, 62*scl]).add(c)
     u -= b
 
     if pin_parts_3d:
@@ -3729,38 +3730,6 @@ def indented_screwhole(scl, u, x, y, z, rot=0, depth=16, base_screwholes=True):
     u -= s
     return u
 
-def compartment_lockin(scl):
-    u = union()
-    c = cube([(17)*scl, (60)*scl, (55)*scl])
-    c = translate(v=[(0)*scl, (0)*scl, (5)*scl]).add(c)
-    u += c
-    c = cube([(20)*scl, (60)*scl, (35)*scl])
-    c = rotate([0, 45, 0]).add(c)
-    c = translate(v=[(0)*scl, (0)*scl, (60)*scl]).add(c)
-    u += c
-    c = cube([(10)*scl, (50)*scl, (10)*scl])
-    c = rotate([0, 45, 0]).add(c)
-    c = translate(v=[(-7)*scl, (5)*scl, (12)*scl]).add(c)
-    u += c
-
-    # take sheared top off lockin
-    c = shearedcube(size=[8*scl,
-                        64*scl, 25*scl],
-                    shear=[15*scl, 0, 0],
-                    innershear=[0*scl, 0, 0])
-    c = rotate([0, 180, 0]).add(c)
-    c = translate(v=[25*scl, -2*scl, (24)*scl]).add(c)
-    u -= c
-
-    # take corners off top
-    b = cube([(7)*scl, (3)*scl, (20)*scl])
-    c = translate(v=[(-1)*scl, (-1)*scl, (0)*scl]).add(b)
-    u -= c
-    c = translate(v=[(-1)*scl, (58)*scl, (0)*scl]).add(b)
-    u -= c
-
-    return u
-
 def kbd_tray_indent(scl):
     return cube([(30)*scl, (95)*scl, (24.1)*scl])
 
@@ -4235,29 +4204,49 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     return v
 
 
-def compartment_lockin_cutout(scl):
+def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
+
     u = union()
 
-    # screwdriver access
-    c = cube([21*scl, 80*scl, 51*scl])
-    c = translate(v=[-5*scl, -10*scl, (0)*scl]).add(c)
-    u.add(c)
+    w = tpanel_l_b-180-20
 
-    # hide lockin under a slope
-    c = shearedcube(size=[17*scl,
-                        80*scl, 26*scl],
-                    shear=[13*scl, 0, 0],
-                    innershear=[0*scl, 0, 0])
-    c = translate(v=[-1*scl, -10*scl, (3)*scl]).add(c)
-    u.add(c)
+    offs = tpanel_l_b/2
+    v = union()
+    c = cylinder(r=22.*scl, h=(boxheight-25)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (29.5)*scl]).add(c)
+    c = cylinder(r=28.*scl, h=(22)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (-1)*scl]).add(c)
+    c = cylinder(r=22.*scl, r1=28.*scl, h=(8)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (13.9)*scl]).add(c)
+    c = cylinder(r=45.*scl, h=(20)*scl, segments=50, center=True)
+    v += translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
+    c = cube([12*scl, 44.01*scl, 15*scl], center=True)
+    v -= translate(v=[0, 0*scl, (-13)*scl]).add(c)
+    c = cube([60*scl, 20*scl, 90*scl], center=True)
+    v -= translate(v=[0, -30*scl, (-11)*scl]).add(c)
 
-    # remove bit for clip to lock into
-    c = cube([(15)*scl, (80)*scl, (15)*scl])
-    c = rotate([0, 50, 0]).add(c)
-    c = translate(v=[(-14)*scl, (-10)*scl, (12)*scl]).add(c)
-    u.add(c)
+    #v = rotate([0,0,45]).add(v)
+    c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
+    u += c
 
-    return u
+    v = union()
+    u = translate(v=[180*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin_t(ht=160, dep=108)
+        h = rotate([0,90,0]).add(h)
+        c += translate([(offs+30)*scl, (91)*scl, -(ht-8)*scl]).add(h)
+        h = pin_t(ht=180.8, dep=108)
+        c += translate([(offs+47)*scl, (91)*scl, -(ht+25.9)*scl]).add(h)
+
+        c = translate([(0)*scl, (55-3+20)*scl, 0*scl]).add(c)
+        c = rotate([90,0,0]).add(c)
+        v += c
+
+    return v
+
 
 def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
@@ -4312,10 +4301,11 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = cube([(106)*scl, (40)*scl, (90)*scl])
     c = translate(v=[(offs-180-3)*scl, (ht-28)*scl, (-1)*scl]).add(b)
     u -= c
-    b = shearedcube([(60)*scl, (20)*scl, (15)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[0, 5*scl, 0])
-    c = translate(v=[(offs-180+20)*scl, (ht-38)*scl, (15)*scl]).add(b)
+    b = shearedcube([(50)*scl, (60)*scl, (25)*scl],
+                shear=[0*scl, -10*scl, 0],
+                innershear=[28*scl, 10*scl, 0])
+    b = rotate([90,90,0]).add(b)
+    c = translate(v=[(offs-180+20)*scl, (ht-10)*scl, (57)*scl]).add(b)
     u -= c
 
     v = union()
@@ -4809,6 +4799,12 @@ def create_laptop(t, scl, part, angle):
 
     pcb1_support_ht = 30
 
+    if part == COMPARTMENT_LOCKIN:
+        se = compartment_lockin(scl, tpanel_ht-compartment_ht, tpanel_offset,
+                             kbd_numpad_indent)
+        m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+        b.add(m)
+
     if part == COMPARTMENT_LID:
         se = compartment_lid(scl, tpanel_ht-compartment_ht, tpanel_offset,
                              kbd_numpad_indent)
@@ -4931,7 +4927,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4939,7 +4935,8 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
+                        COMPARTMENT_LOCKIN,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
