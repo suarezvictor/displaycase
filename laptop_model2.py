@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1524,7 +1524,7 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
 
     offs = tpanel_l_b/2
     # half-way point support for top front bamboo panel
-    c = cube([(100)*scl, (70)*scl, (boxheight-hthick)*scl])
+    c = cube([(100)*scl, (70)*scl, (60)*scl])
     b = translate(v=[offs*scl, (-25)*scl, 0*scl]).add(c)
     u += b
     c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
@@ -1538,7 +1538,6 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
     b = translate(v=[(offs+50)*scl, (-5)*scl, 60*scl]).add(c)
     u -= b
-
 
     if pin_parts_3d:
 
@@ -4303,6 +4302,22 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
     b = translate(v=[-11*scl, (ht-27)*scl, (20)*scl]).add(b)
     u -= b
 
+    # compartment lockin
+    offs = tpanel_l_b/2
+    b = shearedcube([(140)*scl, (40)*scl, (50)*scl],
+                shear=[0*scl, -5*scl, 0],
+                innershear=[0, 0*scl, 0])
+    c = translate(v=[(offs-180-20)*scl, (ht-43)*scl, (0)*scl]).add(b)
+    u += c
+    b = cube([(106)*scl, (40)*scl, (90)*scl])
+    c = translate(v=[(offs-180-3)*scl, (ht-28)*scl, (-1)*scl]).add(b)
+    u -= c
+    b = shearedcube([(60)*scl, (20)*scl, (15)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[0, 5*scl, 0])
+    c = translate(v=[(offs-180+20)*scl, (ht-38)*scl, (15)*scl]).add(b)
+    u -= c
+
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
     v.add(u)
@@ -4910,13 +4925,13 @@ if __name__ == '__main__':
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4924,7 +4939,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
