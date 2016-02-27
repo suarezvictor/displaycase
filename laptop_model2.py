@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = False
 
 SCREEN_END = 0
@@ -60,6 +60,7 @@ BASE_PANEL_FRONT_CLIPS = 30
 PCB3 = 31
 PCB3_SUPPORT = 32
 COMPARTMENT_LOCKIN = 33
+COMPARTMENT_LOCKIN_CAPTURE = 34
 
 if not test:
     lcd_l = 3598.0
@@ -1537,8 +1538,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
 
     # cutout for circular lock
     c = union()
-    d = cylinder(r=50*scl, h=(20)*scl, segments=50, center=True)
-    c += translate(v=[0*scl, 0*scl, -42*scl]).add(d)
+    d = cylinder(r=48*scl, h=(100)*scl, segments=50, center=True)
+    c += translate(v=[0*scl, 0*scl, -2*scl]).add(d)
     d = cylinder(r=35*scl, h=(140)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
     d = cylinder(r=35*scl, r1=50*scl, h=(14)*scl, segments=50, center=True)
@@ -4232,6 +4233,48 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     return v
 
 
+def compartment_lockin_capture(scl, ht, tpanel_offset, kbd_offs):
+
+    u = union()
+
+    w = tpanel_l_b-180-20
+
+    offs = tpanel_l_b/2
+    v = union()
+    c = cube([145*scl, 155*scl, (boxheight-78)*scl], center=True)
+    v += translate(v=[0, 5*scl, (65)*scl]).add(c)
+    c = cube([112*scl, 55*scl, (60)*scl], center=True)
+    v -= translate(v=[0*scl, 36*scl, (66)*scl]).add(c)
+    c = cube([147*scl, 86*scl, (boxheight-78)*scl], center=True)
+    v -= translate(v=[0*scl, -46*scl, (46)*scl]).add(c)
+    c = cylinder(r=56.*scl, h=(140)*scl, segments=50, center=True)
+    v -= translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
+    c = cube([15*scl, 10*scl, 24*scl], center=True)
+    v += translate(v=[52*scl, 2*scl, (boxheight-70)*scl]).add(c)
+    v += translate(v=[-52*scl, 2*scl, (boxheight-70)*scl]).add(c)
+
+    c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
+    u += c
+
+    v = union()
+    u = translate(v=[180*scl, 0, (55)*scl]).add(u)
+    v.add(u)
+
+    if pin_parts_3d:
+        c = union()
+        h = pin(B0, scl)
+        h = rotate([0,90,0]).add(h)
+        c += translate([(offs-40)*scl, (90)*scl, -(ht-100)*scl]).add(h)
+        c += translate([(offs+140)*scl, (90)*scl, -(ht-100)*scl]).add(h)
+        c += translate([(offs-40)*scl, (90)*scl, -(ht+80)*scl]).add(h)
+        c += translate([(offs+140)*scl, (90)*scl, -(ht+80)*scl]).add(h)
+
+        c = translate([(0)*scl, (55-5+20)*scl, 0*scl]).add(c)
+        c = rotate([90,0,0]).add(c)
+        v += c
+
+    return v
+
 def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
@@ -4240,15 +4283,15 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
 
     offs = tpanel_l_b/2
     v = union()
-    c = cylinder(r=30.*scl, h=(boxheight-25)*scl, segments=50, center=True)
+    c = cylinder(r=25.*scl, h=(boxheight-25)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (29.5)*scl]).add(c)
-    c = cylinder(r=46.*scl, h=(18)*scl, segments=50, center=True)
+    c = cylinder(r=40.*scl, h=(18)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (1)*scl]).add(c)
-    c = cylinder(r=30.*scl, r1=46.*scl, h=(19)*scl, segments=50, center=True)
+    c = cylinder(r=25.*scl, r1=40.*scl, h=(19)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (18.9)*scl]).add(c)
-    c = cylinder(r=45.*scl, h=(20)*scl, segments=50, center=True)
+    c = cylinder(r=52.*scl, h=(20)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([15*scl, 60.01*scl, 20*scl], center=True)
+    c = cube([15*scl, 50.01*scl, 20*scl], center=True)
     v -= translate(v=[0, 0*scl, (-13)*scl]).add(c)
     c = cube([90*scl, 40*scl, 105*scl], center=True)
     v -= translate(v=[0, -40*scl, (-11)*scl]).add(c)
@@ -4834,6 +4877,12 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0, (compartment_ht*scl),0]).add(se)
         b.add(m)
 
+    if part == COMPARTMENT_LOCKIN_CAPTURE:
+        se = compartment_lockin_capture(scl, tpanel_ht-compartment_ht,
+                             tpanel_offset, kbd_numpad_indent)
+        m = translate(v=[0, (compartment_ht*scl),0]).add(se)
+        b.add(m)
+
     if part == COMPARTMENT_LID:
         se = compartment_lid(scl, tpanel_ht-compartment_ht, tpanel_offset,
                              kbd_numpad_indent)
@@ -4956,7 +5005,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -4966,6 +5015,7 @@ if __name__ == '__main__':
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
+                        COMPARTMENT_LOCKIN_CAPTURE,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
