@@ -2113,7 +2113,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, bht, boxheight,
+    b = hollowbox(scl, back_top_width, bht-1, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w1*scl, 0, 0]).add(b)
     u += b
