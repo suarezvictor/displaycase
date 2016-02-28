@@ -2,10 +2,12 @@
 # License: GPLv3+
 
 """ TODO:
+    * deepen keyboard space by 0.4mm - keyboard is too tight
+    * sort out PCB1 lockin into base_end
+    * sort out compartment_lid
     * sort out gaps between base end, base hinge end, and screen edge
     * parameterise plastic join-point gaps/sizes so it can be varied
     * allow [flat] cable access through to screen connector
-    * sort out all runner triangles for panels: they're not printing properly
 """
 
 import time
@@ -17,7 +19,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
