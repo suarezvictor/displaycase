@@ -1460,8 +1460,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     # half-way point support for top front bamboo panel
     c = union()
     c += cube([(110)*scl, (82)*scl, (50)*scl])
-    d = cube([(110)*scl, (52)*scl, (boxheight-38)*scl])
-    c += translate(v=[0, (30)*scl, 0*scl]).add(d)
+    d = cube([(110)*scl, (57)*scl, (boxheight-38)*scl])
+    c += translate(v=[0, (25)*scl, 0*scl]).add(d)
     b = translate(v=[(offs-5)*scl, (-25)*scl, 0*scl]).add(c)
     u += b
     c = cube([(100)*scl, (58)*scl, (boxheight-hthick*2)*scl])
@@ -1542,8 +1542,6 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     c += translate(v=[0*scl, 0*scl, -2*scl]).add(d)
     d = cylinder(r=35*scl, h=(140)*scl, segments=50, center=True)
     c += translate(v=[0*scl, 0*scl, -40*scl]).add(d)
-    d = cylinder(r=35*scl, r1=50*scl, h=(14)*scl, segments=50, center=True)
-    c += translate(v=[0*scl, 0*scl, -25.1*scl]).add(d)
     b = translate(v=[(offs+50)*scl, (-5)*scl, 62*scl]).add(c)
     u -= b
 
@@ -4249,9 +4247,9 @@ def compartment_lockin_capture(scl, ht, tpanel_offset, kbd_offs):
     v -= translate(v=[0*scl, -56*scl, (46)*scl]).add(c)
     c = cylinder(r=56.*scl, h=(140)*scl, segments=50, center=True)
     v -= translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([27*scl, 28*scl, 34*scl], center=True)
-    v += translate(v=[59*scl, -5*scl, (boxheight-75)*scl]).add(c)
-    v += translate(v=[-59*scl, -5*scl, (boxheight-75)*scl]).add(c)
+    c = cube([27*scl, 22*scl, 34*scl], center=True)
+    v += translate(v=[59*scl, -8*scl, (boxheight-75)*scl]).add(c)
+    v += translate(v=[-59*scl, -8*scl, (boxheight-75)*scl]).add(c)
 
     c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
     u += c
@@ -4291,13 +4289,13 @@ def compartment_lockin(scl, ht, tpanel_offset, kbd_offs):
     v += translate(v=[0, 0*scl, (18.9)*scl]).add(c)
     c = cylinder(r=52.*scl, h=(20)*scl, segments=50, center=True)
     v += translate(v=[0, 0*scl, (boxheight-46)*scl]).add(c)
-    c = cube([15*scl, 50.01*scl, 20*scl], center=True)
+    c = cube([15*scl, 90*scl, 20*scl], center=True)
     v -= translate(v=[0, 0*scl, (-13)*scl]).add(c)
     c = cube([90*scl, 40*scl, 105*scl], center=True)
     v -= translate(v=[0, -40*scl, (-11)*scl]).add(c)
 
     v = rotate([0,0,45]).add(v)
-    #v = rotate([0,0,45]).add(v)
+    v = rotate([0,0,45]).add(v)
     c = translate(v=[(offs-180+50)*scl, (ht-5)*scl, (20)*scl]).add(v)
     u += c
 
