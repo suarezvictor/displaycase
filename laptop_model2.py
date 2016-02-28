@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -2300,9 +2300,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
         v += translate([(40)*scl, 0, 0]).add(d)
         v += translate([(120)*scl, 0, 0]).add(d)
-        d = pin_t(ht=240)
+        d = pin_t(ht=240, dep=35)
         d = rotate([0, 90, 0]).add(d)
-        v += translate([130*scl, 0, (50)*scl]).add(d)
+        v += translate([130*scl, 0, (64)*scl]).add(d)
 
         h = pin(B0, scl, fill=True)
         v += translate([(-30)*scl, (-3)*scl, 22*scl]).add(h)
@@ -2318,8 +2318,8 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
         u += v
 
 
-        c = cube([6*scl, 30*scl, 70*scl])
-        c = translate([(w-79)*scl, (179)*scl, 5*scl]).add(c)
+        c = cube([6*scl, 40*scl, 70*scl])
+        c = translate([(w-64)*scl, (ht-40)*scl, 15*scl]).add(c)
         u += c
 
     v = union()
@@ -5003,17 +5003,17 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
-                        COMPARTMENT_LOCKIN,
-                        COMPARTMENT_LOCKIN_CAPTURE,
+                        #COMPARTMENT_LOCKIN,
+                        #COMPARTMENT_LOCKIN_CAPTURE,
                         #BASE_PANEL,
                         #BASE_PANEL_BACK_CLIPS,
                         #BASE_PANEL_FRONT_CLIPS,
