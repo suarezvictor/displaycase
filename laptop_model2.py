@@ -19,7 +19,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -1473,8 +1473,10 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     # inner cut-out for actual touchpanel
     # XXX TODO: add curved edges (use a hollowbox as the cutout)
     crad = 30
-    c = curvebox(scl, tpanel_l+6, tpanel_w+6, 11, crad)
-    c = translate(v=[(100-3)*scl, ((ht-tpanel_w-6)/2)*scl, (-1)*scl]).add(c)
+    inset = 7.0
+    c = curvebox(scl, tpanel_l+inset, tpanel_w+inset, 13, crad)
+    c = translate(v=[(100-inset/2)*scl,
+                      ((ht-tpanel_w-inset)/2)*scl, (-1)*scl]).add(c)
     u -= c
     c = curvebox(scl, tpanel_l-16, tpanel_w-16, 42, 22)
     c = translate(v=[(100+8)*scl, ((ht-tpanel_w)/2+8)*scl, (9)*scl]).add(c)
@@ -1559,30 +1561,30 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
 
     if pin_parts_3d:
 
-        c = curvebox(scl, tpanel_l-13, tpanel_w-13, 9, 21)
+        c = curvebox(scl, tpanel_l-13, tpanel_w-13, 12, 21)
         c = translate(v=[(100+6.5)*scl, ((ht-tpanel_w)/2+6.5)*scl,
                         (0)*scl]).add(c)
         u += c
-        c = curvebox(scl, tpanel_l-26, tpanel_w-26, 11, 14)
+        c = curvebox(scl, tpanel_l-26, tpanel_w-26, 14, 14)
         c = translate(v=[(100+13)*scl, ((ht-tpanel_w)/2+13)*scl,
                         (-1)*scl]).add(c)
         u -= c
 
         c = union()
         h = pin(B0, scl)
-        h = translate([(152)*scl, (0)*scl, -102*scl]).add(h)
+        h = translate([(157)*scl, (0)*scl, -108*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(tpanel_l_b-234)*scl, (0)*scl, -102*scl]).add(h)
+        h = translate([(tpanel_l_b-240)*scl, (0)*scl, -108*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(tpanel_l_b-234)*scl, (0)*scl, (-ht)/2*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(tpanel_l_b-234)*scl, (0)*scl, (-ht+102)*scl]).add(h)
+        h = translate([(tpanel_l_b-240)*scl, (0)*scl, (-ht+108)*scl]).add(h)
         c += h
         h = pin(B0, scl)
-        h = translate([(152)*scl, (0)*scl, (-ht+102)*scl]).add(h)
+        h = translate([(157)*scl, (0)*scl, (-ht+108)*scl]).add(h)
         c += h
         h = pin(B0, scl)
         h = translate([(152)*scl, (0)*scl, (-ht)/2*scl]).add(h)
@@ -5008,7 +5010,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
