@@ -3870,7 +3870,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     else:
         cutht = 21
         shr = 0
-        doff = 0
+        doff = -2
         wo = 0
     # cutouts for bamboo panel
     b = shearedcube([(25)*scl, (2+l)*scl, cutht*scl],
@@ -3947,39 +3947,12 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             h = rotate([0, 90, 0]).add(h)
             c += translate([(w+50)*scl, (0)*scl, (-l+7)*scl]).add(h)
 
-            h = pin_t(mirror=False, pht=70, dep=boxheight-33, half=True)
-            h = rotate([0, -90, 0]).add(h)
-            c += translate([(w-102)*scl, (0)*scl, -118*scl]).add(h)
-            c += translate([(w-102)*scl, (0)*scl, -64*scl]).add(h)
-            c += translate([(w-102)*scl, (0)*scl, (-l+114)*scl]).add(h)
-            c += translate([(w-102)*scl, (0)*scl, (-l+60)*scl]).add(h)
-
-            h = pin(B0, scl)
-            h = translate([(w-50)*scl, (-3)*scl, 10*scl]).add(h)
-            c += h
             h = pin(B0, scl)
             h = translate([(w+31)*scl, (-3)*scl, 30*scl]).add(h)
             c += h
 
             h = pin(B0, scl)
-            h = translate([w*scl, (-3)*scl, (-l-15)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-90)*scl, (-3)*scl, (-l-92)*scl]).add(h)
-            c += h
-            h = pin(B0, scl)
-            h = translate([(w-90)*scl, (-3)*scl, (-l+82)*scl]).add(h)
-            c += h
-
-            v = cube([12*scl, 30*scl, 6*scl])
-            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-l+60)*scl]).add(v)
-            c += h
-            h = translate([(w-12)*scl, (-boxheight+40)*scl,
-                                        (-l+100)*scl]).add(v)
-            c += h
-            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-165)*scl]).add(v)
-            c += h
-            h = translate([(w-12)*scl, (-boxheight+40)*scl, (-205)*scl]).add(v)
+            h = translate([(w-70)*scl, (-3)*scl, (-l+62)*scl]).add(h)
             c += h
 
             c = rotate([90, 0, 0]).add(c)
@@ -4971,7 +4944,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
@@ -4983,7 +4956,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        COMPARTMENT_LID,
+                        #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
                         #BASE_PANEL,
