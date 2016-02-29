@@ -19,7 +19,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -596,21 +596,21 @@ def base_end(scl, ht, kbd_numpad_indent):
             # remove holes for connectors
 
             # Headphones
-            c = cylinder(r=30*scl, h=(40)*scl, center=True, segments=50)
+            c = cylinder(r=33*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
             c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
             u -= c
             # MicroSD
-            c = cube([165*scl, 60*scl, 32*scl])
-            c = translate(v=[(lcd_w-270)*scl, (-1)*scl, (123)*scl]).add(c)
+            c = cube([169*scl, 60*scl, 36*scl])
+            c = translate(v=[(lcd_w-272)*scl, (-1)*scl, (121)*scl]).add(c)
             u -= c
             # EOMA68
-            c = cube([550*scl, 68*scl, 65*scl])
-            c = translate(v=[(1085)*scl, (-1)*scl, (90)*scl]).add(c)
+            c = cube([550*scl, 68*scl, 69*scl])
+            c = translate(v=[(1085)*scl, (-1)*scl, (88)*scl]).add(c)
             u -= c
             # EOMA68 eject
-            c = cube([77*scl, 60*scl, 58*scl])
-            c = translate(v=[(973)*scl, (-1)*scl, (97)*scl]).add(c)
+            c = cube([77*scl, 60*scl, 61*scl])
+            c = translate(v=[(973)*scl, (-1)*scl, (96)*scl]).add(c)
             u -= c
             # USB2
             c = cube([160*scl, 180*scl, 86*scl])
@@ -620,13 +620,13 @@ def base_end(scl, ht, kbd_numpad_indent):
             # add bottom strut, along EOMA68 and USB
             b = cube([765*scl, (ht+2)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
-                    (boxheight-hthick-12+55)*scl]).add(b)
+                    (boxheight-hthick-10+55)*scl]).add(b)
             u += b
 
             # and along USB
-            b = cube([200*scl, (50)*scl, 20*scl])
+            b = cube([219*scl, (50)*scl, 20*scl])
             b = translate(v=[(usb_pos-30)*scl, (0)*scl,
-                    (boxheight-hthick-20+60)*scl]).add(b)
+                    (boxheight-hthick-18+60)*scl]).add(b)
             u += b
 
         else:
@@ -781,10 +781,10 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
 
     if kbd_numpad_indent == 0:
-        c = cube([(30)*scl, (ht+20)*scl, (47)*scl])
-        t = translate(v=[(usb_pos-31)*scl, 0, (55+24)*scl]).add(c)
+        c = cube([(30)*scl, (ht+20)*scl, (54)*scl])
+        t = translate(v=[(usb_pos-31)*scl, 0, (55+17)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+24)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+17)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
@@ -843,6 +843,15 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([70*scl, (ht+60)*scl, (boxheight-50)*scl])
     v = translate([(front_top_width+5.9)*scl, scl*(hthick), (55+25)*scl]).add(c)
     u -= v
+
+    # remove runner for compartment lid
+    c = shearedcube([20*scl, (tpanel_l_b-280)*scl, (13)*scl],
+                shear=[0*scl, 0*scl, 0],
+                innershear=[-13*scl, 0*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(tpanel_l_b-50)*scl, (ht+1)*scl,
+                                (4+55)*scl]).add(c)
+    u -= c
 
     # remove runner for panel
     c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (13)*scl],
@@ -4934,7 +4943,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
