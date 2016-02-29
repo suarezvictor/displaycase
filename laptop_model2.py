@@ -22,7 +22,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3787,8 +3787,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         doff = 5
     else:
         h = boxheight - hthick - pcbthick - 3
-        d = 25
-        doff = 0
+        d = 30
+        doff = 5
 
     b = hollowbox(scl, d, l-2, h,
                 {T:-1, L:-1, R:d, F:hthick, D:-1, B:hthick*2},
@@ -3918,18 +3918,6 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         u += b
 
         t = translate(v=[(w-75)*scl, (l+40)*scl, (19)*scl]).add(d)
-        u -= t
-
-    if woffs >= 0:
-        c = compartment_lockin(scl)
-        t = translate(v=[(w-48)*scl, 58*scl, -2*scl]).add(c)
-        u += t
-        t = translate(v=[(w-48)*scl, (l-120)*scl, -2*scl]).add(c)
-        u += t
-        c = cube([14*scl, 94*scl, 49*scl])
-        t = translate(v=[(w-26)*scl, 41*scl, 0]).add(c)
-        u -= t
-        t = translate(v=[(w-26)*scl, (l-132)*scl, 0]).add(c)
         u -= t
 
     if woffs < 0:
@@ -4334,16 +4322,35 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
 
     u = union()
 
-    w = tpanel_l_b-180-20
+    w = tpanel_l_b-180-15
 
     indent = 50
     # main panel, create staggered part for bamboo panel fill-in
-    b = cube([(w-6)*scl, (ht-6)*scl, (15)*scl])
-    b = translate(v=[3*scl, 3*scl, (0)*scl]).add(b)
+    b = cube([(w-8)*scl, (ht-8)*scl, (15)*scl])
+    b = translate(v=[4*scl, 4*scl, (0)*scl]).add(b)
     u += b
+
+    # compartment lockin
+    offs = tpanel_l_b/2
+    b = shearedcube([(150)*scl, (52)*scl, (50)*scl],
+                shear=[0*scl, -5*scl, 0],
+                innershear=[0, 0*scl, 0])
+    c = translate(v=[(offs-180-25)*scl, (ht-55)*scl, (0)*scl]).add(b)
+    u += c
+    b = cube([(120)*scl, (40)*scl, (90)*scl])
+    c = translate(v=[(offs-180-10)*scl, (ht-34)*scl, (-1)*scl]).add(b)
+    u -= c
+    b = shearedcube([(50)*scl, (80)*scl, (28)*scl],
+                shear=[0*scl, -10*scl, 0],
+                innershear=[30*scl, 10*scl, 0])
+    b = rotate([90,90,0]).add(b)
+    c = translate(v=[(offs-180+10)*scl, (ht-20)*scl, (59)*scl]).add(b)
+    u -= c
+
     b = cube([(w-indent*2)*scl, (ht-indent*2)*scl, (5)*scl])
     b = translate(v=[indent*scl, indent*scl, (-1)*scl]).add(b)
     u -= b
+
     b = shearedcube([(w-indent*2)*scl, (ht-indent*2)*scl, (15)*scl],
                 shear=[-15*scl, -15*scl, 0],
                 innershear=[15*scl, 15*scl, 0])
@@ -4355,40 +4362,15 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
                 shear=[0*scl, 0*scl, 0],
                 innershear=[-14*scl, 0*scl, 0])
     c = rotate([0,0,90]).add(c)
-    c = translate(v=[(w-130)*scl, 3*scl,
+    c = translate(v=[(w-130)*scl, 4*scl,
                                 (0)*scl]).add(c)
     u += c
-
-    # cut off edge so that lid can drop down without catching
-    c = shearedcube([2*scl, (ht+2)*scl, (22)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[-6*scl, 0*scl, 0])
-    c = translate(v=[(w-1.5)*scl, -1*scl,
-                                (-1)*scl]).add(c)
-    u -= c
 
     # cut out corner for tpanel_mid joiner
     b = cube([60*scl, 30*scl, (15)*scl])
     b = rotate([-22,0,0]).add(b)
     b = translate(v=[-11*scl, (ht-27)*scl, (20)*scl]).add(b)
     u -= b
-
-    # compartment lockin
-    offs = tpanel_l_b/2
-    b = shearedcube([(140)*scl, (47)*scl, (50)*scl],
-                shear=[0*scl, -5*scl, 0],
-                innershear=[0, 0*scl, 0])
-    c = translate(v=[(offs-180-20)*scl, (ht-50)*scl, (0)*scl]).add(b)
-    u += c
-    b = cube([(106)*scl, (40)*scl, (90)*scl])
-    c = translate(v=[(offs-180-3)*scl, (ht-34)*scl, (-1)*scl]).add(b)
-    u -= c
-    b = shearedcube([(50)*scl, (80)*scl, (28)*scl],
-                shear=[0*scl, -10*scl, 0],
-                innershear=[30*scl, 10*scl, 0])
-    b = rotate([90,90,0]).add(b)
-    c = translate(v=[(offs-180+10)*scl, (ht-20)*scl, (59)*scl]).add(b)
-    u -= c
 
     v = union()
     u = translate(v=[180*scl, 0, (55)*scl]).add(u)
@@ -4401,35 +4383,13 @@ def compartment_lid(scl, ht, tpanel_offset, kbd_offs):
         c += translate([(0)*scl, (0)*scl, (-ht-42)*scl]).add(h)
         c += translate([(-41.7)*scl, (0)*scl, (-ht+47)*scl]).add(h)
         c += translate([(w+26)*scl, (0)*scl, 13*scl]).add(h)
-        c += translate([(w-20)*scl, (0)*scl, -165*scl]).add(h)
         c += translate([(w+35)*scl, (0)*scl, -76*scl]).add(h)
         c += translate([(w+26)*scl, (0)*scl, (-ht+1)*scl]).add(h)
-        c += translate([(w-20)*scl, (0)*scl, (-ht+179)*scl]).add(h)
         c += translate([(w+35)*scl, (0)*scl, (-ht+90)*scl]).add(h)
 
-        c = translate([(180)*scl, (55-3+20)*scl, 0*scl]).add(c)
+        c = translate([(180)*scl, (55-1.2)*scl, 0*scl]).add(c)
         c = rotate([90,0,0]).add(c)
         v += c
-
-        b = cube([50*scl, 6*scl, (10)*scl])
-        b = translate(v=[(180)*scl, (ht-3.2)*scl, (9+55)*scl]).add(b)
-        v += b
-
-        b = cube([6*scl, 28*scl, (10)*scl])
-        b = translate(v=[(177.5)*scl, (ht-25)*scl, (9+55)*scl]).add(b)
-        v += b
-        b = translate(v=[(25)*scl, 0*scl, 0*scl]).add(b)
-        v += b
-
-        # mid-supports in clip holes
-        b = union()
-        d = cube([35*scl, 6*scl, (17)*scl])
-        d = translate(v=[(-39)*scl, (38)*scl, (-8)*scl]).add(d)
-        b.add(d)
-        c = translate(v=[(w+175)*scl, (ht-130)*scl, (11+55)*scl]).add(b)
-        #v += c
-        c = translate(v=[(w+175)*scl, (35)*scl, (11+55)*scl]).add(b)
-        #v += c
 
     if False: # test single clip hole
         b = cube([(w-6+30)*scl, (ht+200)*scl, (40)*scl])
@@ -5015,7 +4975,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
@@ -5023,7 +4983,7 @@ if __name__ == '__main__':
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
+                        COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
                         #BASE_PANEL,
