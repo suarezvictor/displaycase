@@ -22,7 +22,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1547,6 +1547,16 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     b = translate(v=[(offs+50)*scl, (-5)*scl, 62*scl]).add(c)
     u -= b
 
+    # remove runner along bottom of base, for lower panel
+    # these are along the back wings
+    c = shearedcube([12*scl, (tpanel_l_b-230)*scl, (12)*scl],
+                shear=[12*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([0, 0, -90]).add(c)
+    t = translate(v=[(90)*scl, (ht+12)*scl,
+                                (3)*scl]).add(c)
+    u -= t
+
     if pin_parts_3d:
 
         c = curvebox(scl, tpanel_l-13, tpanel_w-13, 9, 21)
@@ -1948,17 +1958,15 @@ def base_front_top(scl, ht, ht_offset):
                                     (55)*scl]).add(b)
     u -= c
 
-    # remove runner along top of base, for panel and compartment lid to fit
+    # remove runner along top of base, for front top panel 
     if (ht_offset > 0):
-        dropoffs = 1
-    else:
-        dropoffs = 9
-    c = shearedcube([14*scl, (ht+2)*scl, (hthick)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[-8*scl, 0*scl, 0])
-    c = translate(v=[(180)*scl, -1*scl,
-                                (dropoffs)*scl]).add(c)
-    u -= c
+        dropoffs = 3
+        c = shearedcube([12*scl, (ht+2)*scl, (12)*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[-12*scl, 0*scl, 0])
+        c = translate(v=[(180)*scl, -1*scl,
+                                    (dropoffs)*scl]).add(c)
+        u -= c
 
     if pin_parts_3d:
         c = union()
@@ -5000,16 +5008,16 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
