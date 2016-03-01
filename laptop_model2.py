@@ -19,7 +19,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -3600,27 +3600,22 @@ def cable_protector(scl, ht):
 
     # cable access
     c = cube([(45)*scl, (50)*scl, (ht+2)*scl])
-    c = translate(v=[-10*scl,-10*scl,-1*scl]).add(c)
+    c = translate(v=[10*scl,-10*scl,-1*scl]).add(c)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, -120, 0]).add(c)
     u -= c
     c = rotate([0, 70, 0]).add(c)
-    u -= c
+    #u -= c
 
     u = hinge_translate(scl).add(u)
 
     if pin_parts_3d:
         c = union()
         h = pin(B0, scl, fill=True)
-        c += translate([(boxlength-64)*scl, (ht-3)*scl, -62*scl]).add(h)
-        c += translate([(boxlength-152)*scl, (ht-3)*scl, -62*scl]).add(h)
-        c += translate([(boxlength+7)*scl, (ht-3)*scl, 0*scl]).add(h)
-        c += translate([(boxlength-30)*scl, (ht-3)*scl, 165*scl]).add(h)
-        c += translate([(boxlength-80)*scl, (ht-3)*scl, 165*scl]).add(h)
-        c += translate([(boxlength-110)*scl, (ht-3)*scl, 83.9*scl]).add(h)
-        c += translate([(boxlength-165)*scl, (ht-3)*scl, 83.9*scl]).add(h)
-        c += translate([(boxlength+20)*scl, (ht-3)*scl,
-                        (88-lid_offset)*scl]).add(h)
+        c += translate([(boxlength-30)*scl, (ht-3)*scl, 90*scl]).add(h)
+        c += translate([(boxlength-30)*scl, (ht-3)*scl, 130*scl]).add(h)
+        c += translate([(boxlength-80)*scl, (ht-3)*scl, 130*scl]).add(h)
+        c += translate([(boxlength-80)*scl, (ht-3)*scl, 90*scl]).add(h)
         u += c
 
     return u
@@ -4945,9 +4940,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
-                        #CABLE_PROTECTOR,
+                        CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
@@ -4955,7 +4950,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
