@@ -22,7 +22,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -3993,16 +3993,17 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
             c += translate([(w-46)*scl, (-3)*scl, (-l+470)*scl]).add(h)
             c += translate([(w-46)*scl, (-3)*scl, (-l+440)*scl]).add(h)
 
-            v = cube([12*scl, 30*scl, 6*scl])
-            h = translate([(w-12+woffs)*scl, (-30)*scl, (-l+470)*scl]).add(v)
-            c += h
-            h = translate([(w-12+woffs)*scl, (-30)*scl,
-                                        (-l+440)*scl]).add(v)
-            c += h
-            h = translate([(w-12+woffs)*scl, (-30)*scl, (-160)*scl]).add(v)
-            c += h
-            h = translate([(w-12+woffs)*scl, (-30)*scl, (-200)*scl]).add(v)
-            c += h
+            if False: # XXX don't need these (use support)
+                v = cube([12*scl, 30*scl, 6*scl])
+                h = translate([(w-12+woffs)*scl, (-30)*scl, (-l+470)*scl]).add(v)
+                c += h
+                h = translate([(w-12+woffs)*scl, (-30)*scl,
+                                            (-l+440)*scl]).add(v)
+                c += h
+                h = translate([(w-12+woffs)*scl, (-30)*scl, (-160)*scl]).add(v)
+                c += h
+                h = translate([(w-12+woffs)*scl, (-30)*scl, (-200)*scl]).add(v)
+                c += h
 
             c = rotate([90, 0, 0]).add(c)
             c = translate([0*scl, (0)*scl,
@@ -4948,14 +4949,14 @@ if __name__ == '__main__':
                         #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
