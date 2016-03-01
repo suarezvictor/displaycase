@@ -565,7 +565,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
         c = union()
-        b = cube([lcd_w*scl, (ht)*scl, 35*scl])
+        b = cube([lcd_w*scl, (ht)*scl, 33*scl])
         b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
         c += b
         d = cube([52*scl, (ht)*scl, 37*scl])
@@ -643,8 +643,8 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # add keyboard left support
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140-79)-2+kbd_numpad_indent, kbd_ht, 35,
-                {T:35, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
+                        (back_top_width-140-79)-2+kbd_numpad_indent, kbd_ht, 33,
+                {T:33, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
     b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent-79)*scl, (0)*scl,
                     (55)*scl]).add(b)
@@ -4953,7 +4953,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
