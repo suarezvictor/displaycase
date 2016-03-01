@@ -16,7 +16,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -25,7 +26,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = LCD_PANEL # BATTERY 
+add_internal_parts = 0 # BATTERY 
 
 test = False
 single = True
@@ -2371,6 +2372,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
             c = translate([(w-30)*scl, (0)*scl, 55*scl]).add(c)
 
             v += c
+
+    if orientate:
+        v = rotate([-90, 0, 0]).add(v)
 
     return v
 
@@ -4928,13 +4932,13 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
@@ -4945,7 +4949,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
