@@ -559,17 +559,16 @@ def base_end(scl, ht, kbd_numpad_indent):
     walls[B] = hthick
     b = hollowbox(scl, w, ht, boxheight, walls, curverads=curverads,
                                                 scalecurve=scalecurve)
-    b = translate(v=[0, 0, (55)*scl]).add(b)
     u += b
 
     if kbd_numpad_indent == 0:
         # add top strut, along entire length of base_end.
         c = union()
         b = cube([lcd_w*scl, (ht)*scl, 33*scl])
-        b = translate(v=[(120)*scl, (0)*scl, (55)*scl]).add(b)
+        b = translate(v=[(120)*scl, (0)*scl, (0)*scl]).add(b)
         c += b
         d = cube([52*scl, (ht)*scl, 37*scl])
-        b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (54)*scl]).add(d)
+        b = translate(v=[(lcd_w-72)*scl, (-1)*scl, (-1)*scl]).add(d)
         u += c
 
     if revision_1_pcb:
@@ -585,11 +584,11 @@ def base_end(scl, ht, kbd_numpad_indent):
                         innershear=[0*scl, 0, 0])
             c = rotate([180, -90, -90]).add(c)
             u += translate(v=[(lcd_w-75)*scl, (82)*scl,
-                    (boxheight-55)*scl]).add(c)
+                    (boxheight-110)*scl]).add(c)
             u += translate(v=[(lcd_w-400)*scl, (82)*scl,
-                    (boxheight-55)*scl]).add(c)
+                    (boxheight-110)*scl]).add(c)
             u += translate(v=[(usb_pos-160)*scl, (82)*scl,
-                    (boxheight-55)*scl]).add(c)
+                    (boxheight-110)*scl]).add(c)
 
     if not test:
         if kbd_numpad_indent == 0:
@@ -598,59 +597,59 @@ def base_end(scl, ht, kbd_numpad_indent):
             # Headphones
             c = cylinder(r=33*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
-            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (130)*scl]).add(c)
+            c = translate(v=[(lcd_w-340)*scl, (-1)*scl, (75)*scl]).add(c)
             u -= c
             # MicroSD
             c = cube([169*scl, 60*scl, 36*scl])
-            c = translate(v=[(lcd_w-272)*scl, (-1)*scl, (121)*scl]).add(c)
+            c = translate(v=[(lcd_w-272)*scl, (-1)*scl, (66)*scl]).add(c)
             u -= c
             # EOMA68
             c = cube([550*scl, 68*scl, 69*scl])
-            c = translate(v=[(1085)*scl, (-1)*scl, (88)*scl]).add(c)
+            c = translate(v=[(1085)*scl, (-1)*scl, (33)*scl]).add(c)
             u -= c
             # EOMA68 eject
             c = cube([77*scl, 60*scl, 61*scl])
-            c = translate(v=[(973)*scl, (-1)*scl, (96)*scl]).add(c)
+            c = translate(v=[(973)*scl, (-1)*scl, (41)*scl]).add(c)
             u -= c
             # USB2
             c = cube([160*scl, 180*scl, 86*scl])
-            c = translate(v=[(usb_pos)*scl, (-1)*scl, (71)*scl]).add(c)
+            c = translate(v=[(usb_pos)*scl, (-1)*scl, (16)*scl]).add(c)
             u -= c
 
             # add bottom strut, along EOMA68 and USB
             b = cube([765*scl, (ht+2)*scl, 15*scl])
             b = translate(v=[(925)*scl, (0)*scl,
-                    (boxheight-hthick-10+55)*scl]).add(b)
+                    (boxheight-hthick-10)*scl]).add(b)
             u += b
 
             # and along USB
             b = cube([219*scl, (50)*scl, 20*scl])
             b = translate(v=[(usb_pos-30)*scl, (0)*scl,
-                    (boxheight-hthick-18+60)*scl]).add(b)
+                    (boxheight-hthick-18+5)*scl]).add(b)
             u += b
 
         else:
             # Power Jack
             c = cube([60*scl, 60*scl, 60*scl])
-            c = translate(v=[(280)*scl, (-1)*scl, (91)*scl]).add(c)
+            c = translate(v=[(280)*scl, (-1)*scl, (16)*scl]).add(c)
             u -= c
 
             # Reset switch
             c = cylinder(r=30*scl, h=(40)*scl, center=True, segments=50)
             c = rotate([0, 90, 90]).add(c)
-            c = translate(v=[(430)*scl, (-1)*scl, (121)*scl]).add(c)
+            c = translate(v=[(430)*scl, (-1)*scl, (66)*scl]).add(c)
             u -= c
 
     # add keyboard left support
-    w = -2 
+    w1 = -2 
     if kbd_numpad_indent != 0:
-        w = kbd_numpad_indent - 5
+        w1 = kbd_numpad_indent - 5
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140-79)-2+w, kbd_ht, 33,
+                        (back_top_width-140-79)-2+w1, kbd_ht, 33,
                 {T:33, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(lcd_w-kbd_w+23-w-79)*scl, (0)*scl,
-                    (55)*scl]).add(b)
+    b = translate(v=[(lcd_w-kbd_w+23-w1-79)*scl, (0)*scl,
+                    (0)*scl]).add(b)
     u += b
 
     # back keyboard support
@@ -658,14 +657,14 @@ def base_end(scl, ht, kbd_numpad_indent):
                 {T:-1, L:12, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(boxlength-back_top_width-15)*scl,
-                     0*scl, (55)*scl]).add(b)
+                     0*scl, (0)*scl]).add(b)
     u += b
 
     rad=35.0 + 15
     # add hinge
     c = cylinder(r=rad*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,0*scl,0]).add(c)
+    c = translate(v=[0*scl,0*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -673,12 +672,12 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([(ht)*scl, (50)*scl, (85)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[-(rad-12)*scl,0*scl,10*scl]).add(c)
+    c = translate(v=[-(rad-12)*scl,0*scl,(10-55)*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
     c = base_end_bit(scl, ht, fwd=True)
-    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    c = translate(v=[(20)*scl,(0)*scl,(1+hthick)*scl]).add(c)
     u += c
 
     # add bits for screws through to base front
@@ -688,7 +687,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 180, 0]).add(c)
     c = resize([(150-hthick-4)*scl, 0, 0], False).add(c)
-    c = translate(v=[(lcd_w+66)*scl, (hthick)*scl, (boxheight-25)*scl]).add(c)
+    c = translate(v=[(lcd_w+66)*scl, (hthick)*scl, (boxheight-80)*scl]).add(c)
     u -= c
 
     # add base_back lock-ins
@@ -703,7 +702,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                         (-1)*scl]).add(c)
     d -= c
     d = translate(v=[(w-back_top_width+20)*scl,(ht+57)*scl,
-                        (hthick+55+2)*scl]).add(d)
+                        (hthick+2)*scl]).add(d)
     u += d
 
     d = union()
@@ -712,18 +711,18 @@ def base_end(scl, ht, kbd_numpad_indent):
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
     c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
-                        (hthick+55+11)*scl]).add(c)
+                        (hthick+11)*scl]).add(c)
     d += c
     c = cube([(50)*scl, (150)*scl, 50*scl])
     c = translate(v=[(w-back_top_width+145)*scl,(0)*scl,
-                        (hthick+55+2)*scl]).add(c)
+                        (hthick+2)*scl]).add(c)
     d -= c
     u += d
 
     # hollow hinge out
     c = cylinder(r=(rad-12)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,hthick*scl,0*scl]).add(c)
+    c = translate(v=[0*scl,hthick*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -739,112 +738,112 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = translate(v=[10*scl, (70)*scl, (45)*scl]).add(c)
     v -= c
     c = translate(v=[(boxlength-170-5)*scl,
-                      (0)*scl, (56+hthick)*scl]).add(v)
+                      (0)*scl, (1+hthick)*scl]).add(v)
     u += c
 
     # front keyboard tray indentation support, surrounds microsd
     c = cube([(29)*scl, (40)*scl, (boxheight-2)*scl])
     if kbd_numpad_indent == 0:
-        t = translate(v=[(tpanel_l_b-27)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-27)*scl, 0, (1)*scl]).add(c)
         u += t
-        t = translate(v=[(310)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(310)*scl, 0, (1)*scl]).add(c)
         u += t
         # between usb ports
-        t = translate(v=[(usb_pos+160)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(usb_pos+160)*scl, 0, (1)*scl]).add(c)
         u += t
         # at end of PCB
         t = translate(v=[(boxlength-back_top_width-31)*scl, 0,
-                (55+1)*scl]).add(c)
+                (1)*scl]).add(c)
         u += t
 
         # end pcb marker, also supports bamboo panels top and bottom
-        t = translate(v=[(usb_pos-30)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(usb_pos-30)*scl, 0, (1)*scl]).add(c)
         u += t
 
         # support either side of EOMA68 cpu card
         d = cube([(35)*scl, (60)*scl, (boxheight-2)*scl])
-        t = translate(v=[(tpanel_l_b+98)*scl, 0, (55+1)*scl]).add(d)
+        t = translate(v=[(tpanel_l_b+98)*scl, 0, (1)*scl]).add(d)
         u += t
-        t = translate(v=[(tpanel_l_b+683)*scl, 0, (55+1)*scl]).add(d)
+        t = translate(v=[(tpanel_l_b+683)*scl, 0, (1)*scl]).add(d)
         u += t
     else:
         # next to PCB3
-        t = translate(v=[(650)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(650)*scl, 0, (1)*scl]).add(c)
         u += t
         # roughly along the keyboard edge
-        t = translate(v=[(tpanel_l_b-95)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-95)*scl, 0, (1)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b+300)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b+300)*scl, 0, (1)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b+700)*scl, 0, (55+1)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b+700)*scl, 0, (1)*scl]).add(c)
         u += t
         # at end of PCB
         t = translate(v=[(boxlength-back_top_width-50)*scl, 0,
-                (55+1)*scl]).add(c)
+                (1)*scl]).add(c)
         u += t
 
     if kbd_numpad_indent == 0:
         c = cube([(30)*scl, (ht+20)*scl, (54)*scl])
-        t = translate(v=[(usb_pos-31)*scl, 0, (55+17)*scl]).add(c)
+        t = translate(v=[(usb_pos-31)*scl, 0, (17)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b-79)*scl, 0, (55+17)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-79)*scl, 0, (17)*scl]).add(c)
         u += t
         c = cube([(18)*scl, (ht+20)*scl, (50)*scl])
-        t = translate(v=[(tpanel_l_b-56+59)*scl, 0, (55+21)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-56+59)*scl, 0, (21)*scl]).add(c)
         u += t
     else:
         c = cube([(105)*scl, (ht+10)*scl, (18)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
-                            (55+44)*scl]).add(c)
+                            (44)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+10)*scl, (44)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
-                            (55+12)*scl]).add(c)
+                            (12)*scl]).add(c)
         u += t
         t = translate(v=[(tpanel_l_b+1-kbd_numpad_indent+5)*scl, 0,
-                            (55+12)*scl]).add(c)
+                            (12)*scl]).add(c)
         u += t
 
     # add bits for case bolthole at front
     c = cube([(90)*scl, (ht)*scl, (70)*scl])
     c = translate(v=[(60)*scl,
-                      (0)*scl, (52+hthick)*scl]).add(c)
+                      (0)*scl, (hthick-3)*scl]).add(c)
     u += c
 
     # annoying bug in hollowbox, bridge across curve and straight
     c = cube([(1)*scl, (ht)*scl, (hthick)*scl])
     c = translate(v=[(149.5)*scl,
-                      (0)*scl, (boxheight+55-hthick)*scl]).add(c)
+                      (0)*scl, (boxheight-hthick)*scl]).add(c)
     u += c
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0, 2], rad=35./2)
-    t = translate(v=[0, 0, boxheight*scl]).add(t)
+    t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
     s = chamfered_backbox_screwholes(scl, 20, 28)
     s = rotate([90, 0, 0]).add(s)
-    s = translate(v=[0, 10*scl, boxheight*scl]).add(s)
+    s = translate(v=[0, 10*scl, (boxheight-55)*scl]).add(s)
     for hole in [0,2]:
         t = case_bolthole(scl, hole).add(s)
         u -= t
 
     # add screw hole for front
     c = cube([53*scl, ht*scl, boxheight*scl])
-    t = translate(v=[(149)*scl, 0, (55)*scl]).add(c)
+    t = translate(v=[(149)*scl, 0, (0)*scl]).add(c)
     u += t
     v = front_tray_corner(scl, 195)
-    v = translate([0, scl*(ht-hthick-5), -4*scl]).add(v)
+    v = translate([0, scl*(ht-hthick-5), (-4-55)*scl]).add(v)
     u += v
     # remove extra weight from front tray
     c = shearedcube([(boxheight-66)*scl, (ht+60)*scl, (25)*scl],
             shear=[8*scl, 0*scl, 0],
             innershear=[-8*scl, 0*scl, 0])
     c = rotate([0, 90, 0]).add(c)
-    v = translate([(front_top_width-19)*scl, scl*(hthick), (55+91)*scl]).add(c)
+    v = translate([(front_top_width-19)*scl, scl*(hthick), (91)*scl]).add(c)
     u -= v
     c = cube([70*scl, (ht+60)*scl, (boxheight-50)*scl])
-    v = translate([(front_top_width+5.9)*scl, scl*(hthick), (55+25)*scl]).add(c)
+    v = translate([(front_top_width+5.9)*scl, scl*(hthick), (25)*scl]).add(c)
     u -= v
 
     # remove runner for panel
@@ -853,7 +852,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                 innershear=[11*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(boxlength-180+8+8)*scl, (ht-9)*scl,
-                                (boxheight-hthick-4+55)*scl]).add(c)
+                                (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
     # add interlock down behind base_back_bot
@@ -864,10 +863,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = translate(v=[0*scl, (ht-11)*scl, 0*scl]).add(c)
     b += c
     t = translate(v=[(boxlength-back_top_width-42)*scl, (0)*scl,
-                    (55+boxheight-hthick*2-4)*scl]).add(b)
+                    (boxheight-hthick*2-4)*scl]).add(b)
     u += t
     t = translate(v=[(220)*scl, (0)*scl,
-                    (55+boxheight-hthick*2-4)*scl]).add(b)
+                    (boxheight-hthick*2-4)*scl]).add(b)
     u += t
 
     if kbd_numpad_indent != 0:
@@ -879,13 +878,13 @@ def base_end(scl, ht, kbd_numpad_indent):
         for l in [(boxlength-back_top_width-200),
                  (boxlength*0.45), (boxlength*0.64), 530, 794]:
             t = translate(v=[l*scl, (0)*scl,
-                            (55+boxheight-hthick*2-6)*scl]).add(b)
+                            (boxheight-hthick*2-6)*scl]).add(b)
             u += t
 
     # inset for base_front
     c = cube([(118)*scl, (40)*scl, (63)*scl])
     c = translate(v=[14*scl,(ht-25)*scl,(4)*scl]).add(c)
-    c = translate(v=[(20)*scl,(0)*scl,(56+hthick)*scl]).add(c)
+    c = translate(v=[(20)*scl,(0)*scl,(1+hthick)*scl]).add(c)
     u -= c
 
     if kbd_numpad_indent != 0:
@@ -897,30 +896,30 @@ def base_end(scl, ht, kbd_numpad_indent):
     # top screwhole into front kbd tray
     s = cube([wd*scl, (ht-8)*scl, boxheight*scl])
     s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent-50)*scl,
-                    (0)*scl, (+55)*scl]).add(s)
+                    (0)*scl, (0)*scl]).add(s)
     u += s
     s = chamfered_backbox_screwholes(scl, 60, 25)
     #s = rotate([180, 0, 0]).add(s)
     s = translate(v=[(tpanel_l_b-29-kbd_numpad_indent)*scl,
-                    (ht-40)*scl, (55+doffs)*scl]).add(s)
+                    (ht-40)*scl, (doffs)*scl]).add(s)
     u -= s
 
     if kbd_numpad_indent != 0:
         c = cube([(65)*scl, (ht+20)*scl, (34)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 27*scl,
-                            (55+11)*scl]).add(c)
+                            (11)*scl]).add(c)
         u -= t
     else:
         c = cube([(60)*scl, (ht+20)*scl, (36)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
-                            (55+boxheight-pcbthick-47)*scl]).add(c)
+                            (boxheight-pcbthick-47)*scl]).add(c)
         u -= t
 
     if kbd_numpad_indent != 0:
         # add an underside support
         c = cube([(tpanel_l_b-190-150)*scl, 11*scl, (14)*scl])
         c = translate(v=[(202)*scl, (ht-1)*scl,
-                                    (55+12)*scl]).add(c)
+                                    (12)*scl]).add(c)
         u += c
 
         # remove runner for top panel
@@ -929,7 +928,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                     innershear=[-11*scl, 0*scl, 0])
         c = rotate([0, 0, 90]).add(c)
         c = translate(v=[(tpanel_l_b+8-100)*scl, (ht)*scl,
-                                    (55+4)*scl]).add(c)
+                                    (4)*scl]).add(c)
         u -= c
 
     if kbd_numpad_indent == 0:
@@ -939,31 +938,27 @@ def base_end(scl, ht, kbd_numpad_indent):
                     innershear=[-13*scl, 0*scl, 0])
         c = rotate([0, 0, 90]).add(c)
         c = translate(v=[(tpanel_l_b-50)*scl, (ht+1)*scl,
-                                    (4+55)*scl]).add(c)
+                                    (4)*scl]).add(c)
         u -= c
 
     clasp = False
     if clasp:
         # add spring-loaded clasp
         c = cube([(150)*scl, (ht)*scl, (boxheight)*scl])
-        t = translate(v=[150*scl, 0*scl,
-                            (55)*scl]).add(c)
+        t = translate(v=[150*scl, 0*scl, (0)*scl]).add(c)
         u += t
         c = cube([(120)*scl, (ht-20+1)*scl, (boxheight-30+1)*scl])
-        t = translate(v=[145*scl, -1*scl,
-                            (55-1+15)*scl]).add(c)
+        t = translate(v=[145*scl, -1*scl, (-1+15)*scl]).add(c)
         u -= t
         c = cube([(120)*scl, (28+1)*scl, (30)*scl])
-        t = translate(v=[145*scl, -1*scl,
-                            (55-1)*scl]).add(c)
+        t = translate(v=[145*scl, -1*scl, (-1)*scl]).add(c)
         u -= t
         c = cube([(160)*scl, (55)*scl, (30)*scl])
-        c = translate(v=[130*scl,15*scl,(55+53)*scl]).add(c)
+        c = translate(v=[130*scl,15*scl, (53)*scl]).add(c)
         u -= c
         # add middle-bit back in
         c = cube([(26)*scl, (40)*scl, (boxheight)*scl])
-        t = translate(v=[180*scl, (base_end_ht-47)*scl,
-                            (55)*scl]).add(c)
+        t = translate(v=[180*scl, (base_end_ht-47)*scl, (0)*scl]).add(c)
         u += t
 
     if pin_parts_3d:
@@ -4629,7 +4624,7 @@ def create_laptop(t, scl, part, angle):
     if part == BASE_END:
         if mirroring & LEFTPART:
             se = base_end(scl, base_end_ht, 0)
-            m = translate(v=[0, -10*scl,0]).add(se)
+            m = translate(v=[0, -10*scl, 55*scl]).add(se)
             b.add(m)
         if mirroring & RIGHTPART:
             se = base_end(scl, base_end_ht, kbd_numpad_indent)
