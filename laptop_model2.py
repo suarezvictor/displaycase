@@ -22,7 +22,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -4132,7 +4132,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     c.add(b)
 
     for h in locks:
-        b = translate(v=[(w-12)*scl, (h+5)*scl, (hthick+4)*scl]).add(c)
+        b = translate(v=[(w-12)*scl, (h+5)*scl, (11)*scl]).add(c)
         u += b
 
     # remove bit for pcb1/battery support
