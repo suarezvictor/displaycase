@@ -1028,7 +1028,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c += h
 
         h = cube([150*scl, 60*scl, 7*scl])
-        h = translate([(130)*scl, (-0)*scl, 55*scl]).add(h)
+        h = translate([(130)*scl, (1.2)*scl, 55*scl]).add(h)
         c += h
 
         h = cube([w*scl, 1.2*scl, (boxheight+20)*scl*1.1])
