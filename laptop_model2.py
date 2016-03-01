@@ -19,10 +19,10 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -642,11 +642,14 @@ def base_end(scl, ht, kbd_numpad_indent):
             u -= c
 
     # add keyboard left support
+    w = -2 
+    if kbd_numpad_indent != 0:
+        w = kbd_numpad_indent - 5
     b = hollowbox(scl, lcd_w-tpanel_l_b-
-                        (back_top_width-140-79)-2+kbd_numpad_indent, kbd_ht, 33,
+                        (back_top_width-140-79)-2+w, kbd_ht, 33,
                 {T:33, L:-1, R:-1, F:20+hthick, D:-1, B:-1},
                 curverads={ T|F: (hthick, 0)})
-    b = translate(v=[(lcd_w-kbd_w+23-kbd_numpad_indent-79)*scl, (0)*scl,
+    b = translate(v=[(lcd_w-kbd_w+23-w-79)*scl, (0)*scl,
                     (55)*scl]).add(b)
     u += b
 
@@ -786,19 +789,19 @@ def base_end(scl, ht, kbd_numpad_indent):
         u += t
         t = translate(v=[(tpanel_l_b-79)*scl, 0, (55+17)*scl]).add(c)
         u += t
-        c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
-        t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
+        c = cube([(18)*scl, (ht+20)*scl, (50)*scl])
+        t = translate(v=[(tpanel_l_b-56+59)*scl, 0, (55+21)*scl]).add(c)
         u += t
     else:
-        c = cube([(100)*scl, (ht+10)*scl, (18)*scl])
+        c = cube([(105)*scl, (ht+10)*scl, (18)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
-                            (55+42)*scl]).add(c)
+                            (55+44)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+10)*scl, (44)*scl])
         t = translate(v=[(tpanel_l_b-79-kbd_numpad_indent)*scl, 0,
                             (55+12)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b+1-kbd_numpad_indent)*scl, 0,
+        t = translate(v=[(tpanel_l_b+1-kbd_numpad_indent+5)*scl, 0,
                             (55+12)*scl]).add(c)
         u += t
 
@@ -903,7 +906,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= s
 
     if kbd_numpad_indent != 0:
-        c = cube([(60)*scl, (ht+20)*scl, (31)*scl])
+        c = cube([(65)*scl, (ht+20)*scl, (34)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 27*scl,
                             (55+11)*scl]).add(c)
         u -= t
@@ -3794,7 +3797,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     u += b
 
     if woffs < 0:
-        b = hollowbox(scl, 25-woffs, hoffs+8, h,
+        b = hollowbox(scl, 25-woffs, hoffs+7, h,
                     {T:hthick, L:20, R:15, F:hthick, D:-1, B:hthick*2},
                     curverads={ T|R: (hthick, 0), T|B: (hthick, 0),
                                 B|R: (hthick, 0)}) # XXX argh need better box!
@@ -3824,7 +3827,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs-40)*scl, (3)*scl, (h-18)*scl]).add(b)
     u += b
     if woffs < 0:
-        b = cube([(60)*scl, (l-100)*scl, (40-hthick-3)*scl])
+        b = cube([(60)*scl, (l-41)*scl, (40-hthick-3)*scl])
         b = translate(v=[(w-1+woffs-80)*scl, 40*scl, (h-40+hthick+3)*scl]).add(b)
         u += b
 
@@ -3840,8 +3843,8 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick)*scl]).add(d)
         u -= b
     else:
-        b = cube([(50)*scl, (100)*scl, (39-hthick-2)*scl])
-        b = translate(v=[(w-1+woffs-53)*scl, -55*scl, (h-39+hthick+2)*scl]).add(b)
+        b = cube([(53)*scl, (100)*scl, (39-hthick-2)*scl])
+        b = translate(v=[(w-1+woffs-52)*scl, -55*scl, (h-39+hthick+2)*scl]).add(b)
         u += b
         b = translate(v=[(w-1+woffs-28)*scl, -28*scl, (h-31+hthick+2)*scl]).add(d)
         u -= b
@@ -3910,7 +3913,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
         t = translate(v=[(w-75)*scl, (l+40)*scl, (50)*scl]).add(d)
         u -= t
     else:
-        b = cube([(100)*scl, (68)*scl, (18)*scl])
+        b = cube([(100)*scl, (66)*scl, (18)*scl])
         b = translate(v=[(w-129)*scl, (l-1)*scl, (22)*scl]).add(b)
         u += b
 
@@ -4932,7 +4935,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4942,18 +4945,18 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
                         #BASE_MID,
-                        BACK_KBD_RUNNER,
+                        #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
