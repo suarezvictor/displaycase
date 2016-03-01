@@ -651,7 +651,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += b
 
     # back keyboard support
-    b = hollowbox(scl, 18, ht+20, 35,
+    b = hollowbox(scl, 18, ht+20, 33,
                 {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(boxlength-back_top_width-20)*scl,
@@ -704,11 +704,11 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += d
 
     d = union()
-    c = shearedcube([(110)*scl, (25)*scl, 91*scl],
+    c = shearedcube([(108)*scl, (25)*scl, 91*scl],
                 shear=[70*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+18)*scl,(ht+10)*scl,
+    c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
                         (hthick+55+11)*scl]).add(c)
     d += c
     c = cube([(50)*scl, (150)*scl, 50*scl])
@@ -4940,9 +4940,9 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
-                        CABLE_PROTECTOR,
+                        #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
