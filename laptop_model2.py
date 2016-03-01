@@ -25,7 +25,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = 0 # BATTERY 
+add_internal_parts = LCD_PANEL # BATTERY 
 
 test = False
 single = True
@@ -240,7 +240,7 @@ def lcd_view_area(scl, offs=0):
     c = cube(size=[(w+offs*2)*scl,(h+offs*2)*scl,(d+offs*2)*scl])
     c = rotate([00, 0, 0 ]).add(c)
     r.add(c)
-    t = translate(v=[(-83-offs+wo)*scl, (-40-offs+do)*scl, (32.5-offs)*scl])
+    t = translate(v=[(-78-offs+wo)*scl, (-40-offs+do)*scl, (32.5-offs)*scl])
     t.add(r)
     a.add(t)
 
@@ -470,7 +470,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         slen = lcd_inset_bot + 40
         offs = boxlength - slen
     elif front:
-        slen = 130
+        slen = 140
         offs = 0
     else:
         slen = boxlength
@@ -512,7 +512,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         # ok, remove just a tiny bit from the lcd edge, for two reasons:
         # (1) so that 3d printing works (too much overhang)
         # (2) so that the centre (wooden) laminate has something to hook onto
-        d = shearedcube([(44)*scl, (ht+4)*scl, (32.6)*scl],
+        d = shearedcube([(54)*scl, (ht+4)*scl, (32.6)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
         c = translate(v=[(98+lcd_panel_offs)*scl, (-1)*scl, (-38)*scl]).add(d)
@@ -4927,17 +4927,17 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
-                        #SCREEN_END,
+                        #BASE_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
