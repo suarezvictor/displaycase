@@ -33,7 +33,7 @@ add_internal_parts = 0 # BATTERY
 test = False
 single = True
 cutdown = False
-revision_1_pcb = False
+revision_1_pcb = True
 
 SCREEN_END = 0
 SCREEN_HINGE = 2
@@ -584,7 +584,7 @@ def base_end(scl, ht, kbd_numpad_indent):
                         shear=[5*scl, 0, 0],
                         innershear=[0*scl, 0, 0])
             c = rotate([180, -90, -90]).add(c)
-            u += translate(v=[(lcd_w-77)*scl, (82)*scl,
+            u += translate(v=[(lcd_w-75)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
             u += translate(v=[(lcd_w-400)*scl, (82)*scl,
                     (boxheight-55)*scl]).add(c)
@@ -750,7 +750,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         t = translate(v=[(usb_pos+160)*scl, 0, (55+1)*scl]).add(c)
         u += t
         # at end of PCB
-        t = translate(v=[(boxlength-back_top_width-50)*scl, 0,
+        t = translate(v=[(boxlength-back_top_width-31)*scl, 0,
                 (55+1)*scl]).add(c)
         u += t
 
@@ -784,7 +784,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = cube([(30)*scl, (ht+20)*scl, (54)*scl])
         t = translate(v=[(usb_pos-31)*scl, 0, (55+17)*scl]).add(c)
         u += t
-        t = translate(v=[(tpanel_l_b-58)*scl, 0, (55+17)*scl]).add(c)
+        t = translate(v=[(tpanel_l_b-79)*scl, 0, (55+17)*scl]).add(c)
         u += t
         c = cube([(20)*scl, (ht+20)*scl, (50)*scl])
         t = translate(v=[(tpanel_l_b-56+57)*scl, 0, (55+21)*scl]).add(c)
@@ -844,15 +844,6 @@ def base_end(scl, ht, kbd_numpad_indent):
     v = translate([(front_top_width+5.9)*scl, scl*(hthick), (55+25)*scl]).add(c)
     u -= v
 
-    # remove runner for compartment lid
-    c = shearedcube([20*scl, (tpanel_l_b-280)*scl, (13)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[-13*scl, 0*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(tpanel_l_b-50)*scl, (ht+1)*scl,
-                                (4+55)*scl]).add(c)
-    u -= c
-
     # remove runner for panel
     c = shearedcube([20*scl, (boxlength-180-150-5)*scl, (13)*scl],
                 shear=[0*scl, 0*scl, 0],
@@ -864,12 +855,12 @@ def base_end(scl, ht, kbd_numpad_indent):
 
     # add interlock down behind base_back_bot
     b = union()
-    c = cube([48*scl, (ht-10)*scl, (hthick+6)*scl])
+    c = cube([40*scl, (ht-10)*scl, (hthick+6)*scl])
     b += c
-    c = cube([48*scl, (21)*scl, (hthick)*scl])
+    c = cube([40*scl, (21)*scl, (hthick)*scl])
     c = translate(v=[0*scl, (ht-11)*scl, 0*scl]).add(c)
     b += c
-    t = translate(v=[(boxlength-back_top_width-50)*scl, (0)*scl,
+    t = translate(v=[(boxlength-back_top_width-42)*scl, (0)*scl,
                     (55+boxheight-hthick*2-4)*scl]).add(b)
     u += t
     t = translate(v=[(220)*scl, (0)*scl,
@@ -917,9 +908,9 @@ def base_end(scl, ht, kbd_numpad_indent):
                             (55+11)*scl]).add(c)
         u -= t
     else:
-        c = cube([(60)*scl, (ht+20)*scl, (33)*scl])
+        c = cube([(60)*scl, (ht+20)*scl, (36)*scl])
         t = translate(v=[(tpanel_l_b-59-kbd_numpad_indent)*scl, 30*scl,
-                            (55+boxheight-pcbthick-45)*scl]).add(c)
+                            (55+boxheight-pcbthick-47)*scl]).add(c)
         u -= t
 
     if kbd_numpad_indent != 0:
@@ -937,6 +928,17 @@ def base_end(scl, ht, kbd_numpad_indent):
         c = translate(v=[(tpanel_l_b+8-100)*scl, (ht)*scl,
                                     (55+4)*scl]).add(c)
         u -= c
+
+    if kbd_numpad_indent == 0:
+        # remove runner for compartment lid
+        c = shearedcube([20*scl, (tpanel_l_b-280)*scl, (13)*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[-13*scl, 0*scl, 0])
+        c = rotate([0, 0, 90]).add(c)
+        c = translate(v=[(tpanel_l_b-50)*scl, (ht+1)*scl,
+                                    (4+55)*scl]).add(c)
+        u -= c
+
     clasp = False
     if clasp:
         # add spring-loaded clasp
@@ -4953,7 +4955,7 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
+                        FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
