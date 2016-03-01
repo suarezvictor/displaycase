@@ -3753,6 +3753,11 @@ def screen_hinge(scl, ht):
                         (88-lid_offset)*scl]).add(h)
         u += c
 
+    # XXX bugs so cut off the end
+    c = cube([(400)*scl, (100)*scl, 500*scl])
+    c = translate([(boxlength-250)*scl, ht*scl, -150*scl]).add(c)
+    u -= c
+
     return u
 
 def indented_screwhole(scl, u, x, y, z, rot=0, depth=16, base_screwholes=True):
@@ -4940,10 +4945,10 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
