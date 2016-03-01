@@ -22,7 +22,7 @@ from pyscadutil import L, R, T, D, F, B
 pin_parts_3d=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -651,10 +651,10 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += b
 
     # back keyboard support
-    b = hollowbox(scl, 18, ht+20, 33,
-                {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
+    b = hollowbox(scl, 12, ht+20, 33,
+                {T:-1, L:12, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(boxlength-back_top_width-20)*scl,
+    b = translate(v=[(boxlength-back_top_width-15)*scl,
                      0*scl, (55)*scl]).add(b)
     u += b
 
@@ -4053,10 +4053,10 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     w = boxlength-back_top_width
     l = boxheight-hthick-3
 
-    b = hollowbox(scl, 18, ht-2+12, l,
+    b = hollowbox(scl, 13, ht-2+12, l,
                 {T:14, L:8, R:-1, F:30, D:12, B:10},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-20)*scl, 1*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-15)*scl, 1*scl, (0)*scl]).add(b)
     u += b
     c = cube([(31)*scl, (30)*scl, (boxheight*2)*scl])
     b = translate(v=[(w-21)*scl, (ht-2)*scl, (55)*scl]).add(c)
@@ -4065,14 +4065,14 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
                     shear=[0*scl, 0, 0],
                     innershear=[-12*scl, 0, 0])
     c = rotate([0, 90, 0]).add(c)
-    b = translate(v=[(w-32)*scl, (25)*scl, (42.0)*scl]).add(c)
+    b = translate(v=[(w-27)*scl, (25)*scl, (42.0)*scl]).add(c)
     u += b
-    c = shearedcube([(18)*scl, (17)*scl, (14)*scl],
+    c = shearedcube([(13)*scl, (17)*scl, (14)*scl],
                     shear=[0, -12*scl, 0, 0],
                     innershear=[0, 0*scl, 0])
     #c = rotate([0, 0, 180]).add(c)
     c = rotate([90, 0, 0]).add(c)
-    b = translate(v=[(w-20)*scl, (3)*scl, (38)*scl]).add(c)
+    b = translate(v=[(w-15)*scl, (3)*scl, (38)*scl]).add(c)
     u += b
     c = rotate([0, 0, 180]).add(c)
     b = translate(v=[(w-2)*scl, (ht-3)*scl, (55)*scl]).add(c)
@@ -4101,9 +4101,9 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     b = cube([(25)*scl, (70)*scl, (3.1)*scl])
     d += translate(v=[(0)*scl, (0)*scl, (11.9)*scl]).add(b)
     d = rotate([0, 0, 180]).add(d)
-    u += translate(v=[(w-15)*scl, (130)*scl, (l-15)*scl]).add(d)
-    u += translate(v=[(w-15)*scl, (ht/2)*scl, (l-15)*scl]).add(d)
-    u += translate(v=[(w-15)*scl, (ht-30)*scl, (l-15)*scl]).add(d)
+    u += translate(v=[(w-10)*scl, (130)*scl, (l-15)*scl]).add(d)
+    u += translate(v=[(w-10)*scl, (ht/2)*scl, (l-15)*scl]).add(d)
+    u += translate(v=[(w-10)*scl, (ht-30)*scl, (l-15)*scl]).add(d)
 
     # add set of interlocks into back_base to hold it down
     c = union()
@@ -4114,30 +4114,30 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
                     innershear=[0*scl, 0, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    d = translate(v=[(34)*scl, (16)*scl, (l-14)*scl]).add(d)
+    d = translate(v=[(31)*scl, (16)*scl, (l-14)*scl]).add(d)
     c += d
     supports = [ht-162, ht*0.35, 305, ht*0.55, offs+35, offs+119]
     #for s in locks:
     #   supports.append(s+35)
     for h in supports:
-        b = translate(v=[(w-17)*scl, h*scl, (hthick+2)*scl]).add(c)
+        b = translate(v=[(w-12)*scl, h*scl, (hthick+2)*scl]).add(c)
         u += b
 
     # add series of keyboard locks
     c = union()
-    b = shearedcube([(19.5)*scl, (78)*scl, (10)*scl],
+    b = shearedcube([(19.5)*scl, (70)*scl, (10)*scl],
                     shear=[-9*scl, 0, 0],
                     innershear=[10*scl, 0, 0])
     b = rotate([0, -90, 0]).add(b)
     c.add(b)
 
     for h in locks:
-        b = translate(v=[(w-17)*scl, (h)*scl, (hthick+4)*scl]).add(c)
+        b = translate(v=[(w-12)*scl, (h+5)*scl, (hthick+4)*scl]).add(c)
         u += b
 
     # remove bit for pcb1/battery support
-    c = cube([(18)*scl, (86)*scl, (boxheight-31)*scl])
-    b = translate(v=[(w-20)*scl, (offs+42)*scl, (10+2)*scl]).add(c)
+    c = cube([(13)*scl, (86)*scl, (boxheight-31)*scl])
+    b = translate(v=[(w-15)*scl, (offs+42)*scl, (10+2)*scl]).add(c)
     u += b
     #c = cube([(28)*scl, (86)*scl, (boxheight-105)*scl])
     #b = translate(v=[(w-20)*scl, (offs+42)*scl, (10+4)*scl]).add(c)
@@ -4146,7 +4146,7 @@ def back_kbd_runner(scl, ht, toffs, mirrored=False):
     b = translate(v=[(w-50)*scl, (offs+68)*scl, (50+1)*scl]).add(c)
     u -= b
     c = cube([(30)*scl, (36)*scl, (l-23)*scl])
-    b = translate(v=[(w-50)*scl, (offs+68)*scl, (20+1)*scl]).add(c)
+    b = translate(v=[(w-45)*scl, (offs+68)*scl, (35+1)*scl]).add(c)
     u -= b
 
     if pin_parts_3d:
@@ -4956,13 +4956,13 @@ if __name__ == '__main__':
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
                         #BASE_MID,
-                        #BACK_KBD_RUNNER,
+                        BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
