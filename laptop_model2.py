@@ -2910,10 +2910,10 @@ def base_mid(scl, ht, base_screwholes=False):
     u -= c
 
     # back keyboard support
-    b = hollowbox(scl, 18, ht, boxheight,
-                {T:-1, L:18, R:-1, F:-1, D:-1, B:-1},
+    b = hollowbox(scl, 13, ht, boxheight,
+                {T:-1, L:13, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
-    b = translate(v=[(w-40-79)*scl, 0*scl, (0)*scl]).add(b)
+    b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
     # lock for back keyboard runner
@@ -4961,7 +4961,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
