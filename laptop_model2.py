@@ -1163,16 +1163,9 @@ def battery_support1(scl, ht, tpanel_offset):
     u += c
 
     # cut-out for back kbd runner
-    c = cube([(26)*scl, (150)*scl, (18)*scl])
+    c = cube([(46)*scl, (150)*scl, (18)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
-    u -= c
-
-    # shape end of support so it fits in slot
-    c = cube([(26)*scl, (150)*scl, (15)*scl])
-    c = rotate([0, -20, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width+10)*scl,
-                (-40)*scl, (24)*scl]).add(c)
     u -= c
 
     # screw holder, done in 2 parts so that it's easier to calculate heights
@@ -1326,7 +1319,7 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     u -= c
 
     # cut-out for back kbd runner
-    c = cube([(26)*scl, (150)*scl, (18)*scl])
+    c = cube([(46)*scl, (150)*scl, (18)*scl])
     c = translate(v=[(boxlength-back_top_width-25)*scl,
                 (-40)*scl, (36)*scl]).add(c)
     u -= c
@@ -1335,13 +1328,6 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     c = cube([(w+18-70)*scl, (holder_ht-ht+1)*scl, (150)*scl])
     c = translate(v=[(tpanel_l_b-tpanel_box_l+170)*scl, (10)*scl,
                     (boxheight-kbd_inset+7)*scl]).add(c)
-    u -= c
-
-    # shape end of support so it fits in slot
-    c = cube([(26)*scl, (150)*scl, (15)*scl])
-    c = rotate([0, -20, 0]).add(c)
-    c = translate(v=[(boxlength-back_top_width+10)*scl,
-                (-40)*scl, (24)*scl]).add(c)
     u -= c
 
     # screw holder, done in 3 parts so that it's easier to calculate heights
@@ -4961,13 +4947,13 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #PCB3_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
