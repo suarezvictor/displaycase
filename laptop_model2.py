@@ -2,9 +2,6 @@
 # License: GPLv3+
 
 """ TODO:
-    * deepen keyboard space by 0.4mm - keyboard is too tight
-    * sort out PCB1 lockin into base_end
-    * sort out compartment_lid
     * sort out gaps between base end, base hinge end, and screen edge
     * parameterise plastic join-point gaps/sizes so it can be varied
     * allow [flat] cable access through to screen connector
