@@ -2176,13 +2176,13 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # lock-in slot to base_back_bot
     c = union()
-    d = cube([70*scl, 35*scl, (boxheight-30)*scl], center=True)
+    d = cube([70*scl, 45*scl, (boxheight-30)*scl], center=True)
     d = translate(v=[(70)*scl, (0)*scl, (19)*scl]).add(d)
     c += d
-    d = cube([200*scl, 35*scl, 40*scl], center=True)
+    d = cube([200*scl, 45*scl, 40*scl], center=True)
     d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
     c += d
-    c = translate(v=[(-65)*scl, (ht-16)*scl, (boxheight-55)*scl]).add(c)
+    c = translate(v=[(-65)*scl, (ht-20)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
 
