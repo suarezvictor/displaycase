@@ -16,7 +16,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
@@ -2224,13 +2224,13 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     rad=35.0 + 15
     # add hinge
     d = union()
-    c = cylinder(r=rad*scl, h=(friclen+45)*scl, segments=50)
+    c = cylinder(r=rad*scl, h=(friclen+44)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     d += c
-    c = cube([55*scl, (friclen+45)*scl, 93*scl])
+    c = cube([55*scl, (friclen+44)*scl, 93*scl])
     c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
     d += c
-    c = cube([35*scl, (friclen+45)*scl, 100*scl])
+    c = cube([35*scl, (friclen+44)*scl, 100*scl])
     c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
     d += c
     c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(d)
