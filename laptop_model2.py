@@ -17,7 +17,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=True
+orientate=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -689,29 +689,28 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
 
     # add base_back lock-ins
-    d = union()
-    c = shearedcube([(21)*scl, (34)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
+    c = shearedcube([(42)*scl, (40)*scl, 61*scl],
+                shear=[7*scl, 0, 0],
+                innershear=[-7*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
     d += c
-    c = cube([(60)*scl, (40)*scl, 40*scl])
-    c = translate(v=[(-1)*scl,(-30)*scl,
+    c = cube([(80)*scl, (1200)*scl, 60*scl])
+    c = translate(v=[(-20)*scl,(-30)*scl,
                         (-1)*scl]).add(c)
     d -= c
-    d = translate(v=[(w-back_top_width+20)*scl,(ht+57)*scl,
-                        (hthick+2)*scl]).add(d)
+    d = translate(v=[(w-back_top_width+30)*scl,(ht+57)*scl,
+                        (hthick+5)*scl]).add(d)
     u += d
 
     d = union()
-    c = shearedcube([(108)*scl, (25)*scl, 91*scl],
+    c = shearedcube([(114)*scl, (34)*scl, 91*scl],
                 shear=[70*scl, 0, 0],
                 innershear=[0*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+20)*scl,(ht+10)*scl,
+    c = translate(v=[(w-back_top_width+23)*scl,(ht)*scl,
                         (hthick+11)*scl]).add(c)
     d += c
-    c = cube([(50)*scl, (150)*scl, 50*scl])
+    c = cube([(60)*scl, (150)*scl, 60*scl])
     c = translate(v=[(w-back_top_width+145)*scl,(0)*scl,
                         (hthick+2)*scl]).add(c)
     d -= c
@@ -1054,6 +1053,7 @@ def base_end(scl, ht, kbd_numpad_indent):
         #c = translate([(-175)*scl, -20*scl, -50*scl]).add(c)
         #u -= c
 
+    u = translate([(0)*scl, (-50)*scl, 0*scl]).add(u)
     return u
 
 def holed_support(scl, ht, sht=50, dep=60, inverse=False):
@@ -2153,37 +2153,15 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u -= c
 
     # cable access and interlock with base_end
-    c = shearedcube([(41)*scl, (boxheight-hthick*2)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
+    c = shearedcube([(50)*scl, (50)*scl, 61*scl],
+                shear=[7*scl, 0, 0],
+                innershear=[-7*scl, 0, 0])
     c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+110)*scl,59*scl,(hthick)*scl]).add(c)
+    c = translate(v=[(w-back_top_width+135)*scl,59*scl,(hthick)*scl]).add(c)
     u -= c
-    c = shearedcube([(61)*scl, (40)*scl, 61*scl],
-                shear=[50*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+140)*scl,29*scl,
-                    (boxheight-hthick-45)*scl]).add(c)
-    u -= c
-    c = shearedcube([(61)*scl, (43)*scl, 14*scl],
-                shear=[10*scl, 0, 0],
-                innershear=[0*scl, 0, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[(w-back_top_width+177)*scl,13*scl,
-                    (20)*scl]).add(c)
-    u -= c
-    c = cube([(80)*scl, (50)*scl, 63*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,13*scl,
-                    (50)*scl]).add(c)
-    u += c
-    c = cube([(15)*scl, (70)*scl, 41*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,0*scl,
-                    (hthick)*scl]).add(c)
-    u += c
-    c = cube([(140)*scl, (80)*scl, 12*scl])
+    c = cube([(120)*scl, (80)*scl, 12*scl])
     c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
-                    (boxheight-hthick-12)*scl]).add(c)
+                    (boxheight-hthick-15)*scl]).add(c)
     u += c
     c = shearedcube([(10)*scl, (16)*scl, 5*scl],
                 shear=[5*scl, 0, 0],
@@ -2191,9 +2169,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w-back_top_width+112)*scl,-16*scl,
                     (boxheight-hthick-4)*scl]).add(c)
     u -= c
-    c = cube([(140)*scl, (75)*scl, 12*scl])
-    c = translate(v=[(w-back_top_width+112)*scl,-10*scl,
-                    (53)*scl]).add(c)
+    c = cube([(80)*scl, (75)*scl, 40*scl])
+    c = translate(v=[(w-back_top_width+112)*scl,-15*scl,
+                    (62)*scl]).add(c)
     u += c
 
     # lock-in slot to base_back_bot
@@ -4931,7 +4909,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
