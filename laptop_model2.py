@@ -1053,7 +1053,6 @@ def base_end(scl, ht, kbd_numpad_indent):
         #c = translate([(-175)*scl, -20*scl, -50*scl]).add(c)
         #u -= c
 
-    u = translate([(0)*scl, (-50)*scl, 0*scl]).add(u)
     return u
 
 def holed_support(scl, ht, sht=50, dep=60, inverse=False):
