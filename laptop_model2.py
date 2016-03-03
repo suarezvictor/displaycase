@@ -615,9 +615,9 @@ def base_end(scl, ht, kbd_numpad_indent):
             u -= c
 
             # add bottom strut, along EOMA68 and USB
-            b = cube([765*scl, (ht+2)*scl, 15*scl])
-            b = translate(v=[(925)*scl, (0)*scl,
-                    (boxheight-hthick-10)*scl]).add(b)
+            b = cube([715*scl, (ht)*scl, 15*scl])
+            b = translate(v=[(955)*scl, (0)*scl,
+                    (boxheight-hthick-12)*scl]).add(b)
             u += b
 
             # and along USB
