@@ -17,7 +17,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=True
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -3017,18 +3017,24 @@ def screen_mid(scl, ht):
     u += b
 
     # add cutout to screen_back_edge
-    c = cube([118*scl, 35*scl, 35*scl], center=True)
+    c = cube([147*scl, 35*scl, 35*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[25*scl,(0)*scl,0*scl]).add(t)
     u -= t
     t = translate(v=[0*scl,(ht)*scl,0*scl]).add(t)
     u -= t
+    # and screen_front_edge
+    c = cube([118*scl, 35*scl, 35*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    t = lid_bolthole(scl, end=True).add(c)
+    t = translate(v=[-25*scl,(0)*scl,0*scl]).add(t)
+    u -= t
+    t = translate(v=[0*scl,(ht)*scl,0*scl]).add(t)
+    u -= t
 
     # cutouts for connectors
     d = cube([(34)*scl, (ht+4)*scl, (39)*scl])
-    c = translate(v=[25*scl, (-2)*scl, (-1)*scl]).add(d)
-    u -= c
     d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
     c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-5)*scl]).add(d)
     u -= c
@@ -3047,35 +3053,31 @@ def screen_mid(scl, ht):
 
     if pin_parts_3d:
         c = union()
-        h = pin(B0, scl)
-        c += translate([(boxlength-62)*scl, (0)*scl, -60*scl]).add(h)
-        c += translate([(boxlength-140)*scl, (0)*scl, -75*scl]).add(h)
-        c += translate([(boxlength+15)*scl, (0)*scl, 3*scl]).add(h)
-        c += translate([(boxlength-18)*scl, (0)*scl, 85*scl]).add(h)
-        c += translate([(boxlength-95)*scl, (0)*scl, 85*scl]).add(h)
-        c += translate([(boxlength-165)*scl, (0)*scl, 85*scl]).add(h)
 
-        c += translate([(190)*scl, (0)*scl, -75*scl]).add(h)
-        c += translate([(107)*scl, (0)*scl, -75*scl]).add(h)
-        c += translate([(30)*scl, (0)*scl, -45*scl]).add(h)
-        c += translate([(-30)*scl, (0)*scl, 8*scl]).add(h)
-        c += translate([(10)*scl, (0)*scl, 85*scl]).add(h)
-        c += translate([(90)*scl, (0)*scl, 85*scl]).add(h)
-
-        h = pin_t(0)
+        h = pin_t(0, dep=ht, half=True, pht=90)
         h = rotate([0, 0, 180]).add(h)
-        for l in [0.25, 0.5, 0.75]:
-            c += translate([(boxlength*l)*scl, (1.2)*scl, -40*scl]).add(h)
-
-        h = cube([(boxlength-300)*scl, (1.8)*scl, (50)*scl])
-        c += translate([(140)*scl, (1.2)*scl, -80*scl]).add(h)
+        for l in [30, boxlength-30]:
+            c += translate([(l)*scl, (1.2)*scl, -23*scl]).add(h)
+            c += translate([(l)*scl, (1.2)*scl, 120*scl]).add(h)
+        h = pin_t(0, pht=90, half=True, dep=ht-25)
+        h = rotate([0, 0, 180]).add(h)
+        h = rotate([0, 90, 0]).add(h)
+        for l in [70, boxlength]:
+            c += translate([(l)*scl, (1.2)*scl, 10*scl]).add(h)
 
         c = translate([0*scl, (-1.2)*scl, 0*scl]).add(c)
 
         u += c
 
+    c = lcd_screen_removeparts(scl)
+    u -= translate([0*scl, -180*scl, 16*scl]).add(c)
+
     # shift up a bit
     u = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(u)
+
+    if orientate:
+        u = rotate([90, 0, 0]).add(u)
+        u = rotate([0, 0, -45]).add(u)
 
     return u
 
@@ -4795,7 +4797,8 @@ def create_laptop(t, scl, part, angle):
         se = screen_mid(scl, scrn_centre_ht+10)
         m = translate(v=[0, (total_width/2-(scrn_centre_ht+10)/2)*scl,0]).add(se)
         b.add(m)
-        b = screen_adjust(b, scl, angle)
+        b = hinge_rotate(scl, b, angle)
+        #b = screen_adjust(b, scl, angle)
 
     base_joiner_ht = 150
 
@@ -4934,9 +4937,9 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
