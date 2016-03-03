@@ -3016,11 +3016,18 @@ def screen_mid(scl, ht):
     b = screen_box(scl, ht, end=False)
     u += b
 
+    # add cutout to screen_back_edge
+    c = cube([118*scl, 35*scl, 35*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    t = lid_bolthole(scl, end=False).add(c)
+    t = translate(v=[25*scl,(0)*scl,0*scl]).add(t)
+    u -= t
+    t = translate(v=[0*scl,(ht)*scl,0*scl]).add(t)
+    u -= t
+
     # cutouts for connectors
     d = cube([(34)*scl, (ht+4)*scl, (39)*scl])
     c = translate(v=[25*scl, (-2)*scl, (-1)*scl]).add(d)
-    u -= c
-    c = translate(v=[(lcd_w+157)*scl, (-2)*scl, (-7)*scl]).add(d)
     u -= c
     d = cube([(45)*scl, (ht+2)*scl, (45)*scl])
     c = translate(v=[(lcd_w+75)*scl, (-1)*scl, (-5)*scl]).add(d)
@@ -3323,6 +3330,11 @@ def screen_back_edge(scl, ht, cable_access=False):
     d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
     b += d
 
+    # add cutin to screen_mid
+    d = screen_cutin(scl, 100, diam=35, length=73, offs=-100)
+    d = translate(v=[0*scl,(ht-1)*scl,0*scl]).add(d)
+    b += d
+
     # TODO: this is going to need some underside supports
     # TODO: length of the cable run doesn't have to be this long
     fthick = 8
@@ -3367,13 +3379,6 @@ def screen_back_edge(scl, ht, cable_access=False):
             innershear=[0, 0*scl, 0])
     c = translate(v=[(lcd_w+35)*scl, (ht-630)*scl, (-15)*scl]).add(d)
     b -= c
-
-    # matching screen mid (back)
-    d = shearedcube([(26)*scl, ((28))*scl, (31)*scl],
-            shear=[0, -0*scl, 0],
-            innershear=[0, 0*scl, 0])
-    c = translate(v=[(lcd_w+161)*scl, (ht-1)*scl, (-3)*scl]).add(d)
-    b += c
 
     c = lcd_screen_removeparts(scl)
     b -= translate([0*scl, -180*scl, 16*scl]).add(c)
@@ -3582,7 +3587,7 @@ def cable_protector(scl, ht):
 
     return u
 
-def screen_cutin(scl, ht, diam=45, length=99):
+def screen_cutin(scl, ht, diam=45, length=99, offs=0):
     # indentation - has to be done this way (recreate screen_box) so
     # that the profile of the indentation fits with screen_end curvature
     d = intersection()
@@ -3593,7 +3598,7 @@ def screen_cutin(scl, ht, diam=45, length=99):
     c = cube([length*scl, diam*scl, diam*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[10*scl,(ht)*scl,0*scl]).add(t)
+    t = translate(v=[10*scl,(ht+offs)*scl,0*scl]).add(t)
     d.add(t)
    
     return d
@@ -4908,15 +4913,15 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -4926,7 +4931,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
