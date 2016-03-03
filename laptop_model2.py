@@ -16,7 +16,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
@@ -3461,6 +3461,10 @@ def screen_back_edge(scl, ht, cable_access=False):
     # shift up a bit
     b = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(b)
 
+    if orientate:
+        b = rotate([90, 0, 0]).add(b)
+        b = rotate([0, 0, -45]).add(b)
+
     return b
 
 def friction_hinge2(scl, ht):
@@ -4937,9 +4941,9 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
+                        SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
