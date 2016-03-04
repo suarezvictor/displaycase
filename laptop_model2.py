@@ -3107,16 +3107,14 @@ def screen_end(scl, ht, lcd_end_ht):
                        14*scl]).add(c)
             u -= c
 
-    # indentation to fit screen front edge lockin
-    d = cube([(32)*scl, (50)*scl, (39)*scl])
-    c = translate(v=[24*scl, (ht-48)*scl, (-1)*scl]).add(d)
-    u -= c
-
     # indentation
     c = cube([102*scl, 45*scl, 45*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
     t = translate(v=[10*scl,(ht-10)*scl,0*scl]).add(t)
+    u -= t
+    t = lid_bolthole(scl, end=True).add(c)
+    t = translate(v=[2*scl,(ht-10)*scl,0*scl]).add(t)
     u -= t
 
     # lock-in to screen_hinge part
@@ -3328,7 +3326,6 @@ def screen_front_edge(scl, ht):
 
     if orientate:
         b = rotate([180, 0, 0]).add(b)
-        b = rotate([0, 0, 45]).add(b)
 
     return b
 
@@ -3472,7 +3469,6 @@ def screen_back_edge(scl, ht, cable_access=False):
 
     if orientate:
         b = rotate([180, 0, 0]).add(b)
-        b = rotate([0, 0, 45]).add(b)
 
     return b
 
@@ -4592,6 +4588,12 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
 
         b = screen_adjust(b, scl, angle)
+        if orientate:
+            b = rotate([90, 0, 0]).add(b)
+            if mirroring & LEFTPART:
+                b = rotate([0, 0, -45]).add(b)
+            if mirroring & RIGHTPART:
+                    b = rotate([0, 0, 45]).add(b)
 
     lid_adjust_ht += scrn_end_ht
     lid_adjust_ht += lcd_end_ht
@@ -4732,9 +4734,13 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
+            if orientate:
+                b = rotate([0, 0, 45]).add(b)
         if mirroring & RIGHTPART:
             m = mirror_part(se, scl, total_width-adj)
             b.add(m)
+            if orientate:
+                b = rotate([0, 0, -45]).add(b)
         #b = screen_adjust(b, scl, angle)
         b = hinge_rotate(scl, b, angle)
 
@@ -4747,9 +4753,13 @@ def create_laptop(t, scl, part, angle):
         m = translate(v=[0, (adj)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
+            if orientate:
+                b = rotate([0, 0, 45]).add(b)
         if mirroring & RIGHTPART:
             m = mirror_part(se, scl, total_width-adj)
             b.add(m)
+            if orientate:
+                b = rotate([0, 0, -45]).add(b)
         b = hinge_rotate(scl, b, angle)
 
     compartment_ht = base_adjust_ht-scrn_hinge_ht
@@ -4954,13 +4964,13 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
+                        #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
