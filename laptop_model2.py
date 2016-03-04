@@ -3266,15 +3266,20 @@ def screen_front_edge(scl, ht):
     c = translate(v=[175*scl, (mholdero+35)*scl, (lcd_d-59)*scl]).add(c)
     b -= c
 
-    # matching screen mid (front)
-    d = shearedcube([(23)*scl, (28)*scl, (30)*scl],
-            shear=[0, -0*scl, 0],
-            innershear=[0, 0*scl, 0])
-    c = translate(v=[30.5*scl, (ht-4)*scl, (3.5)*scl]).add(d)
-    b += c
-    d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(28.5+23)*scl, (4)*scl, (3.5)*scl]).add(d)
-    b += c
+    # add cutin to screen_end
+    d = screen_cutin(scl, ht, diam=35, length=93,
+                     woffs=-20, back=False)
+    d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
+    b += d
+
+    # add cutin to screen_mid
+    d = screen_cutin(scl, 100, diam=35, length=93, offs=-100,
+                            woffs=-20, back=False)
+    d = translate(v=[0*scl,(ht-1)*scl,0*scl]).add(d)
+    b += d
+
+    c = lcd_screen_removeparts(scl)
+    b -= translate([0*scl, -180*scl, 16*scl]).add(c)
 
     if pin_parts_3d:
         c = union()
@@ -3320,6 +3325,10 @@ def screen_front_edge(scl, ht):
 
     # shift up a bit
     b = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(b)
+
+    if orientate:
+        b = rotate([180, 0, 0]).add(b)
+        b = rotate([0, 0, 45]).add(b)
 
     return b
 
@@ -3608,18 +3617,26 @@ def cable_protector(scl, ht):
 
     return u
 
-def screen_cutin(scl, ht, diam=45, length=99, offs=0):
+def screen_cutin(scl, ht, diam=45, length=99, offs=0, woffs=10, back=True):
+
+    if back == True:
+        front = False
+        end = False
+    else:
+        front = True
+        back = False
+        end = True
     # indentation - has to be done this way (recreate screen_box) so
     # that the profile of the indentation fits with screen_end curvature
     d = intersection()
-    b = screen_box(scl, ht, end=False, back=True, hingewall=False)
+    b = screen_box(scl, ht, end=False, back=back, front=front, hingewall=False)
     r = union()
     r += b
     d.add(r)
     c = cube([length*scl, diam*scl, diam*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
-    t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[10*scl,(ht+offs)*scl,0*scl]).add(t)
+    t = lid_bolthole(scl, end=end).add(c)
+    t = translate(v=[(woffs)*scl,(ht+offs)*scl,0*scl]).add(t)
     d.add(t)
    
     return d
@@ -4718,7 +4735,8 @@ def create_laptop(t, scl, part, angle):
         if mirroring & RIGHTPART:
             m = mirror_part(se, scl, total_width-adj)
             b.add(m)
-        b = screen_adjust(b, scl, angle)
+        #b = screen_adjust(b, scl, angle)
+        b = hinge_rotate(scl, b, angle)
 
     adj = scrn_end_ht+lcd_end_ht+scrn_hinge_ht
     if part == SCREEN_BACK_EDGE:
@@ -4941,8 +4959,8 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
+                        #SCREEN_BACK_EDGE,
+                        SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
