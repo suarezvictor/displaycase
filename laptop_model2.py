@@ -3462,8 +3462,8 @@ def screen_back_edge(scl, ht, cable_access=False):
     b = translate(v=[0*scl,0*scl,-lid_offset*scl]).add(b)
 
     if orientate:
-        b = rotate([90, 0, 0]).add(b)
-        b = rotate([0, 0, -45]).add(b)
+        b = rotate([180, 0, 0]).add(b)
+        b = rotate([0, 0, 45]).add(b)
 
     return b
 
