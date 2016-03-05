@@ -3110,10 +3110,11 @@ def screen_end(scl, ht, lcd_end_ht):
             u -= c
 
     # indentation
-    c = cube([102*scl, 45*scl, 45*scl], center=True)
+    c = cube([102*scl, 35*scl, 35*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
+    c = rotate([0, 90, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[10*scl,(ht-10)*scl,0*scl]).add(t)
+    t = translate(v=[0*scl,(ht-10)*scl,0*scl]).add(t)
     u -= t
     c = cube([102*scl, 35*scl, 35*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
@@ -3276,7 +3277,7 @@ def screen_front_edge(scl, ht):
     b += d
 
     # add cutin to screen_mid
-    d = screen_cutin(scl, 100, diam=32, length=93, offs=-100,
+    d = screen_cutin(scl, 100, diam=33, length=93, offs=-100,
                             woffs=2, back=False, upright=True)
     d = translate(v=[0*scl,(ht-1)*scl,0*scl]).add(d)
     b += d
@@ -3339,12 +3340,12 @@ def screen_back_edge(scl, ht, cable_access=False):
     b = translate(v=[(0)*scl, (2)*scl, (0)*scl]).add(b)
 
     # add cutin to screen_end
-    d = screen_cutin(scl, ht, diam=35, length=83)
+    d = screen_cutin(scl, ht, diam=35, length=83, woffs=0)
     d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
     b += d
 
     # add cutin to screen_mid
-    d = screen_cutin(scl, 100, diam=35, length=73, offs=-100, upright=True)
+    d = screen_cutin(scl, 100, diam=35, length=100, offs=-100, upright=True)
     d = translate(v=[0*scl,(ht-1)*scl,0*scl]).add(d)
     b += d
 
@@ -3619,7 +3620,7 @@ def cable_protector(scl, ht):
     return u
 
 def screen_cutin(scl, ht, diam=45, length=99, offs=0, woffs=10, back=True,
-                 upright=False):
+                 upright=True):
 
     if back == True:
         front = False
@@ -3672,15 +3673,16 @@ def screen_hinge(scl, ht):
     u += c
 
     # add cutin to screen_end
-    d = screen_cutin(scl, ht, length=95)
+    d = screen_cutin(scl, ht, diam=35, length=95, woffs=0)
     d = translate(v=[0*scl,(-ht+3)*scl,0*scl]).add(d)
     u += d
 
     # add cutout to screen_edge
-    c = cube([128*scl, 35*scl, 35*scl], center=True)
+    c = cube([92*scl, 35*scl, 35*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
+    c = rotate([0, 90, 0]).add(c)
     t = lid_bolthole(scl, end=False).add(c)
-    t = translate(v=[25*scl,(ht)*scl,0*scl]).add(t)
+    t = translate(v=[0*scl,(ht)*scl,0*scl]).add(t)
     u -= t
 
     # hex indentation
