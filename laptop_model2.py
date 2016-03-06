@@ -4602,11 +4602,11 @@ def create_laptop(t, scl, part, angle):
 
         b = screen_adjust(b, scl, angle, mirroring & RIGHTPART)
         if orientate:
-            b = rotate([90, 0, 0]).add(b)
             if mirroring & LEFTPART:
-                b = rotate([0, 0, -45]).add(b)
+                b = rotate([90, 0, 0]).add(b)
             if mirroring & RIGHTPART:
-                    b = rotate([0, 0, 45]).add(b)
+                b = rotate([-90, 0, 0]).add(b)
+            b = rotate([0, 0, -45]).add(b)
 
     lid_adjust_ht += scrn_end_ht
     lid_adjust_ht += lcd_end_ht
