@@ -4572,7 +4572,7 @@ def lcd_screen_removeparts(scl, rightpart=False):
 
     return u
 
-def screen_adjust(b, scl, angle, rightpart):
+def screen_adjust(b, scl, angle, rightpart=False):
 
     b -= lcd_screen_removeparts(scl, rightpart)
     return hinge_rotate(scl, b, angle)
@@ -4639,15 +4639,17 @@ def create_laptop(t, scl, part, angle):
         b = screen_adjust(b, scl, angle)
 
     if part == SCREEN_HINGE:
-        se = screen_hinge(scl, scrn_hinge_ht-5)
-        m = translate(v=[0, (lid_adjust_ht-5)*scl,0]).add(se)
+        se = screen_hinge(scl, scrn_hinge_ht)
+        m = translate(v=[0, (lid_adjust_ht)*scl,0]).add(se)
         if mirroring & LEFTPART:
             b.add(m)
         if mirroring & RIGHTPART:
-            m = mirror_part(se, scl, total_width-(lid_adjust_ht-5))
+            m = mirror_part(se, scl, total_width-(lid_adjust_ht))
             b.add(m)
 
         b = screen_adjust(b, scl, angle)
+        if orientate:
+            b = rotate([90, 0, 0]).add(b)
 
     if part == CABLE_PROTECTOR:
         se = cable_protector(scl, 30)
@@ -4977,9 +4979,9 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
+                        SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
