@@ -17,10 +17,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -224,13 +224,16 @@ def lcd_panel(scl, offs=0):
 
     return a
 
-def lcd_view_area(scl, offs=0):
+def lcd_view_area(scl, rightpart, offs=0):
 
     shear = 0
     innershear = 0
     w = lcd_wa
     h = lcd_la
     d = lcd_d
+
+    if rightpart:
+        h += 20
 
     wo = (lcd_w - lcd_wa) / 2
     do = (lcd_l - lcd_la) / 2
@@ -4554,14 +4557,14 @@ def pcb1(scl):
 
     return t
 
-def lcd_screen_removeparts(scl):
+def lcd_screen_removeparts(scl, rightpart=False):
 
     u = union()
     p = lcd_panel(scl, offs=2)
     p = translate(v=[155.5*scl,61*scl,(lcd_ht)*scl]).add(p)
     u += p
 
-    p = lcd_view_area(scl, offs=3)
+    p = lcd_view_area(scl, rightpart, offs=3)
     p = translate(v=[155.5*scl,61*scl,(lcd_doff+lcd_ht)*scl]).add(p)
     u += p
 
@@ -4569,9 +4572,9 @@ def lcd_screen_removeparts(scl):
 
     return u
 
-def screen_adjust(b, scl, angle):
+def screen_adjust(b, scl, angle, rightpart):
 
-    b -= lcd_screen_removeparts(scl)
+    b -= lcd_screen_removeparts(scl, rightpart)
     return hinge_rotate(scl, b, angle)
 
 def mirror_part(se, scl, offs):
@@ -4597,7 +4600,7 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width)
             b.add(m)
 
-        b = screen_adjust(b, scl, angle)
+        b = screen_adjust(b, scl, angle, mirroring & RIGHTPART)
         if orientate:
             b = rotate([90, 0, 0]).add(b)
             if mirroring & LEFTPART:
@@ -4976,12 +4979,12 @@ if __name__ == '__main__':
                         #BASE_END,
                         SCREEN_END,
                         #CABLE_PROTECTOR,
-                        SCREEN_HINGE,
+                        #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
+                        #SCREEN_BACK_EDGE,
+                        #SCREEN_FRONT_EDGE,
+                        #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
