@@ -1483,10 +1483,10 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
             innershear=[-32*scl, 0*scl, 0])
     d = rotate([0, -90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(181)*scl, (-85)*scl, (44)*scl]).add(d)
+    c = translate(v=[(182)*scl, (-85)*scl, (44)*scl]).add(d)
     u += c
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(181+40)*scl, (ht+85)*scl, (44)*scl]).add(d)
+    c = translate(v=[(182+40)*scl, (ht+85)*scl, (44)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -1511,8 +1511,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= b
 
     # matches screw-hole in front base
-    u = indented_screwhole(scl, u, (182), -40, 75, -90, base_screwholes)
-    u = indented_screwhole(scl, u, (182), ht+40, 75, -90, base_screwholes)
+    u = indented_screwhole(scl, u, (183), -40, 75, -90, base_screwholes)
+    u = indented_screwhole(scl, u, (183), ht+40, 75, -90, base_screwholes)
 
     # screw-holes into front base
     s = chamfered_backbox_screwholes(scl, 50)
