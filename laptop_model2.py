@@ -79,7 +79,7 @@ if not test:
     tpanel_w = 950.0
     tpanel_wb = 50.0
     tpanel_b_w = tpanel_w + tpanel_wb * 2
-    tpanel_l = 670.0
+    tpanel_l = 665.0
     tpanel_l_b = tpanel_l + 150 + 132
     tpanel_h = 40
 
@@ -1492,11 +1492,11 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     # cut-out to match pcb1_support
     w = tpanel_b_w
     l = 0
-    c = cube([(163)*scl, (95+pcb1_support_offset)*scl, (50)*scl])
-    b = translate(v=[(w-263)*scl, (0)*scl, (tpanel_h-33)*scl]).add(c)
+    c = cube([(167)*scl, (100+pcb1_support_offset)*scl, (50)*scl])
+    b = translate(v=[(w-270)*scl, (0)*scl, (tpanel_h-28.1)*scl]).add(c)
     u += b
-    c = cube([(160)*scl, (90)*scl, (20)*scl])
-    b = translate(v=[(w-260)*scl, (ht-90)*scl, (tpanel_h-3)*scl]).add(c)
+    c = cube([(160)*scl, (100)*scl, (23)*scl])
+    b = translate(v=[(w-263)*scl, (ht-100)*scl, (tpanel_h-3)*scl]).add(c)
     u += b
     c = cube([(160)*scl, (85+pcb1_support_offset)*scl, (95)*scl])
     b = translate(v=[(w-253)*scl, (-1)*scl, (tpanel_h-3)*scl]).add(c)
@@ -1506,8 +1506,8 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= b
 
     # cut-out to match right kbd tray
-    c = cube([(104)*scl, (82)*scl, (93)*scl])
-    b = translate(v=[(w-229)*scl, (ht-82+1)*scl, (20)*scl]).add(c)
+    c = cube([(104)*scl, (88)*scl, (93)*scl])
+    b = translate(v=[(w-229)*scl, (ht-85+1)*scl, (20)*scl]).add(c)
     u -= b
 
     # matches screw-hole in front base
