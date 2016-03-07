@@ -1478,15 +1478,10 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= c
 
     # wings for screw-holes to fit with front base
-    d = shearedcube([(64)*scl, (40)*scl, (86)*scl],
-            shear=[0*scl, 0*scl, 0],
-            innershear=[-32*scl, 0*scl, 0])
-    d = rotate([0, -90, 0]).add(d)
-    d = rotate([0, 0, -90]).add(d)
-    c = translate(v=[(182)*scl, (-85)*scl, (44)*scl]).add(d)
+    d = front_tray_corner(scl, 105, dep=20)
+    c = translate(v=[(0)*scl, (-14)*scl, (-4-55)*scl]).add(d)
     u += c
-    d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(182+40)*scl, (ht+85)*scl, (44)*scl]).add(d)
+    c = translate(v=[(0)*scl, (ht-6)*scl, (-4-55)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -1509,10 +1504,6 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     c = cube([(104)*scl, (88)*scl, (93)*scl])
     b = translate(v=[(w-229)*scl, (ht-85+1)*scl, (20)*scl]).add(c)
     u -= b
-
-    # matches screw-hole in front base
-    u = indented_screwhole(scl, u, (183), -40, 75, -90, base_screwholes)
-    u = indented_screwhole(scl, u, (183), ht+40, 75, -90, base_screwholes)
 
     # screw-holes into front base
     s = chamfered_backbox_screwholes(scl, 50)
@@ -1936,11 +1927,9 @@ def base_front_top(scl, ht, ht_offset):
     t = rotate([0, 90, 0]).add(t)
     b = translate(v=[(146)*scl, (-1)*scl, (55+hthick+34)*scl]).add(t)
     u -= b
-    # screw hole for tpanel_mid
-    t = holed_support(scl, 50, inverse=True)
-    t = rotate([0, 0, -90]).add(t)
-    b = translate(v=[(130)*scl, ((tpanel_ht-tpanel_b_w/2-5))*scl,
-                     (44)*scl]).add(t)
+    # ... and tpanel_mid
+    b = translate(v=[(146)*scl, ((tpanel_ht-tpanel_b_w/2-50))*scl,
+                     (55+hthick+34)*scl]).add(t)
     u -= b
 
     # remove runner along top of base, for front top panel 
@@ -4041,7 +4030,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     v.add(u)
     return v
 
-def front_tray_corner(scl, ht):
+def front_tray_corner(scl, ht, dep=70):
     """
     this part basically locks into place (relies on surrounding parts)
     rather than acts as structural support, with the exception of
@@ -4055,15 +4044,15 @@ def front_tray_corner(scl, ht):
     w = lcd_w-kbd_w-158
     l = ht
 
-    b = cube([25.1*scl, 70*scl, (boxheight-hthick-22)*scl])
+    b = cube([25.1*scl, (dep)*scl, (boxheight-hthick-22)*scl])
     b = translate(v=[(-3.1)*scl, 0*scl, (21)*scl]).add(b)
     u += b
 
-    t = shearedcube([(boxheight-hthick*2-26)*scl, (71)*scl, (25)*scl],
+    t = shearedcube([(boxheight-hthick*2-26)*scl, (dep)*scl, (25)*scl],
             shear=[8*scl, 0*scl, 0],
             innershear=[-8*scl, 0*scl, 0])
     t = rotate([0, 90, 0]).add(t)
-    b = translate(v=[(-28)*scl, (-1)*scl, (boxheight-21)*scl]).add(t)
+    b = translate(v=[(-28)*scl, (0)*scl, (boxheight-21)*scl]).add(t)
     u += b
 
     v = union()
@@ -5002,8 +4991,8 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        BASE_MID,
+                        TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
