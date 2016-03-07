@@ -1753,6 +1753,7 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[0*scl, 0*scl, 0]).add(b)
     u += b
 
+    u = union()
     # lockin for base_mid
     cht = 30
     c = shearedcube([95*scl, cht*scl, (50)*scl],
@@ -1761,12 +1762,21 @@ def base_front_top(scl, ht, ht_offset):
     t = translate(v=[(56)*scl, (ht-cht-173)*scl, (40)*scl]).add(c)
     u += t
     # ...with a bit of a cutoff of the point ends...
-    b = cube([(190)*scl, (50)*scl, (60)*scl])
-    c = translate(v=[(0)*scl, (ht-160)*scl, (40)*scl]).add(b)
+    b = shearedcube([(190)*scl, (50)*scl, (60)*scl],
+                shear=[0*scl, 21*scl, 0],
+                innershear=[0*scl, -21*scl, 0])
+    c = translate(v=[(0)*scl, (ht-154)*scl, (40)*scl]).add(b)
     u -= c
-    b = cube([(20)*scl, (50)*scl, (60)*scl])
-    u -= translate(v=[(23)*scl, (ht-181)*scl, (40)*scl]).add(b)
-    u -= translate(v=[(14+150)*scl, (ht-181)*scl, (40)*scl]).add(b)
+    b = shearedcube([(20)*scl, (50)*scl, (60)*scl],
+                shear=[16*scl, 0*scl, 0],
+                innershear=[-16*scl, 0*scl, 0])
+    u -= translate(v=[(23)*scl, (ht-205)*scl, (45)*scl]).add(b)
+    u -= translate(v=[(14+150)*scl, (ht-205)*scl, (45)*scl]).add(b)
+
+    # add undersupport
+    c = cube([60*scl, 25*scl, 25*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    u += translate(v=[(150)*scl, (ht-182)*scl, (65)*scl]).add(c)
 
     # add bits for screws through to base front
     c = shearedcube([110*scl, (54)*scl, (21)*scl],
@@ -2762,14 +2772,20 @@ def base_mid(scl, ht, base_screwholes=False):
                                 (0)*scl]).add(c)
     u -= c
     # cutout from front wings for base_front_top
-    c = shearedcube([97*scl, (80)*scl, (52)*scl],
-                shear=[15*scl, 0*scl, 0],
-                innershear=[-15*scl, -21*scl, 0])
-    u -= translate(v=[(55)*scl, (ht+102)*scl, (39)*scl]).add(c)
-    c = shearedcube([97*scl, (80)*scl, (52)*scl],
+    d = union()
+    d += shearedcube([97*scl, (80)*scl, (52)*scl],
                 shear=[15*scl, 21*scl, 0],
+                innershear=[-15*scl, -21*scl, 0])
+    c = shearedcube([97*scl, (150)*scl, (52)*scl],
+                shear=[15*scl, 0*scl, 0],
                 innershear=[-15*scl, 0*scl, 0])
-    u -= translate(v=[(55)*scl, (-102-80)*scl, (39)*scl]).add(c)
+    d -= translate(v=[(-112)*scl, (-30)*scl, (1)*scl]).add(c)
+    d -= translate(v=[(112)*scl, (-30)*scl, (1)*scl]).add(c)
+    u -= translate(v=[(55)*scl, (ht+102)*scl, (39)*scl]).add(d)
+    u -= translate(v=[(55)*scl, (-102-80)*scl, (39)*scl]).add(d)
+    c = cube([62*scl, 25*scl, 25*scl], center=True)
+    c = rotate([45, 0, 0]).add(c)
+    u -= translate(v=[(151)*scl, (-110)*scl, (65)*scl]).add(c)
 
     # tpanel cutout
     u = tpanel_cutout(scl, u, 100)
@@ -3010,7 +3026,6 @@ def base_mid(scl, ht, base_screwholes=False):
 
     if cutdown:
         c = cube([(boxlength+50)*scl, 300*scl, 200*scl])
-        #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
         u -= translate([-1*scl, -20*scl, -1*scl]).add(c)
         u -= translate([300*scl, -120*scl, -1*scl]).add(c)
 
