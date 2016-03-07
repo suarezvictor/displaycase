@@ -1753,7 +1753,6 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[0*scl, 0*scl, 0]).add(b)
     u += b
 
-    u = union()
     # lockin for base_mid
     cht = 30
     c = shearedcube([95*scl, cht*scl, (50)*scl],
@@ -5017,13 +5016,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
