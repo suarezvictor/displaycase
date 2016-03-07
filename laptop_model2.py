@@ -1881,8 +1881,8 @@ def base_front_top(scl, ht, ht_offset):
     c = rotate([0, 0, 40]).add(c)
     u += translate(v=[(185)*scl, (ht-115)*scl, (75)*scl]).add(c)
     # cutoff protrusion
-    c = cube([80*scl, 80*scl, 180*scl])
-    u -= translate(v=[(180)*scl, (ht-150)*scl, (0)*scl]).add(c)
+    c = cube([100*scl, 90*scl, 200*scl])
+    u -= translate(v=[(180)*scl, (ht-160)*scl, (0)*scl]).add(c)
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
