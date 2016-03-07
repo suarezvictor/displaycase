@@ -1769,8 +1769,8 @@ def base_front_top(scl, ht, ht_offset):
     b = shearedcube([(20)*scl, (50)*scl, (60)*scl],
                 shear=[16*scl, 0*scl, 0],
                 innershear=[-16*scl, 0*scl, 0])
-    u -= translate(v=[(23)*scl, (ht-205)*scl, (45)*scl]).add(b)
-    u -= translate(v=[(14+150)*scl, (ht-205)*scl, (45)*scl]).add(b)
+    u -= translate(v=[(23)*scl, (ht-181)*scl, (45)*scl]).add(b)
+    u -= translate(v=[(14+150)*scl, (ht-181)*scl, (45)*scl]).add(b)
 
     # add undersupport
     c = cube([60*scl, 25*scl, 25*scl], center=True)
