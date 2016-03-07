@@ -1521,9 +1521,9 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= b
     b = translate(v=[(40)*scl, (40)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(40)*scl, (ht/2-50-ht_offset)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2-120-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
-    b = translate(v=[(40)*scl, (ht/2+50-ht_offset)*scl, (+20)*scl]).add(s)
+    b = translate(v=[(40)*scl, (ht/2+120-ht_offset)*scl, (+20)*scl]).add(s)
     u -= b
     # and into pcb1_support
     b = translate(v=[(tpanel_l_b-75)*scl, (40)*scl, (+20)*scl]).add(s)
@@ -2786,8 +2786,8 @@ def base_mid(scl, ht, base_screwholes=False):
     d = cylinder(r=topscrewrad*scl,
                     h=(55)*scl,
                     segments=50, center=True)
-    u -= translate(v=[(40)*scl, (ht-20)*scl, (50)*scl]).add(d)
-    u -= translate(v=[(40)*scl, (+20)*scl, (50)*scl]).add(d)
+    u -= translate(v=[(40)*scl, (ht+50)*scl, (50)*scl]).add(d)
+    u -= translate(v=[(40)*scl, (-50)*scl, (50)*scl]).add(d)
 
     # end wall for tpanel_mid to lock into
     v = union()
@@ -5002,7 +5002,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
