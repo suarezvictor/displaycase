@@ -1762,18 +1762,18 @@ def base_front_top(scl, ht, ht_offset):
     u += b
 
     # lockin for base_mid
-    cht = 50
-    c = shearedcube([100*scl, cht*scl, (40)*scl],
+    cht = 30
+    c = shearedcube([95*scl, cht*scl, (50)*scl],
             shear=[15*scl, 20*scl, 0],
             innershear=[-15*scl, 0*scl, 0])
-    t = translate(v=[(51)*scl, (ht-cht-153)*scl, (40)*scl]).add(c)
+    t = translate(v=[(56)*scl, (ht-cht-173)*scl, (40)*scl]).add(c)
     u += t
     # ...with a bit of a cutoff of the point ends...
-    b = cube([(190)*scl, (50)*scl, (50)*scl])
-    c = translate(v=[(0)*scl, (ht-140)*scl, (40)*scl]).add(b)
+    b = cube([(190)*scl, (50)*scl, (60)*scl])
+    c = translate(v=[(0)*scl, (ht-160)*scl, (40)*scl]).add(b)
     u -= c
-    b = cube([(20)*scl, (50)*scl, (50)*scl])
-    u -= translate(v=[(18)*scl, (ht-181)*scl, (40)*scl]).add(b)
+    b = cube([(20)*scl, (50)*scl, (60)*scl])
+    u -= translate(v=[(23)*scl, (ht-181)*scl, (40)*scl]).add(b)
     u -= translate(v=[(14+150)*scl, (ht-181)*scl, (40)*scl]).add(b)
 
     # add bits for screws through to base front
@@ -2770,14 +2770,14 @@ def base_mid(scl, ht, base_screwholes=False):
                                 (0)*scl]).add(c)
     u -= c
     # cutout from front wings for base_front_top
-    c = shearedcube([102*scl, (80)*scl, (43)*scl],
+    c = shearedcube([97*scl, (80)*scl, (52)*scl],
                 shear=[15*scl, 0*scl, 0],
                 innershear=[-15*scl, -21*scl, 0])
-    u -= translate(v=[(50)*scl, (ht+82)*scl, (39)*scl]).add(c)
-    c = shearedcube([102*scl, (80)*scl, (43)*scl],
+    u -= translate(v=[(55)*scl, (ht+102)*scl, (39)*scl]).add(c)
+    c = shearedcube([97*scl, (80)*scl, (52)*scl],
                 shear=[15*scl, 21*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    u -= translate(v=[(50)*scl, (-82-80)*scl, (39)*scl]).add(c)
+                innershear=[-15*scl, 0*scl, 0])
+    u -= translate(v=[(55)*scl, (-102-80)*scl, (39)*scl]).add(c)
 
     # tpanel cutout
     u = tpanel_cutout(scl, u, 100)
@@ -5001,7 +5001,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
