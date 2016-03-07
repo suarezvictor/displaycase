@@ -1747,7 +1747,7 @@ def base_front_top(scl, ht, ht_offset):
     u = union()
 
     tpanel_ht = ht+ht_offset
-    walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:105}
+    walls = {T:hthick, L:hthick, R:-1, F:80, D:hthick, B:140}
     curverads={
                 L|T: (hthick, 0),
                 L|D: (boxheight-40, 0),
@@ -1791,7 +1791,7 @@ def base_front_top(scl, ht, ht_offset):
 
     # prepare series of cutouts
     fthick = 6
-    offs = 110-hthick+fthick
+    offs = 140
     if test:
         num_steps = 4.0
     else:
@@ -1799,8 +1799,7 @@ def base_front_top(scl, ht, ht_offset):
             num_steps = 12.0
         else:
             num_steps = 8.0
-    step = (tpanel_ht-tpanel_b_w/2-100-offs) / num_steps
-    end = (tpanel_ht-step-tpanel_b_w/2+5)
+    end = (tpanel_ht-100-tpanel_b_w/2+5)
 
     doffs = 66
     c = base_cutout(scl, end-offs, doffs=doffs)
@@ -1809,6 +1808,8 @@ def base_front_top(scl, ht, ht_offset):
     c = translate(v=[0*scl, (end)*scl, (0)*scl]).add(c)
     u -= c
 
+    offs -= 40
+    step = (tpanel_ht-tpanel_b_w/2-100-offs) / num_steps
     # put in series of cutouts
     while offs < end-10:
         # add fill-ins
@@ -1891,16 +1892,16 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[0], h=130, rad=35./2)
+    t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
     t = translate(v=[0, 0, (boxheight-55)*scl]).add(t)
     u -= t
 
     # add hexagonal bolt hole support for a nut to sit in
-    c = cube([100*scl, 40*scl, 60*scl], center=True)
+    c = cube([100*scl, 35*scl, 60*scl], center=True)
     c = translate(v=[(50)*scl, (110)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 0).add(c)
     u -= t
-    c = cylinder(r=34.0*scl, h=40*scl, center=True, segments=6)
+    c = cylinder(r=34.0*scl, h=35*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 0).add(c)
