@@ -141,7 +141,7 @@ class SurfaceFromCurves:
 
         points = [vtrans(trans, vmult(scale, p)) for p in points]
 
-        return polyhedron(points=points, triangles=triangles)
+        return polyhedron(points=points, faces=triangles)
 
 if __name__ == '__main__':
     p1 = [(0,0,0), (100,0,20), (200,0,0), (300,0, 60)]
@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
     plist = [p1, p2, p3, p4]
 
-    plist = spline_double_divide(plist, step_h=0.1, step_v=0.1)
+    #plist = spline_double_divide(plist, step_h=0.1, step_v=0.1)
 
     scale = (0.01, 0.01, 0.01)
     po = Offset((0,0,50))

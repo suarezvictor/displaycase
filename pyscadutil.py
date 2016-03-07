@@ -300,3 +300,189 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0,
     t.add(r)
     return t
 
+class Polygon:
+    def __init__(self):
+        self.points = []
+        self.triangles = []
+        self.points_idx = {}
+
+    def add_point(self, pt):
+        if pt in self.points_idx:
+            print "point already in %s %s" % \
+                        (repr(pt), repr(self.points_idx))
+            return 
+        self.points_idx[pt] = len(self.points)
+        self.points.append(list(pt))
+
+    def add_triangle(self, points):
+        tarray = []
+        for pt in points:
+            tarray.append(self.points_idx[pt])
+        self.triangles.append(tarray)
+
+
+W = 1
+D = 2
+H = 4
+
+def pf(pspec, pwo, pdo, pho):
+    return (pspec[0][pwo], pspec[1][pdo], pspec[2][pho])
+
+def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
+
+    if curverads is None:
+        curverads = {}
+    pg = Polygon()
+
+    ws = (0, curverads.get(L, 0), w-curverads.get(R, 0), w)
+    ds = (0, curverads.get(F, 0), d-curverads.get(B, 0), d)
+    hs = (0, curverads.get(D, 0), h-curverads.get(T, 0), h)
+
+    pspec = (ws, ds, hs)
+
+    for i in range(8):
+        for pwo in range(4):
+            for pdo in range(4):
+                for pho in range(4):
+                    pg.add_point(pf(pspec, pwo, pdo, pho))
+
+    # centre rectangles (very middles)
+    d = (pf(pspec, 1, 1, 0),
+         pf(pspec, 2, 1, 0),
+         pf(pspec, 2, 2, 0),
+         pf(pspec, 1, 2, 0))
+    t = (pf(pspec, 1, 1, 3),
+         pf(pspec, 2, 1, 3),
+         pf(pspec, 2, 2, 3),
+         pf(pspec, 1, 2, 3))
+    f = (pf(pspec, 1, 0, 1),
+         pf(pspec, 2, 0, 1),
+         pf(pspec, 2, 0, 2),
+         pf(pspec, 1, 0, 2))
+    b = (pf(pspec, 1, 3, 1),
+         pf(pspec, 2, 3, 1),
+         pf(pspec, 2, 3, 2),
+         pf(pspec, 1, 3, 2))
+    l = (pf(pspec, 0, 1, 1),
+         pf(pspec, 0, 1, 2),
+         pf(pspec, 0, 2, 2),
+         pf(pspec, 0, 2, 1))
+    r = (pf(pspec, 3, 1, 1),
+         pf(pspec, 3, 1, 2),
+         pf(pspec, 3, 2, 2),
+         pf(pspec, 3, 2, 1))
+
+    for pts in [d,t,f,b,l,r]:
+        pg.add_triangle(pts)
+
+    # ok these will be 2-axis curves
+    ft = (pf(pspec, 1, 0, 2),
+          pf(pspec, 2, 0, 2),
+          pf(pspec, 2, 1, 3),
+          pf(pspec, 1, 1, 3))
+    pg.add_triangle(ft)
+    fd = (pf(pspec, 1, 0, 1),
+          pf(pspec, 2, 0, 1),
+          pf(pspec, 2, 1, 0),
+          pf(pspec, 1, 1, 0))
+    pg.add_triangle(fd)
+    bd = (pf(pspec, 1, 3, 1),
+          pf(pspec, 2, 3, 1),
+          pf(pspec, 2, 2, 0),
+          pf(pspec, 1, 2, 0))
+    pg.add_triangle(bd)
+    bt = (pf(pspec, 1, 3, 2),
+          pf(pspec, 2, 3, 2),
+          pf(pspec, 2, 2, 3),
+          pf(pspec, 1, 2, 3))
+    pg.add_triangle(bt)
+
+    lt = (pf(pspec, 0, 1, 2),
+          pf(pspec, 0, 2, 2),
+          pf(pspec, 1, 2, 3),
+          pf(pspec, 1, 1, 3))
+    pg.add_triangle(lt)
+    ld = (pf(pspec, 0, 1, 1),
+          pf(pspec, 0, 2, 1),
+          pf(pspec, 1, 2, 0),
+          pf(pspec, 1, 1, 0))
+    pg.add_triangle(ld)
+    rt = (pf(pspec, 3, 1, 2),
+          pf(pspec, 3, 2, 2),
+          pf(pspec, 2, 2, 3),
+          pf(pspec, 2, 1, 3))
+    pg.add_triangle(rt)
+    rd = (pf(pspec, 3, 1, 1),
+          pf(pspec, 3, 2, 1),
+          pf(pspec, 2, 2, 0),
+          pf(pspec, 2, 1, 0))
+    pg.add_triangle(rd)
+
+    rf = (pf(pspec, 3, 1, 2),
+          pf(pspec, 3, 1, 1),
+          pf(pspec, 2, 0, 1),
+          pf(pspec, 2, 0, 2))
+    pg.add_triangle(rf)
+    rb = (pf(pspec, 3, 2, 2),
+          pf(pspec, 3, 2, 1),
+          pf(pspec, 2, 3, 1),
+          pf(pspec, 2, 3, 2))
+    pg.add_triangle(rb)
+    lf = (pf(pspec, 0, 1, 2),
+          pf(pspec, 0, 1, 1),
+          pf(pspec, 1, 0, 1),
+          pf(pspec, 1, 0, 2))
+    pg.add_triangle(lf)
+    lb = (pf(pspec, 0, 2, 2),
+          pf(pspec, 0, 2, 1),
+          pf(pspec, 1, 3, 1),
+          pf(pspec, 1, 3, 2))
+    pg.add_triangle(lb)
+
+    # ok corners
+    ldf = (pf(pspec, 1, 0, 1),
+           pf(pspec, 0, 1, 1),
+           pf(pspec, 1, 1, 0))
+    pg.add_triangle(ldf)
+    rdf = (pf(pspec, 2, 0, 1),
+           pf(pspec, 3, 1, 1),
+           pf(pspec, 2, 1, 0))
+    pg.add_triangle(rdf)
+    rdb = (pf(pspec, 2, 3, 1),
+           pf(pspec, 3, 2, 1),
+           pf(pspec, 2, 2, 0))
+    pg.add_triangle(rdb)
+    ldb = (pf(pspec, 1, 3, 1),
+           pf(pspec, 0, 2, 1),
+           pf(pspec, 1, 2, 0))
+    pg.add_triangle(ldb)
+
+    ltf = (pf(pspec, 1, 0, 2),
+           pf(pspec, 0, 1, 2),
+           pf(pspec, 1, 1, 3))
+    pg.add_triangle(ltf)
+    rtf = (pf(pspec, 2, 0, 2),
+           pf(pspec, 3, 1, 2),
+           pf(pspec, 2, 1, 3))
+    pg.add_triangle(rtf)
+    rtb = (pf(pspec, 2, 3, 2),
+           pf(pspec, 3, 2, 2),
+           pf(pspec, 2, 2, 3))
+    pg.add_triangle(rtb)
+    ltb = (pf(pspec, 1, 3, 2),
+           pf(pspec, 0, 2, 2),
+           pf(pspec, 1, 2, 3))
+    pg.add_triangle(ltb)
+
+    return polyhedron(points=pg.points, faces=pg.triangles)
+
+if __name__ == '__main__':
+
+    p = splinebox(0.01, 300, 200, 100,
+                    curverads={L:10, T:20, D:30, R:5, B: 15, F: 25})
+    t = union()
+    t.add(p)
+
+    scad_render_to_file(t, "test.scad")
+
+

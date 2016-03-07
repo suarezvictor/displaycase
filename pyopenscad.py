@@ -22,7 +22,7 @@ openscad_builtins = [
     {'name': 'sphere',          'args': [],         'kwargs': ['r']} ,
     {'name': 'cube',            'args': [],         'kwargs': ['size', 'center']} ,
     {'name': 'cylinder',        'args': [],         'kwargs': ['r','h','r1', 'r2', 'center']}  ,
-    {'name': 'polyhedron',      'args': ['points', 'triangles' ], 'kwargs': ['convexity']} ,
+    {'name': 'polyhedron',      'args': ['points'], 'kwargs': ['triangles', 'faces', 'convexity']} ,
     
     # Boolean operations
     {'name': 'union',           'args': [],         'kwargs': []} ,
