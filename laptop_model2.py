@@ -2019,9 +2019,8 @@ def base_front_top(scl, ht, ht_offset):
         c = cube([300*scl, ht*scl, 200*scl])
         #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
         u -= translate([-1*scl, -150*scl, -1*scl]).add(c)
-        c = cube([300*scl, 100*scl, 200*scl])
-        #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
-        u -= translate([-1*scl, (ht-80)*scl, -1*scl]).add(c)
+        #c = cube([300*scl, 100*scl, 200*scl])
+        #u -= translate([-1*scl, (ht-80)*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -2725,8 +2724,8 @@ def base_mid(scl, ht, base_screwholes=False):
     u += b
 
     # fill in front a bit
-    c = cube([66*scl, (ht)*scl, (boxheight-42)*scl])
-    c = translate(v=[(149)*scl, (0)*scl, (40)*scl]).add(c)
+    c = cube([65*scl, (ht)*scl, (boxheight-42)*scl])
+    c = translate(v=[(150)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
     c = cube([30*scl, (ht+80)*scl, (boxheight-40)*scl])
     c = translate(v=[(150)*scl, (-40)*scl, (40)*scl]).add(c)
@@ -2977,8 +2976,8 @@ def base_mid(scl, ht, base_screwholes=False):
 
     if cutdown:
         c = cube([(boxlength+50)*scl, 300*scl, 200*scl])
-        u -= translate([-1*scl, -20*scl, -1*scl]).add(c)
-        u -= translate([300*scl, -120*scl, -1*scl]).add(c)
+        u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
+        u -= translate([250*scl, -120*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4968,13 +4967,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
