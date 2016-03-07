@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2032,7 +2032,8 @@ def base_front_top(scl, ht, ht_offset):
 
     if cutdown:
         c = cube([300*scl, ht*scl, 200*scl])
-        u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
+        #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
+        u -= translate([-1*scl, -290*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -3006,6 +3007,12 @@ def base_mid(scl, ht, base_screwholes=False):
         c += h
 
         u += c
+
+    if cutdown:
+        c = cube([(boxlength+50)*scl, 300*scl, 200*scl])
+        #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
+        u -= translate([-1*scl, -20*scl, -1*scl]).add(c)
+        u -= translate([300*scl, -120*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4995,13 +5002,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
-                        #BASE_MID,
+                        #TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
