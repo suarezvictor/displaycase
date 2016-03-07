@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1882,7 +1882,7 @@ def base_front_top(scl, ht, ht_offset):
     u += translate(v=[(185)*scl, (ht-115)*scl, (75)*scl]).add(c)
     # cutoff protrusion
     c = cube([80*scl, 80*scl, 180*scl])
-    u -= translate(v=[(180)*scl, (ht-155)*scl, (0)*scl]).add(c)
+    u -= translate(v=[(180)*scl, (ht-150)*scl, (0)*scl]).add(c)
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
@@ -2018,7 +2018,7 @@ def base_front_top(scl, ht, ht_offset):
     if cutdown:
         c = cube([300*scl, ht*scl, 200*scl])
         #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
-        u -= translate([-1*scl, -290*scl, -1*scl]).add(c)
+        u -= translate([-1*scl, -200*scl, -1*scl]).add(c)
 
     v = union()
     u = translate(v=[0*scl, 0, (55)*scl]).add(u)
@@ -4970,8 +4970,8 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
