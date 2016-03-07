@@ -1478,10 +1478,11 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= c
 
     # wings for screw-holes to fit with front base
-    d = front_tray_corner(scl, 105, dep=20)
-    c = translate(v=[(0)*scl, (-14)*scl, (-4-55)*scl]).add(d)
+    d = front_tray_corner(scl, 105, dep=20, inset=15)
+    c = translate(v=[(0)*scl, (-34)*scl, (-4-55)*scl]).add(d)
     u += c
-    c = translate(v=[(0)*scl, (ht-6)*scl, (-4-55)*scl]).add(d)
+    d = front_tray_corner(scl, 105, dep=20, inset=-15)
+    c = translate(v=[(0)*scl, (ht+14)*scl, (-4-55)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -1928,7 +1929,7 @@ def base_front_top(scl, ht, ht_offset):
     b = translate(v=[(146)*scl, (-1)*scl, (55+hthick+34)*scl]).add(t)
     u -= b
     # ... and tpanel_mid
-    b = translate(v=[(146)*scl, ((tpanel_ht-tpanel_b_w/2-50))*scl,
+    b = translate(v=[(146)*scl, ((tpanel_ht-tpanel_b_w/2-72))*scl,
                      (55+hthick+34)*scl]).add(t)
     u -= b
 
@@ -4030,7 +4031,7 @@ def front_kbd_tray(scl, ht, woffs, hoffs):
     v.add(u)
     return v
 
-def front_tray_corner(scl, ht, dep=70):
+def front_tray_corner(scl, ht, dep=70, inset = 0):
     """
     this part basically locks into place (relies on surrounding parts)
     rather than acts as structural support, with the exception of
@@ -4043,6 +4044,14 @@ def front_tray_corner(scl, ht, dep=70):
     u = union()
     w = lcd_w-kbd_w-158
     l = ht
+
+    if inset:
+        off = inset
+        if inset > 0:
+            off = dep-1
+        b = cube([20.1*scl, (abs(inset)+1)*scl, (boxheight-hthick-22)*scl])
+        b = translate(v=[(2-0.1)*scl, off*scl, (21)*scl]).add(b)
+        u += b
 
     b = cube([25.1*scl, (dep)*scl, (boxheight-hthick-22)*scl])
     b = translate(v=[(-3.1)*scl, 0*scl, (21)*scl]).add(b)
