@@ -303,7 +303,7 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0,
     return t
 
 def roundpt(pt):
-    return tuple(map(lambda x: round(x, 2), pt))
+    return tuple(map(lambda x: round(x, 5), pt))
 
 class Polygon:
     def __init__(self):
@@ -328,8 +328,10 @@ class Polygon:
     def add_triangle(self, points):
         tarray = []
         pts = list(points)
+        pts = map(tuple, pts)
         pts.sort()
         pts = tuple(pts)
+        print pts
         if pts in self.triangles_idx:
             return
         self.triangles_idx.add(pts)
@@ -357,14 +359,10 @@ class Polygon:
     def _add_triangles(self, tr):
         self.triangles += tr
 
-W = 1
-D = 2
-H = 4
-
 def pf(pspec, pwo, pdo, pho):
     return (pspec[0][pwo], pspec[1][pdo], pspec[2][pho])
 
-spline_res = 0.15
+spline_res = 1.0/6
 
 def sl(pspec, lidx):
     """ ok this function takes 4 points, uses the 1st two and last two
@@ -372,24 +370,15 @@ def sl(pspec, lidx):
         approximately going to go flat to those pairs.
     """
     pts = map(lambda x: pf(pspec, x[0], x[1], x[2]), lidx)
-    scale = (0.000001,0.000001,0.000001)
+    scale = [0.000000000005] * 3
     v1 = vmult(scale, vsub(pts[1], pts[0]))
-    v2 = vmult(scale, vsub(pts[4], pts[3]))
+    v2 = vmult(scale, vsub(pts[3], pts[4]))
     print "points", pts
     print "v1", v1
     print "v2", v2
-    f = [pts[1]]
-    b = [pts[3]]
-    for i in range(1):
-        print f, b, v1
-        x = vtrans(v1, f[-1])
-        print x
-        f.append(x)
-        x = vtrans(v2, b[-1])
-        print x
-        b.append(x)
-    b.reverse()
-    pts = f + [pts[2]] + b
+    pts = [pts[1], vtrans(pts[1], v1), pts[2], vtrans(pts[3], v2), pts[3]]
+    #pts = [pts[1], pts[1], pts[2], pts[3], pts[3]]
+    #pts = [pts[1], pts[2], pts[3]]
     pts = spline_divide([pts], spline_res)
     print pts
     return v1, v2, pts[0]
@@ -703,9 +692,10 @@ def add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2):
     frt = []
     for (pts1, pts2) in zip(rf_t, ft_r):
         midpoint = (pts1[0], pts1[1], pts2[2])
-        pts = [vsub(pts1, rf_t_v1), pts1,
+        pts = [pts1, vtrans(pts1, rf_t_v1),
                 midpoint,
-                pts2, vtrans(pts2, ft_r_v2)]
+                vtrans(pts2, ft_r_v2),
+                pts2]
         print "corner pts", pts
         pts = spline_divide([pts], spline_res)
         pts = pts[0]
@@ -722,7 +712,7 @@ def add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2):
 if __name__ == '__main__':
 
     p = splinebox(0.01, 300, 200, 100,
-                    curverads={L:10, T:20, D:30, R:40, B: 15, F: 25})
+                    curverads={L:10, T:20, D:10, R:45, B: 15, F: 25})
     t = union()
     t.add(p)
 
