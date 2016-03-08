@@ -9,6 +9,9 @@ def vmult(v1, v2):
 def vtrans(v1, v2):
     return map(lambda (x,y): x+y, zip(v1, v2))
 
+def vsub(v1, v2):
+    return map(lambda (x,y): x-y, zip(v1, v2))
+
 def turnaround(l):
     res = []
     for i in range(len(l[0])):
@@ -23,7 +26,7 @@ def turnaround(l):
 def spline_divide(plist, step=0.1):
     res = []
     for l in plist:
-        #print "spline", l
+        print "spline", l
         s = Spline(len(l)-1, l)
         #s.Spaceout()
         res.append(s.plot(step))
@@ -68,15 +71,15 @@ def end_indices_from_pointsets(l, invert=False):
             triangles.append((l*2+i, l*2+i+1, i))
     return triangles
         
-def surface_indices_from_pointsets(l, invert=False):
+def surface_indices_from_pointsets(l, invert=False, offs=0):
     triangles = []
     for i in range(l-1):
         if invert:
-            triangles.append((i, i+1, l+i+1))
-            triangles.append((l+i+1, l+i, i))
+            triangles.append((offs+i, offs+i+1, offs+l+i+1))
+            triangles.append((offs+l+i+1, offs+l+i, offs+i))
         else:
-            triangles.append((i+1, i, l+i+1))
-            triangles.append((l+i, l+i+1, i))
+            triangles.append((offs+i+1, offs+i, offs+l+i+1))
+            triangles.append((offs+l+i, offs+l+i+1, offs+i))
     return triangles
         
 class SurfaceFromCurves:
@@ -151,7 +154,7 @@ if __name__ == '__main__':
 
     plist = [p1, p2, p3, p4]
 
-    #plist = spline_double_divide(plist, step_h=0.1, step_v=0.1)
+    plist = spline_double_divide(plist, step_h=0.1, step_v=0.1)
 
     scale = (0.01, 0.01, 0.01)
     po = Offset((0,0,50))

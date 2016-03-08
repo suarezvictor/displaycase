@@ -5,6 +5,8 @@ import time
 import itertools
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
+from polysurface import spline_divide, vsub, vmult, vtrans, turnaround
+from polysurface import surface_indices_from_pointsets
 from copy import deepcopy
 
 B0 = 1
@@ -306,10 +308,14 @@ class Polygon:
         self.triangles = []
         self.points_idx = {}
 
+    def add_points(self, pts):
+        for pt in pts:
+            self.add_point(pt)
+
     def add_point(self, pt):
         if pt in self.points_idx:
-            print "point already in %s %s" % \
-                        (repr(pt), repr(self.points_idx))
+            #print "point already in %s %s" % \
+                        #(repr(pt), repr(self.points_idx))
             return 
         self.points_idx[pt] = len(self.points)
         self.points.append(list(pt))
@@ -320,6 +326,12 @@ class Polygon:
             tarray.append(self.points_idx[pt])
         self.triangles.append(tarray)
 
+    def add_triangles(self, tr):
+        for t in tr:
+            self.add_triangle(t)
+
+    def _add_triangles(self, tr):
+        self.triangles += tr
 
 W = 1
 D = 2
@@ -328,6 +340,35 @@ H = 4
 def pf(pspec, pwo, pdo, pho):
     return (pspec[0][pwo], pspec[1][pdo], pspec[2][pho])
 
+def sl(pspec, lidx):
+    """ ok this function takes 4 points, uses the 1st two and last two
+        each as "direction-finders", then creates a spline which is
+        approximately going to go flat to those pairs.
+    """
+    pts = map(lambda x: pf(pspec, x[0], x[1], x[2]), lidx)
+    scale = (0.0001,0.0001,0.0001)
+    v1 = vmult(scale, vsub(pts[1], pts[0]))
+    v2 = vmult(scale, vsub(pts[4], pts[3]))
+    print "points", pts
+    print "v1", v1
+    print "v2", v2
+    f = [pts[1]]
+    b = [pts[3]]
+    for i in range(2):
+        print f, b, v1
+        x = vtrans(v1, f[-1])
+        print x
+        f.append(x)
+        x = vtrans(v2, b[-1])
+        print x
+        b.append(x)
+    b.reverse()
+    pts = f + [pts[2]] + b
+    pts = spline_divide([pts], 0.1)
+    print pts
+    return v1, v2, pts[0]
+    
+    
 def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
 
     if curverads is None:
@@ -372,15 +413,15 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
          pf(pspec, 3, 2, 2),
          pf(pspec, 3, 2, 1))
 
-    for pts in [d,t,f,b,l,r]:
-        pg.add_triangle(pts)
+    #for pts in [d,t,f,b,l,r]:
+    #    pg.add_triangle(pts)
 
     # ok these will be 2-axis curves
     ft = (pf(pspec, 1, 0, 2),
           pf(pspec, 2, 0, 2),
           pf(pspec, 2, 1, 3),
           pf(pspec, 1, 1, 3))
-    pg.add_triangle(ft)
+    #pg.add_triangle(ft)
     fd = (pf(pspec, 1, 0, 1),
           pf(pspec, 2, 0, 1),
           pf(pspec, 2, 1, 0),
@@ -474,12 +515,88 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
            pf(pspec, 1, 2, 3))
     pg.add_triangle(ltb)
 
+    # spinelines
+    ft_l = ((1, 0, 1),
+            (1, 0, 2),
+            (1, 0, 3),
+            (1, 1, 3),
+            (1, 2, 3))
+    ft_l_v1, ft_l_v2, ft_l = sl(pspec, ft_l)
+    ft_offs = len(pg.points)
+    pg.add_points(ft_l)
+    ft_r = ((2, 0, 1),
+            (2, 0, 2),
+            (2, 0, 3),
+            (2, 1, 3),
+            (2, 2, 3))
+    ft_r_v1, ft_r_v2, ft_r = sl(pspec, ft_r)
+    pg.add_points(ft_r)
+
+    rt_f = ((3, 1, 1),
+            (3, 1, 2),
+            (3, 1, 3),
+            (2, 1, 3),
+            (1, 1, 3))
+    rt_f_v1, rt_f_v2, rt_f = sl(pspec, rt_f)
+    pg.add_points(rt_f)
+    rt_b = None # TODO
+
+    rf_t = ((3, 2, 2),
+            (3, 1, 2),
+            (3, 0, 2),
+            (2, 0, 2),
+            (1, 0, 2))
+    rf_t_v1, rf_t_v2, rf_t = sl(pspec, rf_t)
+    pg.add_points(rf_t)
+
+    rf_d = ((3, 2, 1),
+            (3, 1, 1),
+            (3, 0, 1),
+            (2, 0, 1),
+            (1, 0, 1))
+    rf_d_v1, rf_d_v2, rf_d = sl(pspec, rf_d)
+    pg.add_points(rf_d)
+
+    # between edges
+    ft_pts = []
+    for i in range(len(ft_l)-1):
+        pts = (ft_l[i], ft_l[i+1], ft_r[i+1], ft_r[i])
+        ft_pts.append(pts)
+        pg.add_triangle(pts)
+    rf_pts = []
+    for i in range(len(rf_t)-1):
+        pts = (rf_t[i], rf_t[i+1], rf_d[i+1], rf_d[i])
+        rf_pts.append(pts)
+        pg.add_triangle(pts)
+
+    ft_r.reverse()
+    # at corners
+    frt = []
+    for (pts1, pts2) in zip(rf_t, ft_r):
+        midpoint = pf(pspec, 3, 1, 3)
+        pts = [vtrans(pts1, rf_t_v1), pts1,
+                midpoint,
+                pts2, vsub(pts2, ft_r_v2)]
+        print "corner pts", pts
+        pts = spline_divide([pts], 0.1)
+        pts = pts[0]
+        pg.add_points(pts)
+        frt.append(pts)
+
+    print "frt", len(frt), len(frt[0])
+    for j in range(len(frt)-1):
+        for i in range(len(frt[0])-1):
+            pts = (frt[j][i], frt[j][i+1],
+                   frt[j+1][i+1], frt[j+1][i])
+            pg.add_triangle(pts)
+
+
     return polyhedron(points=pg.points, faces=pg.triangles)
 
 if __name__ == '__main__':
 
     p = splinebox(0.01, 300, 200, 100,
-                    curverads={L:10, T:20, D:30, R:5, B: 15, F: 25})
+                    curverads={L:10, T:20, D:30, R:40, B: 15, F: 25})
     t = union()
     t.add(p)
 
