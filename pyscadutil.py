@@ -452,7 +452,8 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
     ft_r_v1, ft_r_v2, ft_r = sl(pspec, ft_r)
     pg.add_points(ft_r)
 
-    add_edge(pg, ft_l, ft_r)
+    if curverads.get(F,0) !=0 or curverads.get(T,0) !=0:
+        add_edge(pg, ft_l, ft_r)
 
     fd_l = ((1, 0, 2),
             (1, 0, 1),
@@ -663,23 +664,23 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
 
     # at corners
     #ft_r.reverse()
-    add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2)
+    add_corner(pg, pspec, rf_t, ft_r, ft_r_v2, rf_t_v2)
     ft_l.reverse()
-    add_corner(pg, pspec, lf_t, ft_l, lf_t_v1, ft_l_v2)
+    add_corner(pg, pspec, lf_t, ft_l, ft_l_v2, lf_t_v1)
     rf_d.reverse()
-    add_corner(pg, pspec, rf_d, fd_r, rf_d_v1, fd_r_v2)
+    add_corner(pg, pspec, rf_d, fd_r, fd_r_v1, rf_d_v2)
     lf_d.reverse()
     fd_l.reverse()
-    add_corner(pg, pspec, lf_d, fd_l, lf_d_v1, fd_l_v2)
+    add_corner(pg, pspec, lf_d, fd_l, fd_l_v1, lf_d_v1)
     #rb_t.reverse()
-    add_corner(pg, pspec, rb_t, bt_r, rb_t_v1, bt_r_v2)
+    add_corner(pg, pspec, rb_t, bt_r, bt_r_v1, rb_t_v1)
     bt_l.reverse()
-    add_corner(pg, pspec, lb_t, bt_l, lb_t_v1, bt_l_v2)
+    add_corner(pg, pspec, lb_t, bt_l, bt_l_v1, lb_t_v2)
     lb_d.reverse()
     bd_l.reverse()
-    add_corner(pg, pspec, lb_d, bd_l, lb_d_v1, bd_l_v2)
+    add_corner(pg, pspec, lb_d, bd_l, bd_l_v2, lb_d_v2)
     rb_d.reverse()
-    add_corner(pg, pspec, rb_d, bd_r, rb_d_v1, bd_r_v2)
+    add_corner(pg, pspec, rb_d, bd_r, bd_r_v2, rb_d_v1)
 
     return polyhedron(points=pg.points, faces=pg.triangles)
 
