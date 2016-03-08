@@ -302,10 +302,14 @@ def touch_arc(rad, ht, bwid, iro, scl, roffs=0, roffsinner=0, angle=0.0,
     t.add(r)
     return t
 
+def roundpt(pt):
+    return tuple(map(lambda x: round(x, 2), pt))
+
 class Polygon:
     def __init__(self):
         self.points = []
         self.triangles = []
+        self.triangles_idx = set()
         self.points_idx = {}
 
     def add_points(self, pts):
@@ -313,6 +317,7 @@ class Polygon:
             self.add_point(pt)
 
     def add_point(self, pt):
+        pt = roundpt(pt)
         if pt in self.points_idx:
             #print "point already in %s %s" % \
                         #(repr(pt), repr(self.points_idx))
@@ -322,8 +327,27 @@ class Polygon:
 
     def add_triangle(self, points):
         tarray = []
+        pts = list(points)
+        pts.sort()
+        pts = tuple(pts)
+        if pts in self.triangles_idx:
+            return
+        self.triangles_idx.add(pts)
+
+        pts = []
         for pt in points:
+            pt = roundpt(pt)
+            if pt in pts:
+                continue
+            if len(pts) > 1:
+                if pts[-1] == pt or pts[0] == pt:
+                    continue
+            pts.append(pt)
+        if len(pts) < 3:
+            return
+        for pt in pts:
             tarray.append(self.points_idx[pt])
+        tarray.reverse()
         self.triangles.append(tarray)
 
     def add_triangles(self, tr):
@@ -340,13 +364,15 @@ H = 4
 def pf(pspec, pwo, pdo, pho):
     return (pspec[0][pwo], pspec[1][pdo], pspec[2][pho])
 
+spline_res = 0.15
+
 def sl(pspec, lidx):
     """ ok this function takes 4 points, uses the 1st two and last two
         each as "direction-finders", then creates a spline which is
         approximately going to go flat to those pairs.
     """
     pts = map(lambda x: pf(pspec, x[0], x[1], x[2]), lidx)
-    scale = (0.0001,0.0001,0.0001)
+    scale = (0.000001,0.000001,0.000001)
     v1 = vmult(scale, vsub(pts[1], pts[0]))
     v2 = vmult(scale, vsub(pts[4], pts[3]))
     print "points", pts
@@ -354,7 +380,7 @@ def sl(pspec, lidx):
     print "v2", v2
     f = [pts[1]]
     b = [pts[3]]
-    for i in range(2):
+    for i in range(1):
         print f, b, v1
         x = vtrans(v1, f[-1])
         print x
@@ -364,7 +390,7 @@ def sl(pspec, lidx):
         b.append(x)
     b.reverse()
     pts = f + [pts[2]] + b
-    pts = spline_divide([pts], 0.1)
+    pts = spline_divide([pts], spline_res)
     print pts
     return v1, v2, pts[0]
     
@@ -388,10 +414,10 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
                     pg.add_point(pf(pspec, pwo, pdo, pho))
 
     # centre rectangles (very middles)
-    d = (pf(pspec, 1, 1, 0),
-         pf(pspec, 2, 1, 0),
+    d = ( pf(pspec, 1, 2, 0),
          pf(pspec, 2, 2, 0),
-         pf(pspec, 1, 2, 0))
+         pf(pspec, 2, 1, 0),
+         pf(pspec, 1, 1, 0),)
     t = (pf(pspec, 1, 1, 3),
          pf(pspec, 2, 1, 3),
          pf(pspec, 2, 2, 3),
@@ -400,146 +426,176 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
          pf(pspec, 2, 0, 1),
          pf(pspec, 2, 0, 2),
          pf(pspec, 1, 0, 2))
-    b = (pf(pspec, 1, 3, 1),
-         pf(pspec, 2, 3, 1),
+    b = (pf(pspec, 1, 3, 2),
          pf(pspec, 2, 3, 2),
-         pf(pspec, 1, 3, 2))
+         pf(pspec, 2, 3, 1),
+         pf(pspec, 1, 3, 1),)
     l = (pf(pspec, 0, 1, 1),
          pf(pspec, 0, 1, 2),
          pf(pspec, 0, 2, 2),
          pf(pspec, 0, 2, 1))
-    r = (pf(pspec, 3, 1, 1),
-         pf(pspec, 3, 1, 2),
+    r = (
+         pf(pspec, 3, 2, 1),
          pf(pspec, 3, 2, 2),
-         pf(pspec, 3, 2, 1))
+         pf(pspec, 3, 1, 2),
+         pf(pspec, 3, 1, 1),
+            )
 
-    #for pts in [d,t,f,b,l,r]:
-    #    pg.add_triangle(pts)
-
-    # ok these will be 2-axis curves
-    ft = (pf(pspec, 1, 0, 2),
-          pf(pspec, 2, 0, 2),
-          pf(pspec, 2, 1, 3),
-          pf(pspec, 1, 1, 3))
-    #pg.add_triangle(ft)
-    fd = (pf(pspec, 1, 0, 1),
-          pf(pspec, 2, 0, 1),
-          pf(pspec, 2, 1, 0),
-          pf(pspec, 1, 1, 0))
-    pg.add_triangle(fd)
-    bd = (pf(pspec, 1, 3, 1),
-          pf(pspec, 2, 3, 1),
-          pf(pspec, 2, 2, 0),
-          pf(pspec, 1, 2, 0))
-    pg.add_triangle(bd)
-    bt = (pf(pspec, 1, 3, 2),
-          pf(pspec, 2, 3, 2),
-          pf(pspec, 2, 2, 3),
-          pf(pspec, 1, 2, 3))
-    pg.add_triangle(bt)
-
-    lt = (pf(pspec, 0, 1, 2),
-          pf(pspec, 0, 2, 2),
-          pf(pspec, 1, 2, 3),
-          pf(pspec, 1, 1, 3))
-    pg.add_triangle(lt)
-    ld = (pf(pspec, 0, 1, 1),
-          pf(pspec, 0, 2, 1),
-          pf(pspec, 1, 2, 0),
-          pf(pspec, 1, 1, 0))
-    pg.add_triangle(ld)
-    rt = (pf(pspec, 3, 1, 2),
-          pf(pspec, 3, 2, 2),
-          pf(pspec, 2, 2, 3),
-          pf(pspec, 2, 1, 3))
-    pg.add_triangle(rt)
-    rd = (pf(pspec, 3, 1, 1),
-          pf(pspec, 3, 2, 1),
-          pf(pspec, 2, 2, 0),
-          pf(pspec, 2, 1, 0))
-    pg.add_triangle(rd)
-
-    rf = (pf(pspec, 3, 1, 2),
-          pf(pspec, 3, 1, 1),
-          pf(pspec, 2, 0, 1),
-          pf(pspec, 2, 0, 2))
-    pg.add_triangle(rf)
-    rb = (pf(pspec, 3, 2, 2),
-          pf(pspec, 3, 2, 1),
-          pf(pspec, 2, 3, 1),
-          pf(pspec, 2, 3, 2))
-    pg.add_triangle(rb)
-    lf = (pf(pspec, 0, 1, 2),
-          pf(pspec, 0, 1, 1),
-          pf(pspec, 1, 0, 1),
-          pf(pspec, 1, 0, 2))
-    pg.add_triangle(lf)
-    lb = (pf(pspec, 0, 2, 2),
-          pf(pspec, 0, 2, 1),
-          pf(pspec, 1, 3, 1),
-          pf(pspec, 1, 3, 2))
-    pg.add_triangle(lb)
-
-    # ok corners
-    ldf = (pf(pspec, 1, 0, 1),
-           pf(pspec, 0, 1, 1),
-           pf(pspec, 1, 1, 0))
-    pg.add_triangle(ldf)
-    rdf = (pf(pspec, 2, 0, 1),
-           pf(pspec, 3, 1, 1),
-           pf(pspec, 2, 1, 0))
-    pg.add_triangle(rdf)
-    rdb = (pf(pspec, 2, 3, 1),
-           pf(pspec, 3, 2, 1),
-           pf(pspec, 2, 2, 0))
-    pg.add_triangle(rdb)
-    ldb = (pf(pspec, 1, 3, 1),
-           pf(pspec, 0, 2, 1),
-           pf(pspec, 1, 2, 0))
-    pg.add_triangle(ldb)
-
-    ltf = (pf(pspec, 1, 0, 2),
-           pf(pspec, 0, 1, 2),
-           pf(pspec, 1, 1, 3))
-    pg.add_triangle(ltf)
-    rtf = (pf(pspec, 2, 0, 2),
-           pf(pspec, 3, 1, 2),
-           pf(pspec, 2, 1, 3))
-    pg.add_triangle(rtf)
-    rtb = (pf(pspec, 2, 3, 2),
-           pf(pspec, 3, 2, 2),
-           pf(pspec, 2, 2, 3))
-    pg.add_triangle(rtb)
-    ltb = (pf(pspec, 1, 3, 2),
-           pf(pspec, 0, 2, 2),
-           pf(pspec, 1, 2, 3))
-    pg.add_triangle(ltb)
+    for pts in [d,t,f,b,l,r]:
+        pg.add_triangle(pts)
 
     # spinelines
-    ft_l = ((1, 0, 1),
-            (1, 0, 2),
-            (1, 0, 3),
+    ft_l = (
+            (1, 2, 3),
             (1, 1, 3),
-            (1, 2, 3))
+            (1, 0, 3),
+            (1, 0, 2),
+            (1, 0, 1))
     ft_l_v1, ft_l_v2, ft_l = sl(pspec, ft_l)
     ft_offs = len(pg.points)
     pg.add_points(ft_l)
-    ft_r = ((2, 0, 1),
-            (2, 0, 2),
-            (2, 0, 3),
+    ft_r = (
+            (2, 2, 3),
             (2, 1, 3),
-            (2, 2, 3))
+            (2, 0, 3),
+            (2, 0, 2),
+            (2, 0, 1),)
     ft_r_v1, ft_r_v2, ft_r = sl(pspec, ft_r)
     pg.add_points(ft_r)
 
-    rt_f = ((3, 1, 1),
-            (3, 1, 2),
-            (3, 1, 3),
-            (2, 1, 3),
+    add_edge(pg, ft_l, ft_r)
+
+    fd_l = ((1, 0, 2),
+            (1, 0, 1),
+            (1, 0, 0),
+            (1, 1, 0),
+            (1, 2, 0))
+    fd_l_v1, fd_l_v2, fd_l = sl(pspec, fd_l)
+    fd_offs = len(pg.points)
+    pg.add_points(fd_l)
+    fd_r = ((2, 0, 2),
+            (2, 0, 1),
+            (2, 0, 0),
+            (2, 1, 0),
+            (2, 2, 0))
+    fd_r_v1, fd_r_v2, fd_r = sl(pspec, fd_r)
+    pg.add_points(fd_r)
+
+    add_edge(pg, fd_l, fd_r)
+
+    bd_l = (
+            (1, 1, 0),
+            (1, 2, 0),
+            (1, 3, 0),
+            (1, 3, 1),
+            (1, 3, 2),
+            )
+    bd_l_v1, bd_l_v2, bd_l = sl(pspec, bd_l)
+    bd_offs = len(pg.points)
+    pg.add_points(bd_l)
+    bd_r = (
+            (2, 1, 0),
+            (2, 2, 0),
+            (2, 3, 0),
+            (2, 3, 1),
+            (2, 3, 2),
+            )
+    bd_r_v1, bd_r_v2, bd_r = sl(pspec, bd_r)
+    pg.add_points(bd_r)
+
+    add_edge(pg, bd_l, bd_r)
+
+    bt_l = ((1, 3, 1),
+            (1, 3, 2),
+            (1, 3, 3),
+            (1, 2, 3),
             (1, 1, 3))
+    bt_l_v1, bt_l_v2, bt_l = sl(pspec, bt_l)
+    bt_offs = len(pg.points)
+    pg.add_points(bt_l)
+    bt_r = ((2, 3, 1),
+            (2, 3, 2),
+            (2, 3, 3),
+            (2, 2, 3),
+            (2, 1, 3))
+    bt_r_v1, bt_r_v2, bt_r = sl(pspec, bt_r)
+    pg.add_points(bt_r)
+
+    add_edge(pg, bt_l, bt_r)
+
+    lt_f = ((0, 1, 1),
+            (0, 1, 2),
+            (0, 1, 3),
+            (1, 1, 3),
+            (2, 1, 3))
+    lt_f_v1, lt_f_v2, lt_f = sl(pspec, lt_f)
+    pg.add_points(lt_f)
+    lt_b = ((0, 2, 1),
+            (0, 2, 2),
+            (0, 2, 3),
+            (1, 2, 3),
+            (2, 2, 3))
+    lt_b_v1, lt_b_v2, lt_b = sl(pspec, lt_b)
+    pg.add_points(lt_b)
+
+    add_edge(pg, lt_f, lt_b)
+
+    rt_f = (
+            (1, 1, 3),
+            (2, 1, 3),
+            (3, 1, 3),
+            (3, 1, 2),
+            (3, 1, 1),
+    )
     rt_f_v1, rt_f_v2, rt_f = sl(pspec, rt_f)
     pg.add_points(rt_f)
-    rt_b = None # TODO
+    rt_b = (
+            (1, 2, 3),
+            (2, 2, 3),
+            (3, 2, 3),
+            (3, 2, 2),
+            (3, 2, 1),
+            )
+    rt_b_v1, rt_b_v2, rt_b = sl(pspec, rt_b)
+    pg.add_points(rt_b)
+
+    add_edge(pg, rt_f, rt_b)
+
+    ld_f = (
+            (2, 1, 0),
+            (1, 1, 0),
+            (0, 1, 0),
+            (0, 1, 1),
+            (0, 1, 2),
+)
+    ld_f_v1, ld_f_v2, ld_f = sl(pspec, ld_f)
+    pg.add_points(ld_f)
+    ld_b = ( (2, 2, 0),
+            (1, 2, 0),
+            (0, 2, 0),
+            (0, 2, 1),
+            (0, 2, 2),)
+    ld_b_v1, ld_b_v2, ld_b = sl(pspec, ld_b)
+    pg.add_points(ld_b)
+
+    add_edge(pg, ld_f, ld_b)
+
+    rd_f = ((3, 1, 2),
+            (3, 1, 1),
+            (3, 1, 0),
+            (2, 1, 0),
+            (1, 1, 0))
+    rd_f_v1, rd_f_v2, rd_f = sl(pspec, rd_f)
+    pg.add_points(rd_f)
+    rd_b = ((3, 2, 2),
+            (3, 2, 1),
+            (3, 2, 0),
+            (2, 2, 0),
+            (1, 2, 0))
+    rd_b_v1, rd_b_v2, rd_b = sl(pspec, rd_b)
+    pg.add_points(rd_b)
+
+    add_edge(pg, rd_f, rd_b)
 
     rf_t = ((3, 2, 2),
             (3, 1, 2),
@@ -548,7 +604,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 0, 2))
     rf_t_v1, rf_t_v2, rf_t = sl(pspec, rf_t)
     pg.add_points(rf_t)
-
     rf_d = ((3, 2, 1),
             (3, 1, 1),
             (3, 0, 1),
@@ -557,28 +612,102 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
     rf_d_v1, rf_d_v2, rf_d = sl(pspec, rf_d)
     pg.add_points(rf_d)
 
-    # between edges
-    ft_pts = []
+    add_edge(pg, rf_t, rf_d)
+
+    lf_t = (
+            (2, 0, 2),
+            (1, 0, 2),
+            (0, 0, 2),
+            (0, 1, 2),
+            (0, 2, 2),)
+    lf_t_v1, lf_t_v2, lf_t = sl(pspec, lf_t)
+    pg.add_points(lf_t)
+    lf_d = (
+            (2, 0, 1),
+            (1, 0, 1),
+            (0, 0, 1),
+            (0, 1, 1),
+            (0, 2, 1),)
+    lf_d_v1, lf_d_v2, lf_d = sl(pspec, lf_d)
+    pg.add_points(lf_d)
+
+    add_edge(pg, lf_t, lf_d)
+
+    lb_t = ((0, 1, 2),
+            (0, 2, 2),
+            (0, 3, 2),
+            (1, 3, 2),
+            (2, 3, 2))
+    lb_t_v1, lb_t_v2, lb_t = sl(pspec, lb_t)
+    pg.add_points(lb_t)
+    lb_d = ((0, 1, 1),
+            (0, 2, 1),
+            (0, 3, 1),
+            (1, 3, 1),
+            (2, 3, 1))
+    lb_d_v1, lb_d_v2, lb_d = sl(pspec, lb_d)
+    pg.add_points(lb_d)
+
+    add_edge(pg, lb_t, lb_d)
+
+    rb_t = (
+            (1, 3, 2),
+            (2, 3, 2),
+            (3, 3, 2),
+            (3, 2, 2),
+            (3, 1, 2),
+            )
+    rb_t_v1, rb_t_v2, rb_t = sl(pspec, rb_t)
+    pg.add_points(rb_t)
+    rb_d = (
+            (1, 3, 1),
+            (2, 3, 1),
+            (3, 3, 1),
+            (3, 2, 1),
+            (3, 1, 1),
+            )
+    rb_d_v1, rb_d_v2, rb_d = sl(pspec, rb_d)
+    pg.add_points(rb_d)
+
+    add_edge(pg, rb_t, rb_d)
+
+
+    # at corners
+    #ft_r.reverse()
+    add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2)
+    ft_l.reverse()
+    add_corner(pg, pspec, lf_t, ft_l, lf_t_v1, ft_l_v2)
+    rf_d.reverse()
+    add_corner(pg, pspec, rf_d, fd_r, rf_d_v1, fd_r_v2)
+    lf_d.reverse()
+    fd_l.reverse()
+    add_corner(pg, pspec, lf_d, fd_l, lf_d_v1, fd_l_v2)
+    #rb_t.reverse()
+    add_corner(pg, pspec, rb_t, bt_r, rb_t_v1, bt_r_v2)
+    bt_l.reverse()
+    add_corner(pg, pspec, lb_t, bt_l, lb_t_v1, bt_l_v2)
+    lb_d.reverse()
+    bd_l.reverse()
+    add_corner(pg, pspec, lb_d, bd_l, lb_d_v1, bd_l_v2)
+    rb_d.reverse()
+    add_corner(pg, pspec, rb_d, bd_r, rb_d_v1, bd_r_v2)
+
+    return polyhedron(points=pg.points, faces=pg.triangles)
+
+def add_edge(pg, ft_l, ft_r):
     for i in range(len(ft_l)-1):
         pts = (ft_l[i], ft_l[i+1], ft_r[i+1], ft_r[i])
-        ft_pts.append(pts)
-        pg.add_triangle(pts)
-    rf_pts = []
-    for i in range(len(rf_t)-1):
-        pts = (rf_t[i], rf_t[i+1], rf_d[i+1], rf_d[i])
-        rf_pts.append(pts)
         pg.add_triangle(pts)
 
-    ft_r.reverse()
-    # at corners
+def add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2):
     frt = []
     for (pts1, pts2) in zip(rf_t, ft_r):
-        midpoint = pf(pspec, 3, 1, 3)
-        pts = [vtrans(pts1, rf_t_v1), pts1,
+        midpoint = (pts1[0], pts1[1], pts2[2])
+        pts = [vsub(pts1, rf_t_v1), pts1,
                 midpoint,
-                pts2, vsub(pts2, ft_r_v2)]
+                pts2, vtrans(pts2, ft_r_v2)]
         print "corner pts", pts
-        pts = spline_divide([pts], 0.1)
+        pts = spline_divide([pts], spline_res)
         pts = pts[0]
         pg.add_points(pts)
         frt.append(pts)
@@ -589,9 +718,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             pts = (frt[j][i], frt[j][i+1],
                    frt[j+1][i+1], frt[j+1][i])
             pg.add_triangle(pts)
-
-
-    return polyhedron(points=pg.points, faces=pg.triangles)
 
 if __name__ == '__main__':
 
