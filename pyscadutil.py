@@ -394,6 +394,11 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
     ds = (0, curverads.get(F, 0), d-curverads.get(B, 0), d)
     hs = (0, curverads.get(D, 0), h-curverads.get(T, 0), h)
 
+    mvec = lambda x : x * scl
+    ws = map(mvec, ws)
+    ds = map(mvec, ds)
+    hs = map(mvec, hs)
+
     pspec = (ws, ds, hs)
 
     for i in range(8):
@@ -710,12 +715,36 @@ def add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2):
                    frt[j+1][i+1], frt[j+1][i])
             pg.add_triangle(pts)
 
+def hollowsplinebox(scl, w, d, h, thick=0.0, curverads=None):
+
+    if isinstance(thick, float):
+        thick = {L:thick, R:thick, T:thick, D:thick,
+                 F:thick, B:thick}
+
+    c = union()
+    c += splinebox(scl, w, d, h, curverads=curverads)
+    w2 = w-thick[L]-thick[R]
+    d2 = d-thick[F]-thick[B]
+    h2 = h-thick[T]-thick[D]
+    for k in curverads.keys():
+        if thick.has_key(k) and thick[k] > 0:
+            curverads[k] -= thick[k]
+    b = splinebox(scl, w2, d2, h2, curverads=curverads)
+    c -= translate([thick[L]*scl, thick[F]*scl, thick[D]*scl]).add(b)
+
+    return c
+
 if __name__ == '__main__':
 
-    p = splinebox(0.01, 300, 200, 100,
+    p = splinebox(0.1, 300, 200, 100,
                     curverads={L:10, T:20, D:10, R:45, B: 15, F: 25})
     t = union()
-    t.add(p)
+    t += p
+    p = hollowsplinebox(0.1, 300, 200, 100,
+                    curverads={L:15, T:30, D:15, R:45, B: 20, F: 25},
+                    thick={L:-50, R:10, T:10, D:10, F: 10, B:-40})
+    p = translate([0,0,30]).add(p)
+    t += p
 
     scad_render_to_file(t, "test.scad")
 
