@@ -1818,28 +1818,6 @@ def base_front_top(scl, ht, ht_offset):
     mholderw = 139+fthick*4
     mholdero = 229
 
-    # add a support for magnet
-    d = union()
-    c = shearedcube([(mholderw+40)*scl, 178*scl, 110*scl],
-            shear=[-95*scl, -20*scl, 0],
-            innershear=[95*scl, 0*scl, 0])
-    d += rotate([0, 0, 90]).add(c)
-    c = shearedcube([(mholderw+40)*scl, 180*scl, 110*scl],
-            shear=[-180*scl, -20*scl, 0],
-            innershear=[0*scl, -8*scl, 0])
-    c = rotate([180, 0, 0]).add(c)
-    d -= translate(v=[-264*scl, 180*scl, (130)*scl]).add(c)
-    u += translate(v=[180*scl, (mholdero-25)*scl, (6)*scl]).add(d)
-
-    print "magholder width", mholderw-fthick*4
-    # add a hole for a magnet.  quite low down
-    c = shearedcube([(65)*scl, 167*scl, 57*scl],
-            shear=[-2*scl, 15*scl, 0],
-            innershear=[2*scl, 8*scl, 0])
-    c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[201*scl, (mholdero+42)*scl, (6)*scl]).add(c)
-    u -= c
-
     if ht_offset > 0:
         boffs = pcb3_lock_offs-52
         # ok these are for the pcb3 support
@@ -2001,13 +1979,16 @@ def base_front_top(scl, ht, ht_offset):
                     (boxheight+5)*scl]).add(v)
         c += v
 
-        h = cube([(1.2)*scl, (ht+ht_offset-tpanel_l-70)*scl,
-                            (boxheight-35)*scl])
-        h = translate(v=[(180-1.2)*scl, (100)*scl,
-                            (21)*scl]).add(h)
+        c = union()
+        h = cube([(1.2)*scl, (ht+ht_offset-tpanel_l-60)*scl,
+                            (boxheight-25)*scl])
+        h = translate(v=[(180-1.2)*scl, (130)*scl,
+                            (12)*scl]).add(h)
         c += h
 
         u += c
+
+    # XXX these next things need to be cut out *after* the pinning is added
 
     # remove runner along bottom of base, for lower panel
     c = shearedcube([15*scl, (ht+2)*scl, (14)*scl],
@@ -2015,6 +1996,28 @@ def base_front_top(scl, ht, ht_offset):
                 innershear=[14*scl, 0*scl, 0])
     c = translate(v=[(front_top_width-11)*scl, (-1-doffs)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
+    u -= c
+
+    # add a support for magnet
+    d = union()
+    c = shearedcube([(mholderw+40)*scl, 178*scl, 110*scl],
+            shear=[-95*scl, -20*scl, 0],
+            innershear=[95*scl, 0*scl, 0])
+    d += rotate([0, 0, 90]).add(c)
+    c = shearedcube([(mholderw+40)*scl, 180*scl, 110*scl],
+            shear=[-180*scl, -20*scl, 0],
+            innershear=[0*scl, -8*scl, 0])
+    c = rotate([180, 0, 0]).add(c)
+    d -= translate(v=[-264*scl, 180*scl, (130)*scl]).add(c)
+    u += translate(v=[180*scl, (mholdero-25)*scl, (6)*scl]).add(d)
+
+    print "magholder width", mholderw-fthick*4
+    # add a hole for a magnet.  quite low down
+    c = shearedcube([(65)*scl, 167*scl, 57*scl],
+            shear=[-2*scl, 15*scl, 0],
+            innershear=[2*scl, 8*scl, 0])
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[201*scl, (mholdero+42)*scl, (6)*scl]).add(c)
     u -= c
 
     if cutdown:
@@ -4937,7 +4940,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4945,7 +4948,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
