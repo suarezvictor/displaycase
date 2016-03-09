@@ -2597,7 +2597,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         u += t
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([15*scl, (ht+2)*scl, (14)*scl],
+    c = shearedcube([15*scl, (ht+100)*scl, (14)*scl],
                 shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = translate(v=[(boxlength-back_top_width-5)*scl, (-1)*scl,
@@ -4965,7 +4965,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
