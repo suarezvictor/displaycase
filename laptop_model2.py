@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2343,7 +2343,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, bht, boxheight,
+    b = hollowbox(scl, back_top_width, bht-1, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
