@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2405,7 +2405,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    for h in [ht*0.310, ht*0.515, ht*0.74, 62]:
+    for h in [ht*0.307, ht*0.515, ht*0.75, 62, ht-78]:
         c = shearedcube([(back_top_width-80)*scl, (40)*scl, (15)*scl])
         c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
                                     (boxheight-hthick-13)*scl]).add(c)
@@ -2609,27 +2609,32 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     v.add(u)
 
     if cutdown:
-        # cut down
+        # cutdown of base_mid end
         c = cube([(boxlength-300+80)*scl, (ht+300)*scl, 500*scl])
-        c = translate([(300)*scl, 70.0*scl, -100*scl]).add(c)
+        c = translate([(300)*scl, -340.0*scl, -100*scl]).add(c)
         v -= c
-        c = cube([(boxlength-300+60)*scl, (413)*scl, 500*scl])
-        c = translate([(130)*scl, -250*scl, -100*scl]).add(c)
-        v -= c
+        if False: # cutdown of hinge end
+            # cut down
+            c = cube([(boxlength-300+80)*scl, (ht+300)*scl, 500*scl])
+            c = translate([(300)*scl, 70.0*scl, -100*scl]).add(c)
+            v -= c
+            c = cube([(boxlength-300+60)*scl, (413)*scl, 500*scl])
+            c = translate([(130)*scl, -250*scl, -100*scl]).add(c)
+            v -= c
 
-        if pin_parts_3d:
+            if pin_parts_3d:
 
-            c = union()
+                c = union()
 
-            h = pin(B0, scl)
-            c += translate([(70)*scl, (0)*scl, 104*scl]).add(h)
-            c += translate([(70)*scl, (0)*scl, 15*scl]).add(h)
-            c += translate([(-15)*scl, (0)*scl, 104*scl]).add(h)
-            c += translate([(-15)*scl, (0)*scl, 15*scl]).add(h)
-            c = rotate([0, 0, 90]).add(c)
-            c = translate([(w+5)*scl, (0)*scl, 55*scl]).add(c)
+                h = pin(B0, scl)
+                c += translate([(70)*scl, (0)*scl, 104*scl]).add(h)
+                c += translate([(70)*scl, (0)*scl, 15*scl]).add(h)
+                c += translate([(-15)*scl, (0)*scl, 104*scl]).add(h)
+                c += translate([(-15)*scl, (0)*scl, 15*scl]).add(h)
+                c = rotate([0, 0, 90]).add(c)
+                c = translate([(w+5)*scl, (0)*scl, 55*scl]).add(c)
 
-            v += c
+                v += c
 
     return v
 
@@ -4955,7 +4960,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
                         #BASE_BACK_HINGE,
