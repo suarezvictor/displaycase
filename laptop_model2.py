@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2191,38 +2191,16 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
     # add lock-in to base_back_hinge
-    c = cylinder(r=(41.5)*scl, h=(60)*scl, segments=6)
+    c = cylinder(r=(41.3)*scl, h=(60)*scl, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
-    c = translate(v=[0*scl,(scrn_hinge_ht-10)*scl,-55*scl]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-6)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
     # hole for bolt
     c = cylinder(r=(35./2)*scl, h=(friclen+90)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
-
-    # capture channel in hinge
-    hd = 25
-    v = union()
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht+40)*scl, hd*scl], center=True,
-                shear=[-3*scl, 0*scl, 0],
-                innershear=[0*scl, 0*scl, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[5*scl,-40*scl,20*scl]).add(c)
-    v += c
-    c = shearedcube([24*scl, (friclen+scrn_hinge_ht+40)*scl, hd*scl], center=True,
-                shear=[0*scl, 0*scl, 0],
-                innershear=[3*scl, 0*scl, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = translate(v=[-5*scl,-40*scl, 20*scl]).add(c)
-    v += c
-
-    v = rotate([90, 0, 0]).add(v)
-    v = rotate([0, 90, 0]).add(v)
-    c = translate(v=[0*scl,((scrn_hinge_ht+friclen)/2+30)*scl,-55*scl]).add(v)
     t = hinge_translate(scl).add(c)
     u -= t
 
@@ -2278,8 +2256,8 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
         c = cube([(boxlength-300+60)*scl, (ht+150)*scl, 400*scl])
         c = translate([(138)*scl, -150*scl, -50*scl]).add(c)
         v -= c
-        c = translate([(138)*scl, 320*scl, -50*scl]).add(c)
-        v -= c
+        #c = translate([(138)*scl, 320*scl, -50*scl]).add(c)
+        #v -= c
 
         if pin_parts_3d:
 
