@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2480,24 +2480,31 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = shearedcube([(230)*scl, (base_centre_ht/2+93)*scl, (boxheight-62)*scl],
-                shear=[-100*scl, 0*scl, 0],
+    b = shearedcube([(240)*scl, (base_centre_ht/2+93)*scl, (boxheight-76)*scl],
+                shear=[-50*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
-    b = shearedcube([(boxheight-72)*scl, (60)*scl, (20)*scl],
+    c = shearedcube([(120)*scl, (boxheight-50-hthick)*scl, (110)*scl],
                 shear=[0*scl, -20*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 0, 90]).add(c)
+    c = translate(v=[(w-wd)*scl, (ht-2)*scl, (41)*scl]).add(c)
+    u -= c
+    b = shearedcube([(boxheight-74)*scl, (50)*scl, (22)*scl],
+                shear=[0*scl, -18*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
-    b = translate(v=[(w-wd+32)*scl, (ht-1)*scl, (90)*scl]).add(b)
+    b = translate(v=[(w-wd+32)*scl, (ht-1)*scl, (88)*scl]).add(b)
     u -= b
     b = shearedcube([(60)*scl, (40)*scl, (28)*scl],
                 shear=[30*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd+1)*scl, (ht-2)*scl, (11)*scl]).add(b)
     u -= b
-    b = shearedcube([(2)*scl, (90)*scl, (28)*scl],
+    b = shearedcube([(2)*scl, (40)*scl, (28)*scl],
                 shear=[55*scl, 00*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
@@ -4967,7 +4974,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
                         #BASE_BACK_HINGE,
