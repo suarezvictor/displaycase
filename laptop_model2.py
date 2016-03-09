@@ -16,7 +16,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2306,7 +2306,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     wthick = 130
     walls = {T:hthick, L:-1, R:hthick, F:50+base_centre_ht/2,
-                                        D:hthick, B:110}
+                                        D:hthick, B:90}
     curverads={
                 R|D: (boxheight-40, 0),
                 R|T: (40, 0),
@@ -2345,9 +2345,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     fthick = 6
     offs = scrn_hinge_ht+hthick+fthick+60
-    c = base_cutout(scl, ht-34-offs)
+    c = base_cutout(scl, ht-44-offs)
     c = resize([(238)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
-    c = translate(v=[boxlength*scl, (offs-fthick)*scl, (0)*scl]).add(c)
+    c = translate(v=[boxlength*scl, (offs-fthick+10)*scl, (0)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
@@ -2430,22 +2430,18 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(lcd_w+85-79/2.)*scl, (68)*scl, (boxheight/2)*scl]).add(c)
     #u += c
     c = cube([200*scl, 34*scl, 62*scl], center=True)
-    c = translate(v=[(-100)*scl, (67)*scl, (boxheight-55)*scl]).add(c)
-    t = case_bolthole(scl, 2).add(c)
-    u -= t
-    c = cube([200*scl, 52*scl, 60*scl], center=True)
-    c = translate(v=[(-140)*scl, (101)*scl, (boxheight-55)*scl]).add(c)
+    c = translate(v=[(-100)*scl, (58)*scl, (boxheight-55)*scl]).add(c)
     t = case_bolthole(scl, 2).add(c)
     u -= t
     c = cylinder(r=36.0*scl, h=34*scl, center=True, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     t = case_bolthole(scl, 2).add(c)
-    t = translate(v=[(0)*scl, (67)*scl, (boxheight-55)*scl]).add(t)
+    t = translate(v=[(0)*scl, (58)*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
     # screw holes in box
-    t = box_screwholes(scl, hthick, holes=[2], h=120, rad=35./2)
+    t = box_screwholes(scl, hthick, holes=[2], h=140, rad=35./2)
     t = translate(v=[0, -10*scl, (boxheight-55)*scl]).add(t)
     u -= t
 
@@ -2560,13 +2556,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = pin(B0, scl, fill=True)
         h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
         c += h
+        c = union()
         offs = ht + toffs - tpanel_l_b/2 +8
         if toffs > 0:
             offs -= 50
-        h = cube([(offs-45)*scl, 1.8*scl, boxheight*1.5*scl])
-        h = translate([(100)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
+        h = cube([(offs-20)*scl, 1.8*scl, boxheight*1.5*scl])
+        h = translate([(75)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
         c += h
-        h = cube([(ht-offs-235)*scl, 1.8*scl, boxheight*1.5*scl])
+        h = cube([(ht-offs-135)*scl, 1.8*scl, boxheight*1.5*scl])
         h = translate([(offs+100)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
@@ -4947,8 +4944,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
