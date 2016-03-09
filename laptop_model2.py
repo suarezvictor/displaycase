@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2867,18 +2867,18 @@ def base_mid(scl, ht, base_screwholes=False):
     u -= c
 
     # now remove runner along length of base
-    c = shearedcube([14*scl, (boxlength-180-250)*scl, (12)*scl],
+    c = shearedcube([14*scl, (boxlength-180-250+1)*scl, (12)*scl],
                 shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180-70)*scl, (-3)*scl,
+    c = translate(v=[(boxlength-180-70+1)*scl, (-3)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
-    c = shearedcube([14*scl, (boxlength-180-250)*scl, (12)*scl],
+    c = shearedcube([14*scl, (boxlength-180-250+1)*scl, (12)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180-70)*scl, (ht-10)*scl,
+    c = translate(v=[(boxlength-180-70+1)*scl, (ht-10)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
