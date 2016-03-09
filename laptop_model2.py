@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2492,12 +2492,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(w-wd)*scl, (ht-2)*scl, (41)*scl]).add(c)
     u -= c
-    b = shearedcube([(boxheight-74)*scl, (50)*scl, (22)*scl],
+    b = shearedcube([(boxheight-74)*scl, (52)*scl, (22)*scl],
                 shear=[0*scl, -24*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
-    b = translate(v=[(w-wd+32)*scl, (ht-1)*scl, (88)*scl]).add(b)
+    b = translate(v=[(w-wd+29)*scl, (ht-1)*scl, (88)*scl]).add(b)
     u -= b
     b = shearedcube([(60)*scl, (40)*scl, (28)*scl],
                 shear=[30*scl, 0*scl, 0],
@@ -2843,12 +2843,12 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = shearedcube([(37)*scl, (90)*scl, (28)*scl],
+    b = shearedcube([(36)*scl, (90)*scl, (28)*scl],
                 shear=[0*scl, 00*scl, 0],
                 innershear=[-13*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
-    b = translate(v=[(w-40-35)*scl, (37)*scl, (14)*scl]).add(b)
+    b = translate(v=[(w-40-35)*scl, (36)*scl, (14)*scl]).add(b)
     u += b
 
     # lock for back keyboard runner (and base_back_bot)
@@ -2858,7 +2858,7 @@ def base_mid(scl, ht, base_screwholes=False):
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
     bl = boxlength - back_top_width - 47
-    bb = boxlength - back_top_width + 30
+    bb = boxlength - back_top_width + 27
     u += translate(v=[(bl)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
     u += translate(v=[(bb)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
     d = rotate([0, 0, 180]).add(d)
@@ -4974,7 +4974,7 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
                         #BASE_BACK_HINGE,
