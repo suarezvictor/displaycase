@@ -2334,7 +2334,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     print "BASE_BACK ht", bht
 
     wthick = 130
-    walls = {T:hthick, L:-1, R:hthick, F:wthick-3+hthick+base_centre_ht/2,
+    walls = {T:hthick, L:-1, R:hthick, F:50+base_centre_ht/2,
                                         D:hthick, B:110}
     curverads={
                 R|D: (boxheight-40, 0),
@@ -2374,16 +2374,16 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     fthick = 6
     offs = scrn_hinge_ht+hthick+fthick+60
-    c = base_cutout(scl, ht-wthick-offs-2)
+    c = base_cutout(scl, ht-34-offs)
     c = resize([(238)*scl, 0, (boxheight-hthick*2)*scl], False).add(c)
     c = translate(v=[boxlength*scl, (offs-fthick)*scl, (0)*scl]).add(c)
     u -= c
 
     # put in series of cutouts
-    offs -= 105 
-    step = (ht-wthick-offs) / (4.0 if test else 14.0)
+    offs -= 130
+    step = (ht+60) / (4.0 if test else 15.0)
     offs += step 
-    while offs < (ht-step-90):
+    while offs < (ht-step):
         # add fill-ins
         b = base_cutout(scl, fthick, arch=True)
         b = resize([(236)*scl, 0,
@@ -2392,9 +2392,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         c = translate(v=[boxlength*scl, (offs-fthick+step+35)*scl, (-9)*scl]).add(c)
         u += c
         offs += step
-        if abs(offs - boffs+step) < 90:
+        if abs(offs - boffs) < 120:
             if toffs < 0:
-                offs += 50
+                offs += 40
             else:
                 offs += 80
         c = rotate([-43, 0, 0]).add(b)
@@ -2480,13 +2480,9 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = cube([(288)*scl, (123)*scl, (80)*scl])
-    b = translate(v=[(w-wd+78)*scl, (ht-112)*scl, (boxheight-46)*scl]).add(b)
-    u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+123)*scl, (boxheight+50)*scl])
-    b = translate(v=[(w-61+75)*scl, (ht-112)*scl, (38)*scl]).add(b)
-    u -= b
-    b = cube([(288)*scl, (base_centre_ht/2+93)*scl, (boxheight)*scl])
+    b = shearedcube([(230)*scl, (base_centre_ht/2+93)*scl, (boxheight-62)*scl],
+                shear=[-100*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
 
@@ -2494,8 +2490,6 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     s = chamfered_backbox_screwholes(scl, 50)
     s = rotate([-180, 0, 0]).add(s)
     b = translate(v=[(w-75)*scl, (ht+25)*scl, (16)*scl]).add(s)
-    u -= b
-    b = translate(v=[(w+50)*scl, (ht-85)*scl, (16)*scl]).add(s)
     u -= b
 
     rad=35.0 + 12
@@ -2689,14 +2683,8 @@ def base_mid(scl, ht, base_screwholes=False):
     w = boxlength
 
     walls = {T:-1, L:-1, R:hthick, F:32, D:8, B:32}
-    curverads={
-                R|D: (boxheight-40, 0),
-                }
-    scalecurve = {
-                R|D: [0, 150],
-            }
-    b = hollowbox(scl, w-150, ht, boxheight-40,
-                    walls, curverads=curverads, scalecurve=scalecurve)
+    b = hollowbox(scl, w-150-150-100, ht, boxheight-40,
+                    walls, curverads=None, scalecurve=None)
     b = translate(v=[(150)*scl, 0*scl, 40*scl]).add(b)
     u += b
 
@@ -2711,20 +2699,6 @@ def base_mid(scl, ht, base_screwholes=False):
     u -= translate(v=[(180+35)*scl, -10*scl, -20*scl]).add(d)
     u -= translate(v=[(180+35)*scl, (ht-22)*scl, -20*scl]).add(d)
     
-    # couple of wings on the side for back base to screw into
-    walls[F] = 110
-    walls[B] = 110
-    curverads={
-                R|D: (boxheight-40, 0),
-                }
-    scalecurve = {
-                R|D: [0, 150],
-            }
-    b = hollowbox(scl, 170, ht+220, boxheight-40,
-                    walls, curverads=curverads, scalecurve=scalecurve)
-    b = translate(v=[(w-20)*scl, -110*scl, 40*scl]).add(b)
-    u += b
-
     # fill in front a bit
     c = cube([65*scl, (ht)*scl, (boxheight-42)*scl])
     c = translate(v=[(150)*scl, (0)*scl, (40)*scl]).add(c)
@@ -2811,7 +2785,11 @@ def base_mid(scl, ht, base_screwholes=False):
         alternate = not alternate
 
     # fill in end for diagonals to mesh to
-    c = cube([(140)*scl, (ht)*scl, (boxheight-39-hthick)*scl])
+    c = shearedcube([(ht)*scl, (boxheight-50-hthick)*scl, (110)*scl],
+                shear=[0*scl, -20*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    c = rotate([90, 0, 0]).add(c)
+    c = rotate([0, 0, 90]).add(c)
     c = translate(v=[(w-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
 
@@ -2864,10 +2842,6 @@ def base_mid(scl, ht, base_screwholes=False):
     c = translate(v=[(bl+25)*scl,
                 (ht-1)*scl, (53+50)*scl]).add(d)
     u += c
-    d = cube([(32)*scl, ht*scl, (boxheight-40)*scl])
-    c = translate(v=[(boxlength-back_top_width-27)*scl,
-                (0)*scl, (40)*scl]).add(d)
-    u += c
     d = shearedcube([(90)*scl, 22*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[17*scl, 0*scl, 0])
@@ -2881,19 +2855,19 @@ def base_mid(scl, ht, base_screwholes=False):
                 (ht+5)*scl, (74)*scl]).add(d)
     u -= c
 
-    # now remove along length of base
-    c = shearedcube([14*scl, (boxlength-180-150-5-8-6)*scl, (12)*scl],
+    # now remove runner along length of base
+    c = shearedcube([14*scl, (boxlength-180-250)*scl, (12)*scl],
                 shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8-6)*scl, (-3)*scl,
+    c = translate(v=[(boxlength-180-70)*scl, (-3)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
-    c = shearedcube([14*scl, (boxlength-180-150-5-7-6)*scl, (12)*scl],
+    c = shearedcube([14*scl, (boxlength-180-250)*scl, (12)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[12*scl, 0*scl, 0])
     c = rotate([0, 0, 90]).add(c)
-    c = translate(v=[(boxlength-180+8+8-6)*scl, (ht-10)*scl,
+    c = translate(v=[(boxlength-180-70)*scl, (ht-10)*scl,
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
@@ -4969,7 +4943,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
@@ -4977,7 +4951,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
