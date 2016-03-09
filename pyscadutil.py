@@ -348,6 +348,7 @@ class Polygon:
         if len(pts) < 3:
             return
         for pt in pts:
+            self.add_point(pt)
             tarray.append(self.points_idx[pt])
         tarray.reverse()
         self.triangles.append(tarray)
@@ -384,7 +385,7 @@ def sl(pspec, lidx):
     return v1, v2, pts[0]
     
     
-def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
+def splinebox(scl, w, d, h, thick=0.0, curverads=None):
 
     if curverads is None:
         curverads = {}
@@ -400,12 +401,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
     hs = map(mvec, hs)
 
     pspec = (ws, ds, hs)
-
-    for i in range(8):
-        for pwo in range(4):
-            for pdo in range(4):
-                for pho in range(4):
-                    pg.add_point(pf(pspec, pwo, pdo, pho))
 
     # centre rectangles (very middles)
     d = ( pf(pspec, 1, 2, 0),
@@ -447,7 +442,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 0, 1))
     ft_l_v1, ft_l_v2, ft_l = sl(pspec, ft_l)
     ft_offs = len(pg.points)
-    pg.add_points(ft_l)
     ft_r = (
             (2, 2, 3),
             (2, 1, 3),
@@ -455,7 +449,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (2, 0, 2),
             (2, 0, 1),)
     ft_r_v1, ft_r_v2, ft_r = sl(pspec, ft_r)
-    pg.add_points(ft_r)
 
     if curverads.get(F,0) !=0 or curverads.get(T,0) !=0:
         add_edge(pg, ft_l, ft_r)
@@ -467,14 +460,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 2, 0))
     fd_l_v1, fd_l_v2, fd_l = sl(pspec, fd_l)
     fd_offs = len(pg.points)
-    pg.add_points(fd_l)
     fd_r = ((2, 0, 2),
             (2, 0, 1),
             (2, 0, 0),
             (2, 1, 0),
             (2, 2, 0))
     fd_r_v1, fd_r_v2, fd_r = sl(pspec, fd_r)
-    pg.add_points(fd_r)
 
     add_edge(pg, fd_l, fd_r)
 
@@ -487,7 +478,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             )
     bd_l_v1, bd_l_v2, bd_l = sl(pspec, bd_l)
     bd_offs = len(pg.points)
-    pg.add_points(bd_l)
     bd_r = (
             (2, 1, 0),
             (2, 2, 0),
@@ -496,7 +486,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (2, 3, 2),
             )
     bd_r_v1, bd_r_v2, bd_r = sl(pspec, bd_r)
-    pg.add_points(bd_r)
 
     add_edge(pg, bd_l, bd_r)
 
@@ -507,14 +496,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 1, 3))
     bt_l_v1, bt_l_v2, bt_l = sl(pspec, bt_l)
     bt_offs = len(pg.points)
-    pg.add_points(bt_l)
     bt_r = ((2, 3, 1),
             (2, 3, 2),
             (2, 3, 3),
             (2, 2, 3),
             (2, 1, 3))
     bt_r_v1, bt_r_v2, bt_r = sl(pspec, bt_r)
-    pg.add_points(bt_r)
 
     add_edge(pg, bt_l, bt_r)
 
@@ -524,14 +511,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 1, 3),
             (2, 1, 3))
     lt_f_v1, lt_f_v2, lt_f = sl(pspec, lt_f)
-    pg.add_points(lt_f)
     lt_b = ((0, 2, 1),
             (0, 2, 2),
             (0, 2, 3),
             (1, 2, 3),
             (2, 2, 3))
     lt_b_v1, lt_b_v2, lt_b = sl(pspec, lt_b)
-    pg.add_points(lt_b)
 
     add_edge(pg, lt_f, lt_b)
 
@@ -543,7 +528,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (3, 1, 1),
     )
     rt_f_v1, rt_f_v2, rt_f = sl(pspec, rt_f)
-    pg.add_points(rt_f)
     rt_b = (
             (1, 2, 3),
             (2, 2, 3),
@@ -552,7 +536,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (3, 2, 1),
             )
     rt_b_v1, rt_b_v2, rt_b = sl(pspec, rt_b)
-    pg.add_points(rt_b)
 
     add_edge(pg, rt_f, rt_b)
 
@@ -564,14 +547,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (0, 1, 2),
 )
     ld_f_v1, ld_f_v2, ld_f = sl(pspec, ld_f)
-    pg.add_points(ld_f)
     ld_b = ( (2, 2, 0),
             (1, 2, 0),
             (0, 2, 0),
             (0, 2, 1),
             (0, 2, 2),)
     ld_b_v1, ld_b_v2, ld_b = sl(pspec, ld_b)
-    pg.add_points(ld_b)
 
     add_edge(pg, ld_f, ld_b)
 
@@ -581,14 +562,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (2, 1, 0),
             (1, 1, 0))
     rd_f_v1, rd_f_v2, rd_f = sl(pspec, rd_f)
-    pg.add_points(rd_f)
     rd_b = ((3, 2, 2),
             (3, 2, 1),
             (3, 2, 0),
             (2, 2, 0),
             (1, 2, 0))
     rd_b_v1, rd_b_v2, rd_b = sl(pspec, rd_b)
-    pg.add_points(rd_b)
 
     add_edge(pg, rd_f, rd_b)
 
@@ -598,14 +577,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (2, 0, 2),
             (1, 0, 2))
     rf_t_v1, rf_t_v2, rf_t = sl(pspec, rf_t)
-    pg.add_points(rf_t)
     rf_d = ((3, 2, 1),
             (3, 1, 1),
             (3, 0, 1),
             (2, 0, 1),
             (1, 0, 1))
     rf_d_v1, rf_d_v2, rf_d = sl(pspec, rf_d)
-    pg.add_points(rf_d)
 
     add_edge(pg, rf_t, rf_d)
 
@@ -616,7 +593,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (0, 1, 2),
             (0, 2, 2),)
     lf_t_v1, lf_t_v2, lf_t = sl(pspec, lf_t)
-    pg.add_points(lf_t)
     lf_d = (
             (2, 0, 1),
             (1, 0, 1),
@@ -624,7 +600,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (0, 1, 1),
             (0, 2, 1),)
     lf_d_v1, lf_d_v2, lf_d = sl(pspec, lf_d)
-    pg.add_points(lf_d)
 
     add_edge(pg, lf_t, lf_d)
 
@@ -634,14 +609,12 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (1, 3, 2),
             (2, 3, 2))
     lb_t_v1, lb_t_v2, lb_t = sl(pspec, lb_t)
-    pg.add_points(lb_t)
     lb_d = ((0, 1, 1),
             (0, 2, 1),
             (0, 3, 1),
             (1, 3, 1),
             (2, 3, 1))
     lb_d_v1, lb_d_v2, lb_d = sl(pspec, lb_d)
-    pg.add_points(lb_d)
 
     add_edge(pg, lb_t, lb_d)
 
@@ -653,7 +626,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (3, 1, 2),
             )
     rb_t_v1, rb_t_v2, rb_t = sl(pspec, rb_t)
-    pg.add_points(rb_t)
     rb_d = (
             (1, 3, 1),
             (2, 3, 1),
@@ -662,7 +634,6 @@ def splinebox(scl, w, d, h, thick=0.0, curverads=None, scalecurve=None):
             (3, 1, 1),
             )
     rb_d_v1, rb_d_v2, rb_d = sl(pspec, rb_d)
-    pg.add_points(rb_d)
 
     add_edge(pg, rb_t, rb_d)
 
@@ -705,7 +676,6 @@ def add_corner(pg, pspec, rf_t, ft_r, rf_t_v1, ft_r_v2):
         print "corner pts", pts
         pts = spline_divide([pts], spline_res)
         pts = pts[0]
-        pg.add_points(pts)
         frt.append(pts)
 
     print "frt", len(frt), len(frt[0])
@@ -729,6 +699,7 @@ def hollowsplinebox(scl, w, d, h, thick=0.0, curverads=None):
     for k in curverads.keys():
         if thick.has_key(k) and thick[k] > 0:
             curverads[k] -= thick[k]
+            curverads[k] = max( curverads[k], 0.1)
     b = splinebox(scl, w2, d2, h2, curverads=curverads)
     c -= translate([thick[L]*scl, thick[F]*scl, thick[D]*scl]).add(b)
 
@@ -740,6 +711,7 @@ if __name__ == '__main__':
                     curverads={L:10, T:20, D:10, R:45, B: 15, F: 25})
     t = union()
     t += p
+
     p = hollowsplinebox(0.1, 300, 200, 100,
                     curverads={L:15, T:30, D:15, R:45, B: 20, F: 25},
                     thick={L:-50, R:10, T:10, D:10, F: 10, B:-40})
