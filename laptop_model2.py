@@ -2481,7 +2481,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     # fit base_mid
     wd = back_top_width-109
     b = shearedcube([(240)*scl, (base_centre_ht/2+93)*scl, (boxheight-76)*scl],
-                shear=[-50*scl, 0*scl, 0],
+                shear=[-70*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
@@ -2493,7 +2493,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     c = translate(v=[(w-wd)*scl, (ht-2)*scl, (41)*scl]).add(c)
     u -= c
     b = shearedcube([(boxheight-74)*scl, (50)*scl, (22)*scl],
-                shear=[0*scl, -18*scl, 0],
+                shear=[0*scl, -24*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = rotate([0, 90, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
