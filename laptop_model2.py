@@ -17,7 +17,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2962,10 +2962,10 @@ def base_mid(scl, ht, base_screwholes=False):
 
     if cutdown:
         c = cube([(boxlength+50)*scl, 300*scl, 200*scl])
-        if False: # cutdown for base_front_top
-            u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
+        if True: # cutdown for base_front_top
+            #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
             u -= translate([250*scl, -120*scl, -1*scl]).add(c)
-        if True: # cutdown for base_back_bot
+        if False: # cutdown for base_back_bot
             u -= translate([-380*scl, -120*scl, -1*scl]).add(c)
 
     v = union()
@@ -4808,6 +4808,9 @@ def create_laptop(t, scl, part, angle):
         se = base_mid(scl, base_centre_ht)
         m = translate(v=[0, (base_adjust_ht)*scl,0]).add(se)
         b.add(m)
+        if orientate:
+            b = rotate([180, 0, 0]).add(b)
+            b = rotate([0, 0, -45]).add(b)
 
     if part == SCREEN_MID:
         se = screen_mid(scl, scrn_centre_ht+10)
