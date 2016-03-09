@@ -2802,6 +2802,7 @@ def base_mid(scl, ht, base_screwholes=False):
                 innershear=[0*scl, -7*scl, 0])
     c = rotate([0, 0, -90]).add(c)
     u -= translate(v=[(146)*scl, (29)*scl, (41)*scl]).add(c)
+    u -= translate(v=[(146)*scl, (ht+1)*scl, (41)*scl]).add(c)
 
     # screw holes in top for tpanel_mid
     d = cylinder(r=topscrewrad*scl,
@@ -2829,13 +2830,14 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = shearedcube([(36)*scl, (90)*scl, (28)*scl],
+    b = shearedcube([(36)*scl, (30)*scl, (28)*scl],
                 shear=[0*scl, 00*scl, 0],
                 innershear=[-13*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
-    b = translate(v=[(w-40-35)*scl, (36)*scl, (14)*scl]).add(b)
-    u += b
+    u += translate(v=[(w-40-35)*scl, (36)*scl, (14)*scl]).add(b)
+    b = rotate([180, 0, 0]).add(b)
+    u += translate(v=[(w-40-35)*scl, (ht-36)*scl, (30+14)*scl]).add(b)
 
     # lock for back keyboard runner (and base_back_bot)
     d = shearedcube([(boxheight-80)*scl, 25*scl, 20*scl],
@@ -4954,12 +4956,12 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
