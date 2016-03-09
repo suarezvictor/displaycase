@@ -2485,6 +2485,13 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
                 innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
+    b = shearedcube([(boxheight-72)*scl, (60)*scl, (20)*scl],
+                shear=[0*scl, -20*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    b = rotate([0, 90, 0]).add(b)
+    b = rotate([0, 0, -90]).add(b)
+    b = translate(v=[(w-wd+32)*scl, (ht-1)*scl, (90)*scl]).add(b)
+    u -= b
 
     # screw-holes into base_mid
     s = chamfered_backbox_screwholes(scl, 50)
@@ -2828,20 +2835,19 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    # lock for back keyboard runner
-    d = shearedcube([(boxheight-70)*scl, 25*scl, 20*scl],
+    # lock for back keyboard runner (and base_back_bot)
+    d = shearedcube([(boxheight-80)*scl, 25*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
     bl = boxlength - back_top_width - 47
-    c = translate(v=[(bl)*scl,
-                (1)*scl, (boxheight-17)*scl]).add(d)
-    u += c
+    bb = boxlength - back_top_width + 30
+    u += translate(v=[(bl)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
+    u += translate(v=[(bb)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    c = translate(v=[(bl+25)*scl,
-                (ht-1)*scl, (53+50)*scl]).add(d)
-    u += c
+    u += translate(v=[(bl+25)*scl, (ht-1)*scl, (53+31)*scl]).add(d)
+    u += translate(v=[(bb+25)*scl, (ht-1)*scl, (44+40)*scl]).add(d)
     d = shearedcube([(90)*scl, 22*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[17*scl, 0*scl, 0])
