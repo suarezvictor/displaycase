@@ -16,7 +16,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -1526,6 +1526,12 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     b = translate(v=[(tpanel_l_b-75)*scl, (ht/2-ht_offset)*scl,
                      (+20)*scl]).add(s)
     u -= b
+
+    # extra bit for base_mid lockin
+    c = cube([(30)*scl, (120)*scl, (58)*scl])
+    t = translate(v=[(78)*scl, (ht/2-ht_offset-60)*scl,
+                     (+30)*scl]).add(c)
+    u += t
 
     # cutout for circular lock
     c = union()
@@ -4945,8 +4951,8 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
