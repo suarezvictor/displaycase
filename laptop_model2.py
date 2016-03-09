@@ -1868,13 +1868,15 @@ def base_front_top(scl, ht, ht_offset):
                         (40)*scl]).add(c)
     u += c
     # cutout for base_mid
-    c = shearedcube([250*scl, 200*scl, (boxheight+2)*scl],
+    c = union()
+    c += shearedcube([250*scl, 200*scl, (boxheight+2)*scl],
                     shear=[0*scl, 0*scl, 0],
                     innershear=[120*scl, 0*scl, 0])
-
-    c = translate(v=[(68)*scl, (ht-112)*scl,
-                        (39)*scl]).add(c)
-    u -= c
+    d = shearedcube([250*scl, 200*scl, (boxheight+2)*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[0*scl, 0*scl, 0])
+    c += translate(v=[(88)*scl, 0*scl, 0*scl]).add(d)
+    u -= translate(v=[(60)*scl, (ht-112)*scl, (26)*scl]).add(c)
     # lockin for base_mid
     c = cube([60*scl, 40*scl, 40*scl], center=True)
     c = rotate([45, 0, 0]).add(c)
@@ -4967,15 +4969,15 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
