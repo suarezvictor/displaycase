@@ -2571,10 +2571,11 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
         u += c
 
-        c = cube([105*scl,36*scl,6*scl], center=True)
-        c = translate(v=[-15*scl,(scrn_hinge_ht+10)*scl,-55*scl]).add(c)
-        t = hinge_translate(scl).add(c)
-        u += t
+        if False:
+            c = cube([105*scl,36*scl,6*scl], center=True)
+            c = translate(v=[-15*scl,(scrn_hinge_ht+10)*scl,-55*scl]).add(c)
+            t = hinge_translate(scl).add(c)
+            u += t
 
     # remove runner along bottom of base, for lower panel
     c = shearedcube([15*scl, (ht+100)*scl, (14)*scl],
