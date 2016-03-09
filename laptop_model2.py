@@ -1110,16 +1110,6 @@ def base_end_bit(scl, ht, fwd=False, below=False):
 
     return u
 
-def base_front_arc(scl, ht):
-    c = touch_arc(0, ht, (boxheight-40-hthick),
-                        25, scl,
-                  angle=0)
-    c = rotate([90, 0, 0]).add(c)
-    c = rotate([0, 180, 0]).add(c)
-    c = rotate([0, 0, 180]).add(c)
-    c = resize([(151-hthick)*scl, 0, 0], False).add(c)
-    return c
-
 def base_front_fillin(scl, ht):
     u = union()
     c = cube([80*scl, ht*scl, (boxheight-hthick+2)*scl])
@@ -1129,21 +1119,6 @@ def base_front_fillin(scl, ht):
     c = cube([(front_top_width-hthick)*scl, ht*scl, (42)*scl])
     c = translate(v=[(hthick)*scl, (0)*scl, (1)*scl]).add(c)
     u += c
-    return u
-
-def base_mid_cutout(u, scl, ht, offs):
-    c = cube([50*scl, (hthick*3+4)*scl, (boxheight-hthick*2)*scl])
-    c = translate(v=[(tpanel_l_b-50)*scl, (offs+ht/2-(hthick*3+4)/2)*scl,
-                (hthick)*scl]).add(c)
-    u += c
-    c = cube([90*scl, (hthick+4)*scl, (boxheight)*scl])
-    c = translate(v=[(tpanel_l_b-60)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
-                (58)*scl]).add(c)
-    u -= c
-    c = cube([90*scl, (hthick+4)*scl, (boxheight)*scl])
-    c = translate(v=[(tpanel_l_b)*scl, (offs+ht/2-(hthick+4.)/2)*scl,
-                (28)*scl]).add(c)
-    u -= c
     return u
 
 def battery_support1(scl, ht, tpanel_offset):
