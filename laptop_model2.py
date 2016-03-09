@@ -132,6 +132,7 @@ lcd_end_offs = 20
 pcb3_lock_offs = 839+15
 kbd_numpad_indent = 79
 lcd_panel_offs = -10
+hinge_outer_rad=38.0 + 15
 
 # XXX should really be calculated from lcd width, scrn width etc.
 base_end_ht = 110
@@ -661,9 +662,8 @@ def base_end(scl, ht, kbd_numpad_indent):
                      0*scl, (0)*scl]).add(b)
     u += b
 
-    rad=35.0 + 15
     # add hinge
-    c = cylinder(r=rad*scl, h=(ht)*scl, segments=50)
+    c = cylinder(r=hinge_outer_rad*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,0*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -673,7 +673,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     c = cube([(ht)*scl, (50)*scl, (85)*scl])
     c = rotate([0, 0, 90]).add(c)
     c = rotate([0, -90, 0]).add(c)
-    c = translate(v=[-(rad-12)*scl,0*scl,(10-55)*scl]).add(c)
+    c = translate(v=[-(hinge_outer_rad-12)*scl,0*scl,(10-55)*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u += t
 
@@ -720,7 +720,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u += d
 
     # hollow hinge out
-    c = cylinder(r=(rad-12)*scl, h=(ht)*scl, segments=50)
+    c = cylinder(r=(hinge_outer_rad-12)*scl, h=(ht)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,hthick*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
@@ -2169,10 +2169,9 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
                                 (boxheight-hthick-4)*scl]).add(c)
     u -= c
 
-    rad=35.0 + 15
     # add hinge
     d = union()
-    c = cylinder(r=rad*scl, h=(friclen+44)*scl, segments=50)
+    c = cylinder(r=hinge_outer_rad*scl, h=(friclen+44)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     d += c
     c = cube([55*scl, (friclen+44)*scl, 93*scl])
@@ -2186,21 +2185,16 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     u += t
 
     # hollow hinge out
-    c = cylinder(r=(rad-12)*scl, h=(friclen+40)*scl, segments=50)
+    c = cylinder(r=(35)*scl, h=(friclen+40)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-1)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
-    c = cylinder(r=(rad+2)*scl, h=(scrn_hinge_ht+2+40)*scl,
-                    segments=50)
-    c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(-1-40)*scl,-55*scl]).add(c)
-    t = hinge_translate(scl).add(c)
-    u -= t
     # add lock-in to base_back_hinge
-    c = cylinder(r=(rad-8)*scl, r1 = (rad-12)*scl, h=(14)*scl, segments=50)
+    c = cylinder(r=(41.5)*scl, h=(60)*scl, segments=6)
     c = rotate([0, 90, 90]).add(c)
-    c = translate(v=[0*scl,(ht+scrn_hinge_ht-25.5)*scl,-55*scl]).add(c)
+    c = rotate([0, 30, 0]).add(c)
+    c = translate(v=[0*scl,(scrn_hinge_ht-10)*scl,-55*scl]).add(c)
     t = hinge_translate(scl).add(c)
     u -= t
     # hole for bolt
@@ -2281,11 +2275,10 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     if cutdown:
         # cut down
-        c = cube([(boxlength-300+80)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(300)*scl, 212.0*scl, -50*scl]).add(c)
+        c = cube([(boxlength-300+60)*scl, (ht+150)*scl, 400*scl])
+        c = translate([(138)*scl, -150*scl, -50*scl]).add(c)
         v -= c
-        c = cube([(boxlength-300+60)*scl, (ht+100)*scl, 400*scl])
-        c = translate([(95)*scl, -150*scl, -50*scl]).add(c)
+        c = translate([(138)*scl, 320*scl, -50*scl]).add(c)
         v -= c
 
         if pin_parts_3d:
@@ -4974,10 +4967,10 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        #BASE_BACK,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
