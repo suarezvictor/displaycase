@@ -1592,11 +1592,16 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
 
     if cutdown:
         c = cube([500*scl, (ht+200)*scl, 300*scl])
-        u -= translate([-100*scl, -100*scl, -20*scl]).add(c)
-        c = cube([900*scl, (ht+200)*scl, 300*scl])
-        u -= translate([(offs+120)*scl, -100*scl, -1*scl]).add(c)
-        c = cube([1900*scl, (ht+200)*scl, 300*scl])
-        u -= translate([(-100)*scl, 200*scl, -20*scl]).add(c)
+        if False: # XXX for compartment lockin
+            u -= translate([-100*scl, -100*scl, -20*scl]).add(c)
+            c = cube([900*scl, (ht+200)*scl, 300*scl])
+            u -= translate([(offs+120)*scl, -100*scl, -1*scl]).add(c)
+            c = cube([1900*scl, (ht+200)*scl, 300*scl])
+            u -= translate([(-100)*scl, 200*scl, -20*scl]).add(c)
+        if True: # XXX for base_mid and base_front_top test
+            u -= translate([260*scl, -100*scl, -20*scl]).add(c)
+            u -= translate([560*scl, -100*scl, -20*scl]).add(c)
+            u -= translate([-100*scl, -650*scl, -20*scl]).add(c)
 
         if pin_parts_3d:
             c = union()
@@ -4964,8 +4969,8 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        BASE_MID,
+                        TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
