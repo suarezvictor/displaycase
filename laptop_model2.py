@@ -2492,11 +2492,16 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = rotate([0, 0, -90]).add(b)
     b = translate(v=[(w-wd+32)*scl, (ht-1)*scl, (90)*scl]).add(b)
     u -= b
-
-    # screw-holes into base_mid
-    s = chamfered_backbox_screwholes(scl, 50)
-    s = rotate([-180, 0, 0]).add(s)
-    b = translate(v=[(w-75)*scl, (ht+25)*scl, (16)*scl]).add(s)
+    b = shearedcube([(60)*scl, (40)*scl, (28)*scl],
+                shear=[30*scl, 0*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    b = translate(v=[(w-wd+1)*scl, (ht-2)*scl, (11)*scl]).add(b)
+    u -= b
+    b = shearedcube([(2)*scl, (90)*scl, (28)*scl],
+                shear=[55*scl, 00*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
+    b = rotate([90, 0, 0]).add(b)
+    b = translate(v=[(w-wd+1)*scl, (ht+50)*scl, (11)*scl]).add(b)
     u -= b
 
     rad=35.0 + 12
@@ -2805,19 +2810,10 @@ def base_mid(scl, ht, base_screwholes=False):
     c = translate(v=[(w-120)*scl, (0)*scl, (40)*scl]).add(c)
     u += c
 
-    # screw holes in top for back_box_base
+    # screw holes in top for tpanel_mid
     d = cylinder(r=topscrewrad*scl,
                     h=(65)*scl,
                     segments=50, center=True)
-    t = translate(v=[(w+87)*scl, (-85)*scl, (50)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w+87)*scl, (ht+85)*scl, (50)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w-38)*scl, (25)*scl, (50)*scl]).add(d)
-    u -= t
-    t = translate(v=[(w-38)*scl, (ht-25)*scl, (50)*scl]).add(d)
-    u -= t
-    # and for tpanel_mid
     t = translate(v=[(tpanel_l_b-75)*scl, (ht/2)*scl, (60)*scl]).add(d)
     u -= t
 
@@ -2838,6 +2834,14 @@ def base_mid(scl, ht, base_screwholes=False):
                 {T:-1, L:13, R:-1, F:-1, D:-1, B:-1},
                 curverads={ T|L: (hthick, 0)})
     b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
+    u += b
+
+    b = shearedcube([(37)*scl, (90)*scl, (28)*scl],
+                shear=[0*scl, 00*scl, 0],
+                innershear=[-13*scl, 0*scl, 0])
+    b = rotate([90, 0, 0]).add(b)
+    b = rotate([0, 0, -90]).add(b)
+    b = translate(v=[(w-40-35)*scl, (37)*scl, (14)*scl]).add(b)
     u += b
 
     # lock for back keyboard runner (and base_back_bot)
