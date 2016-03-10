@@ -20,7 +20,7 @@ pin_parts_3d=True
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART|RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1741,7 +1741,7 @@ def base_front_top(scl, ht, ht_offset):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, front_top_width, ht-2, boxheight, walls,
+    b = hollowbox(scl, front_top_width, ht-1, boxheight, walls,
             curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[0*scl, 0*scl, 0]).add(b)
     u += b
@@ -4970,7 +4970,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
