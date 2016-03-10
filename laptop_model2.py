@@ -2023,7 +2023,7 @@ def base_front_top(scl, ht, ht_offset):
     if cutdown:
         c = cube([300*scl, ht*scl, 200*scl])
         #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
-        u -= translate([-1*scl, -150*scl, -1*scl]).add(c)
+        u -= translate([-1*scl, (-600+ht_offset)*scl, -1*scl]).add(c)
         #c = cube([300*scl, 100*scl, 200*scl])
         #u -= translate([-1*scl, (ht-80)*scl, -1*scl]).add(c)
 
@@ -4964,12 +4964,12 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
