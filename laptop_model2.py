@@ -1741,7 +1741,7 @@ def base_front_top(scl, ht, ht_offset):
                 L|D: [0, 150],
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, front_top_width, ht-1, boxheight, walls,
+    b = hollowbox(scl, front_top_width, ht-0.5, boxheight, walls,
             curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[0*scl, 0*scl, 0]).add(b)
     u += b
