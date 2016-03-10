@@ -20,7 +20,7 @@ pin_parts_3d=False
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -1855,9 +1855,7 @@ def base_front_top(scl, ht, ht_offset):
     c = shearedcube([60*scl, 105*scl, 25*scl],
                     shear=[0*scl, 0*scl, 0],
                     innershear=[20*scl, 0*scl, 0])
-    #c = rotate([90, 0, 0]).add(c)
-    #c = rotate([0, 0, 90]).add(c)
-    u += translate(v=[(20)*scl, (ht-100)*scl, (56)*scl]).add(c)
+    u -= translate(v=[(20)*scl, (ht-100)*scl, (56)*scl]).add(c)
 
     # hole for tpanel_mid extension
     c = shearedcube([120*scl, 27*scl, 37*scl],
