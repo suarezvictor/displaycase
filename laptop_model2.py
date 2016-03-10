@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1827,10 +1827,11 @@ def base_front_top(scl, ht, ht_offset):
     u += c
 
     # and support wall
-    c = cube([30*scl, (tpanel_b_w/2-ht_offset+25-32)*scl, (boxheight-50)*scl])
-    c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-65)*scl,
+    c = cube([30*scl, (tpanel_b_w/2-ht_offset+25-72)*scl, (boxheight-50)*scl])
+    c = translate(v=[(150)*scl, (tpanel_ht-tpanel_b_w/2-15)*scl,
                         (40)*scl]).add(c)
     u += c
+
     # cutout for base_mid
     c = union()
     c += shearedcube([250*scl, 200*scl, (42)*scl],
