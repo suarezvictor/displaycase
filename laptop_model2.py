@@ -17,10 +17,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1718,7 +1718,7 @@ def tpanel_cutout(scl, u, tpanel_ht):
     u -= c
     return u
 
-def base_front_top_cutount(scl, ht):
+def base_front_top_cutout(scl, ht):
 
     t = shearedcube([(boxheight-hthick*2-22)*scl, (ht)*scl, (34.2)*scl],
             shear=[11*scl, 0*scl, 0],
@@ -1900,10 +1900,10 @@ def base_front_top(scl, ht, ht_offset):
     u -= c
 
     # cut-in for base_end lock
-    b = base_front_top_cutount(scl, 60)
+    b = base_front_top_cutout(scl, 60)
     u -= translate(v=[(0)*scl, (-1)*scl, 0*scl]).add(b)
     # and tpanel_mid
-    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-67)*scl, 0*scl]).add(b)
+    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-68)*scl, 0*scl]).add(b)
 
     # remove runner along top of base, for front top panel 
     if (ht_offset > 0):
@@ -4970,13 +4970,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
