@@ -16,8 +16,8 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
-orientate=True
+pin_parts_3d=False
+orientate=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART|RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
@@ -2156,10 +2156,10 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
 
     # lock-in slot to base_back_bot
     c = union()
-    d = cube([70*scl, 45*scl, (boxheight-30)*scl], center=True)
-    d = translate(v=[(70)*scl, (0)*scl, (19)*scl]).add(d)
+    d = cube([75*scl, 45*scl, (boxheight-30)*scl], center=True)
+    d = translate(v=[(65)*scl, (0)*scl, (19)*scl]).add(d)
     c += d
-    d = cube([200*scl, 45*scl, 40*scl], center=True)
+    d = cube([200*scl, 45*scl, 42*scl], center=True)
     d = translate(v=[(0)*scl, (0)*scl, (20)*scl]).add(d)
     c += d
     c = translate(v=[(-65)*scl, (ht-20)*scl, (boxheight-55)*scl]).add(c)
@@ -2184,11 +2184,11 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     c = cylinder(r=hinge_outer_rad*scl, h=(friclen+44)*scl, segments=50)
     c = rotate([0, 90, 90]).add(c)
     d += c
-    c = cube([55*scl, (friclen+44)*scl, 93*scl])
-    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
+    c = cube([50*scl, (friclen+44)*scl, 93*scl])
+    c = translate(v=[-55*scl,0*scl,(-34)*scl]).add(c)
     d += c
-    c = cube([35*scl, (friclen+44)*scl, 100*scl])
-    c = translate(v=[-60*scl,0*scl,(-35)*scl]).add(c)
+    c = cube([25*scl, (friclen+44)*scl, 100*scl])
+    c = translate(v=[-55*scl,0*scl,(-34)*scl]).add(c)
     d += c
     c = translate(v=[0*scl,(scrn_hinge_ht+1)*scl,(-55)*scl]).add(d)
     t = hinge_translate(scl).add(c)
@@ -4970,16 +4970,16 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
