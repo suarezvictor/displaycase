@@ -1860,12 +1860,12 @@ def base_front_top(scl, ht, ht_offset):
     #u -= translate(v=[(180)*scl, (ht-160)*scl, (0)*scl]).add(c)
 
     # holes for base_mid prong(s)
-    c = shearedcube([45*scl, 25*scl, 48*scl],
-                    shear=[14*scl, 0*scl, 0],
-                    innershear=[0*scl, 0*scl, 0])
-    c = rotate([90, 0, 0]).add(c)
-    c = rotate([0, 0, 90]).add(c)
-    u -= translate(v=[(40)*scl, (ht-base_centre_ht/2-4)*scl, (56)*scl]).add(c)
+    c = shearedcube([60*scl, 105*scl, 25*scl],
+                    shear=[0*scl, 0*scl, 0],
+                    innershear=[20*scl, 0*scl, 0])
+    #c = rotate([90, 0, 0]).add(c)
+    #c = rotate([0, 0, 90]).add(c)
+    u += translate(v=[(20)*scl, (ht-100)*scl, (56)*scl]).add(c)
 
     # hole for tpanel_mid extension
     c = shearedcube([120*scl, 27*scl, 37*scl],
