@@ -1587,7 +1587,7 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
         h = translate([(197)*scl, (-85)*scl, 0*scl]).add(h)
         c += h
 
-        u += c
+        #u += c
 
     if cutdown:
         c = cube([500*scl, (ht+200)*scl, 300*scl])
@@ -4970,12 +4970,12 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
