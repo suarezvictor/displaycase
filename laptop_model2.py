@@ -1719,6 +1719,14 @@ def tpanel_cutout(scl, u, tpanel_ht):
     u -= c
     return u
 
+def base_front_top_cutount(scl, ht):
+
+    t = shearedcube([(boxheight-hthick*2-22)*scl, (ht)*scl, (34.2)*scl],
+            shear=[11*scl, 0*scl, 0],
+            innershear=[-11*scl, 0*scl, 0])
+    t = rotate([0, 90, 0]).add(t)
+    return translate(v=[(146)*scl, (0)*scl, (55+hthick+34)*scl]).add(t)
+
 def base_front_top(scl, ht, ht_offset):
     print "BASE_FRONT_TOP ht", ht
 
@@ -1898,6 +1906,13 @@ def base_front_top(scl, ht, ht_offset):
     c = translate(v=[(-1)*scl, (tpanel_ht-tpanel_b_w/2-2)*scl,
                         (-1)*scl]).add(c)
     u -= c
+
+    # cut-in for base_end lock
+    b = base_front_top_cutount(scl, 60)
+    u -= translate(v=[(0)*scl, (-1)*scl, 0*scl]).add(b)
+    # and tpanel_mid
+    b = base_front_top_cutount(scl, 40)
+    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-50)*scl, 0*scl]).add(b)
 
     # remove runner along top of base, for front top panel 
     if (ht_offset > 0):
@@ -4970,7 +4985,7 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
