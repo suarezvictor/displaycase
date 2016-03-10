@@ -1903,8 +1903,8 @@ def base_front_top(scl, ht, ht_offset):
     b = base_front_top_cutount(scl, 60)
     u -= translate(v=[(0)*scl, (-1)*scl, 0*scl]).add(b)
     # and tpanel_mid
-    b = base_front_top_cutount(scl, 40)
-    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-50)*scl, 0*scl]).add(b)
+    b = base_front_top_cutount(scl, 35)
+    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-45)*scl, 0*scl]).add(b)
 
     # remove runner along top of base, for front top panel 
     if (ht_offset > 0):
