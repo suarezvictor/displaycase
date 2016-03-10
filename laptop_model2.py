@@ -1860,12 +1860,12 @@ def base_front_top(scl, ht, ht_offset):
     u -= translate(v=[(20)*scl, (ht-39)*scl, (56)*scl]).add(c)
 
     # hole for tpanel_mid extension
-    c = shearedcube([60*scl, 26*scl, 38*scl],
+    c = shearedcube([80*scl, 26*scl, 38*scl],
                     shear=[0*scl, 5*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    u -= translate(v=[(74)*scl, (ht-59)*scl, (78)*scl]).add(c)
+    u -= translate(v=[(74)*scl, (ht-79)*scl, (78)*scl]).add(c)
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
