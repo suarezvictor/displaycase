@@ -17,10 +17,10 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=True
+orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART #LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1453,11 +1453,11 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= c
 
     # wings for screw-holes to fit with front base
-    d = front_tray_corner(scl, 105, dep=20, inset=15)
-    c = translate(v=[(0)*scl, (-34)*scl, (-4-55)*scl]).add(d)
+    d = front_tray_corner(scl, 105, dep=20, inset=40)
+    c = translate(v=[(0)*scl, (-54)*scl, (-4-55)*scl]).add(d)
     u += c
-    d = front_tray_corner(scl, 105, dep=20, inset=-15)
-    c = translate(v=[(0)*scl, (ht+14)*scl, (-4-55)*scl]).add(d)
+    d = front_tray_corner(scl, 105, dep=20, inset=-40)
+    c = translate(v=[(0)*scl, (ht+34)*scl, (-4-55)*scl]).add(d)
     u += c
 
     # cut-out to match pcb1_support
@@ -1499,14 +1499,13 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= b
 
     # extra bit for base_mid lockin
-    c = cube([(30)*scl, (200)*scl, (72)*scl])
-    t = translate(v=[(78)*scl, (ht/2-ht_offset-100)*scl,
+    c = cube([(30)*scl, (140)*scl, (72)*scl])
+    t = translate(v=[(78)*scl, (ht/2-ht_offset-70)*scl,
                      (+30)*scl]).add(c)
     u += t
     # couple of cutouts for base_mid lockin, these go through to base_front_top
-    c = cube([(50)*scl, (48)*scl, (29)*scl])
-    u -= translate(v=[(68)*scl, (ht/2-ht_offset-74)*scl, (+50)*scl]).add(c)
-    u -= translate(v=[(68)*scl, (ht/2-ht_offset+26)*scl, (+50)*scl]).add(c)
+    c = cube([(50)*scl, (70)*scl, (29)*scl])
+    u -= translate(v=[(68)*scl, (ht/2-ht_offset-35)*scl, (+50)*scl]).add(c)
 
     # cutout for circular lock
     c = union()
@@ -1845,25 +1844,28 @@ def base_front_top(scl, ht, ht_offset):
     c += shearedcube([250*scl, 200*scl, (42)*scl],
                     shear=[0*scl, 0*scl, 0],
                     innershear=[150*scl, 0*scl, 0])
-    d = shearedcube([250*scl, 100*scl, (50)*scl],
-                    shear=[0*scl, 0*scl, 0],
+    d = shearedcube([100*scl, 50*scl, (100)*scl],
+                    shear=[-15*scl, 0*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
-    c += translate(v=[(40)*scl, 20*scl, -40*scl]).add(d)
-    u -= translate(v=[(80)*scl, (ht-base_centre_ht/2-2)*scl, (boxheight-50)*scl]).add(c)
+    d = rotate([0, 90, 0]).add(d)
+    d = rotate([-90, 0, 0]).add(d)
+    c += translate(v=[(40)*scl, 115*scl, 0*scl]).add(d)
+    u -= translate(v=[(80)*scl, (ht-base_centre_ht/2-2)*scl,
+                     (boxheight-50)*scl]).add(c)
 
-    # holes for base_mid prong(s)
-    c = shearedcube([60*scl, 105*scl, 25*scl],
+    # holes for base_mid prong
+    c = shearedcube([60*scl, 40*scl, 25*scl],
                     shear=[0*scl, 0*scl, 0],
                     innershear=[20*scl, 0*scl, 0])
-    u -= translate(v=[(20)*scl, (ht-100)*scl, (56)*scl]).add(c)
+    u -= translate(v=[(20)*scl, (ht-39)*scl, (56)*scl]).add(c)
 
     # hole for tpanel_mid extension
-    c = shearedcube([120*scl, 27*scl, 37*scl],
+    c = shearedcube([60*scl, 26*scl, 38*scl],
                     shear=[0*scl, 5*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    u -= translate(v=[(74)*scl, (ht-104)*scl, (78)*scl]).add(c)
+    u -= translate(v=[(74)*scl, (ht-59)*scl, (78)*scl]).add(c)
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
@@ -1901,8 +1903,7 @@ def base_front_top(scl, ht, ht_offset):
     b = base_front_top_cutount(scl, 60)
     u -= translate(v=[(0)*scl, (-1)*scl, 0*scl]).add(b)
     # and tpanel_mid
-    b = base_front_top_cutount(scl, 35)
-    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-45)*scl, 0*scl]).add(b)
+    u -= translate(v=[0, (tpanel_ht-tpanel_b_w/2-67)*scl, 0*scl]).add(b)
 
     # remove runner along top of base, for front top panel 
     if (ht_offset > 0):
@@ -2798,13 +2799,12 @@ def base_mid(scl, ht, base_screwholes=False):
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, -90]).add(c)
     d += c
-    c = shearedcube([40*scl, (25)*scl, (60)*scl],
-                shear=[0*scl, 0*scl, 0],
+    c = shearedcube([60*scl, (25)*scl, (65)*scl],
+                shear=[0*scl, -4*scl, 0],
                 innershear=[0*scl, 4*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, -90]).add(c)
-    d += translate(v=[(-10-115+60)*scl, (0)*scl, (11)*scl]).add(c)
-    d += translate(v=[(-10-115+60)*scl, (-ht+40)*scl, (11)*scl]).add(c)
+    d += translate(v=[(-10-115+60)*scl, (-ht+60)/2*scl, (11)*scl]).add(c)
     u += translate(v=[(182)*scl, (ht)*scl, (42)*scl]).add(d)
 
     # remove cutin for base_front_top
@@ -4970,13 +4970,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
