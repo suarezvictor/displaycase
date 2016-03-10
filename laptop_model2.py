@@ -2324,7 +2324,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     scalecurve = {
                 R|D: [0, 150]
             }
-    b = hollowbox(scl, back_top_width, bht-1, boxheight,
+    b = hollowbox(scl, back_top_width, bht-0.5, boxheight,
                     walls, curverads=curverads, scalecurve=scalecurve)
     b = translate(v=[w*scl, 0, 0]).add(b)
     u += b
