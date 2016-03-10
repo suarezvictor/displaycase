@@ -1850,14 +1850,6 @@ def base_front_top(scl, ht, ht_offset):
                     innershear=[0*scl, 0*scl, 0])
     c += translate(v=[(40)*scl, 20*scl, -40*scl]).add(d)
     u -= translate(v=[(80)*scl, (ht-base_centre_ht/2-2)*scl, (boxheight-50)*scl]).add(c)
-    # lockin for base_mid
-    #c = cube([60*scl, 40*scl, 40*scl], center=True)
-    #c = rotate([45, 0, 0]).add(c)
-    #c = rotate([0, 0, 40]).add(c)
-    #u += translate(v=[(185)*scl, (ht-115)*scl, (75)*scl]).add(c)
-    # cutoff protrusion
-    #c = cube([100*scl, 90*scl, 200*scl])
-    #u -= translate(v=[(180)*scl, (ht-160)*scl, (0)*scl]).add(c)
 
     # holes for base_mid prong(s)
     c = shearedcube([60*scl, 105*scl, 25*scl],
