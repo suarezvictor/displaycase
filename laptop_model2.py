@@ -20,7 +20,7 @@ pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART|RIGHTPART #LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -4962,7 +4962,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4980,7 +4980,7 @@ if __name__ == '__main__':
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         BASE_BACK,
-                        BASE_BACK_HINGE,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
