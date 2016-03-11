@@ -16,7 +16,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2377,8 +2377,10 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         if abs(offs - boffs) < 120:
             if toffs < 0:
                 offs += 40
+                runnersupportht = ht*0.75
             else:
-                offs += 80
+                offs += 40
+                runnersupportht = ht*0.725
         c = rotate([-43, 0, 0]).add(b)
         c = translate(v=[boxlength*scl, (offs-fthick)*scl,
                 (-5)*scl]).add(c)
@@ -2387,7 +2389,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         offs += step
 
     # add runner support, has to be done before pcb/battery support
-    for h in [ht*0.307, ht*0.515, ht*0.75, 62, ht-78]:
+    for h in [ht*0.307, ht*0.515, runnersupportht, 62, ht-78]:
         c = shearedcube([(back_top_width-80)*scl, (40)*scl, (15)*scl])
         c = translate(v=[(boxlength-back_top_width)*scl, h*scl,
                                     (boxheight-hthick-13)*scl]).add(c)
