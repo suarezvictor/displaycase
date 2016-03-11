@@ -692,6 +692,7 @@ def base_end(scl, ht, kbd_numpad_indent):
     u -= c
 
     # add base_back lock-ins
+    d = union()
     c = shearedcube([(42)*scl, (40)*scl, 61*scl],
                 shear=[7*scl, 0, 0],
                 innershear=[-7*scl, 0, 0])
@@ -4666,7 +4667,7 @@ def create_laptop(t, scl, part, angle):
         b.add(se)
 
     if part == BASE_BACK_HINGE:
-        bh = base_back_hinge_ht+scrn_hinge_ht-9
+        bh = base_back_hinge_ht+scrn_hinge_ht-5
         print "base back hinge", bh/10., (scrn_hinge_ht)/10.
         if mirroring & LEFTPART:
             # NOTE: ... here's the other bit
@@ -4961,7 +4962,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
