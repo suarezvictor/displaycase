@@ -16,17 +16,17 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART|RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = 0 # BATTERY 
+add_internal_parts = LCD_PANEL # BATTERY 
 
 test = False
 single = True
@@ -66,8 +66,8 @@ if not test:
     lcd_l = 3598.0
     lcd_w = 2100.0
     # dimensions from datasheet.  reality-adjustment is needed..
-    lcd_la = lcd_l-98.0
-    lcd_wa = lcd_w-129.9
+    lcd_la = lcd_l-118.0
+    lcd_wa = lcd_w-149.9
     lcd_la -= 25
     #lcd_wa -= 20
     lcd_d = 50
@@ -232,9 +232,6 @@ def lcd_view_area(scl, rightpart, offs=0):
     w = lcd_wa
     h = lcd_la
     d = lcd_d
-
-    if rightpart:
-        h += 20
 
     wo = (lcd_w - lcd_wa) / 2
     do = (lcd_l - lcd_la) / 2
@@ -475,7 +472,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         slen = lcd_inset_bot + 40
         offs = boxlength - slen
     elif front:
-        slen = 140
+        slen = 160
         offs = 0
     else:
         slen = boxlength
@@ -517,7 +514,7 @@ def screen_box(scl, ht, end=True, hingewall=False, back=False, front=False):
         # ok, remove just a tiny bit from the lcd edge, for two reasons:
         # (1) so that 3d printing works (too much overhang)
         # (2) so that the centre (wooden) laminate has something to hook onto
-        d = shearedcube([(54)*scl, (ht+4)*scl, (32.6)*scl],
+        d = shearedcube([(104)*scl, (ht+4)*scl, (32.6)*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
         c = translate(v=[(98+lcd_panel_offs)*scl, (-1)*scl, (-38)*scl]).add(d)
@@ -4965,14 +4962,14 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        #SCREEN_END,
+                        SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_BACK_EDGE,
+                        SCREEN_FRONT_EDGE,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -4981,7 +4978,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
