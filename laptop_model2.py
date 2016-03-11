@@ -1410,10 +1410,10 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= c
 
     # lengthways support (keeps tpanel from bending)
-    c = shearedcube([33*scl, ht*scl, (40)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[15*scl, 0*scl, 0])
-    c = translate(v=[(63)*scl, 0*scl, (38)*scl]).add(c)
+    c = shearedcube([33*scl, (ht-10)*scl, (40)*scl],
+                shear=[0*scl, -10*scl, 0],
+                innershear=[15*scl, 10*scl, 0])
+    c = translate(v=[(63)*scl, 5*scl, (38)*scl]).add(c)
     u += c
 
     # cutout for underside of panel (reduce plastic usage)
@@ -4970,7 +4970,7 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
