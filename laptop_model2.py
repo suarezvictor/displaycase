@@ -2457,12 +2457,12 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
 
     # fit base_mid
     wd = back_top_width-109
-    b = shearedcube([(240)*scl, (base_centre_ht/2+93)*scl, (boxheight-76)*scl],
+    b = shearedcube([(240)*scl, (base_centre_ht/2+93)*scl, (boxheight-86)*scl],
                 shear=[-70*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = translate(v=[(w-wd)*scl, (ht-2)*scl, (38)*scl]).add(b)
     u -= b
-    c = shearedcube([(120)*scl, (boxheight-50-hthick)*scl, (110)*scl],
+    c = shearedcube([(120)*scl, (boxheight-60-hthick)*scl, (110)*scl],
                 shear=[0*scl, -20*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
@@ -2476,12 +2476,14 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
     b = rotate([0, 0, -90]).add(b)
     b = translate(v=[(w-wd+29)*scl, (ht-1)*scl, (88)*scl]).add(b)
     u -= b
-    b = shearedcube([(60)*scl, (40)*scl, (28)*scl],
-                shear=[30*scl, 0*scl, 0],
+    b = shearedcube([(57)*scl, (40)*scl, (36)*scl],
+                shear=[40*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
-    b = translate(v=[(w-wd+1)*scl, (ht-2)*scl, (11)*scl]).add(b)
+    u -= translate(v=[(w-wd+1)*scl, (ht-2)*scl, (11)*scl]).add(b)
+    b = rotate([180, 0, 0]).add(b)
+    b = translate(v=[(w-wd+1)*scl, (ht-2+40)*scl, (boxheight-14)*scl]).add(b)
     u -= b
-    b = shearedcube([(2)*scl, (40)*scl, (28)*scl],
+    b = shearedcube([(2)*scl, (boxheight-25)*scl, (28)*scl],
                 shear=[55*scl, 00*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
@@ -2784,7 +2786,7 @@ def base_mid(scl, ht, base_screwholes=False):
         alternate = not alternate
 
     # sheared end at back, locks into base_back_bot
-    c = shearedcube([(ht)*scl, (boxheight-50-hthick)*scl, (110)*scl],
+    c = shearedcube([(ht)*scl, (boxheight-59-hthick)*scl, (110)*scl],
                 shear=[0*scl, -20*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
@@ -2841,28 +2843,29 @@ def base_mid(scl, ht, base_screwholes=False):
     b = translate(v=[(w-40-74)*scl, 0*scl, (0)*scl]).add(b)
     u += b
 
-    b = shearedcube([(36)*scl, (30)*scl, (28)*scl],
+    # lockin hooks to base_back_bot, hooks top and bottom
+    b = shearedcube([(36)*scl, (boxheight-30)*scl, (28)*scl],
                 shear=[0*scl, 00*scl, 0],
                 innershear=[-13*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
     b = rotate([0, 0, -90]).add(b)
     u += translate(v=[(w-40-35)*scl, (36)*scl, (14)*scl]).add(b)
     b = rotate([180, 0, 0]).add(b)
-    u += translate(v=[(w-40-35)*scl, (ht-36)*scl, (30+14)*scl]).add(b)
+    u += translate(v=[(w-40-35)*scl, (ht-36)*scl, (boxheight-30+14)*scl]).add(b)
 
     # lock for back keyboard runner (and base_back_bot)
-    d = shearedcube([(boxheight-80)*scl, 25*scl, 20*scl],
+    d = shearedcube([(boxheight-85)*scl, 25*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([0, 0, -90]).add(d)
     bl = boxlength - back_top_width - 47
     bb = boxlength - back_top_width + 27
-    u += translate(v=[(bl)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
-    u += translate(v=[(bb)*scl, (1)*scl, (boxheight-40)*scl]).add(d)
+    u += translate(v=[(bl)*scl, (1)*scl, (boxheight-45)*scl]).add(d)
+    u += translate(v=[(bb)*scl, (1)*scl, (boxheight-45)*scl]).add(d)
     d = rotate([0, 0, 180]).add(d)
-    u += translate(v=[(bl+25)*scl, (ht-1)*scl, (53+31)*scl]).add(d)
-    u += translate(v=[(bb+25)*scl, (ht-1)*scl, (44+40)*scl]).add(d)
+    u += translate(v=[(bl+25)*scl, (ht-1)*scl, (79)*scl]).add(d)
+    u += translate(v=[(bb+25)*scl, (ht-1)*scl, (79)*scl]).add(d)
     d = shearedcube([(90)*scl, 22*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[17*scl, 0*scl, 0])
@@ -4978,8 +4981,8 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        BASE_BACK_HINGE,
+                        BASE_BACK,
+                        #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
