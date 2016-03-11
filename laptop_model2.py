@@ -2199,7 +2199,7 @@ def base_back_hinge(scl, ht, scrn_hinge_ht, toffs):
     t = hinge_translate(scl).add(c)
     u -= t
     # add lock-in to base_back_hinge
-    c = cylinder(r=(41.2)*scl, h=(110)*scl, segments=6)
+    c = cylinder(r=(41.4)*scl, h=(110)*scl, segments=6)
     c = rotate([0, 90, 90]).add(c)
     c = rotate([0, 30, 0]).add(c)
     c = translate(v=[0*scl,(scrn_hinge_ht-6)*scl,-55*scl]).add(c)
@@ -4975,11 +4975,11 @@ if __name__ == '__main__':
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        TPANEL_MID,
+                        #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
-                        #BASE_BACK_HINGE,
+                        BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
