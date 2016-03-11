@@ -30,7 +30,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2976,10 +2976,10 @@ def base_mid(scl, ht, base_screwholes=False):
 
     if cutdown:
         c = cube([(boxlength+50)*scl, 300*scl, 200*scl])
-        if True: # cutdown for base_front_top
+        if False: # cutdown for base_front_top
             #u -= translate([-1*scl, 20*scl, -1*scl]).add(c)
             u -= translate([250*scl, -120*scl, -1*scl]).add(c)
-        if False: # cutdown for base_back_bot
+        if True: # cutdown for base_back_bot
             u -= translate([-380*scl, -120*scl, -1*scl]).add(c)
 
     v = union()
@@ -4979,9 +4979,9 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
