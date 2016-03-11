@@ -20,13 +20,13 @@ pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART|RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = LCD_PANEL # BATTERY 
+add_internal_parts = 0 # BATTERY 
 
 test = False
 single = True
@@ -1840,16 +1840,16 @@ def base_front_top(scl, ht, ht_offset):
     # cutout for base_mid
     c = union()
     c += shearedcube([250*scl, 200*scl, (42)*scl],
-                    shear=[0*scl, 0*scl, 0],
+                    shear=[20*scl, 0*scl, 0],
                     innershear=[150*scl, 0*scl, 0])
     d = shearedcube([100*scl, 50*scl, (100)*scl],
                     shear=[-15*scl, 0*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
     d = rotate([-90, 0, 0]).add(d)
-    c += translate(v=[(40)*scl, 115*scl, 0*scl]).add(d)
-    u -= translate(v=[(80)*scl, (ht-base_centre_ht/2-2)*scl,
-                     (boxheight-50)*scl]).add(c)
+    c += translate(v=[(40)*scl, 118*scl, 2*scl]).add(d)
+    u += translate(v=[(75)*scl, (ht-base_centre_ht/2-10)*scl,
+                     (boxheight-51)*scl]).add(c)
 
     # holes for base_mid prong
     c = shearedcube([60*scl, 40*scl, 25*scl],
@@ -1858,12 +1858,12 @@ def base_front_top(scl, ht, ht_offset):
     u -= translate(v=[(20)*scl, (ht-39)*scl, (56)*scl]).add(c)
 
     # hole for tpanel_mid extension
-    c = shearedcube([80*scl, 26*scl, 38*scl],
+    c = shearedcube([90*scl, 26*scl, 48*scl],
                     shear=[0*scl, 5*scl, 0],
                     innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    u -= translate(v=[(74)*scl, (ht-79)*scl, (78)*scl]).add(c)
+    u -= translate(v=[(74)*scl, (ht-89)*scl, (78)*scl]).add(c)
 
     # screw holes in box
     t = box_screwholes(scl, hthick, holes=[0], h=190, rad=35./2)
@@ -4962,20 +4962,20 @@ if __name__ == '__main__':
             u = union()
             for i in [
                         #BASE_END,
-                        SCREEN_END,
+                        #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
-                        SCREEN_FRONT_EDGE,
-                        SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        #SCREEN_BACK_EDGE,
+                        #SCREEN_FRONT_EDGE,
+                        #SCREEN_MID,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
-                        #TPANEL_MID,
+                        TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
