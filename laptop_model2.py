@@ -31,7 +31,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = False
+cutdown = True
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -2787,7 +2787,7 @@ def base_mid(scl, ht, base_screwholes=False):
         alternate = not alternate
 
     # sheared end at back, locks into base_back_bot
-    c = shearedcube([(ht-4)*scl, (boxheight-59-hthick)*scl, (110)*scl],
+    c = shearedcube([(ht-4)*scl, (boxheight-58-hthick)*scl, (110)*scl],
                 shear=[0*scl, -20*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
@@ -2855,7 +2855,7 @@ def base_mid(scl, ht, base_screwholes=False):
     u += translate(v=[(w-40-35)*scl, (ht-36)*scl, (boxheight-30+14)*scl]).add(b)
 
     # lock for back keyboard runner (and base_back_bot)
-    d = shearedcube([(boxheight-85)*scl, 25*scl, 20*scl],
+    d = shearedcube([(boxheight-85)*scl, 25*scl, 22*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[8*scl, 0*scl, 0])
     d = rotate([0, 90, 0]).add(d)
