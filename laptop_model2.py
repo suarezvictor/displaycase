@@ -5,6 +5,7 @@
     * sort out gaps between base end, base hinge end, and screen edge
     * parameterise plastic join-point gaps/sizes so it can be varied
     * allow [flat] cable access through to screen connector
+    * base_front_top is short by 1mm on each side.
 """
 
 import time
@@ -16,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -30,7 +31,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1848,7 +1849,7 @@ def base_front_top(scl, ht, ht_offset):
     d = rotate([0, 90, 0]).add(d)
     d = rotate([-90, 0, 0]).add(d)
     c += translate(v=[(40)*scl, 118*scl, 2*scl]).add(d)
-    u += translate(v=[(75)*scl, (ht-base_centre_ht/2-10)*scl,
+    u -= translate(v=[(75)*scl, (ht-base_centre_ht/2-10)*scl,
                      (boxheight-51)*scl]).add(c)
 
     # holes for base_mid prong
@@ -4973,13 +4974,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
+                        BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
