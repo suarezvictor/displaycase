@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
@@ -2787,12 +2787,12 @@ def base_mid(scl, ht, base_screwholes=False):
         alternate = not alternate
 
     # sheared end at back, locks into base_back_bot
-    c = shearedcube([(ht)*scl, (boxheight-59-hthick)*scl, (110)*scl],
+    c = shearedcube([(ht-4)*scl, (boxheight-59-hthick)*scl, (110)*scl],
                 shear=[0*scl, -20*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = rotate([90, 0, 0]).add(c)
     c = rotate([0, 0, 90]).add(c)
-    u += translate(v=[(w-120)*scl, (0)*scl, (40)*scl]).add(c)
+    u += translate(v=[(w-120)*scl, (2)*scl, (40)*scl]).add(c)
 
     # ...and base_front_top (through tpanel_mid)
     d = union()
@@ -2863,10 +2863,10 @@ def base_mid(scl, ht, base_screwholes=False):
     bl = boxlength - back_top_width - 47
     bb = boxlength - back_top_width + 27
     u += translate(v=[(bl)*scl, (1)*scl, (boxheight-45)*scl]).add(d)
-    u += translate(v=[(bb)*scl, (1)*scl, (boxheight-45)*scl]).add(d)
+    u += translate(v=[(bb)*scl, (3)*scl, (boxheight-45)*scl]).add(d)
     d = rotate([0, 0, 180]).add(d)
     u += translate(v=[(bl+25)*scl, (ht-1)*scl, (79)*scl]).add(d)
-    u += translate(v=[(bb+25)*scl, (ht-1)*scl, (79)*scl]).add(d)
+    u += translate(v=[(bb+25)*scl, (ht-3)*scl, (79)*scl]).add(d)
     d = shearedcube([(90)*scl, 22*scl, 20*scl],
                 shear=[0*scl, 0*scl, 0],
                 innershear=[17*scl, 0*scl, 0])
@@ -4974,13 +4974,13 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
+                        #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        #BASE_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
