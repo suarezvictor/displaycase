@@ -2845,7 +2845,7 @@ def base_mid(scl, ht, base_screwholes=False):
     u += b
 
     # lockin hooks to base_back_bot, hooks top and bottom
-    b = shearedcube([(36)*scl, (boxheight-30)*scl, (28)*scl],
+    b = shearedcube([(34)*scl, (boxheight-30)*scl, (28)*scl],
                 shear=[0*scl, 00*scl, 0],
                 innershear=[-13*scl, 0*scl, 0])
     b = rotate([90, 0, 0]).add(b)
@@ -4982,7 +4982,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
