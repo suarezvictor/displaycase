@@ -17,7 +17,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=False
+pin_parts_3d=True
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
@@ -2570,14 +2570,8 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
         h = translate([(0)*scl, (-3)*scl, -16*scl]).add(h)
         c += h
         c = union()
-        offs = ht + toffs - tpanel_l_b/2 +8
-        if toffs > 0:
-            offs -= 50
-        h = cube([(offs-20)*scl, 1.8*scl, boxheight*1.5*scl])
-        h = translate([(75)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
-        c += h
-        h = cube([(ht-offs-135)*scl, 1.8*scl, boxheight*1.5*scl])
-        h = translate([(offs+100)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
+        h = cube([(ht+145)*scl, 1.8*scl, boxheight*1.5*scl])
+        h = translate([(-60)*scl, (-1.8)*scl, -boxheight*0.25*scl]).add(h)
         c += h
         c = rotate([0, 0, 90]).add(c)
         c = translate([(w-58-79)*scl, (0)*scl, 0*scl]).add(c)
@@ -2591,7 +2585,7 @@ def base_back_bot(scl, ht, scrn_hinge_ht, toffs):
             u += t
 
     # remove runner along bottom of base, for lower panel
-    c = shearedcube([15*scl, (ht+100)*scl, (14)*scl],
+    c = shearedcube([15*scl, (ht+72)*scl, (14)*scl],
                 shear=[-12*scl, 0*scl, 0],
                 innershear=[0*scl, 0*scl, 0])
     c = translate(v=[(boxlength-back_top_width-5)*scl, (-1)*scl,
@@ -4982,9 +4976,9 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        #BASE_BACK,
+                        BASE_BACK,
                         #BASE_BACK_HINGE,
-                        PCB1_SUPPORT,
+                        #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
