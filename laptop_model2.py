@@ -18,7 +18,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
@@ -31,7 +31,7 @@ add_internal_parts = 0 # BATTERY
 
 test = False
 single = True
-cutdown = True
+cutdown = False
 revision_1_pcb = True
 
 SCREEN_END = 0
@@ -1268,11 +1268,11 @@ def pcb1_support(scl, ht, tpanel_offset, pcb1_support_offset):
     u -= c
 
     c = shearedcube([(200)*scl, (30)*scl, (50)*scl],
-                shear=[0*scl, 0*scl, 0],
-                innershear=[0*scl, 23*scl, 0])
+                shear=[0*scl, -23*scl, 0],
+                innershear=[0*scl, 0*scl, 0])
     c = rotate([-90, 0, 0]).add(c)
     c = translate(v=[(tpanel_l_b-tpanel_box_l+180+400)*scl, (-1+50)*scl,
-                    (kbd_inset+80)*scl]).add(c)
+                    (kbd_inset+71.1)*scl]).add(c)
     u -= c
 
     d = union()
@@ -4980,11 +4980,11 @@ if __name__ == '__main__':
                         #PCB2,
                         #PCB3,
                         #TPANEL_MID,
-                        BASE_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
+                        PCB1_SUPPORT,
                         #PCB3_SUPPORT,
                         #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
