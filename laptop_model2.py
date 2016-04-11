@@ -9,6 +9,7 @@
     * add chamfering on bacK kbd runner and pcb/battery support.
     * move back kbd runner last internal supports in so that they miss
       the hex nut slot in base_back
+    * move left keyboard lock on right front_kbd_tray, keyboard jamming
 """
 
 import time
