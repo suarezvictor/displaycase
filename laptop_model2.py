@@ -6,6 +6,9 @@
     * parameterise plastic join-point gaps/sizes so it can be varied
     * allow [flat] cable access through to screen connector
     * base_front_top is short by 1mm on each side.
+    * add chamfering on bacK kbd runner and pcb/battery support.
+    * move back kbd runner last internal supports in so that they miss
+      the hex nut slot in base_back
 """
 
 import time
@@ -17,7 +20,7 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
-pin_parts_3d=True
+pin_parts_3d=False
 orientate=True
 LEFTPART = 1
 RIGHTPART = 2
@@ -4967,7 +4970,7 @@ if __name__ == '__main__':
                         #FRICTION_HINGE2,
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
+                        SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
                         #PCB1,
@@ -4976,7 +4979,7 @@ if __name__ == '__main__':
                         #TPANEL_MID,
                         #BASE_MID,
                         #BACK_KBD_RUNNER,
-                        BASE_BACK,
+                        #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
                         #PCB3_SUPPORT,
