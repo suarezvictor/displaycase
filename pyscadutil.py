@@ -27,6 +27,34 @@ def pin(spec, scl, r=0, fill=True, ht=1.8):
     c = translate([0*scl, (-ht/2+3)*scl, 0]).add(c)
     return c
         
+def triangle(size, center=False):
+    v = size
+    points = [
+    [ 0.5,  0.5,  0.5],
+    [ 0.5,  0.5, -0.5],
+    [ 0.5, -0.5,  0.5],
+    [ 0.5, -0.5, -0.5],
+    [-0.5,  0.5,  0.5],
+    [-0.5,  0.5, -0.5],
+    [-0.5, -0.5,  0.5],
+    [-0.5, -0.5, -0.5]]
+
+    faces = [
+    [ 4 , 5, 1, 0],
+    [ 2 , 4, 0],
+    [ 1 , 3, 2, 0],
+    [ 5 , 4, 3, 2],
+    [ 3 , 1, 5]]
+
+    for i in range(len(points)):
+        for j in range(len(v)):
+            if not center:
+                points[i][j] += 0.5
+            points[i][j] *= v[j]
+
+    return polyhedron(points, faces)
+
+
 def shearedcube(size, center=False, shear=None, innershear=None):
     v = size
     points = [
@@ -37,14 +65,14 @@ def shearedcube(size, center=False, shear=None, innershear=None):
     [-0.5,  0.5,  0.5],
     [-0.5,  0.5, -0.5],
     [-0.5, -0.5,  0.5],
-    [-0.5, -0.5, -0.5]];
+    [-0.5, -0.5, -0.5]]
     faces = [
     [ 4 , 5, 1, 0],
     [ 2 , 6, 4, 0],
     [ 1 , 3, 2, 0],
     [ 6 , 2, 3, 7],
     [ 5 , 4, 6, 7],
-    [ 3 , 1, 5, 7]];
+    [ 3 , 1, 5, 7]]
 
     for i in range(len(points)):
         for j in range(len(v)):
@@ -74,7 +102,7 @@ D=0x8
 F=0x10
 B=0x20
 
-def curvebox(scl, l, w, ht, rad):
+def curvebox(scl, l, w, ht, rad, center=False):
     """ hollowbox has some bugs (not proper overlaps leaving gaps
         between sections.  it therefore can't be used for "subtract".
         this function can create a cube with 4 curved corners
@@ -97,6 +125,9 @@ def curvebox(scl, l, w, ht, rad):
     c = cube([l*scl, (w-rad*2.0)*scl, ht*scl])
     t = translate([(0)*scl, (rad)*scl, 0*scl]).add(c)
     u += t
+
+    if center:
+        u = translate([-l/2.0, -w/2.0, -ht/2.0]).add(u)
 
     return u
     
