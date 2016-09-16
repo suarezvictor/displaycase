@@ -22,7 +22,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 pin_parts_3d=False
-orientate=True
+orientate=False
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
@@ -4390,50 +4390,47 @@ def pcb2(scl):
 
     # PCB
     pcb = union()
-    b = cube([870*scl, 640*scl, (12)*scl])
+    b = cube([1100*scl, 400*scl, (12)*scl])
     pcb += b
-    b = cube([981*scl, 500*scl, (30)*scl])
-    b = translate([(190)*scl, 400*scl, -10*scl]).add(b)
-    pcb -= b
 
-    # touchpanel connector
-    j = cube([90*scl, 60*scl, (12)*scl])
-    r = translate([(50)*scl, 590*scl,
+    # Inductor (large)
+    j = cube([60*scl, 60*scl, (20)*scl])
+    r = translate([(427)*scl, 127*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # lcd connector
-    j = cube([40*scl, 140*scl, (12)*scl])
-    r = translate([(260)*scl, (150)*scl,
+    j = cube([291*scl, 38*scl, (12)*scl])
+    r = translate([(29)*scl, (51)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # keyboard connector
-    j = cube([330*scl, 70*scl, (12)*scl])
-    r = translate([(480)*scl, (290)*scl,
+    j = cube([320*scl, 60*scl, (12)*scl])
+    r = translate([(723)*scl, (307)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # STM32F0
     j = cube([100*scl, 100*scl, (12)*scl])
-    r = translate([(470)*scl, (90)*scl,
+    r = translate([(729)*scl, (69)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
-    # SIP-8 1
-    j = cube([20*scl, 100*scl, (30)*scl])
-    r = translate([(370)*scl, (50)*scl,
-                (12)*scl]).add(j)
+    # SIP-8
+    j = cube([30*scl, 121*scl, (30)*scl])
+    r = translate([(542)*scl, (42)*scl,
+                (-22)*scl]).add(j)
     t.add(r)
-    # SIP-8 2
-    j = cube([20*scl, 100*scl, (30)*scl])
-    r = translate([(370)*scl, (250)*scl,
-                (12)*scl]).add(j)
+    # SIP-10
+    j = cube([30*scl, 145*scl, (30)*scl])
+    r = translate([(536)*scl, (225)*scl,
+                (-22)*scl]).add(j)
     t.add(r)
 
     t.add(pcb)
 
-    t = translate([(tpanel_l_b-360-90)*scl, (lcd_l/2-480)*scl,
+    t = translate([(tpanel_l_b-360-90-240)*scl, (lcd_l/2-480)*scl,
                     (52+55)*scl]).add(t)
     return t
 
@@ -4969,16 +4966,16 @@ if __name__ == '__main__':
                         #SCREEN_HINGE,
                         #FRICTION_HINGE1,
                         #FRICTION_HINGE2,
-                        SCREEN_BACK_EDGE,
+                        #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
-                        #PCB2,
+                        PCB1,
+                        PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
