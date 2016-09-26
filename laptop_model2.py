@@ -134,7 +134,7 @@ lcd_ext_rot_angle=250
 lcd_outer_rad = lcd_hinge_inner_rad+bwid
 lcd_end_ht = 72
 lcd_end_offs = 20
-pcb3_lock_offs = 839+15
+pcb3_lock_offs = 1269+15
 kbd_numpad_indent = 79
 lcd_panel_offs = -10
 hinge_outer_rad=38.0 + 15
@@ -4436,9 +4436,28 @@ def pcb2(scl):
 
 def pcb3(scl):
 
-    c = cube([327.66*scl, 849.63*scl, (pcbthick)*scl])
-    c = translate(v=[(front_top_width+25)*scl, 0, (55+26)*scl]).add(c)
-    return c
+    u = union()
+
+    # main board
+    c = cube([327.66*scl, 1270*scl, (pcbthick)*scl])
+    u.add(c)
+
+    # PJ-018H-SMT
+    c = cube([93*scl, 80*scl, (50)*scl])
+    u.add(translate(v=[186.7*scl, 4.064*scl, -50*scl]).add(c))
+
+    # SW1
+    c = cube([50*scl, 33*scl, (50)*scl])
+    u.add(translate(v=[67.5*scl, 14.9*scl, -50*scl]).add(c))
+
+    # Battery Connector
+    c = cube([67.4*scl, 100*scl, (50)*scl])
+    u.add(translate(v=[103*scl, 555*scl, -50*scl]).add(c))
+
+    u = rotate([180, 0, 0]).add(u)
+
+    return translate(v=[(front_top_width+25)*scl, 1270*scl,
+                        (55+26+pcbthick)*scl]).add(u)
 
 
 def pcb1(scl):
