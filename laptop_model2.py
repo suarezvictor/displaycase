@@ -25,7 +25,7 @@ pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = LEFTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
 
 BATTERY = 0x1
 KEYBOARD = 0x2
@@ -4646,6 +4646,7 @@ def create_laptop(t, scl, part, angle):
         if mirroring & RIGHTPART:
             se = base_end(scl, base_end_ht, kbd_numpad_indent)
             m = mirror_part(se, scl, total_width+10)
+            m = translate(v=[0, 0*scl, 55*scl]).add(m)
             b.add(m)
 
     base_adjust_ht = base_end_ht-10
@@ -4960,7 +4961,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        #BASE_END,
+                        BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -4969,19 +4970,19 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        PCB1,
+                        BASE_FRONT_TOP,
+                        FRONT_KBD_TRAY,
+                        #PCB1,
                         PCB2,
-                        #PCB3,
+                        PCB3,
                         TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        #PCB3_SUPPORT,
-                        #BATTERY_SUPPORT1,
+                        PCB3_SUPPORT,
+                        BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
