@@ -31,7 +31,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = 0 # BATTERY 
+add_internal_parts = BATTERY 
 
 test = False
 single = True
@@ -4453,6 +4453,14 @@ def pcb3(scl):
     # Battery Connector
     c = cube([67.4*scl, 100*scl, (50)*scl])
     u.add(translate(v=[103*scl, 555*scl, -50*scl]).add(c))
+
+    # To PCB1
+    c = cube([153*scl, 64*scl, (34)*scl])
+    u.add(translate(v=[31.0*scl, 905.5*scl, -34*scl]).add(c))
+
+    # To PCB2
+    c = cube([142*scl, 47*scl, (34)*scl])
+    u.add(translate(v=[37.0*scl, 1154.0*scl, -34*scl]).add(c))
 
     u = rotate([180, 0, 0]).add(u)
 
