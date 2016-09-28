@@ -1210,11 +1210,11 @@ def pcb3_support(scl, ht):
     v += translate([0*scl, 0*scl, 24*scl]).add(c)
 
     u += translate([25*scl, 0, 0]).add(v)
-    u += translate([340*scl, 0, 0]).add(v)
+    u += translate([215*scl, 0, 0]).add(v)
 
     # end-stop for pcb, extends down to base panel
     c = cube([(20)*scl, (ht+20)*scl, (boxheight-30)*scl])
-    u += translate([365*scl, 0*scl, 0]).add(c)
+    u += translate([225*scl, 0*scl, 0]).add(c)
     
     # other end-stop for pcb
     c = cube([(20)*scl, 21*scl, (39)*scl])
@@ -4461,6 +4461,10 @@ def pcb3(scl):
     # To PCB2
     c = cube([142*scl, 47*scl, (34)*scl])
     u.add(translate(v=[37.0*scl, 1154.0*scl, -34*scl]).add(c))
+
+    # cutout
+    c = cube([300*scl, 100*scl, (pcbthick+2)*scl])
+    u -= translate(v=[175*scl, 1250*scl, -1*scl]).add(c)
 
     u = rotate([180, 0, 0]).add(u)
 
