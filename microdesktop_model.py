@@ -48,21 +48,10 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1630*scl, 1255*scl, (pcbthick)*scl])
+    b = cube([1144*scl, 841*scl, (pcbthick)*scl])
     pcb += b
     b = cube([521*scl, 1200*scl, (30)*scl])
-    b = translate([(-1)*scl, 245*scl, -10*scl]).add(b)
-    pcb -= b
-    # extra small cutout to fit pcb1_support at corner
-    b = cube([80*scl, 280*scl, (30)*scl])
-    b = translate([(510)*scl, (1090)*scl, -10*scl]).add(b)
-    pcb -= b
-    b = cube([835*scl, (101)*scl, 30*scl])
-    b = translate(v=[(470)*scl, (-1)*scl, (-10)*scl]).add(b)
-    pcb -= b
-    # cutout around USB connector
-    b = cube([483*scl, 25*scl, (30)*scl])
-    b = translate([(-1)*scl, (-1)*scl, -10*scl]).add(b)
+    b = translate([(947.8)*scl, 688*scl, -10*scl]).add(b)
     pcb -= b
 
     r = translate([(0)*scl, 15*scl, 0]).add(pcb)
@@ -78,55 +67,41 @@ def pcb1(scl):
     b = cube([900*scl, 100*scl, (60)*scl])
     b = translate([(55)*scl, -1*scl,
                 (-1)*scl]).add(b)
+    s = rotate([0,180,90]).add(s)
+    s = translate([(555+590)*scl, (725+125)*scl,
+                (74)*scl]).add(s)
     s -= b
 
-    cpu_offs = 590
-    r = translate([(cpu_offs)*scl, 0*scl,
-                (-58)*scl]).add(s)
-    t.add(r)
+    t.add(s)
 
     # EOMA68 CPU Card
     card = import_stl(filename = "eoma68.stl")
-    r = rotate([90,180,180]).add(card)
-    r = translate([(600+cpu_offs)*scl, 0*scl,
-                (-19)*scl]).add(r)
+    r = rotate([90,180,270]).add(card)
+    r = translate([(1140)*scl, 690*scl,
+                (50)*scl]).add(r)
     t.add(r)
 
     # Micro SD
     j = cube([165.0*scl, 151.1*scl, (18)*scl])
-    r = translate([(1440)*scl, 0*scl,
+    r = translate([(980)*scl, 200*scl,
                 (-18)*scl]).add(j)
-    t.add(r)
-
-    # LVDS IC
-    j = cube([141*scl, 83*scl, (12)*scl])
-    r = translate([(1040)*scl, 1000*scl,
-                (-12)*scl]).add(j)
-    t.add(r)
-
-    # Headphone jack
-    j = union()
-    c = cube([100*scl, 100*scl, (1)*scl])
-    c = translate([(0)*scl, 40*scl, (-1)*scl]).add(c)
-    j += c
-    c = cube([50*scl, 120*scl, (52)*scl])
-    c = translate([(25)*scl, 20*scl, (-52)*scl]).add(c)
-    j += c
-    c = cylinder(r=50/2.*scl, h=40*scl, segments=50, center=True)
-    c = rotate([90, 0, 0]).add(c)
-    c = translate([(50)*scl, 20*scl, (-20)*scl]).add(c)
-    j += c
-    r = translate([(1320)*scl, 0*scl,
-                (0)*scl]).add(j)
     t.add(r)
 
     # USB x 2
     u = cube([132*scl, 137*scl, (66.5)*scl])
-    r = translate([(40)*scl, 130*scl, (-66.5)*scl]).add(u)
+    r = translate([(0)*scl, 678*scl, (pcbthick)*scl]).add(u)
     t.add(r)
-    r = translate([(185)*scl, 0*scl, (-66.5)*scl]).add(u)
+    r = translate([(0)*scl, 502*scl, (pcbthick)*scl]).add(u)
     t.add(r)
-    r = translate([(330)*scl, 130*scl, (-66.5)*scl]).add(u)
+
+    # VGA
+    u = cube([132*scl, 310*scl, (90)*scl])
+    r = translate([(0)*scl, 166*scl, (pcbthick)*scl]).add(u)
+    t.add(r)
+
+    # DC
+    u = cube([144*scl, 90*scl, (110)*scl])
+    r = translate([(0)*scl, 26*scl, (pcbthick)*scl]).add(u)
     t.add(r)
 
     v = union()
