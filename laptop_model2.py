@@ -31,7 +31,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = BATTERY 
+add_internal_parts = 0#BATTERY 
 
 test = False
 single = True
@@ -5001,19 +5001,19 @@ if __name__ == '__main__':
                         #SCREEN_BACK_EDGE,
                         #SCREEN_FRONT_EDGE,
                         #SCREEN_MID,
-                        BASE_FRONT_TOP,
-                        FRONT_KBD_TRAY,
+                        #BASE_FRONT_TOP,
+                        #FRONT_KBD_TRAY,
                         #PCB1,
-                        PCB2,
-                        PCB3,
-                        TPANEL_MID,
-                        BASE_MID,
+                        #PCB2,
+                        #PCB3,
+                        #TPANEL_MID,
+                        #BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
                         #PCB1_SUPPORT,
-                        PCB3_SUPPORT,
-                        BATTERY_SUPPORT1,
+                        #PCB3_SUPPORT,
+                        #BATTERY_SUPPORT1,
                         #COMPARTMENT_LID,
                         #COMPARTMENT_LOCKIN,
                         #COMPARTMENT_LOCKIN_CAPTURE,
