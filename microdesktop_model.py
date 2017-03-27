@@ -110,6 +110,35 @@ def pcb1(scl):
 
     return t
 
+def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
+    """
+    http://mymathforum.com/algebra/21368-find-equation-circle-given-two-points-arc-angle.html
+    """
+    xd = xa - xb
+    yd = ya - yb
+    d2 = xd*xd+yd*yd
+
+    d = sqrt(d2)
+    r = sqrt(d2 / (1 - math.cos(angle)))
+    
+    xm = (xd/2.0) + xa
+    ym = (yd/2.0) + ya
+ 
+    a = sqrt(r*r - d2/4)
+
+    if xd > yd:
+        m = xd / yd
+    else:
+        m = yd / xd
+
+    a1 = a / sqrt(m*m + 1)
+    a2 = m * a1
+
+    if xd > yd:
+        return xm + a1*x1, ym + a2*y1
+    else:
+        return xm + a2*x1, ym + a1*y1
+
 
 def create_microdesktop(t, scl, part):
     b = union()
