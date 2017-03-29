@@ -12,6 +12,7 @@
     * move left keyboard lock on right front_kbd_tray, keyboard jamming
 """
 
+import sdxf
 import time
 import itertools
 from pyopenscad import *
@@ -41,6 +42,119 @@ cutdown = False
 revision_1_pcb = True
 
 PCB1 = 1
+LAYER0     = 6
+LAYER1_TOP = 2
+LAYER2_TOP = 3
+LAYER3_TOP = 4
+LAYER4_TOP = 5
+LAYER5_TOP = 7
+LAYER2_BOT = 8
+LAYER3_BOT = 9
+LAYER6     = 10
+LAYER7     = 11
+
+TOP=0x1
+BOTTOM=0x2
+
+md_w = 1144
+md_h = 841
+boxthick = 100
+
+def create_top_line_outer(scl, downtoleft, downtoright, gap):
+    tlist = []
+    tlist.append((0      , (boxthick+md_h-downtoleft)*scl))
+    tlist.append((0, (boxthick*2+md_h)*scl))
+    tlist.append(((md_w+boxthick*2)*scl, (boxthick*2+md_h)*scl))
+    tlist.append(((md_w+boxthick*2)*scl, (boxthick+md_h-downtoright)*scl))
+
+    return tlist
+
+def create_top_line_inner(scl, downtoleft, downtoright, gap):
+    tlist = []
+    tlist.append(((md_w+boxthick)*scl, (boxthick+md_h-downtoright)*scl))
+    tlist.append(((md_w+boxthick)*scl, (boxthick+md_h)*scl))
+    tlist.append((boxthick*scl      , (boxthick+md_h)*scl))
+    tlist.append((boxthick*scl, (boxthick+md_h-downtoleft)*scl))
+
+    return tlist
+
+def create_bottom_line_outer(scl, uptoleft, uptoright, gap):
+    tlist = []
+    tlist.append(((md_w+boxthick*2)*scl, (boxthick+uptoright)*scl))
+    tlist.append(((md_w+boxthick*2)*scl, (0)*scl))
+    tlist.append((0, (0)*scl))
+    tlist.append((0      , (boxthick+uptoleft)*scl))
+
+    return tlist
+
+def create_bottom_line_inner(scl, uptoleft, uptoright, gap):
+    tlist = []
+    tlist.append((boxthick*scl, (boxthick+uptoleft)*scl))
+    tlist.append((boxthick*scl      , (boxthick)*scl))
+    tlist.append(((md_w+boxthick)*scl, (boxthick)*scl))
+    tlist.append(((md_w+boxthick)*scl, (boxthick+uptoright)*scl))
+
+    return tlist
+
+def create_layer(scl, layer, topbot, gap):
+
+    if topbot & TOP:
+        if layer == 0:
+            tlisti = create_bottom_line_outer(scl, 0, 0, gap)
+            tlisto = create_top_line_outer(scl, 800, 500, gap)
+        if layer == 1:
+            tlisti = create_top_line_inner(scl, 700, 500, gap)
+            tlisto = create_top_line_outer(scl, 700, 500, gap)
+            tlisti += create_bottom_line_inner(scl, 60, 180, gap)
+            tlisti += create_bottom_line_outer(scl, 60, 180, gap)
+        elif layer == 2 or layer == 3:
+            tlisti = create_top_line_inner(scl, 35, 50, gap)
+            tlisto = create_top_line_outer(scl, 35, 50, gap)
+        elif layer == 4:
+            tlisti = create_top_line_inner(scl, 375, 800, gap)
+            tlisto = create_top_line_outer(scl, 375, 800, gap)
+            tlisto += create_bottom_line_outer(scl, 7, 180, gap)
+            tlisto += create_bottom_line_inner(scl, 7, 180, gap)
+        elif layer == 5:
+            tlisti = create_top_line_inner(scl, 735, 800, gap)
+            tlisto = create_top_line_outer(scl, 735, 800, gap)
+            tlisto += create_bottom_line_outer(scl, 7, 180, gap)
+            tlisto += create_bottom_line_inner(scl, 7, 180, gap)
+        elif layer == 6:
+            tlisti = create_top_line_inner(scl, 7, 100, gap)
+            tlisto = create_bottom_line_outer(scl, 7, 180, gap)
+            tlisto += create_top_line_outer(scl, 7, 100, gap)
+            tlisti += create_bottom_line_inner(scl, 7, 180, gap)
+    elif topbot & BOTTOM:
+        if layer == 2 or layer == 3:
+            tlisto = create_bottom_line_outer(scl, 7, 110, gap)
+            tlisti = create_bottom_line_inner(scl, 7, 110, gap)
+
+    d = sdxf.Drawing()
+    if layer == 6:
+        d.append(sdxf.PolyLine(points=tlisto,closed=1,color=1))
+        d.append(sdxf.PolyLine(points=tlisti,closed=1,color=1))
+    else:
+        d.append(sdxf.PolyLine(points=tlisto+tlisti,closed=1,color=1))
+
+    if topbot & TOP:
+        for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
+                  ((boxthick+boxthick/2.0+md_w)*scl,
+                   (md_h+boxthick+boxthick/2.0)*scl),):
+            d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+
+    if topbot & BOTTOM:
+        for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
+                  ((boxthick+boxthick/2.0+md_w)*scl, boxthick/2.0*scl),):
+            d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+
+    fname = 'microdesktopcase%d.dxf' % layer
+    d.saveas(fname)
+
+    t = union()
+    t.add(dxf_linear_extrude(file=fname, height=3))
+
+    return t
 
 def pcb1(scl):
 
@@ -48,7 +162,7 @@ def pcb1(scl):
 
     # PCB
     pcb = union()
-    b = cube([1144*scl, 841*scl, (pcbthick)*scl])
+    b = cube([md_w*scl, md_h*scl, (pcbthick)*scl])
     pcb += b
     b = cube([521*scl, 1200*scl, (30)*scl])
     b = translate([(947.8)*scl, 688*scl, -10*scl]).add(b)
@@ -148,6 +262,84 @@ def create_microdesktop(t, scl, part):
         m = translate(v=[0, -20*scl,0]).add(se)
         b.add(m)
 
+    elif part == LAYER0:
+
+        gap = 4
+        se = create_layer(scl, 0, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 10.6]).add(se)
+        b.add(m)
+
+    elif part == LAYER1_TOP:
+
+        gap = 4
+        se = create_layer(scl, 1, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        b.add(m)
+
+    elif part == LAYER2_TOP:
+
+        offs = 3
+        gap = 4
+        se = create_layer(scl, 2, TOP, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER2_BOT:
+
+        offs = 6
+        gap = 4
+        se = create_layer(scl, 2, BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER3_TOP:
+
+        offs = 6
+        gap = 4
+        se = create_layer(scl, 3, TOP, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER3_BOT:
+
+        offs = 3
+        gap = 4
+        se = create_layer(scl, 3, TOP, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER4_TOP:
+
+        offs = 9
+        gap = 4
+        se = create_layer(scl, 4, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER5_TOP:
+
+        offs = 12
+        gap = 4
+        se = create_layer(scl, 5, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER6:
+
+        offs = 15
+        gap = 4
+        se = create_layer(scl, 6, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        b.add(m)
+
+    elif part == LAYER7:
+
+        offs = 21
+        gap = 4
+        se = create_layer(scl, 0, TOP|BOTTOM, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 10.6+offs]).add(se)
+        b.add(m)
+
     t.add(b)
 
 
@@ -156,6 +348,16 @@ if __name__ == '__main__':
     u = union()
     for i in [
                 PCB1,
+                LAYER0,
+                LAYER1_TOP,
+                LAYER2_TOP,
+                LAYER3_TOP,
+                LAYER2_BOT,
+                LAYER3_BOT,
+                LAYER4_TOP,
+                LAYER5_TOP,
+                LAYER6,
+                LAYER7,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
