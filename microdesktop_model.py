@@ -51,7 +51,6 @@ LAYER5_TOP = 7
 LAYER2_BOT = 8
 LAYER3_BOT = 9
 LAYER6     = 10
-LAYER7     = 11
 
 TOP=0x1
 BOTTOM=0x2
@@ -137,18 +136,21 @@ def create_layer(scl, layer, topbot, gap):
     else:
         d.append(sdxf.PolyLine(points=tlisto+tlisti,closed=1,color=1))
 
+    tb = ''
     if topbot & TOP:
+        tb += 't'
         for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
                   ((boxthick+boxthick/2.0+md_w)*scl,
                    (md_h+boxthick+boxthick/2.0)*scl),):
             d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
     if topbot & BOTTOM:
+        tb += 'b'
         for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
                   ((boxthick+boxthick/2.0+md_w)*scl, boxthick/2.0*scl),):
             d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
-    fname = 'microdesktopcase%d.dxf' % layer
+    fname = 'microdesktopcase_%s_%d.dxf' % (tb, layer)
     d.saveas(fname)
 
     t = union()
@@ -286,7 +288,7 @@ def create_microdesktop(t, scl, part):
 
     elif part == LAYER2_BOT:
 
-        offs = 6
+        offs = 3
         gap = 4
         se = create_layer(scl, 2, BOTTOM, gap)
         m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
@@ -302,9 +304,9 @@ def create_microdesktop(t, scl, part):
 
     elif part == LAYER3_BOT:
 
-        offs = 3
+        offs = 6
         gap = 4
-        se = create_layer(scl, 3, TOP, gap)
+        se = create_layer(scl, 3, BOTTOM, gap)
         m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
@@ -328,16 +330,8 @@ def create_microdesktop(t, scl, part):
 
         offs = 15
         gap = 4
-        se = create_layer(scl, 6, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER7:
-
-        offs = 21
-        gap = 4
         se = create_layer(scl, 0, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 10.6+offs]).add(se)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     t.add(b)
@@ -357,7 +351,6 @@ if __name__ == '__main__':
                 LAYER4_TOP,
                 LAYER5_TOP,
                 LAYER6,
-                LAYER7,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
