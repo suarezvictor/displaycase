@@ -51,6 +51,7 @@ LAYER5_TOP = 7
 LAYER2_BOT = 8
 LAYER3_BOT = 9
 LAYER6     = 10
+CORNER1     = 11
 
 TOP=0x1
 BOTTOM=0x2
@@ -58,7 +59,39 @@ BOTTOM=0x2
 md_w = 1144
 md_h = 841
 boxthick = 100
+boxthick = 70
 
+def create_corner1(scl, gap):
+    t = union()
+
+    u = union()
+
+    b = curvebox(scl, 130, 78, 150, 30)
+    u.add(b)
+
+    c = cylinder(h=200*scl, r=17.5*scl, segments=30)
+    u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+    u -= translate([(boxthick+12)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+
+    d = cube([50*scl, 19*scl, 200*scl])
+    d = translate([(130-20)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([19*scl, 50*scl, 200*scl])
+    d = translate([(boxthick-gap-15)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([1500*scl, 500*scl, 19*scl])
+    d = translate([(boxthick-gap)*scl, (boxthick-gap)*scl, 13*scl]).add(d)
+
+    u -= d
+
+    t.add(u)
+
+    return t
+    
 def create_top_line_outer(scl, downtoleft, downtoright, gap):
     tlist = []
     tlist.append((0      , (boxthick+md_h-downtoleft)*scl))
@@ -154,7 +187,7 @@ def create_layer(scl, layer, topbot, gap):
     d.saveas(fname)
 
     t = union()
-    t.add(dxf_linear_extrude(file=fname, height=3))
+    t.add(dxf_linear_extrude(file=fname, height=2))
 
     return t
 
@@ -261,14 +294,21 @@ def create_microdesktop(t, scl, part):
 
     if part == PCB1:
         se = pcb1(scl)
-        m = translate(v=[0, -20*scl,0]).add(se)
+        m = translate(v=[(boxthick*2-200)*scl, (-20+boxthick-100)*scl,0]).add(se)
         b.add(m)
 
     elif part == LAYER0:
 
         gap = 4
         se = create_layer(scl, 0, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 10.6]).add(se)
+        m = translate(v=[19+boxthick*scl, -9.5, 11.6]).add(se)
+        b.add(m)
+
+    elif part == CORNER1:
+
+        gap = 4
+        se = create_corner1(scl, gap)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
     elif part == LAYER1_TOP:
@@ -343,13 +383,7 @@ if __name__ == '__main__':
     for i in [
                 PCB1,
                 LAYER0,
-                LAYER1_TOP,
-                LAYER2_TOP,
-                LAYER3_TOP,
-                LAYER2_BOT,
-                LAYER3_BOT,
-                LAYER4_TOP,
-                LAYER5_TOP,
+                CORNER1,
                 LAYER6,
             ]:
         t = union()
