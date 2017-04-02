@@ -53,6 +53,8 @@ LAYER3_BOT = 9
 LAYER6     = 10
 CORNER1     = 11
 CORNER2     = 12
+CORNER3     = 13
+CORNER4     = 14
 
 TOP=0x1
 BOTTOM=0x2
@@ -75,7 +77,7 @@ def create_corner2(scl, gap):
     u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
 
     d = cube([50*scl, 19*scl, 200*scl])
-    d = translate([(140-15)*scl, (88-19-(boxthick-gap-18))*scl, -1*scl]).add(d)
+    d = translate([(140-15)*scl, (88-19-(boxthick/2-gap-15))*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -108,7 +110,7 @@ def create_corner1(scl, gap):
     u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
 
     d = cube([50*scl, 19*scl, 200*scl])
-    d = translate([(140-15)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
+    d = translate([(140-15)*scl, (boxthick/2-gap-15)*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -353,6 +355,26 @@ def create_microdesktop(t, scl, part):
                             13.6]).add(se)
         b.add(m)
 
+    elif part == CORNER3:
+
+        gap = 4
+        se = create_corner1(scl, gap)
+        se = rotate([0,0,180]).add(se)
+        se = translate(v=[(md_w+boxthick*2)*scl,
+                          (md_h+boxthick*2)*scl, 0]).add(se)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        b.add(m)
+
+    elif part == CORNER4:
+
+        gap = 4
+        se = create_corner2(scl, gap)
+        se = rotate([0,0,180]).add(se)
+        se = translate(v=[(md_w+boxthick*2)*scl,
+                          (boxthick*1+gap*2)*scl, 0]).add(se)
+        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        b.add(m)
+
     elif part == LAYER1_TOP:
 
         gap = 4
@@ -427,7 +449,9 @@ if __name__ == '__main__':
                 LAYER0,
                 CORNER1,
                 CORNER2,
-                LAYER6,
+                CORNER3,
+                CORNER4,
+                #LAYER6,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
