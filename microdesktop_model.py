@@ -56,6 +56,7 @@ CORNER2     = 12
 CORNER3     = 13
 CORNER4     = 14
 FRONT_PLATE = 15
+BACK_PLATE = 16
 
 TOP=0x1
 BOTTOM=0x2
@@ -142,12 +143,69 @@ def create_corner1(scl, gap, pcbcut=False):
 
     return t
     
+def create_back(scl, gap):
+
+    tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
+
+    d = sdxf.Drawing()
+    d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
+
+    pcmcia = [(0, 0), (5.5, 0), (5.5, 56), (0, 56)]
+
+    posx, posy = (28*scl, 174*scl,)
+    l = []
+    for p1, p2 in pcmcia:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    fname = 'microdesktopcase_back.dxf'
+    d.saveas(fname)
+
+    t = union()
+    d = dxf_linear_extrude(file=fname, height=1.5)
+    d = rotate([0, -90, 0]).add(d)
+    t.add(d)
+
+    return t
+
 def create_front(scl, gap):
 
     tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
 
     d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
+
+    usb = [(0, 0), (6.8, 0), (6.8, 14), (0, 14)]
+
+    for posx, posy in [(28*scl, 661.5*scl,), (28*scl, 486*scl,)]:
+        l = []
+        for p1, p2 in usb:
+            l.append((p1+posx, p2+posy,))
+        d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    vga = [(0, 0), (8.8, 0), (8.8, 30), (0, 30)]
+
+    posx, posy = (28*scl, 157*scl,)
+    l = []
+    for p1, p2 in vga:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    dc = [(0, 0), (10, 0), (10, 7), (0, 7)]
+
+    posx, posy = (28*scl, 20*scl,)
+    l = []
+    for p1, p2 in dc:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    led = [(0, 0), (1, 0), (1, 2), (0, 2)]
+
+    posx, posy = (28*scl, 115*scl,)
+    l = []
+    for p1, p2 in led:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     fname = 'microdesktopcase_front.dxf'
     d.saveas(fname)
@@ -364,6 +422,14 @@ def create_microdesktop(t, scl, part):
         m = translate(v=[(indent*2-200)*scl, (-20+boxthick-100)*scl,0]).add(se)
         b.add(m)
 
+    elif part == BACK_PLATE:
+
+        gap = 4
+        se = create_back(scl, gap)
+        m = translate(v=[24.7+(indent+md_w)*scl,
+                        (-9.5+boxthick*scl), 13.6]).add(se)
+        b.add(m)
+
     elif part == FRONT_PLATE:
 
         gap = 4
@@ -491,6 +557,7 @@ if __name__ == '__main__':
                 CORNER4,
                 #LAYER6,
                 FRONT_PLATE,
+                BACK_PLATE,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
@@ -503,8 +570,8 @@ if __name__ == '__main__':
             c = [0.3, 0.8, 0.3, 0.25]
         elif i == -4: # pcb3
             c = [0.1, 0.8, 0.3, 0.25]
-        #elif i == CASE_CLASP: # pcb1
-            #c = [0.3, 0.8, 0.3, 0.2]
+        elif i == FRONT_PLATE:
+            c = [0.3, 0.8, 0.3, 0.5]
         else:
             c = [0.3, 0.5, 0.8, 0.5]
         c = color(c)
