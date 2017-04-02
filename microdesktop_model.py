@@ -55,14 +55,16 @@ CORNER1     = 11
 CORNER2     = 12
 CORNER3     = 13
 CORNER4     = 14
+FRONT_PLATE = 15
 
 TOP=0x1
 BOTTOM=0x2
 
 md_w = 1144
 md_h = 841
-boxthick = 100
+md_d = 150
 boxthick = 80
+indent = 40
 
 def create_corner2(scl, gap):
     t = union()
@@ -82,13 +84,13 @@ def create_corner2(scl, gap):
     u -= d
 
     d = cube([19*scl, 50*scl, 200*scl])
-    d = translate([(boxthick-gap-15)*scl, (88-50-(boxthick-gap))*scl,
+    d = translate([(indent-gap-15)*scl, (88-50-(boxthick-gap))*scl,
                     -1*scl]).add(d)
 
     u -= d
 
     d = cube([100*scl, 100*scl, 19*scl])
-    d = translate([(boxthick-gap)*scl, (88-100-(boxthick-gap))*scl,
+    d = translate([(indent-gap)*scl, (88-100-(boxthick-gap))*scl,
                     13*scl]).add(d)
 
     u -= d
@@ -97,13 +99,25 @@ def create_corner2(scl, gap):
 
     return t
     
-def create_corner1(scl, gap):
+def create_corner1(scl, gap, pcbcut=False):
     t = union()
 
     u = union()
 
+    
     b = curvebox(scl, 140, 88, 150, 25)
     u.add(b)
+
+    if pcbcut:
+
+        d = cube([300*scl, 100*scl, 65*scl])
+        d = translate([-1*scl, (88-gap)*scl, 27*scl]).add(d)
+
+        u -= d
+
+        b = curvebox(scl, 180, 35, 45, 15)
+        b = translate([100*scl, 53*scl, 0*scl]).add(b)
+        u += b
 
     c = cylinder(h=200*scl, r=17.5*scl, segments=30)
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
@@ -115,12 +129,12 @@ def create_corner1(scl, gap):
     u -= d
 
     d = cube([19*scl, 50*scl, 200*scl])
-    d = translate([(boxthick-gap-15)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
+    d = translate([(indent-gap-15)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
 
     u -= d
 
-    d = cube([1500*scl, 500*scl, 19*scl])
-    d = translate([(boxthick-gap)*scl, (boxthick-gap)*scl, 13*scl]).add(d)
+    d = cube([300*scl, 100*scl, 19*scl])
+    d = translate([(230)*scl, (boxthick-gap)*scl, 13*scl]).add(d)
 
     u -= d
 
@@ -128,28 +142,45 @@ def create_corner1(scl, gap):
 
     return t
     
+def create_front(scl, gap):
+
+    tlist = [(0, 0), (md_d, 0), (md_d, md_h), (0, md_h)]
+
+    d = sdxf.Drawing()
+    d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
+
+    fname = 'microdesktopcase_front.dxf'
+    d.saveas(fname)
+
+    t = union()
+    d = dxf_linear_extrude(file=fname, height=2)
+    d = rotate([0, 90, 0]).add(d)
+    t.add(d)
+
+    return t
+
 def create_top_line_outer(scl, downtoleft, downtoright, gap):
     tlist = []
     tlist.append((0      , (boxthick+md_h-downtoleft)*scl))
     tlist.append((0, (boxthick*2+md_h)*scl))
-    tlist.append(((md_w+boxthick*2)*scl, (boxthick*2+md_h)*scl))
-    tlist.append(((md_w+boxthick*2)*scl, (boxthick+md_h-downtoright)*scl))
+    tlist.append(((md_w+indent*2)*scl, (boxthick*2+md_h)*scl))
+    tlist.append(((md_w+indent*2)*scl, (boxthick+md_h-downtoright)*scl))
 
     return tlist
 
 def create_top_line_inner(scl, downtoleft, downtoright, gap):
     tlist = []
-    tlist.append(((md_w+boxthick)*scl, (boxthick+md_h-downtoright)*scl))
-    tlist.append(((md_w+boxthick)*scl, (boxthick+md_h)*scl))
-    tlist.append((boxthick*scl      , (boxthick+md_h)*scl))
-    tlist.append((boxthick*scl, (boxthick+md_h-downtoleft)*scl))
+    tlist.append(((md_w+indent)*scl, (boxthick+md_h-downtoright)*scl))
+    tlist.append(((md_w+indent)*scl, (boxthick+md_h)*scl))
+    tlist.append((indent*scl      , (boxthick+md_h)*scl))
+    tlist.append((indent*scl, (boxthick+md_h-downtoleft)*scl))
 
     return tlist
 
 def create_bottom_line_outer(scl, uptoleft, uptoright, gap):
     tlist = []
-    tlist.append(((md_w+boxthick*2)*scl, (boxthick+uptoright)*scl))
-    tlist.append(((md_w+boxthick*2)*scl, (0)*scl))
+    tlist.append(((md_w+indent*2)*scl, (boxthick+uptoright)*scl))
+    tlist.append(((md_w+indent*2)*scl, (0)*scl))
     tlist.append((0, (0)*scl))
     tlist.append((0      , (boxthick+uptoleft)*scl))
 
@@ -157,10 +188,10 @@ def create_bottom_line_outer(scl, uptoleft, uptoright, gap):
 
 def create_bottom_line_inner(scl, uptoleft, uptoright, gap):
     tlist = []
-    tlist.append((boxthick*scl, (boxthick+uptoleft)*scl))
-    tlist.append((boxthick*scl      , (boxthick)*scl))
-    tlist.append(((md_w+boxthick)*scl, (boxthick)*scl))
-    tlist.append(((md_w+boxthick)*scl, (boxthick+uptoright)*scl))
+    tlist.append((indent*scl, (boxthick+uptoleft)*scl))
+    tlist.append((indent*scl      , (boxthick)*scl))
+    tlist.append(((md_w+indent)*scl, (boxthick)*scl))
+    tlist.append(((md_w+indent)*scl, (boxthick+uptoright)*scl))
 
     return tlist
 
@@ -209,14 +240,14 @@ def create_layer(scl, layer, topbot, gap):
     if topbot & TOP:
         tb += 't'
         for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
-                  ((boxthick+boxthick/2.0+md_w)*scl,
+                  ((indent+md_w)*scl,
                    (md_h+boxthick+boxthick/2.0)*scl),):
             d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
     if topbot & BOTTOM:
         tb += 'b'
         for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
-                  ((boxthick+boxthick/2.0+md_w)*scl, boxthick/2.0*scl),):
+                  ((indent+md_w)*scl, boxthick/2.0*scl),):
             d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
     fname = 'microdesktopcase_%s_%d.dxf' % (tb, layer)
@@ -330,39 +361,39 @@ def create_microdesktop(t, scl, part):
 
     if part == PCB1:
         se = pcb1(scl)
-        m = translate(v=[(boxthick*2-200)*scl, (-20+boxthick-100)*scl,0]).add(se)
+        m = translate(v=[(indent*2-200)*scl, (-20+boxthick-100)*scl,0]).add(se)
         b.add(m)
 
     elif part == LAYER0:
 
         gap = 4
         se = create_layer(scl, 0, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 11.6]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 11.6]).add(se)
         b.add(m)
 
     elif part == CORNER1:
 
         gap = 4
         se = create_corner1(scl, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
     elif part == CORNER2:
 
         gap = 4
         se = create_corner2(scl, gap)
-        m = translate(v=[19+boxthick*scl, -9.5+(md_h+boxthick-8)*scl,
+        m = translate(v=[19+indent*scl, -9.5+(md_h+boxthick-8)*scl,
                             13.6]).add(se)
         b.add(m)
 
     elif part == CORNER3:
 
         gap = 4
-        se = create_corner1(scl, gap)
+        se = create_corner1(scl, gap, True)
         se = rotate([0,0,180]).add(se)
-        se = translate(v=[(md_w+boxthick*2)*scl,
+        se = translate(v=[(md_w+indent*2)*scl,
                           (md_h+boxthick*2)*scl, 0]).add(se)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
     elif part == CORNER4:
@@ -370,16 +401,16 @@ def create_microdesktop(t, scl, part):
         gap = 4
         se = create_corner2(scl, gap)
         se = rotate([0,0,180]).add(se)
-        se = translate(v=[(md_w+boxthick*2)*scl,
+        se = translate(v=[(md_w+indent*2)*scl,
                           (boxthick*1+gap*2)*scl, 0]).add(se)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
     elif part == LAYER1_TOP:
 
         gap = 4
         se = create_layer(scl, 1, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
     elif part == LAYER2_TOP:
@@ -387,7 +418,7 @@ def create_microdesktop(t, scl, part):
         offs = 3
         gap = 4
         se = create_layer(scl, 2, TOP, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER2_BOT:
@@ -395,7 +426,7 @@ def create_microdesktop(t, scl, part):
         offs = 3
         gap = 4
         se = create_layer(scl, 2, BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER3_TOP:
@@ -403,7 +434,7 @@ def create_microdesktop(t, scl, part):
         offs = 6
         gap = 4
         se = create_layer(scl, 3, TOP, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER3_BOT:
@@ -411,7 +442,7 @@ def create_microdesktop(t, scl, part):
         offs = 6
         gap = 4
         se = create_layer(scl, 3, BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER4_TOP:
@@ -419,7 +450,7 @@ def create_microdesktop(t, scl, part):
         offs = 9
         gap = 4
         se = create_layer(scl, 4, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER5_TOP:
@@ -427,7 +458,7 @@ def create_microdesktop(t, scl, part):
         offs = 12
         gap = 4
         se = create_layer(scl, 5, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     elif part == LAYER6:
@@ -435,7 +466,7 @@ def create_microdesktop(t, scl, part):
         offs = 15
         gap = 4
         se = create_layer(scl, 0, TOP|BOTTOM, gap)
-        m = translate(v=[19+boxthick*scl, -9.5, 13.6+offs]).add(se)
+        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     t.add(b)
@@ -446,7 +477,7 @@ if __name__ == '__main__':
     u = union()
     for i in [
                 PCB1,
-                LAYER0,
+                #LAYER0,
                 CORNER1,
                 CORNER2,
                 CORNER3,
