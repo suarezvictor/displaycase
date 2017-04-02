@@ -144,7 +144,7 @@ def create_corner1(scl, gap, pcbcut=False):
     
 def create_front(scl, gap):
 
-    tlist = [(0, 0), (md_d, 0), (md_d, md_h), (0, md_h)]
+    tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
 
     d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
@@ -153,8 +153,8 @@ def create_front(scl, gap):
     d.saveas(fname)
 
     t = union()
-    d = dxf_linear_extrude(file=fname, height=2)
-    d = rotate([0, 90, 0]).add(d)
+    d = dxf_linear_extrude(file=fname, height=1.5)
+    d = rotate([0, -90, 0]).add(d)
     t.add(d)
 
     return t
@@ -364,6 +364,13 @@ def create_microdesktop(t, scl, part):
         m = translate(v=[(indent*2-200)*scl, (-20+boxthick-100)*scl,0]).add(se)
         b.add(m)
 
+    elif part == FRONT_PLATE:
+
+        gap = 4
+        se = create_front(scl, gap)
+        m = translate(v=[22.7+indent*scl, (-9.5+boxthick*scl), 13.6]).add(se)
+        b.add(m)
+
     elif part == LAYER0:
 
         gap = 4
@@ -483,6 +490,7 @@ if __name__ == '__main__':
                 CORNER3,
                 CORNER4,
                 #LAYER6,
+                FRONT_PLATE,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
