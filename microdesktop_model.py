@@ -150,9 +150,25 @@ def create_back(scl, gap):
     d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
-    pcmcia = [(0, 0), (5.5, 0), (5.5, 56), (0, 56)]
+    micro = [(0, 0), (1.7, 0), (1.7, 15), (0, 15)]
 
-    posx, posy = (32*scl, 174*scl,)
+    posx, posy = (0*scl, 185*scl,)
+    l = []
+    for p1, p2 in micro:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    eject = [(0, 0), (9.5, 0), (9.5, 7), (0, 7)]
+
+    posx, posy = (0*scl, 771*scl,)
+    l = []
+    for p1, p2 in eject:
+        l.append((p1+posx, p2+posy,))
+    d.append(sdxf.PolyLine(points=l,closed=1,color=1))
+
+    pcmcia = [(0, 0), (5.2, 0), (5.2, 61), (0, 61)]
+
+    posx, posy = (35*scl, 124*scl,)
     l = []
     for p1, p2 in pcmcia:
         l.append((p1+posx, p2+posy,))
