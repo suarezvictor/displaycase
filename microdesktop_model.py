@@ -52,6 +52,7 @@ LAYER2_BOT = 8
 LAYER3_BOT = 9
 LAYER6     = 10
 CORNER1     = 11
+CORNER2     = 12
 
 TOP=0x1
 BOTTOM=0x2
@@ -59,22 +60,55 @@ BOTTOM=0x2
 md_w = 1144
 md_h = 841
 boxthick = 100
-boxthick = 70
+boxthick = 80
 
+def create_corner2(scl, gap):
+    t = union()
+
+    u = union()
+
+    b = curvebox(scl, 140, 88, 150, 25)
+    u.add(b)
+
+    c = cylinder(h=200*scl, r=17.5*scl, segments=30)
+    u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+    u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+
+    d = cube([50*scl, 19*scl, 200*scl])
+    d = translate([(140-15)*scl, (88-19-(boxthick-gap-18))*scl, -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([19*scl, 50*scl, 200*scl])
+    d = translate([(boxthick-gap-15)*scl, (88-50-(boxthick-gap))*scl,
+                    -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([100*scl, 100*scl, 19*scl])
+    d = translate([(boxthick-gap)*scl, (88-100-(boxthick-gap))*scl,
+                    13*scl]).add(d)
+
+    u -= d
+
+    t.add(u)
+
+    return t
+    
 def create_corner1(scl, gap):
     t = union()
 
     u = union()
 
-    b = curvebox(scl, 130, 78, 150, 30)
+    b = curvebox(scl, 140, 88, 150, 25)
     u.add(b)
 
     c = cylinder(h=200*scl, r=17.5*scl, segments=30)
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
-    u -= translate([(boxthick+12)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+    u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
 
     d = cube([50*scl, 19*scl, 200*scl])
-    d = translate([(130-20)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
+    d = translate([(140-15)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -311,6 +345,14 @@ def create_microdesktop(t, scl, part):
         m = translate(v=[19+boxthick*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
+    elif part == CORNER2:
+
+        gap = 4
+        se = create_corner2(scl, gap)
+        m = translate(v=[19+boxthick*scl, -9.5+(md_h+boxthick-8)*scl,
+                            13.6]).add(se)
+        b.add(m)
+
     elif part == LAYER1_TOP:
 
         gap = 4
@@ -384,6 +426,7 @@ if __name__ == '__main__':
                 PCB1,
                 LAYER0,
                 CORNER1,
+                CORNER2,
                 LAYER6,
             ]:
         t = union()
