@@ -14,7 +14,7 @@
 
 import sdxf
 import time
-import itertools
+import math
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
@@ -57,6 +57,8 @@ CORNER3     = 13
 CORNER4     = 14
 FRONT_PLATE = 15
 BACK_PLATE = 16
+SIDE_PLATE1 = 17
+SIDE_PLATE2 = 18
 
 TOP=0x1
 BOTTOM=0x2
@@ -116,8 +118,8 @@ def create_corner1(scl, gap, pcbcut=False):
 
         u -= d
 
-        b = curvebox(scl, 180, 35, 50, 15)
-        b = translate([100*scl, 53*scl, 0*scl]).add(b)
+        b = curvebox(scl, 160, 32, 50, 12)
+        b = translate([100*scl, 55*scl, 0*scl]).add(b)
         u += b
 
     c = cylinder(h=200*scl, r=17.5*scl, segments=30)
@@ -143,6 +145,39 @@ def create_corner1(scl, gap, pcbcut=False):
 
     return t
     
+def create_side(scl, gap):
+
+    md_w1 = md_w-175#-286
+
+    angle = 19.0
+    rangle = math.radians(angle)
+    a, r, xm, ym = arc_between_points(0, 0, md_w1, 0, rangle, x1=1, y1=1)
+    print md_w1, r, xm, ym
+
+    t = union()
+    #d = dxf_linear_extrude(file=fname, height=1.5)
+    d = touch_arc(r, md_d-gap*2, 15, 0, scl, 0, angle=90-angle, segments=400)
+    d = rotate([0, 0, -angle/2.0]).add(d)
+    d = translate([(ym)*scl, (xm-1)*scl, -gap*scl]).add(d)
+    d = rotate([180, 0, 0]).add(d)
+
+    t.add(d)
+
+    md_w2 = (r+15) * rangle
+    tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_w2*scl), (0, md_w2*scl)]
+
+    d = sdxf.Drawing()
+    d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
+
+    fname = 'microdesktopcase_side.dxf'
+    d.saveas(fname)
+
+    if False: # testing
+        d = dxf_linear_extrude(file=fname, height=1.5)
+        d = rotate([0, -90, 0]).add(d)
+        t.add(d)
+    return t
+
 def create_back(scl, gap):
 
     tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
@@ -404,30 +439,31 @@ def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
     """
     http://mymathforum.com/algebra/21368-find-equation-circle-given-two-points-arc-angle.html
     """
+
     xd = xa - xb
     yd = ya - yb
     d2 = xd*xd+yd*yd
 
-    d = sqrt(d2)
-    r = sqrt(d2 / (1 - math.cos(angle)))
+    d = math.sqrt(d2)
+    r = math.sqrt(d2 / (2*(1 - math.cos(angle))))
     
     xm = (xd/2.0) + xa
     ym = (yd/2.0) + ya
  
-    a = sqrt(r*r - d2/4)
+    a = math.sqrt(r*r - d2/4)
 
     if xd > yd:
         m = xd / yd
     else:
         m = yd / xd
 
-    a1 = a / sqrt(m*m + 1)
+    a1 = a / math.sqrt(m*m + 1)
     a2 = m * a1
 
     if xd > yd:
-        return xm + a1*x1, ym + a2*y1
+        return a, r, xm + a1*x1, ym + a2*y1
     else:
-        return xm + a2*x1, ym + a1*y1
+        return a, r, xm + a2*x1, ym + a1*y1
 
 
 def create_microdesktop(t, scl, part):
@@ -445,6 +481,24 @@ def create_microdesktop(t, scl, part):
         se = create_back(scl, gap)
         m = translate(v=[24.7+(indent+md_w)*scl,
                         (-9.5+boxthick*scl), 13.6]).add(se)
+        b.add(m)
+
+    elif part == SIDE_PLATE1:
+
+        gap = 4
+        se = create_side(scl, gap)
+        se = rotate([0,0,-90]).add(se)
+        m = translate(v=[22.7+(indent+90)*scl,
+                            (-9.5+23*scl), 13.6]).add(se)
+        b.add(m)
+
+    elif part == SIDE_PLATE2:
+
+        gap = 4
+        se = create_side(scl, gap)
+        se = rotate([0,0,90]).add(se)
+        m = translate(v=[22.7+(md_w-(indent+4))*scl,
+                            (-9.5+(md_h+138)*scl), 13.6]).add(se)
         b.add(m)
 
     elif part == FRONT_PLATE:
@@ -575,6 +629,8 @@ if __name__ == '__main__':
                 #LAYER6,
                 FRONT_PLATE,
                 BACK_PLATE,
+                SIDE_PLATE1,
+                SIDE_PLATE2,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
@@ -587,7 +643,7 @@ if __name__ == '__main__':
             c = [0.3, 0.8, 0.3, 0.25]
         elif i == -4: # pcb3
             c = [0.1, 0.8, 0.3, 0.25]
-        elif i in[ FRONT_PLATE, BACK_PLATE]:
+        elif i in[ FRONT_PLATE, BACK_PLATE, SIDE_PLATE1, SIDE_PLATE2]:
             c = [0.3, 0.8, 0.3, 0.5]
         else:
             c = [0.3, 0.5, 0.8, 0.5]
