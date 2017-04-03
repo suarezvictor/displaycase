@@ -214,9 +214,9 @@ def create_back(scl, gap):
         l.append((p1+posx, p2+posy,))
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
-    eject = [(0, 0), (9.5, 0), (9.5, 7), (0, 7)]
+    eject = [(0, 0), (7.5, 0), (7.5, 7), (0, 7)]
 
-    posx, posy = (0*scl, 771*scl,)
+    posx, posy = (25*scl, 771*scl,)
     l = []
     for p1, p2 in eject:
         l.append((p1+posx, p2+posy,))
@@ -362,7 +362,7 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
         if microsd:
             msd_x = 415*scl
             msd_w = 150*scl
-            msd_h = 20*scl
+            msd_h = 30*scl
             h = tlist[-1][0]
             tlist += [(h, msd_x), (h-msd_h, msd_x),
                       (h-msd_h, msd_x-msd_w),
