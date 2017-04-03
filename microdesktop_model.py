@@ -344,6 +344,18 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
         tlist += pts
         tlist += points_arc(r, r, r, 180, 270)
 
+        angle1 = 8.0
+        rangle1 = math.radians(angle1)
+        x1 = 0
+        h = (md_h+boxthick*2)*scl - (8.8)
+        a, r1, xm, ym = arc_between_points(x1, 8.8, x1, h,
+                                           rangle1, x1=-1, y1=1)
+
+        #xm -= md_w1*scl - 14
+        ym += h - (8.8)
+        pts = points_arc(xm, ym, r1, angle1/2+90, -angle1/2+90)
+        tlist += pts
+    
         tlist += points_arc(r, (md_h+boxthick*2)*scl-r, r, 270, 360)
 
         y1 = (md_h+boxthick*2)*scl
