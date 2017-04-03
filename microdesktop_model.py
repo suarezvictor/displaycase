@@ -614,10 +614,8 @@ if __name__ == '__main__':
             c = [0.8, 0.8, 0.3, 0.25]
         elif i == PCB1: # pcb1
             c = [0.8, 0.3, 0.8, 0.5]
-        elif i == -3: # pcb2
-            c = [0.3, 0.8, 0.3, 0.25]
-        elif i == -4: # pcb3
-            c = [0.1, 0.8, 0.3, 0.25]
+        elif i in [LAYER0, LAYER6]:
+            c = [0.9, 0.3, 0.3, 0.5]
         elif i in[ FRONT_PLATE, BACK_PLATE, SIDE_PLATE1, SIDE_PLATE2]:
             c = [0.3, 0.8, 0.3, 0.5]
         else:
