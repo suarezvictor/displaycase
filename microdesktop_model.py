@@ -69,6 +69,27 @@ md_d = 150
 boxthick = 80
 indent = 40
 
+def points_arc(x, y, r, angle1, angle2, lines=30.0, incstart=True, incend=True):
+    angle1 = math.radians(angle1)
+    angle2 = math.radians(angle2)
+
+    step = (angle2 - angle1) / (lines+1)
+    if step > 0:
+        dirn = 1.0
+    else:
+        dirn = -1.0
+
+    l = []
+    a = angle1
+    if not incend:
+        angle2 -= step
+    if not incstart:
+        a += step
+    while (a * dirn < angle2 * dirn*0.9995):
+        l.append((x + math.sin(a) * r, y + math.cos(a) * r,))
+        a += step
+    return l
+
 def create_corner2(scl, gap):
     t = union()
 
@@ -144,7 +165,7 @@ def create_corner1(scl, gap, pcbcut=False):
     t.add(u)
 
     return t
-    
+ 
 def create_side(scl, gap):
 
     md_w1 = md_w-175#-286
@@ -304,62 +325,71 @@ def create_bottom_line_inner(scl, uptoleft, uptoright, gap):
 
     return tlist
 
-def create_layer(scl, layer, topbot, gap):
+def create_layer(scl, layer, topbot, gap, microsd=True):
 
-    if topbot & TOP:
-        if layer == 0:
-            tlisti = create_bottom_line_outer(scl, 0, 0, gap)
-            tlisto = create_top_line_outer(scl, 800, 500, gap)
-        if layer == 1:
-            tlisti = create_top_line_inner(scl, 700, 500, gap)
-            tlisto = create_top_line_outer(scl, 700, 500, gap)
-            tlisti += create_bottom_line_inner(scl, 60, 180, gap)
-            tlisti += create_bottom_line_outer(scl, 60, 180, gap)
-        elif layer == 2 or layer == 3:
-            tlisti = create_top_line_inner(scl, 35, 50, gap)
-            tlisto = create_top_line_outer(scl, 35, 50, gap)
-        elif layer == 4:
-            tlisti = create_top_line_inner(scl, 375, 800, gap)
-            tlisto = create_top_line_outer(scl, 375, 800, gap)
-            tlisto += create_bottom_line_outer(scl, 7, 180, gap)
-            tlisto += create_bottom_line_inner(scl, 7, 180, gap)
-        elif layer == 5:
-            tlisti = create_top_line_inner(scl, 735, 800, gap)
-            tlisto = create_top_line_outer(scl, 735, 800, gap)
-            tlisto += create_bottom_line_outer(scl, 7, 180, gap)
-            tlisto += create_bottom_line_inner(scl, 7, 180, gap)
-        elif layer == 6:
-            tlisti = create_top_line_inner(scl, 7, 100, gap)
-            tlisto = create_bottom_line_outer(scl, 7, 180, gap)
-            tlisto += create_top_line_outer(scl, 7, 100, gap)
-            tlisti += create_bottom_line_inner(scl, 7, 180, gap)
-    elif topbot & BOTTOM:
-        if layer == 2 or layer == 3:
-            tlisto = create_bottom_line_outer(scl, 7, 110, gap)
-            tlisti = create_bottom_line_inner(scl, 7, 110, gap)
+    if layer == 0 or layer == 6:
+        tlist = []
+        r=2.5
+
+        md_w1 = md_w-115
+        angle = 19.0
+        rangle = math.radians(angle)
+        y1 = 0
+        a, r1, xm, ym = arc_between_points(8.0-r, y1, md_w1*scl, y1, rangle, x1=1, y1=-1)
+
+        xm += md_w1*scl
+        pts = points_arc(xm, ym, r1, angle/2, -angle/2)
+        #pts.reverse()
+        tlist += pts
+        tlist += points_arc(r, r, r, 180, 270)
+
+        tlist += points_arc(r, (md_h+boxthick*2)*scl-r, r, 270, 360)
+
+        y1 = (md_h+boxthick*2)*scl 
+        a, r1, xm, ym = arc_between_points(md_w1*scl, y1, 8.0-r, y1, rangle, x1=1, y1=1)
+
+        xm -= md_w1*scl - 14
+        pts = points_arc(xm, ym, r1, angle/2-180, -angle/2-180)
+        tlist += pts
+
+        tlist += points_arc((md_w+indent*2)*scl-(r),
+                            (md_h+boxthick*2)*scl-r, r,
+                            0, 90)
+        tlist += points_arc((md_w+indent*2)*scl-(r),
+                            (md_h+boxthick*2)*scl+r-8.8, r,
+                            90, 160)
+
+        if microsd:
+            msd_x = 415*scl
+            msd_w = 150*scl
+            msd_h = 20*scl
+            h = tlist[-1][0]
+            tlist += [(h, msd_x), (h-msd_h, msd_x),
+                      (h-msd_h, msd_x-msd_w),
+                      (h, msd_x-msd_w)]
+
+        tlist += points_arc((md_w+indent*2)*scl-(r),
+                            (8.8-r), r,
+                            20, 90)
+        tlist += points_arc((md_w+indent*2)*scl-(r),
+                            #(md_h+boxthick*2)*scl+r-8.8, r,
+                            r, r,
+                            90, 180)
+        
 
     d = sdxf.Drawing()
-    if layer == 6:
-        d.append(sdxf.PolyLine(points=tlisto,closed=1,color=1))
-        d.append(sdxf.PolyLine(points=tlisti,closed=1,color=1))
-    else:
-        d.append(sdxf.PolyLine(points=tlisto+tlisti,closed=1,color=1))
+    d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
-    tb = ''
-    if topbot & TOP:
-        tb += 't'
-        for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
-                  ((indent+md_w)*scl,
-                   (md_h+boxthick+boxthick/2.0)*scl),):
-            d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+    for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
+              ((indent+md_w)*scl,
+               (md_h+boxthick+boxthick/2.0)*scl),):
+        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
-    if topbot & BOTTOM:
-        tb += 'b'
-        for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
-                  ((indent+md_w)*scl, boxthick/2.0*scl),):
-            d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+    for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
+              ((indent+md_w)*scl, boxthick/2.0*scl),):
+        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
-    fname = 'microdesktopcase_%s_%d.dxf' % (tb, layer)
+    fname = 'microdesktopcase_%d.dxf' % (layer)
     d.saveas(fname)
 
     t = union()
@@ -452,7 +482,7 @@ def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
  
     a = math.sqrt(r*r - d2/4)
 
-    if xd > yd:
+    if abs(yd) > abs(xd):
         m = xd / yd
     else:
         m = yd / xd
@@ -460,7 +490,7 @@ def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
     a1 = a / math.sqrt(m*m + 1)
     a2 = m * a1
 
-    if xd > yd:
+    if abs(yd) > abs(xd):
         return a, r, xm + a1*x1, ym + a2*y1
     else:
         return a, r, xm + a2*x1, ym + a1*y1
@@ -550,66 +580,11 @@ def create_microdesktop(t, scl, part):
         m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
         b.add(m)
 
-    elif part == LAYER1_TOP:
-
-        gap = 4
-        se = create_layer(scl, 1, TOP|BOTTOM, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
-        b.add(m)
-
-    elif part == LAYER2_TOP:
-
-        offs = 3
-        gap = 4
-        se = create_layer(scl, 2, TOP, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER2_BOT:
-
-        offs = 3
-        gap = 4
-        se = create_layer(scl, 2, BOTTOM, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER3_TOP:
-
-        offs = 6
-        gap = 4
-        se = create_layer(scl, 3, TOP, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER3_BOT:
-
-        offs = 6
-        gap = 4
-        se = create_layer(scl, 3, BOTTOM, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER4_TOP:
-
-        offs = 9
-        gap = 4
-        se = create_layer(scl, 4, TOP|BOTTOM, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
-    elif part == LAYER5_TOP:
-
-        offs = 12
-        gap = 4
-        se = create_layer(scl, 5, TOP|BOTTOM, gap)
-        m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
-        b.add(m)
-
     elif part == LAYER6:
 
         offs = 15
         gap = 4
-        se = create_layer(scl, 0, TOP|BOTTOM, gap)
+        se = create_layer(scl, 6, TOP|BOTTOM, gap, False)
         m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
@@ -621,12 +596,12 @@ if __name__ == '__main__':
     u = union()
     for i in [
                 PCB1,
-                #LAYER0,
+                LAYER0,
                 CORNER1,
                 CORNER2,
                 CORNER3,
                 CORNER4,
-                #LAYER6,
+                LAYER6,
                 FRONT_PLATE,
                 BACK_PLATE,
                 SIDE_PLATE1,
