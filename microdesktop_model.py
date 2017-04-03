@@ -26,13 +26,13 @@ pin_parts_3d=False
 orientate=False
 LEFTPART = 1
 RIGHTPART = 2
-mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
+mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART
 
 BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = 0#BATTERY 
+add_internal_parts = 0#BATTERY
 
 pcbthick = 16.0
 scl = 0.1
@@ -122,13 +122,13 @@ def create_corner2(scl, gap):
     t.add(u)
 
     return t
-    
+
 def create_corner1(scl, gap, pcbcut=False):
     t = union()
 
     u = union()
 
-    
+
     b = curvebox(scl, 140, 88, 150, 25)
     u.add(b)
 
@@ -165,7 +165,7 @@ def create_corner1(scl, gap, pcbcut=False):
     t.add(u)
 
     return t
- 
+
 def create_side(scl, gap):
 
     md_w1 = md_w-175#-286
@@ -335,7 +335,8 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
         angle = 19.0
         rangle = math.radians(angle)
         y1 = 0
-        a, r1, xm, ym = arc_between_points(8.0-r, y1, md_w1*scl, y1, rangle, x1=1, y1=-1)
+        a, r1, xm, ym = arc_between_points(8.0-r, y1, md_w1*scl, y1,
+                                           rangle, x1=1, y1=-1)
 
         xm += md_w1*scl
         pts = points_arc(xm, ym, r1, angle/2, -angle/2)
@@ -345,8 +346,9 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
 
         tlist += points_arc(r, (md_h+boxthick*2)*scl-r, r, 270, 360)
 
-        y1 = (md_h+boxthick*2)*scl 
-        a, r1, xm, ym = arc_between_points(md_w1*scl, y1, 8.0-r, y1, rangle, x1=1, y1=1)
+        y1 = (md_h+boxthick*2)*scl
+        a, r1, xm, ym = arc_between_points(md_w1*scl, y1, 8.0-r, y1,
+                                           rangle, x1=1, y1=1)
 
         xm -= md_w1*scl - 14
         pts = points_arc(xm, ym, r1, angle/2-180, -angle/2-180)
@@ -375,7 +377,7 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
                             #(md_h+boxthick*2)*scl+r-8.8, r,
                             r, r,
                             90, 180)
-        
+
 
     d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
@@ -476,10 +478,10 @@ def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
 
     d = math.sqrt(d2)
     r = math.sqrt(d2 / (2*(1 - math.cos(angle))))
-    
+
     xm = (xd/2.0) + xa
     ym = (yd/2.0) + ya
- 
+
     a = math.sqrt(r*r - d2/4)
 
     if abs(yd) > abs(xd):
