@@ -138,9 +138,9 @@ def create_corner1(scl, gap, pcbcut=False):
 
         u -= d
 
-        b = curvebox(scl, 160, 32, 50, 12)
-        b = translate([100*scl, 55*scl, 0*scl]).add(b)
-        u += b
+        #b = curvebox(scl, 160, 32, 50, 12)
+        #b = translate([100*scl, 55*scl, 0*scl]).add(b)
+        ##u += b
 
     c = cylinder(h=200*scl, r=17.5*scl, segments=30)
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
@@ -407,6 +407,10 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
               ((indent+md_w)*scl, boxthick/2.0*scl),):
         d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
 
+    if layer == 0:
+        c1 = ((md_w-250+indent)*scl, (md_h-100+boxthick)*scl,)
+        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+
     fname = 'microdesktopcase_%d.dxf' % (layer)
     d.saveas(fname)
 
@@ -480,6 +484,10 @@ def pcb1(scl):
     u = cube([144*scl, 90*scl, (110)*scl])
     r = translate([(-20)*scl, 20*scl, (pcbthick)*scl]).add(u)
     t.add(r)
+
+    # hole through PCB and PCMCIA holder
+    c = cylinder(h=200*scl, r=17.5*scl, segments=30)
+    t -= translate([(md_w-250)*scl, (md_h-100)*scl, -1*scl]).add(c)
 
     v = union()
     t = translate([(390)*scl, 12.5*scl, (150)*scl]).add(t)
@@ -623,11 +631,11 @@ if __name__ == '__main__':
                 CORNER2,
                 CORNER3,
                 CORNER4,
-                #LAYER6,
+                LAYER6,
                 FRONT_PLATE,
                 BACK_PLATE,
-                #SIDE_PLATE1,
-                #SIDE_PLATE2,
+                SIDE_PLATE1,
+                SIDE_PLATE2,
             ]:
         t = union()
         create_microdesktop(t, scl, part=i)
