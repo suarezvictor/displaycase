@@ -69,6 +69,12 @@ md_d = 190
 boxthick = 80
 indent = 40
 
+def add_offset(offs, l):
+    x, y = offs
+    for i in range(len(l)):
+        l[i] = (l[i][0] + x, l[i][1] + y)
+    return l
+
 def points_arc(x, y, r, angle1, angle2, lines=30.0, incstart=True, incend=True):
     angle1 = math.radians(angle1)
     angle2 = math.radians(angle2)
@@ -169,7 +175,7 @@ def create_corner1(scl, gap, pcbcut=False):
 
     return t
 
-def create_side(scl, gap):
+def create_side(scl, gap, d):
 
     md_w1 = md_w-175#-286
 
@@ -329,7 +335,7 @@ def create_bottom_line_inner(scl, uptoleft, uptoright, gap):
 
     return tlist
 
-def create_layer(scl, layer, topbot, gap, microsd=True):
+def create_layer(scl, layer, topbot, gap, microsd, d, doffs):
 
     if layer == 0 or layer == 6:
         tlist = []
@@ -394,22 +400,25 @@ def create_layer(scl, layer, topbot, gap, microsd=True):
                             r, r,
                             90, 180)
 
+    add_offset(doffs, tlist)
 
-    d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
-    for c1 in ((boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
+    for c1 in add_offset(doffs,
+              [(boxthick/2.0*scl, (boxthick+md_h+boxthick/2.0)*scl),
               ((indent+md_w)*scl,
-               (md_h+boxthick+boxthick/2.0)*scl),):
-        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+               (md_h+boxthick+boxthick/2.0)*scl),]):
+        d.append(sdxf.Circle(center=c1, radius=1.75, color=1))
 
-    for c1 in ((boxthick/2.0*scl, boxthick/2.0*scl),
-              ((indent+md_w)*scl, boxthick/2.0*scl),):
-        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+    for c1 in add_offset(doffs,
+              [(boxthick/2.0*scl, boxthick/2.0*scl),
+               ((indent+md_w)*scl, boxthick/2.0*scl)]):
+        d.append(sdxf.Circle(center=c1, radius=1.75, color=1))
 
     if layer == 0:
-        c1 = ((md_w-250+indent)*scl, (md_h-100+boxthick)*scl,)
-        d.append(sdxf.Circle(center=c1, radius=1.75, color=3))
+        for c1 in add_offset(doffs,
+            [((md_w-250+indent)*scl, (md_h-100+boxthick)*scl,)]):
+            d.append(sdxf.Circle(center=c1, radius=1.75, color=1))
 
     fname = 'microdesktopcase_%d.dxf' % (layer)
     d.saveas(fname)
@@ -526,7 +535,7 @@ def arc_between_points(xa, ya, xb, yb, angle, x1=1, y1=1):
         return a, r, xm + a2*x1, ym + a1*y1
 
 
-def create_microdesktop(t, scl, part):
+def create_microdesktop(t, scl, part, d, doffs):
     b = union()
 
     if part == PCB1:
@@ -546,7 +555,7 @@ def create_microdesktop(t, scl, part):
     elif part == SIDE_PLATE1:
 
         gap = 4
-        se = create_side(scl, gap)
+        se = create_side(scl, gap, d)
         se = rotate([0,0,-90]).add(se)
         m = translate(v=[22.7+(indent+90)*scl,
                             (-9.5+23*scl), 13.6]).add(se)
@@ -555,7 +564,7 @@ def create_microdesktop(t, scl, part):
     elif part == SIDE_PLATE2:
 
         gap = 4
-        se = create_side(scl, gap)
+        se = create_side(scl, gap, d)
         se = rotate([0,0,90]).add(se)
         m = translate(v=[22.7+(md_w-(indent+4))*scl,
                             (-9.5+(md_h+138)*scl), 13.6]).add(se)
@@ -571,7 +580,7 @@ def create_microdesktop(t, scl, part):
     elif part == LAYER0:
 
         gap = 4
-        se = create_layer(scl, 0, TOP|BOTTOM, gap)
+        se = create_layer(scl, 0, TOP|BOTTOM, gap, True, d, doffs)
         m = translate(v=[19+indent*scl, -9.5, 11.6]).add(se)
         b.add(m)
 
@@ -614,15 +623,32 @@ def create_microdesktop(t, scl, part):
 
         offs = md_d*scl
         gap = 4
-        se = create_layer(scl, 6, TOP|BOTTOM, gap, False)
+        se = create_layer(scl, 6, TOP|BOTTOM, gap, False, d, doffs)
         m = translate(v=[19+indent*scl, -9.5, 13.6+offs]).add(se)
         b.add(m)
 
     t.add(b)
 
+def create_topbot_grouped():
 
-if __name__ == '__main__':
+    d = sdxf.Drawing()
+    l = [ LAYER0, LAYER6, ]
+    j = 0
+    for x in range(5,500,130):
+        for y in range(5,500,110):
+            i = l[j]
+            j += 1
+            if j == len(l):
+                j = 0
+            t = union()
+            doffs = (x, y)
+            create_microdesktop(t, scl, i, d, doffs)
 
+    fname = 'microdesktopcase_group1.dxf'
+    d.saveas(fname)
+
+
+def create_scad():
     u = union()
     for i in [
                 PCB1,
@@ -638,7 +664,8 @@ if __name__ == '__main__':
                 SIDE_PLATE2,
             ]:
         t = union()
-        create_microdesktop(t, scl, part=i)
+        d = sdxf.Drawing()
+        create_microdesktop(t, scl, i, d, (0, 0))
         r = union().add(t)
         if i == -1:
             c = [0.8, 0.8, 0.3, 0.25]
@@ -660,3 +687,7 @@ if __name__ == '__main__':
     f.write("""include<microdesktop_prog2.scad>;
     """)
     f.close()
+
+if __name__ == '__main__':
+    #create_scad()
+    create_topbot_grouped()
