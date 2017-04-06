@@ -175,7 +175,7 @@ def create_corner1(scl, gap, pcbcut=False):
 
     return t
 
-def create_side(scl, gap, d):
+def create_side(scl, gap, d, doffs):
 
     md_w1 = md_w-175#-286
 
@@ -186,17 +186,17 @@ def create_side(scl, gap, d):
 
     t = union()
     #d = dxf_linear_extrude(file=fname, height=1.5)
-    d = touch_arc(r, md_d-gap*2, 15, 0, scl, 0, angle=90-angle, segments=400)
-    d = rotate([0, 0, -angle/2.0]).add(d)
-    d = translate([(ym)*scl, (xm-1)*scl, -gap*scl]).add(d)
-    d = rotate([180, 0, 0]).add(d)
+    c = touch_arc(r, md_d-gap*2, 15, 0, scl, 0, angle=90-angle, segments=400)
+    c = rotate([0, 0, -angle/2.0]).add(c)
+    c = translate([(ym)*scl, (xm-1)*scl, -gap*scl]).add(c)
+    c = rotate([180, 0, 0]).add(c)
 
-    t.add(d)
+    t.add(c)
 
     md_w2 = (r+15) * rangle
     tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_w2*scl), (0, md_w2*scl)]
 
-    d = sdxf.Drawing()
+    add_offset(doffs, tlist)
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
     fname = 'microdesktopcase_side.dxf'
@@ -208,11 +208,11 @@ def create_side(scl, gap, d):
         t.add(d)
     return t
 
-def create_back(scl, gap):
+def create_back(scl, gap, d, doffs):
 
     tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
+    l = add_offset(doffs, tlist)
 
-    d = sdxf.Drawing()
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
     micro = [(0, 0), (1.7, 0), (1.7, 15), (0, 15)]
@@ -221,6 +221,7 @@ def create_back(scl, gap):
     l = []
     for p1, p2 in micro:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     eject = [(0, 0), (7.5, 0), (7.5, 7), (0, 7)]
@@ -229,6 +230,7 @@ def create_back(scl, gap):
     l = []
     for p1, p2 in eject:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     pcmcia = [(0, 0), (5.2, 0), (5.2, 61), (0, 61)]
@@ -237,6 +239,7 @@ def create_back(scl, gap):
     l = []
     for p1, p2 in pcmcia:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     fname = 'microdesktopcase_back.dxf'
@@ -249,12 +252,12 @@ def create_back(scl, gap):
 
     return t
 
-def create_front(scl, gap):
+def create_front(scl, gap, d, doffs):
 
     offs = 0.25
     tlist = [(0, 0), (md_d*scl, 0), (md_d*scl, md_h*scl), (0, md_h*scl)]
 
-    d = sdxf.Drawing()
+    l = add_offset(doffs, tlist)
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
     usb = [(0, 0), (7.0, 0), (7.0, 14.5), (0, 14.5)]
@@ -263,6 +266,7 @@ def create_front(scl, gap):
         l = []
         for p1, p2 in usb:
             l.append((p1+posx, p2+posy-offs,))
+        l = add_offset(doffs, l)
         d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     vga = [(0, 0), (13.4, 0), (13.4, 30.8), (0, 30.8)]
@@ -271,6 +275,7 @@ def create_front(scl, gap):
     l = []
     for p1, p2 in vga:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     dc = [(0, 0), (11, 0), (11, 9.2), (0, 9.2)]
@@ -279,6 +284,7 @@ def create_front(scl, gap):
     l = []
     for p1, p2 in dc:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     led = [(0, 0), (1.5, 0), (1.5, 1.0), (0, 1.0)]
@@ -287,6 +293,7 @@ def create_front(scl, gap):
     l = []
     for p1, p2 in led:
         l.append((p1+posx, p2+posy,))
+    l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
     fname = 'microdesktopcase_front.dxf'
@@ -547,7 +554,7 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == BACK_PLATE:
 
         gap = 4
-        se = create_back(scl, gap)
+        se = create_back(scl, gap, d, doffs)
         m = translate(v=[24.7+(indent+md_w)*scl,
                         (-9.5+boxthick*scl), 13.6]).add(se)
         b.add(m)
@@ -555,7 +562,7 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == SIDE_PLATE1:
 
         gap = 4
-        se = create_side(scl, gap, d)
+        se = create_side(scl, gap, d, doffs)
         se = rotate([0,0,-90]).add(se)
         m = translate(v=[22.7+(indent+90)*scl,
                             (-9.5+23*scl), 13.6]).add(se)
@@ -564,7 +571,7 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == SIDE_PLATE2:
 
         gap = 4
-        se = create_side(scl, gap, d)
+        se = create_side(scl, gap, d, doffs)
         se = rotate([0,0,90]).add(se)
         m = translate(v=[22.7+(md_w-(indent+4))*scl,
                             (-9.5+(md_h+138)*scl), 13.6]).add(se)
@@ -573,7 +580,7 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == FRONT_PLATE:
 
         gap = 4
-        se = create_front(scl, gap)
+        se = create_front(scl, gap, d, doffs)
         m = translate(v=[22.7+indent*scl, (-9.5+boxthick*scl), 13.6]).add(se)
         b.add(m)
 
@@ -628,6 +635,24 @@ def create_microdesktop(t, scl, part, d, doffs):
         b.add(m)
 
     t.add(b)
+
+def create_sides_grouped():
+
+    d = sdxf.Drawing()
+    l = [ SIDE_PLATE1, SIDE_PLATE2, BACK_PLATE, FRONT_PLATE]
+    j = 0
+    for x in range(5,500,25):
+        for y in range(5,500,110):
+            i = l[j]
+            j += 1
+            if j == len(l):
+                j = 0
+            t = union()
+            doffs = (x, y)
+            create_microdesktop(t, scl, i, d, doffs)
+
+    fname = 'microdesktopcase_group2.dxf'
+    d.saveas(fname)
 
 def create_topbot_grouped():
 
@@ -691,3 +716,4 @@ def create_scad():
 if __name__ == '__main__':
     #create_scad()
     create_topbot_grouped()
+    create_sides_grouped()
