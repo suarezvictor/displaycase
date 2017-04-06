@@ -102,18 +102,18 @@ def create_corner2(scl, gap):
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
     u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
 
-    d = cube([50*scl, 19*scl, 200*scl])
-    d = translate([(140-15)*scl, (88-19-(boxthick/2-gap-15))*scl, -1*scl]).add(d)
+    d = cube([50*scl, 22*scl, 200*scl])
+    d = translate([(140-17)*scl, (88-22-(boxthick/2-gap-15))*scl, -1*scl]).add(d)
 
     u -= d
 
-    d = cube([19*scl, 50*scl, 200*scl])
-    d = translate([(indent-gap-15)*scl, (88-50-(boxthick-gap))*scl,
+    d = cube([22*scl, 50*scl, 200*scl])
+    d = translate([(indent-gap-17)*scl, (88-50-(boxthick-gap))*scl,
                     -1*scl]).add(d)
 
     u -= d
 
-    d = cube([100*scl, 100*scl, 19*scl])
+    d = cube([100*scl, 100*scl, 20*scl])
     d = translate([(indent-gap)*scl, (88-100-(boxthick-gap))*scl,
                     18*scl]).add(d)
 
@@ -146,13 +146,13 @@ def create_corner1(scl, gap, pcbcut=False):
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
     u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
 
-    d = cube([50*scl, 19*scl, 200*scl])
-    d = translate([(140-15)*scl, (boxthick/2-gap-15)*scl, -1*scl]).add(d)
+    d = cube([50*scl, 22*scl, 200*scl])
+    d = translate([(140-17)*scl, (boxthick/2-gap-15)*scl, -1*scl]).add(d)
 
     u -= d
 
-    d = cube([19*scl, 50*scl, 200*scl])
-    d = translate([(indent-gap-15)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
+    d = cube([22*scl, 50*scl, 200*scl])
+    d = translate([(indent-gap-17)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -160,7 +160,7 @@ def create_corner1(scl, gap, pcbcut=False):
         dep = 230
     else:
         dep = 30
-    d = cube([300*scl, 100*scl, 19*scl])
+    d = cube([300*scl, 100*scl, 20*scl])
     d = translate([(dep)*scl, (boxthick-gap)*scl, 18*scl]).add(d)
 
     u -= d
@@ -631,7 +631,7 @@ if __name__ == '__main__':
                 CORNER2,
                 CORNER3,
                 CORNER4,
-                LAYER6,
+                #LAYER6,
                 FRONT_PLATE,
                 BACK_PLATE,
                 SIDE_PLATE1,
