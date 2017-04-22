@@ -137,20 +137,15 @@ def create_corner1(scl, gap, pcbcut=False):
     b = curvebox(scl, 140, 88, md_d, 25)
     u.add(b)
 
-    if pcbcut:
+    d = cube([300*scl, 100*scl, (md_d-70)*scl])
+    d = translate([-10*scl, (88-gap)*scl, 35*scl]).add(d)
 
-        d = cube([300*scl, 100*scl, 65*scl])
-        d = translate([-1*scl, (88-gap)*scl, 32*scl]).add(d)
+    u -= d
 
-        u -= d
-
-        #b = curvebox(scl, 160, 32, 50, 12)
-        #b = translate([100*scl, 55*scl, 0*scl]).add(b)
-        ##u += b
-
-    c = cylinder(h=200*scl, r=17.5*scl, segments=30)
+    c = cylinder(h=200*scl, r=17.5*scl, r1=18.0*scl, segments=30)
     u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
-    u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
+    c = cylinder(h=200*scl, r=21.5*scl, r1=22.0*scl, segments=30)
+    u -= translate([(boxthick+10)*scl, (boxthick/2+gap)*scl, -1*scl]).add(c)
 
     d = cube([50*scl, 22*scl, 200*scl])
     d = translate([(140-17)*scl, (boxthick/2-gap-15)*scl, -1*scl]).add(d)
@@ -162,14 +157,15 @@ def create_corner1(scl, gap, pcbcut=False):
 
     u -= d
 
-    if pcbcut:
-        dep = 230
-    else:
-        dep = 30
+    dep = 36
     d = cube([300*scl, 100*scl, 20*scl])
-    d = translate([(dep)*scl, (boxthick-gap)*scl, 18*scl]).add(d)
+    d = translate([(dep)*scl, (boxthick-gap-4)*scl, 18*scl]).add(d)
 
     u -= d
+
+    d = translate([0, 0, (md_d-36-20)*scl]).add(d)
+    u -= d
+
 
     t.add(u)
 
@@ -601,9 +597,10 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == CORNER2:
 
         gap = 4
-        se = create_corner2(scl, gap)
-        m = translate(v=[19+indent*scl, -9.5+(md_h+boxthick-8)*scl,
-                            13.6]).add(se)
+        se = create_corner1(scl, gap)
+        se = rotate([180,0,0]).add(se)
+        m = translate(v=[19+indent*scl, -9.5+(md_h+boxthick*2)*scl,
+                            13.6+md_d*scl]).add(se)
         b.add(m)
 
     elif part == CORNER3:
@@ -619,11 +616,13 @@ def create_microdesktop(t, scl, part, d, doffs):
     elif part == CORNER4:
 
         gap = 4
-        se = create_corner2(scl, gap)
+        se = create_corner1(scl, gap)
+        se = rotate([180,0,0]).add(se)
         se = rotate([0,0,180]).add(se)
         se = translate(v=[(md_w+indent*2)*scl,
-                          (boxthick*1+gap*2)*scl, 0]).add(se)
-        m = translate(v=[19+indent*scl, -9.5, 13.6]).add(se)
+                          (gap)*scl, 0]).add(se)
+        m = translate(v=[19+indent*scl, -9.5,
+                         13.6+md_d*scl]).add(se)
         b.add(m)
 
     elif part == LAYER6:
@@ -676,17 +675,17 @@ def create_topbot_grouped():
 def create_scad():
     u = union()
     for i in [
-                PCB1,
-                LAYER0,
+                #PCB1,
+                #LAYER0,
                 CORNER1,
-                CORNER2,
-                CORNER3,
-                CORNER4,
+                #CORNER2,
+                #CORNER3,
+                #CORNER4,
                 #LAYER6,
-                FRONT_PLATE,
-                BACK_PLATE,
-                SIDE_PLATE1,
-                SIDE_PLATE2,
+                #FRONT_PLATE,
+                #BACK_PLATE,
+                #SIDE_PLATE1,
+                #SIDE_PLATE2,
             ]:
         t = union()
         d = sdxf.Drawing()
@@ -714,6 +713,6 @@ def create_scad():
     f.close()
 
 if __name__ == '__main__':
-    #create_scad()
-    create_topbot_grouped()
-    create_sides_grouped()
+    create_scad()
+    #create_topbot_grouped()
+    #create_sides_grouped()
