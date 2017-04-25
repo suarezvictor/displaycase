@@ -1410,7 +1410,7 @@ def tpanel_mid(scl, ht, ht_offset, pcb1_support_offset, base_screwholes=False):
     u -= c
 
     # remove cutout for pcb2 
-    c = cube([470*scl, (421)*scl, (150)*scl])
+    c = cube([470*scl, (431)*scl, (150)*scl])
     c = translate(v=[(tpanel_l_b-280)*scl, (ht-834)*scl, (30)*scl]).add(c)
     u -= c
 
@@ -4390,48 +4390,48 @@ def pcb2(scl):
 
     # PCB
     pcb = union()
-    b = cube([1100*scl, 400*scl, (12)*scl])
+    b = cube([1100*scl, 414*scl, (12)*scl])
     pcb += b
 
     # Inductor (large)
     j = cube([60*scl, 60*scl, (20)*scl])
-    r = translate([(427)*scl, 127*scl,
+    r = translate([(427)*scl, 141*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # lcd connector
     j = cube([291*scl, 38*scl, (12)*scl])
-    r = translate([(29)*scl, (51)*scl,
+    r = translate([(29)*scl, (65)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # keyboard connector
     j = cube([320*scl, 60*scl, (12)*scl])
-    r = translate([(723)*scl, (307)*scl,
+    r = translate([(723)*scl, (321)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # STM32F0
     j = cube([100*scl, 100*scl, (12)*scl])
-    r = translate([(729)*scl, (69)*scl,
+    r = translate([(729)*scl, (83)*scl,
                 (-12)*scl]).add(j)
     t.add(r)
 
     # SIP-8
     j = cube([30*scl, 121*scl, (30)*scl])
-    r = translate([(542)*scl, (42)*scl,
+    r = translate([(502)*scl, (54)*scl,
                 (-22)*scl]).add(j)
     t.add(r)
     # SIP-10
     j = cube([30*scl, 145*scl, (30)*scl])
-    r = translate([(536)*scl, (225)*scl,
+    r = translate([(502)*scl, (239)*scl,
                 (-22)*scl]).add(j)
     t.add(r)
 
     t.add(pcb)
 
-    t = translate([(tpanel_l_b-360-90-240)*scl, (lcd_l/2-480)*scl,
-                    (52+55)*scl]).add(t)
+    t = translate([(tpanel_l_b-360-90-240)*scl, (lcd_l/2-470)*scl,
+                    (92+55)*scl]).add(t)
     return t
 
 def pcb3(scl):
@@ -4992,7 +4992,7 @@ if __name__ == '__main__':
         for angle in angles:
             u = union()
             for i in [
-                        BASE_END,
+                        #BASE_END,
                         #SCREEN_END,
                         #CABLE_PROTECTOR,
                         #SCREEN_HINGE,
@@ -5003,11 +5003,11 @@ if __name__ == '__main__':
                         #SCREEN_MID,
                         #BASE_FRONT_TOP,
                         #FRONT_KBD_TRAY,
-                        #PCB1,
-                        #PCB2,
+                        PCB1,
+                        PCB2,
                         #PCB3,
-                        #TPANEL_MID,
-                        #BASE_MID,
+                        TPANEL_MID,
+                        BASE_MID,
                         #BACK_KBD_RUNNER,
                         #BASE_BACK,
                         #BASE_BACK_HINGE,
