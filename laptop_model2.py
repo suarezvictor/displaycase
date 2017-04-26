@@ -31,7 +31,7 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = 0#BATTERY 
+add_internal_parts = KEYBOARD#BATTERY 
 
 test = False
 single = True
@@ -4392,12 +4392,6 @@ def pcb2(scl):
     pcb = union()
     b = cube([1100*scl, 414*scl, (12)*scl])
     pcb += b
-
-    # Inductor (large)
-    j = cube([60*scl, 60*scl, (20)*scl])
-    r = translate([(427)*scl, 141*scl,
-                (-12)*scl]).add(j)
-    t.add(r)
 
     # lcd connector
     j = cube([291*scl, 38*scl, (12)*scl])
