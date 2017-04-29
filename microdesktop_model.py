@@ -65,7 +65,7 @@ BOTTOM=0x2
 
 md_w = 1144
 md_h = 841
-md_d = 190
+md_d = 195
 boxthick = 80
 indent = 40
 
@@ -115,7 +115,12 @@ def create_corner1(scl, gap, pcbcut=False):
     u -= translate([(boxthick+10)*scl, (boxthick/2+gap)*scl, -1*scl]).add(c)
 
     d = cube([50*scl, 23*scl, 200*scl])
-    d = translate([(140-17)*scl, (boxthick-gap-19)*scl, -1*scl]).add(d)
+    d = translate([(140-20)*scl, (boxthick-gap-19)*scl, -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([70*scl, 42*scl, (30)*scl])
+    d = translate([(140-60)*scl, (boxthick+8)*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -124,8 +129,8 @@ def create_corner1(scl, gap, pcbcut=False):
 
     u -= d
 
-    d = cube([50*scl, 42*scl, (md_d-40)*scl])
-    d = translate([(140-17)*scl, (boxthick-gap-18)*scl, 20*scl]).add(d)
+    d = cube([50*scl, 42*scl, (md_d-20)*scl])
+    d = translate([(140-20)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
 
     u -= d
 
@@ -136,11 +141,11 @@ def create_corner1(scl, gap, pcbcut=False):
 
     dep = 36
     d = cube([300*scl, 100*scl, 23*scl])
-    d = translate([(dep)*scl, (boxthick-gap-4)*scl, 17*scl]).add(d)
+    d = translate([(dep)*scl, (boxthick-gap-4)*scl, 22*scl]).add(d)
 
     u -= d
 
-    d = translate([0, 0, (md_d-36-22)*scl]).add(d)
+    d = translate([0, 0, (md_d-36-32)*scl]).add(d)
     u -= d
 
 
@@ -188,9 +193,9 @@ def create_back(scl, gap, d, doffs):
 
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
-    micro = [(0, 0), (1.7, 0), (1.7, 15), (0, 15)]
+    micro = [(0, 0), (2.3, 0), (2.3, 13), (0, 13)]
 
-    posx, posy = (0*scl, 200*scl,)
+    posx, posy = (0*scl, 220*scl,)
     l = []
     for p1, p2 in micro:
         l.append((p1+posx, p2+posy,))
@@ -199,16 +204,16 @@ def create_back(scl, gap, d, doffs):
 
     eject = [(0, 0), (7.5, 0), (7.5, 7), (0, 7)]
 
-    posx, posy = (25*scl, 771*scl,)
+    posx, posy = (30*scl, 771*scl,)
     l = []
     for p1, p2 in eject:
         l.append((p1+posx, p2+posy,))
     l = add_offset(doffs, l)
     d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
-    pcmcia = [(0, 0), (5.2, 0), (5.2, 61), (0, 61)]
+    pcmcia = [(0, 0), (5.7, 0), (5.7, 61), (0, 61)]
 
-    posx, posy = (35*scl, 124*scl,)
+    posx, posy = (38*scl, 124*scl,)
     l = []
     for p1, p2 in pcmcia:
         l.append((p1+posx, p2+posy,))
@@ -235,7 +240,7 @@ def create_front(scl, gap, d, doffs):
 
     usb = [(0, 0), (7.0, 0), (7.0, 14.6), (0, 14.6)]
 
-    for posx, posy in [(45*scl, 675.0*scl,), (45*scl, 492.0*scl,)]:
+    for posx, posy in [(50*scl, 675.0*scl,), (50*scl, 492.0*scl,)]:
         l = []
         for p1, p2 in usb:
             l.append((p1+posx, p2+posy-offs,))
@@ -244,7 +249,7 @@ def create_front(scl, gap, d, doffs):
 
     vga = [(0, 0), (13.0, 0), (13.0, 31.2), (0, 31.2)]
 
-    posx, posy = (34*scl, 162.0*scl-offs,)
+    posx, posy = (39*scl, 162.0*scl-offs,)
     l = []
     for p1, p2 in vga:
         l.append((p1+posx, p2+posy,))
@@ -253,7 +258,7 @@ def create_front(scl, gap, d, doffs):
 
     dc = [(0, 0), (11, 0), (11, 9.2), (0, 9.2)]
 
-    posx, posy = (34*scl, 22*scl-offs,)
+    posx, posy = (39*scl, 22*scl-offs,)
     l = []
     for p1, p2 in dc:
         l.append((p1+posx, p2+posy,))
@@ -262,7 +267,7 @@ def create_front(scl, gap, d, doffs):
 
     led = [(0, 0), (1.5, 0), (1.5, 1.0), (0, 1.0)]
 
-    posx, posy = (34*scl, 133*scl-offs,)
+    posx, posy = (39*scl, 133*scl-offs,)
     l = []
     for p1, p2 in led:
         l.append((p1+posx, p2+posy,))
@@ -365,7 +370,7 @@ def create_layer(scl, layer, topbot, gap, microsd, d, doffs):
 
         if microsd:
             msd_x = 430*scl
-            msd_w = 150*scl
+            msd_w = 130*scl
             msd_h = 30*scl
             h = tlist[-1][0]
             tlist += [(h, msd_x), (h-msd_h, msd_x),
@@ -449,7 +454,7 @@ def pcb1(scl):
 
     # Micro SD
     j = cube([165.0*scl, 151.1*scl, (18)*scl])
-    r = translate([(980)*scl, 200*scl,
+    r = translate([(980)*scl, 195*scl,
                 (-18)*scl]).add(j)
     t.add(r)
 
@@ -521,7 +526,7 @@ def create_microdesktop(t, scl, part, d, doffs):
     if part == PCB1:
         se = pcb1(scl)
         m = translate(v=[(indent*2-200)*scl, (-7.5+boxthick-100)*scl,
-                          0.5]).add(se)
+                          1.0]).add(se)
         b.add(m)
 
     elif part == BACK_PLATE:
@@ -598,7 +603,7 @@ def create_microdesktop(t, scl, part, d, doffs):
         se = rotate([0,0,180]).add(se)
         se = translate(v=[(md_w+indent*2)*scl,
                           (gap)*scl, 0]).add(se)
-        m = translate(v=[19+indent*scl, -9.5,
+        m = translate(v=[19+indent*scl, -10,
                          13.6+md_d*scl]).add(se)
         b.add(m)
 
@@ -653,14 +658,14 @@ def create_scad():
     u = union()
     for i in [
                 PCB1,
-                #LAYER0,
+                LAYER0,
                 CORNER1,
                 CORNER2,
                 CORNER3,
                 CORNER4,
                 #LAYER6,
                 FRONT_PLATE,
-                #BACK_PLATE,
+                BACK_PLATE,
                 #SIDE_PLATE1,
                 #SIDE_PLATE2,
             ]:
