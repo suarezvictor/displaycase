@@ -96,39 +96,6 @@ def points_arc(x, y, r, angle1, angle2, lines=30.0, incstart=True, incend=True):
         a += step
     return l
 
-def create_corner2(scl, gap):
-    t = union()
-
-    u = union()
-
-    b = curvebox(scl, 140, 88, md_d, 25)
-    u.add(b)
-
-    c = cylinder(h=200*scl, r=17.5*scl, segments=30)
-    u -= translate([(boxthick/2)*scl, (boxthick/2)*scl, -1*scl]).add(c)
-    u -= translate([(boxthick+10)*scl, (boxthick/2)*scl, -1*scl]).add(c)
-
-    d = cube([50*scl, 22*scl, 200*scl])
-    d = translate([(140-17)*scl, (88-22-(boxthick/2-gap-15))*scl, -1*scl]).add(d)
-
-    u -= d
-
-    d = cube([22*scl, 50*scl, 200*scl])
-    d = translate([(indent-gap-17)*scl, (88-50-(boxthick-gap))*scl,
-                    -1*scl]).add(d)
-
-    u -= d
-
-    d = cube([100*scl, 100*scl, 20*scl])
-    d = translate([(indent-gap)*scl, (88-100-(boxthick-gap))*scl,
-                    18*scl]).add(d)
-
-    u -= d
-
-    t.add(u)
-
-    return t
-
 def create_corner1(scl, gap, pcbcut=False):
     t = union()
 
