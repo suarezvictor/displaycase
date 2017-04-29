@@ -4999,7 +4999,7 @@ if __name__ == '__main__':
                         #FRONT_KBD_TRAY,
                         PCB1,
                         PCB2,
-                        #PCB3,
+                        PCB3,
                         TPANEL_MID,
                         BASE_MID,
                         #BACK_KBD_RUNNER,

@@ -134,7 +134,7 @@ def create_corner1(scl, gap, pcbcut=False):
 
     u = union()
 
-    b = curvebox(scl, 140, 88, md_d, 25)
+    b = curvebox(scl, 145, 98, md_d, 25)
     u.add(b)
 
     d = cube([300*scl, 100*scl, (md_d-70)*scl])
@@ -147,23 +147,33 @@ def create_corner1(scl, gap, pcbcut=False):
     c = cylinder(h=200*scl, r=21.5*scl, r1=22.0*scl, segments=30)
     u -= translate([(boxthick+10)*scl, (boxthick/2+gap)*scl, -1*scl]).add(c)
 
-    d = cube([50*scl, 22*scl, 200*scl])
-    d = translate([(140-17)*scl, (boxthick/2-gap-15)*scl, -1*scl]).add(d)
+    d = cube([50*scl, 23*scl, 200*scl])
+    d = translate([(140-17)*scl, (boxthick-gap-19)*scl, -1*scl]).add(d)
 
     u -= d
 
-    d = cube([22*scl, 50*scl, 200*scl])
+    d = cube([50*scl, 42*scl, 200*scl])
+    d = translate([(140-10)*scl, (boxthick-gap-18)*scl, -1*scl]).add(d)
+
+    u -= d
+
+    d = cube([50*scl, 42*scl, (md_d-40)*scl])
+    d = translate([(140-17)*scl, (boxthick-gap-18)*scl, 20*scl]).add(d)
+
+    u -= d
+
+    d = cube([23*scl, 50*scl, 200*scl])
     d = translate([(indent-gap-17)*scl, (boxthick-gap)*scl, -1*scl]).add(d)
 
     u -= d
 
     dep = 36
-    d = cube([300*scl, 100*scl, 20*scl])
-    d = translate([(dep)*scl, (boxthick-gap-4)*scl, 18*scl]).add(d)
+    d = cube([300*scl, 100*scl, 23*scl])
+    d = translate([(dep)*scl, (boxthick-gap-4)*scl, 17*scl]).add(d)
 
     u -= d
 
-    d = translate([0, 0, (md_d-36-20)*scl]).add(d)
+    d = translate([0, 0, (md_d-36-22)*scl]).add(d)
     u -= d
 
 
@@ -675,12 +685,12 @@ def create_topbot_grouped():
 def create_scad():
     u = union()
     for i in [
-                #PCB1,
+                PCB1,
                 #LAYER0,
                 CORNER1,
-                #CORNER2,
-                #CORNER3,
-                #CORNER4,
+                CORNER2,
+                CORNER3,
+                CORNER4,
                 #LAYER6,
                 #FRONT_PLATE,
                 #BACK_PLATE,
