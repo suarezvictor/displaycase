@@ -266,18 +266,18 @@ def create_front(scl, gap, d, doffs):
     l = add_offset(doffs, tlist)
     d.append(sdxf.PolyLine(points=tlist,closed=1,color=1))
 
-    usb = [(0, 0), (7.0, 0), (7.0, 14.5), (0, 14.5)]
+    usb = [(0, 0), (7.0, 0), (7.0, 14.6), (0, 14.6)]
 
-    for posx, posy in [(40*scl, 670.0*scl,), (40*scl, 490.0*scl,)]:
+    for posx, posy in [(45*scl, 675.0*scl,), (45*scl, 492.0*scl,)]:
         l = []
         for p1, p2 in usb:
             l.append((p1+posx, p2+posy-offs,))
         l = add_offset(doffs, l)
         d.append(sdxf.PolyLine(points=l,closed=1,color=1))
 
-    vga = [(0, 0), (13.4, 0), (13.4, 30.8), (0, 30.8)]
+    vga = [(0, 0), (13.0, 0), (13.0, 31.2), (0, 31.2)]
 
-    posx, posy = (32*scl, 166.0*scl-offs,)
+    posx, posy = (34*scl, 162.0*scl-offs,)
     l = []
     for p1, p2 in vga:
         l.append((p1+posx, p2+posy,))
@@ -490,16 +490,16 @@ def pcb1(scl):
     u = union()
     u.add(cube([132*scl, 130*scl, (70.0)*scl]))
     d = cube([21*scl, 145*scl, (66.0)*scl])
-    u.add(translate([(-20)*scl, -7.5*scl, (10)*scl]).add(d))
+    u.add(translate([(-20)*scl, -7.5*scl, (12.5)*scl]).add(d))
     
-    r = translate([(0)*scl, 675*scl, (pcbthick)*scl]).add(u)
+    r = translate([(0)*scl, 680.0*scl, (pcbthick)*scl]).add(u)
     t.add(r)
-    r = translate([(0)*scl, 495*scl, (pcbthick)*scl]).add(u)
+    r = translate([(0)*scl, 497.5*scl, (pcbthick)*scl]).add(u)
     t.add(r)
 
     # VGA
     u = cube([150*scl, 305*scl, (130)*scl])
-    r = translate([(-20)*scl, 166*scl, (pcbthick)*scl]).add(u)
+    r = translate([(-20)*scl, 162*scl, (pcbthick)*scl]).add(u)
     t.add(r)
 
     # DC
@@ -692,7 +692,7 @@ def create_scad():
                 CORNER3,
                 CORNER4,
                 #LAYER6,
-                #FRONT_PLATE,
+                FRONT_PLATE,
                 #BACK_PLATE,
                 #SIDE_PLATE1,
                 #SIDE_PLATE2,
