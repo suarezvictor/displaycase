@@ -657,15 +657,15 @@ def create_topbot_grouped():
 def create_scad():
     u = union()
     for i in [
-                PCB1,
-                LAYER0,
+                #PCB1,
+                #LAYER0,
                 CORNER1,
-                CORNER2,
-                CORNER3,
-                CORNER4,
+                #CORNER2,
+                #CORNER3,
+                #CORNER4,
                 #LAYER6,
-                FRONT_PLATE,
-                BACK_PLATE,
+                #FRONT_PLATE,
+                #BACK_PLATE,
                 #SIDE_PLATE1,
                 #SIDE_PLATE2,
             ]:
