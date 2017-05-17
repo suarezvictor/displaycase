@@ -14,6 +14,7 @@
 
 import time
 import itertools
+import openscad
 from pyopenscad import *
 from polysurface import spline_double_divide, Offset, SurfaceFromCurves
 from copy import deepcopy
@@ -31,41 +32,41 @@ BATTERY = 0x1
 KEYBOARD = 0x2
 USB_WIFI = 0x4
 LCD_PANEL = 0x8
-add_internal_parts = KEYBOARD#BATTERY 
+add_internal_parts = 0#KEYBOARD#BATTERY 
 
 test = False
 single = True
 cutdown = False
 revision_1_pcb = True
 
-SCREEN_END = 0
-SCREEN_HINGE = 2
-SCREEN_FRONT_EDGE = 10
-SCREEN_BACK_EDGE = 6
-TPANEL_MID = 5
-BASE_BACK = 4
-BASE_END = 3
-BASE_FRONT_TOP = 7
-BASE_MID = 8
-SCREEN_MID = 9
-FRONT_KBD_TRAY = 12
-PCB1 = 14
-PCB1_SUPPORT = 17
-BATTERY_SUPPORT1 = 18
-COMPARTMENT_LID = 19
-PCB2 = 20
-BACK_KBD_RUNNER = 21
-FRICTION_HINGE1 = 22
-FRICTION_HINGE2 = 23
-BASE_BACK_HINGE = 26
-CABLE_PROTECTOR = 27
-BASE_PANEL = 28
-BASE_PANEL_BACK_CLIPS = 29
-BASE_PANEL_FRONT_CLIPS = 30
-PCB3 = 31
-PCB3_SUPPORT = 32
-COMPARTMENT_LOCKIN = 33
-COMPARTMENT_LOCKIN_CAPTURE = 34
+SCREEN_END = "screen_end"
+SCREEN_HINGE = "screen_hinge"
+SCREEN_FRONT_EDGE = "screen_front_edge"
+SCREEN_BACK_EDGE = "screen_back_edge"
+TPANEL_MID = "screen_mid"
+BASE_BACK = "base_back"
+BASE_END = "base_end"
+BASE_FRONT_TOP = "base_front_top"
+BASE_MID = "base_mid"
+SCREEN_MID = "screen_mid"
+FRONT_KBD_TRAY = "front_kbd_tray"
+PCB1 = "pcb1"
+PCB1_SUPPORT = "pcb1_support"
+BATTERY_SUPPORT1 = "battery_support1"
+COMPARTMENT_LID = "compartment_lid"
+PCB2 = "pcb2"
+BACK_KBD_RUNNER = "back_kbd_runner"
+FRICTION_HINGE1 = "friction_hinge1"
+FRICTION_HINGE2 = "friction_hinge2"
+BASE_BACK_HINGE = "base_back_hinge"
+CABLE_PROTECTOR = "cable_protector"
+BASE_PANEL = "base_panel"
+BASE_PANEL_BACK_CLIPS = "base_panel_back_clips"
+BASE_PANEL_FRONT_CLIPS = "base_panel_front_clips"
+PCB3 = "pcb3"
+PCB3_SUPPORT = "pcb3_support"
+COMPARTMENT_LOCKIN = "compartment_lockin"
+COMPARTMENT_LOCKIN_CAPTURE = "compartment_lockin_capture"
 
 if not test:
     lcd_l = 3598.0
@@ -4971,8 +4972,39 @@ def kbd_part(scl):
     v.add(u)
     return v
 
-if __name__ == '__main__':
+def gen(parts=None, stl=False):
 
+    if parts is None:
+        parts = [
+            #BASE_END,
+            #SCREEN_END,
+            #CABLE_PROTECTOR,
+            #SCREEN_HINGE,
+            #FRICTION_HINGE1,
+            #FRICTION_HINGE2,
+            #SCREEN_BACK_EDGE,
+            #SCREEN_FRONT_EDGE,
+            #SCREEN_MID,
+            #BASE_FRONT_TOP,
+            #FRONT_KBD_TRAY,
+            #PCB1,
+            #PCB2,
+            #PCB3,
+            #TPANEL_MID,
+            #BASE_MID,
+            #BACK_KBD_RUNNER,
+            #BASE_BACK,
+            BASE_BACK_HINGE,
+            #PCB1_SUPPORT,
+            #PCB3_SUPPORT,
+            #BATTERY_SUPPORT1,
+            #COMPARTMENT_LID,
+            #COMPARTMENT_LOCKIN,
+            #COMPARTMENT_LOCKIN_CAPTURE,
+            #BASE_PANEL,
+            #BASE_PANEL_BACK_CLIPS,
+            #BASE_PANEL_FRONT_CLIPS,
+        ]
     animate = False
     max_open = 130
     if animate:
@@ -4982,39 +5014,10 @@ if __name__ == '__main__':
         rpt = 1
         angles = [0]
 
-    for i in range(rpt):
+    for j in range(rpt):
         for angle in angles:
             u = union()
-            for i in [
-                        #BASE_END,
-                        #SCREEN_END,
-                        #CABLE_PROTECTOR,
-                        #SCREEN_HINGE,
-                        #FRICTION_HINGE1,
-                        #FRICTION_HINGE2,
-                        #SCREEN_BACK_EDGE,
-                        #SCREEN_FRONT_EDGE,
-                        #SCREEN_MID,
-                        #BASE_FRONT_TOP,
-                        #FRONT_KBD_TRAY,
-                        PCB1,
-                        PCB2,
-                        PCB3,
-                        TPANEL_MID,
-                        BASE_MID,
-                        #BACK_KBD_RUNNER,
-                        #BASE_BACK,
-                        #BASE_BACK_HINGE,
-                        #PCB1_SUPPORT,
-                        #PCB3_SUPPORT,
-                        #BATTERY_SUPPORT1,
-                        #COMPARTMENT_LID,
-                        #COMPARTMENT_LOCKIN,
-                        #COMPARTMENT_LOCKIN_CAPTURE,
-                        #BASE_PANEL,
-                        #BASE_PANEL_BACK_CLIPS,
-                        #BASE_PANEL_FRONT_CLIPS,
-                    ]:
+            for i in parts:
                 t = union()
                 create_laptop(t, scl, part=i, angle=angle)
                 r = union().add(t)
@@ -5092,5 +5095,47 @@ if __name__ == '__main__':
             f.write("""include<laptop_prog2.scad>;
             """)
             f.close()
-            if i != rpt:
+            if stl:
+                stl_name = "stl/%s.stl" % i
+                openscad.run("-o", stl_name, "laptop_prog2.scad")
+
+            if j != rpt:
                 time.sleep(2)
+
+if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        gen()
+        sys.exit(0)
+    if sys.argv[1] == 'stl':
+        orientate = True
+        for part in [
+            BASE_END,
+            SCREEN_END,
+            CABLE_PROTECTOR,
+            SCREEN_HINGE,
+            FRICTION_HINGE1,
+            FRICTION_HINGE2,
+            SCREEN_BACK_EDGE,
+            SCREEN_FRONT_EDGE,
+            SCREEN_MID,
+            BASE_FRONT_TOP,
+            FRONT_KBD_TRAY,
+            PCB1,
+            PCB2,
+            PCB3,
+            TPANEL_MID,
+            BASE_MID,
+            BACK_KBD_RUNNER,
+            BASE_BACK,
+            BASE_BACK_HINGE,
+            PCB1_SUPPORT,
+            PCB3_SUPPORT,
+            BATTERY_SUPPORT1,
+            COMPARTMENT_LID,
+            COMPARTMENT_LOCKIN,
+            COMPARTMENT_LOCKIN_CAPTURE,
+            BASE_PANEL,
+            BASE_PANEL_BACK_CLIPS,
+            BASE_PANEL_FRONT_CLIPS,
+        ]:
+            gen([part], stl=True)
