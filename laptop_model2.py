@@ -22,8 +22,9 @@ from pyscadutil import B0, B45, pin
 from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
+global orientate
 pin_parts_3d=False
-orientate=False
+orientate=True
 LEFTPART = 1
 RIGHTPART = 2
 mirroring = RIGHTPART#LEFTPART| RIGHTPART #RIGHTPART 
@@ -4674,6 +4675,9 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width+10)
             m = translate(v=[0, 0*scl, 55*scl]).add(m)
             b.add(m)
+        if orientate:
+            b = rotate([-90, 0, 0]).add(b)
+            b = rotate([0, 0, -45]).add(b)
 
     base_adjust_ht = base_end_ht-10
     base_adjust_ht += scrn_hinge_ht
@@ -4976,7 +4980,7 @@ def gen(parts=None, stl=False):
 
     if parts is None:
         parts = [
-            #BASE_END,
+            BASE_END,
             #SCREEN_END,
             #CABLE_PROTECTOR,
             #SCREEN_HINGE,
@@ -4994,7 +4998,7 @@ def gen(parts=None, stl=False):
             #BASE_MID,
             #BACK_KBD_RUNNER,
             #BASE_BACK,
-            BASE_BACK_HINGE,
+            #BASE_BACK_HINGE,
             #PCB1_SUPPORT,
             #PCB3_SUPPORT,
             #BATTERY_SUPPORT1,
@@ -5090,14 +5094,17 @@ def gen(parts=None, stl=False):
                     u.add(c)
 
 
-            scad_render_to_file(u, "laptop_prog2.scad")
+            scad_name = "laptop_prog2.scad"
+            if stl:
+                scad_name = "%s.scad" % i
+            scad_render_to_file(u, scad_name)
             f = open("laptop_model2.scad", "w")
             f.write("""include<laptop_prog2.scad>;
             """)
             f.close()
             if stl:
                 stl_name = "stl/%s.stl" % i
-                openscad.run("-o", stl_name, "laptop_prog2.scad")
+                openscad.run("-o", stl_name, scad_name)
 
             if j != rpt:
                 time.sleep(2)
