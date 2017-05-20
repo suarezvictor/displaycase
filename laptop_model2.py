@@ -44,7 +44,7 @@ SCREEN_END = "screen_end"
 SCREEN_HINGE = "screen_hinge"
 SCREEN_FRONT_EDGE = "screen_front_edge"
 SCREEN_BACK_EDGE = "screen_back_edge"
-TPANEL_MID = "screen_mid"
+TPANEL_MID = "tpanel_mid"
 BASE_BACK = "base_back"
 BASE_END = "base_end"
 BASE_FRONT_TOP = "base_front_top"
@@ -4725,6 +4725,8 @@ def create_laptop(t, scl, part, angle):
                                     -tpanel_offset)
             m = mirror_part(se, scl, total_width-off)
             b.add(m)
+        if orientate:
+            b = rotate([0, -90, 0]).add(b)
 
     if part == PCB3:
         se = pcb3(scl)
@@ -4798,6 +4800,8 @@ def create_laptop(t, scl, part, angle):
             se = base_front_top(scl, base_front_ht+scrn_hinge_ht, -tpanel_offset)
             m = mirror_part(se, scl, total_width-compartment_ht)
             b.add(m)
+        if orientate:
+            b = rotate([0, 90, 0]).add(b)
 
     if part == BASE_PANEL_BACK_CLIPS:
         if mirroring & LEFTPART:
@@ -4842,6 +4846,8 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl,
                                 total_width-base_adjust_ht+scrn_hinge_ht+hthick)
             b.add(m)
+        if orientate:
+            b = rotate([180, 0, 0]).add(b)
 
     base_adjust_ht += base_back_ht
 
@@ -4897,11 +4903,15 @@ def create_laptop(t, scl, part, angle):
                          (tpanel_ht+tpanel_b_w-80)*scl,
                          0]).add(se)
         b.add(m)
+        if orientate:
+            b = rotate([180, 0, 0]).add(b)
 
     if part == PCB3_SUPPORT:
         se = pcb3_support(scl, 30)
         m = translate(v=[0, (total_width-pcb3_lock_offs)*scl,0]).add(se)
         b.add(m)
+        if orientate:
+            b = rotate([90, 0, 0]).add(b)
 
     if part == PCB1_SUPPORT:
         se = pcb1_support(scl, pcb1_support_ht,
@@ -4910,6 +4920,8 @@ def create_laptop(t, scl, part, angle):
                          (tpanel_ht+110)*scl,
                          0]).add(se)
         b.add(m)
+        if orientate:
+            b = rotate([-90, 0, 0]).add(b)
 
     t.add(b)
 
@@ -4980,7 +4992,7 @@ def gen(parts=None, stl=False):
 
     if parts is None:
         parts = [
-            BASE_END,
+            #BASE_END,
             #SCREEN_END,
             #CABLE_PROTECTOR,
             #SCREEN_HINGE,
@@ -5106,8 +5118,8 @@ def gen(parts=None, stl=False):
                 stl_name = "stl/%s.stl" % i
                 openscad.run("-o", stl_name, scad_name)
 
-            if j != rpt:
-                time.sleep(2)
+            #if j != rpt:
+            #    time.sleep(2)
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
