@@ -4656,7 +4656,10 @@ def create_laptop(t, scl, part, angle):
 
         b = screen_adjust(b, scl, angle)
         if orientate:
-            b = rotate([90, 0, 0]).add(b)
+            if mirroring & LEFTPART:
+                b = rotate([90, 0, 0]).add(b)
+            if mirroring & RIGHTPART:
+                b = rotate([-90, 0, 0]).add(b)
 
     if part == CABLE_PROTECTOR:
         se = cable_protector(scl, 30)
@@ -4677,7 +4680,10 @@ def create_laptop(t, scl, part, angle):
             m = translate(v=[0, 0*scl, 55*scl]).add(m)
             b.add(m)
         if orientate:
-            b = rotate([-90, 0, 0]).add(b)
+            if mirroring & LEFTPART:
+                b = rotate([90, 0, 0]).add(b)
+            if mirroring & RIGHTPART:
+                b = rotate([-90, 0, 0]).add(b)
             b = rotate([0, 0, -45]).add(b)
 
     base_adjust_ht = base_end_ht-10
@@ -4727,7 +4733,10 @@ def create_laptop(t, scl, part, angle):
             m = mirror_part(se, scl, total_width-off)
             b.add(m)
         if orientate:
-            b = rotate([0, -90, 0]).add(b)
+            if mirroring & LEFTPART:
+                b = rotate([90, 0, 0]).add(b)
+            if mirroring & RIGHTPART:
+                b = rotate([-90, 0, 0]).add(b)
 
     if part == PCB3:
         se = pcb3(scl)
