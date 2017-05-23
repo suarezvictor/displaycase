@@ -23,6 +23,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 global orientate
+global mirroring
 pin_parts_3d=False
 orientate=True
 LEFTPART = 1
@@ -4992,7 +4993,7 @@ def gen(parts=None, stl=False):
 
     if parts is None:
         parts = [
-            #BASE_END,
+            BASE_END,
             #SCREEN_END,
             #CABLE_PROTECTOR,
             #SCREEN_HINGE,
@@ -5107,6 +5108,10 @@ def gen(parts=None, stl=False):
 
 
             scad_name = "laptop_prog2.scad"
+            if mirroring & LEFTPART:
+                i = "left_" + i
+            if mirroring & RIGHTPART:
+                i = "right_" + i
             if stl:
                 scad_name = "%s.scad" % i
             scad_render_to_file(u, scad_name)
@@ -5127,34 +5132,37 @@ if __name__ == '__main__':
         sys.exit(0)
     if sys.argv[1] == 'stl':
         orientate = True
-        for part in [
-            BASE_END,
-            SCREEN_END,
-            CABLE_PROTECTOR,
-            SCREEN_HINGE,
-            FRICTION_HINGE1,
-            FRICTION_HINGE2,
-            SCREEN_BACK_EDGE,
-            SCREEN_FRONT_EDGE,
-            SCREEN_MID,
-            BASE_FRONT_TOP,
-            FRONT_KBD_TRAY,
-            PCB1,
-            PCB2,
-            PCB3,
-            TPANEL_MID,
-            BASE_MID,
-            BACK_KBD_RUNNER,
-            BASE_BACK,
-            BASE_BACK_HINGE,
-            PCB1_SUPPORT,
-            PCB3_SUPPORT,
-            BATTERY_SUPPORT1,
-            COMPARTMENT_LID,
-            COMPARTMENT_LOCKIN,
-            COMPARTMENT_LOCKIN_CAPTURE,
-            BASE_PANEL,
-            BASE_PANEL_BACK_CLIPS,
-            BASE_PANEL_FRONT_CLIPS,
+        for side, part in [
+            (LEFTPART, BASE_END),
+            (RIGHTPART, BASE_END),
+            (LEFTPART, SCREEN_END),
+            (RIGHTPART, SCREEN_END),
+            (0, CABLE_PROTECTOR),
+            (LEFTPART, SCREEN_HINGE),
+            (RIGHTPART, SCREEN_HINGE),
+            (0, FRICTION_HINGE1),
+            (0, FRICTION_HINGE2),
+            (LEFTPART, SCREEN_BACK_EDGE),
+            (RIGHTPART, SCREEN_BACK_EDGE),
+            (LEFTPART, SCREEN_FRONT_EDGE),
+            (RIGHTPART, SCREEN_FRONT_EDGE),
+            (0, SCREEN_MID),
+            (LEFTPART, BASE_FRONT_TOP),
+            (0, FRONT_KBD_TRAY),
+            (0, TPANEL_MID),
+            (0, BASE_MID),
+            (LEFTPART, BACK_KBD_RUNNER),
+            (RIGHTPART, BACK_KBD_RUNNER),
+            (LEFTPART, BASE_BACK),
+            (RIGHTPART, BASE_BACK),
+            (LEFTPART, BASE_BACK_HINGE),
+            (RIGHTPART, BASE_BACK_HINGE),
+            (0, PCB1_SUPPORT),
+            (0, PCB3_SUPPORT),
+            (0, BATTERY_SUPPORT1),
+            (0, COMPARTMENT_LID),
+            (0, COMPARTMENT_LOCKIN),
+            (0, COMPARTMENT_LOCKIN_CAPTURE),
         ]:
+            mirroring = side
             gen([part], stl=True)
