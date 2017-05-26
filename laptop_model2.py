@@ -4657,9 +4657,9 @@ def create_laptop(t, scl, part, angle):
         b = screen_adjust(b, scl, angle)
         if orientate:
             if mirroring & LEFTPART:
-                b = rotate([90, 0, 0]).add(b)
-            if mirroring & RIGHTPART:
                 b = rotate([-90, 0, 0]).add(b)
+            if mirroring & RIGHTPART:
+                b = rotate([90, 0, 0]).add(b)
 
     if part == CABLE_PROTECTOR:
         se = cable_protector(scl, 30)
@@ -4734,9 +4734,9 @@ def create_laptop(t, scl, part, angle):
             b.add(m)
         if orientate:
             if mirroring & LEFTPART:
-                b = rotate([90, 0, 0]).add(b)
+                b = rotate([0, -90, 0]).add(b)
             if mirroring & RIGHTPART:
-                b = rotate([-90, 0, 0]).add(b)
+                b = rotate([0, -90, 0]).add(b)
 
     if part == PCB3:
         se = pcb3(scl)
@@ -5002,7 +5002,7 @@ def gen(parts=None, stl=False):
 
     if parts is None:
         parts = [
-            BASE_END,
+            #BASE_END,
             #SCREEN_END,
             #CABLE_PROTECTOR,
             #SCREEN_HINGE,
@@ -5019,7 +5019,7 @@ def gen(parts=None, stl=False):
             #TPANEL_MID,
             #BASE_MID,
             #BACK_KBD_RUNNER,
-            #BASE_BACK,
+            BASE_BACK,
             #BASE_BACK_HINGE,
             #PCB1_SUPPORT,
             #PCB3_SUPPORT,
@@ -5142,36 +5142,36 @@ if __name__ == '__main__':
     if sys.argv[1] == 'stl':
         orientate = True
         for side, part in [
-            (LEFTPART, BASE_END),
-            (RIGHTPART, BASE_END),
-            (LEFTPART, SCREEN_END),
-            (RIGHTPART, SCREEN_END),
-            (0, CABLE_PROTECTOR),
+            #(LEFTPART, BASE_END),
+            #(RIGHTPART, BASE_END),
+            #(LEFTPART, SCREEN_END),
+            #(RIGHTPART, SCREEN_END),
+            #(0, CABLE_PROTECTOR),
             (LEFTPART, SCREEN_HINGE),
             (RIGHTPART, SCREEN_HINGE),
-            (0, FRICTION_HINGE1),
-            (0, FRICTION_HINGE2),
-            (LEFTPART, SCREEN_BACK_EDGE),
-            (RIGHTPART, SCREEN_BACK_EDGE),
-            (LEFTPART, SCREEN_FRONT_EDGE),
-            (RIGHTPART, SCREEN_FRONT_EDGE),
-            (0, SCREEN_MID),
-            (LEFTPART, BASE_FRONT_TOP),
-            (0, FRONT_KBD_TRAY),
-            (0, TPANEL_MID),
-            (0, BASE_MID),
-            (LEFTPART, BACK_KBD_RUNNER),
-            (RIGHTPART, BACK_KBD_RUNNER),
-            (LEFTPART, BASE_BACK),
-            (RIGHTPART, BASE_BACK),
-            (LEFTPART, BASE_BACK_HINGE),
-            (RIGHTPART, BASE_BACK_HINGE),
-            (0, PCB1_SUPPORT),
-            (0, PCB3_SUPPORT),
-            (0, BATTERY_SUPPORT1),
-            (0, COMPARTMENT_LID),
-            (0, COMPARTMENT_LOCKIN),
-            (0, COMPARTMENT_LOCKIN_CAPTURE),
+            #(0, FRICTION_HINGE1),
+            #(0, FRICTION_HINGE2),
+            #(LEFTPART, SCREEN_BACK_EDGE),
+            #(RIGHTPART, SCREEN_BACK_EDGE),
+            #(LEFTPART, SCREEN_FRONT_EDGE),
+            #(RIGHTPART, SCREEN_FRONT_EDGE),
+            #(0, SCREEN_MID),
+            #(LEFTPART, BASE_FRONT_TOP),
+            #(0, FRONT_KBD_TRAY),
+            #(0, TPANEL_MID),
+            #(0, BASE_MID),
+            #(LEFTPART, BACK_KBD_RUNNER),
+            #(RIGHTPART, BACK_KBD_RUNNER),
+            #(LEFTPART, BASE_BACK),
+            #(RIGHTPART, BASE_BACK),
+            #(LEFTPART, BASE_BACK_HINGE),
+            #(RIGHTPART, BASE_BACK_HINGE),
+            #(0, PCB1_SUPPORT),
+            #(0, PCB3_SUPPORT),
+            #(0, BATTERY_SUPPORT1),
+            #(0, COMPARTMENT_LID),
+            #(0, COMPARTMENT_LOCKIN),
+            #(0, COMPARTMENT_LOCKIN_CAPTURE),
         ]:
             mirroring = side
             gen([part], stl=True)
