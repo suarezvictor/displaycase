@@ -35,7 +35,7 @@ def create_socketclamp():
     d = difference()
 
     c = cube([10,5,16.5], center=True)
-    d.add(translate([0,3,5.2]).add(c))
+    d.add(translate([0,2.5,5.2]).add(c))
 
     c = sphere(r=4.2, segments=30)
     d.add(c)
@@ -44,11 +44,11 @@ def create_socketclamp():
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,8]).add(c))
 
-    c = cylinder(r=3.5, h=3, segments=20, center=True)
+    c = cylinder(r=3.5, h=5, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,5,8]).add(c))
 
-    c = cube([4.8,4,15], center=True)
+    c = cube([5.1,7,15], center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,-1.8]).add(c))
 
@@ -102,10 +102,10 @@ def create_ball():
     c = cylinder(r=2.5, h=20, segments=30)
     t.add(c)
 
-    for i in range(7):
+    for i in range(6):
         c = cylinder(r=3.5, h=1, segments=30)
         c = resize([4,0,0]).add(c)
-        c = translate([0,0,5+i*2]).add(c)
+        c = translate([0,0,7+i*2]).add(c)
         t.add(c)
 
     return t
