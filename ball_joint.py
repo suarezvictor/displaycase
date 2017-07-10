@@ -23,7 +23,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 scl = 1.0
-use_sphere = True
+use_sphere = False
 num_ridges = 3
 symmetrical_ridges = True
 
@@ -31,34 +31,44 @@ BALL = 1
 SOCKET     = 2
 SOCKETCLAMP     = 3
 JOINER     = 4
+ROD     = 5
+LONGROD     = 6
+JOINERBOTTOM = 7
 
-def create_joiner():
+def create_joiner(screw=False):
 
     v = union()
 
     d = difference()
 
-    c = curvebox(1.0, 15,15,4.5, 2.5, center=True)
+    c = curvebox(1.0, 15,15,4.8, 2.5, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,2.6,0]).add(c))
+    d.add(translate([0,2.70,0]).add(c))
 
     c = cylinder(r=1.75, h=20, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,0]).add(c))
 
-    c = cylinder(r=4.5, h=5, segments=20, center=True)
+    if screw:
+        c = cylinder(r=3.4, h=3.0, segments=20, center=True)
+    else:
+        c = cylinder(r=3.3, h=5.0, segments=6, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,5,0]).add(c))
 
     v.add(d)
 
-    c = cylinder(r=2.7, h=6, center=True, segments=30)
+    c = cylinder(r=2.5, h=6, center=True, segments=30)
 
-    d.add(translate([0,0,6]).add(c))
-    d.add(translate([0,0,-6]).add(c))
+    d.add(translate([0,0,5.7]).add(c))
+    d.add(translate([0,0,-5.7]).add(c))
     c = rotate([0, 90, 0]).add(c)
-    d.add(translate([6,0,0]).add(c))
-    d.add(translate([-6,0,0]).add(c))
+    d.add(translate([5.7,0,0]).add(c))
+    d.add(translate([-5.7,0,0]).add(c))
+    d.add(translate([-6.1,0,7.7]).add(c))
+    d.add(translate([-6.1,0,-7.7]).add(c))
+    d.add(translate([6.1,0,-7.7]).add(c))
+    d.add(translate([6.1,0,7.7]).add(c))
 
     return v
 
@@ -70,6 +80,16 @@ def socketbox():
     d.add(translate([0,0.5,5.2]).add(c))
     c = cube([11,12,17.5], center=True)
     d.add(translate([0,-5.8,5.2]).add(c))
+
+    t = difference()
+    t.add(cube([12,12,12], center=True))
+    c = cylinder(r=4.8, h=15, center=True, segments=30)
+    c = rotate([0, 90, 0]).add(c)
+    t.add(translate([0,-6,6]).add(c))
+
+    d.add(translate([0,6.5,-4.9]).add(t))
+    t = rotate([0, 180, 0]).add(t)
+    d.add(translate([0,6.5,4.9+10.4]).add(t))
 
     return d
 
@@ -90,7 +110,7 @@ def create_socketclamp():
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,8]).add(c))
 
-    c = cylinder(r=3.5, h=5, segments=20, center=True)
+    c = cylinder(r=3.3, h=5, segments=6, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,5,8]).add(c))
 
@@ -102,15 +122,15 @@ def create_socketclamp():
 
     c = cylinder(r=2.7, h=20, segments=30)
 
-    d.add(translate([0,0,10]).add(c))
+    d.add(translate([0,0,9.5]).add(c))
 
     return v
 
-def add_column():
+def add_column(loffs=0):
 
     t = union()
 
-    c = cylinder(r=2.1, h=6+num_ridges*2, segments=30)
+    c = cylinder(r=2.1, h=4.5+num_ridges*2-loffs, segments=30)
     t.add(c)
 
     for i in range(num_ridges):
@@ -119,22 +139,28 @@ def add_column():
         else:
             c = cylinder(r=3.1, h=1, segments=30)
             c = resize([0,3,0]).add(c)
-        c = translate([0,0,7+i*2]).add(c)
+        c = translate([0,0,5.5+i*2-loffs]).add(c)
         t.add(c)
 
     return t
 
 
+def create_rod(loffs=3):
+
+    v = union()
+
+    c = add_column(loffs)
+    v.add(translate([0,0,-3]).add(c))
+    c = rotate([180, 0, 0]).add(c)
+    v.add(translate([0,0,3]).add(c))
+
+    return v
+
 def create_socket():
 
     v = union()
 
-    d = difference()
-
-    c = curvebox(1.0, 10,9,16.5, 2.5, center=True)
-    d.add(translate([0,0.5,5.2]).add(c))
-    c = cube([11,12,17.5], center=True)
-    d.add(translate([0,-5.7,5.2]).add(c))
+    d = socketbox()
 
     if use_sphere:
         c = sphere(r=4.2, segments=30)
@@ -194,11 +220,34 @@ def create_ball_joint(t, part):
         m = translate(v=[0,0,0]).add(se)
         b.add(m)
 
+    elif part == JOINERBOTTOM:
+
+        se = create_joiner(screw=True)
+        se = rotate([0, 0, 180]).add(se)
+        m = translate(v=[0,0,7.6 + num_ridges*2]).add(se)
+        b.add(m)
+
     elif part == JOINER:
 
         se = create_joiner()
         se = rotate([180, 0, 180]).add(se)
-        m = translate(v=[0,0,9.1 + num_ridges*2]).add(se)
+        m = translate(v=[0,0,7.6 + num_ridges*2]).add(se)
+        b.add(m)
+
+    elif part == ROD:
+
+        se = create_rod()
+        se = rotate([90, 90, 90]).add(se)
+        m = translate(v=[0,0,7.6 + num_ridges*2]).add(se)
+        m = translate(v=[1.6 + num_ridges*2, 0, 0]).add(m)
+        b.add(m)
+
+    elif part == LONGROD:
+
+        se = create_rod(0)
+        se = rotate([90, 90, 90]).add(se)
+        m = translate(v=[0,0,7.6 + num_ridges*2]).add(se)
+        m = translate(v=[-4.6 - num_ridges*2, 0, 0]).add(m)
         b.add(m)
 
     t.add(rotate([90,0,0]).add(b))
@@ -210,6 +259,9 @@ def create_scad():
                 SOCKET,
                 SOCKETCLAMP,
                 JOINER,
+                JOINERBOTTOM,
+                ROD,
+                LONGROD,
             ]:
         t = union()
         create_ball_joint(t, i)
@@ -220,6 +272,8 @@ def create_scad():
             c = [0.8, 0.3, 0.8, 0.5]
         elif i in [SOCKET]:
             c = [0.9, 0.3, 0.3, 0.5]
+        elif i in [JOINER, JOINERBOTTOM]:
+            c = [0.2, 0.7, 0.3, 0.5]
         else:
             c = [0.3, 0.5, 0.8, 0.5]
         c = color(c)
