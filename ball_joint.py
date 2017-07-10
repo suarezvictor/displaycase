@@ -45,10 +45,12 @@ def create_joiner(screw=False):
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,2.70,0]).add(c))
 
+    # screw-hole
     c = cylinder(r=1.75, h=20, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,0]).add(c))
 
+    # nut head
     if screw:
         c = cylinder(r=3.4, h=3.0, segments=20, center=True)
     else:
@@ -57,6 +59,11 @@ def create_joiner(screw=False):
     d.add(translate([0,5,0]).add(c))
 
     v.add(d)
+
+    # problem with printing, undersupport screwhole
+    c = cylinder(r=1.85, h=3.0, segments=20, center=True)
+    c = rotate([90, 0, 0]).add(c)
+    v.add(translate([0,3.55,0]).add(c))
 
     c = cylinder(r=2.5, h=6, center=True, segments=30)
 
@@ -119,6 +126,11 @@ def create_socketclamp():
     d.add(translate([0,0,-1.8]).add(c))
 
     v.add(d)
+
+    # problem with printing, undersupport screwhole
+    c = cylinder(r=1.85, h=3.0, segments=20, center=True)
+    c = rotate([90, 0, 0]).add(c)
+    v.add(translate([0,3.50,8]).add(c))
 
     c = cylinder(r=2.7, h=20, segments=30)
 
@@ -255,13 +267,13 @@ def create_ball_joint(t, part):
 def create_scad():
     u = union()
     for i in [
-                BALL,
-                SOCKET,
+                #BALL,
+                #SOCKET,
                 SOCKETCLAMP,
                 JOINER,
                 JOINERBOTTOM,
-                ROD,
-                LONGROD,
+                #ROD,
+                #LONGROD,
             ]:
         t = union()
         create_ball_joint(t, i)
