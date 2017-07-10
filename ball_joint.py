@@ -191,6 +191,11 @@ def create_socket():
 
     v.add(d)
 
+    # problem with printing, undersupport screwhole
+    c = cylinder(r=1.85, h=3.0, segments=20, center=True)
+    c = rotate([90, 0, 0]).add(c)
+    v.add(translate([0,3.50,8]).add(c))
+
     v.add(translate([0,0,10]).add(add_column()))
 
     return v
@@ -267,13 +272,13 @@ def create_ball_joint(t, part):
 def create_scad():
     u = union()
     for i in [
-                #BALL,
-                #SOCKET,
+                BALL,
+                SOCKET,
                 SOCKETCLAMP,
                 JOINER,
                 JOINERBOTTOM,
-                #ROD,
-                #LONGROD,
+                ROD,
+                LONGROD,
             ]:
         t = union()
         create_ball_joint(t, i)
