@@ -23,7 +23,7 @@ from pyscadutil import curvebox, shearedcube, hollowbox, touch_arc
 from pyscadutil import L, R, T, D, F, B
 
 scl = 1.0
-use_sphere = False
+use_sphere = True
 num_ridges = 3
 symmetrical_ridges = True
 
@@ -65,17 +65,27 @@ def create_joiner(screw=False):
     c = rotate([90, 0, 0]).add(c)
     v.add(translate([0,4.10,0]).add(c))
 
-    c = cylinder(r=2.5, h=6, center=True, segments=30)
+    c = union()
+    c.add(cylinder(r=2.15, h=6, center=True, segments=30))
+    c.add(cylinder(r=2.15, h=6, center=True, segments=30))
+    a = cylinder(r=2.5, h=3.5, center=True, segments=30)
+    a = translate([0,0,-1.3]).add(a)
+    c.add(a)
+    a = translate([0,0,4.3]).add(a)
+    c.add(a)
 
     d.add(translate([0,0,5.7]).add(c))
+    c = rotate([0, 180, 0]).add(c)
     d.add(translate([0,0,-5.7]).add(c))
-    c = rotate([0, 90, 0]).add(c)
+    c = rotate([0, -90, 0]).add(c)
     d.add(translate([5.7,0,0]).add(c))
+    c = rotate([0, 180, 0]).add(c)
     d.add(translate([-5.7,0,0]).add(c))
-    d.add(translate([-6.1,0,7.7]).add(c))
-    d.add(translate([-6.1,0,-7.7]).add(c))
-    d.add(translate([6.1,0,-7.7]).add(c))
-    d.add(translate([6.1,0,7.7]).add(c))
+    d.add(translate([-5.7,0,7.7]).add(c))
+    d.add(translate([-5.7,0,-7.7]).add(c))
+    c = rotate([0, 180, 0]).add(c)
+    d.add(translate([5.7,0,-7.7]).add(c))
+    d.add(translate([5.7,0,7.7]).add(c))
 
     return v
 
@@ -83,7 +93,7 @@ def socketbox():
 
     d = difference()
 
-    c = curvebox(1.0, 10.5,9,16.5, 2.5, center=True)
+    c = curvebox(1.0, 10.8,9,16.5, 2.5, center=True)
     d.add(translate([0,0.5,5.2]).add(c))
     c = cube([12,12,17.5], center=True)
     d.add(translate([0,-5.8,5.2]).add(c))
@@ -98,13 +108,17 @@ def socketbox():
     t = rotate([0, 180, 0]).add(t)
     d.add(translate([0,6.8,4.9+10.4]).add(t))
 
-    c = cylinder(r=2.5, h=20, segments=30)
+    c = union()
+    c.add(cylinder(r=2.15, h=20, segments=30))
+    c.add(cylinder(r=2.7, h=3.6, segments=30))
     c = rotate([0, 90, 0]).add(c)
-    d.add(translate([1.65,0,8.7]).add(c))
+    d.add(translate([1.30,0,8.7]).add(c))
     c = rotate([0, 180, 0]).add(c)
-    d.add(translate([-1.65,0,8.7]).add(c))
+    d.add(translate([-1.30,0,8.7]).add(c))
 
     return d
+
+boltoffset = 5.6
 
 def create_socketclamp():
 
@@ -121,11 +135,11 @@ def create_socketclamp():
 
     c = cylinder(r=1.75, h=20, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,0,6]).add(c))
+    d.add(translate([0,0,boltoffset]).add(c))
 
     c = cylinder(r=3.3, h=5, segments=6, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,5,6]).add(c))
+    d.add(translate([0,5,boltoffset]).add(c))
 
     c = cube([5.2,8,15], center=True)
     c = rotate([90, 0, 0]).add(c)
@@ -136,10 +150,10 @@ def create_socketclamp():
     # problem with printing, undersupport screwhole
     c = cylinder(r=1.60, h=2.0, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
-    v.add(translate([0,4.00,6]).add(c))
+    v.add(translate([0,4.00,boltoffset]).add(c))
 
     c = cylinder(r=2.7, h=20, segments=30)
-    d.add(translate([0,0,9.5]).add(c))
+    d.add(translate([0,0,6.5]).add(c))
 
     return v
 
@@ -188,21 +202,21 @@ def create_socket():
 
     c = cylinder(r=3.5, h=4, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,5,6]).add(c))
+    d.add(translate([0,5,boltoffset]).add(c))
 
     c = cylinder(r=1.75, h=20, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,0,6]).add(c))
+    d.add(translate([0,0,boltoffset]).add(c))
 
     v.add(d)
 
     # problem with printing, undersupport screwhole
     c = cylinder(r=1.60, h=2.0, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
-    v.add(translate([0,4.00,6]).add(c))
+    v.add(translate([0,4.00,boltoffset]).add(c))
 
     v.add(translate([0,0,11.25]).add(add_column(1.25)))
-    v.add(translate([0,0,11.5]).add(cube([3.25,2,2], center=True)))
+    v.add(translate([0,0,11.5]).add(cube([2.0,3.5,2], center=True)))
 
     return v
 
@@ -280,9 +294,9 @@ def create_scad():
     for i in [
                 #BALL,
                 #SOCKET,
-                SOCKETCLAMP,
+                #SOCKETCLAMP,
                 #JOINER,
-                #JOINERBOTTOM,
+                JOINERBOTTOM,
                 #ROD,
                 #LONGROD,
             ]:
