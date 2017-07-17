@@ -1,3 +1,6 @@
+# Copyright (C) 2011-2017 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
+# License: GNU GPLv3+
+
 from operator import add
 from pyopenscad import *
 from copy import copy, deepcopy
