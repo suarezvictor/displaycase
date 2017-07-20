@@ -81,6 +81,12 @@ class Object:
             l += c._get_bom_list()
         return l
 
+    def add_support(self):
+        return False
+
+    def creaate_support(self):
+        return None
+
     def get_bom(self):
         l = self._get_bom_list()
         d = {}
@@ -170,6 +176,11 @@ class Object:
     def obj(self, add_children=True, scad_check=False):
         u = union()
         d = self.o or union()
+        if self.add_support():
+            s = self.create_support()
+            if s:
+                u += s
+
         if self._colour:
             c = color(self._colour)
             c.add(d)
@@ -182,6 +193,7 @@ class Object:
                     continue
                 o = c.obj(add_children, scad_check)
                 u += translate(c.get_parent_offset()).add(o)
+
         # ok resize and rotate... but first, move everything back to the origin
         if self._size != [0]*3:
             u = resize(self._size, False).add(u)
