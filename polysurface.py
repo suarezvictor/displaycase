@@ -17,6 +17,7 @@ def vsub(v1, v2):
 
 def normalise(v1):
     d = pow(reduce(lambda x,y:x+y, map(lambda x: pow(x, 2), v1)), 0.5)
+    print v1, d
     return map(lambda x: x / d, v1)
 
 def turnaround(l):
@@ -79,6 +80,35 @@ def spline_double_divide(pl, step_h=0.1, step_v=0.1):
     #print len(res), len(res[0])
     res = spline_divide(res, step_v)
     #print len(res), len(res[0])
+    return res
+
+def foursplit_spline(plist, step_h, step_v, loopx=True):
+
+    length = len(plist[0]) / 4
+    for i in range(4):
+        pl = []
+        for l in plist:
+            if i == 0:
+                pl.append(l[0:length+1])
+            elif i == 3:
+                pl.append(l[3*length:4*length])
+                if loopx:
+                    pl[-1].append(l[0])
+            else:
+                pl.append(l[i*length:(i+1)*length+1])
+        print "pl", i, pl
+        pl = spline_double_divide(pl, step_h, step_v)
+        for j, l in enumerate(pl):
+            if i != 3 or loopx:
+                pl[j] = l[:-1]
+            #if i != 0:
+                #pl[j] = l[1:]
+        if i == 0:
+            res = pl
+        else:
+            for (j, l) in enumerate(pl):
+                res[j] += l
+
     return res
 
 class Offset:
