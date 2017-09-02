@@ -44,6 +44,7 @@ class Object:
         self.parent_offset = [0.0]*3
         self.children = []
         self._size = [0]*3
+        self._prot = [0]*3
         self._rot = []
         self._ptrans = [0]*3
         self._trans = [0]*3
@@ -125,6 +126,9 @@ class Object:
             r = [r]
         self._rot += r # keep on adding rotations
 
+    def postrotate(self, t):
+        self._prot = t
+
     def posttranslate(self, t):
         self._ptrans = t
 
@@ -203,6 +207,8 @@ class Object:
             u = rotate(r).add(u)
         if self._ptrans != [0]*3:
             u = translate(self._ptrans).add(u)
+        if self._prot != [0]*3:
+            u = rotate(self._prot).add(u)
         if self._pcolour:
             c = color(self._pcolour)
             c.add(u)
