@@ -24,7 +24,7 @@ from pyscadutil import L, R, T, D, F, B
 
 scl = 1.0
 use_sphere = True
-num_ridges = 3
+num_ridges = 4
 symmetrical_ridges = True
 
 BALL = 1
@@ -110,11 +110,11 @@ def socketbox():
 
     c = union()
     c.add(cylinder(r=2.15, h=20, segments=30))
-    c.add(cylinder(r=2.7, h=3.6, segments=30))
+    c.add(cylinder(r=2.7, h=5, segments=30))
     c = rotate([0, 90, 0]).add(c)
-    d.add(translate([1.30,0,8.7]).add(c))
+    d.add(translate([-0.1,0,8.7]).add(c))
     c = rotate([0, 180, 0]).add(c)
-    d.add(translate([-1.30,0,8.7]).add(c))
+    d.add(translate([0.1,0,8.7]).add(c))
 
     return d
 
@@ -133,13 +133,13 @@ def create_socketclamp():
         c = rotate([0, 90, 0]).add(c)
     d.add(c)
 
-    c = cylinder(r=1.75, h=20, segments=20, center=True)
+    c = cylinder(r=1.4, h=20, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     d.add(translate([0,0,boltoffset]).add(c))
 
-    c = cylinder(r=3.3, h=5, segments=6, center=True)
+    c = cylinder(r=2.9, h=5, segments=6, center=True)
     c = rotate([90, 0, 0]).add(c)
-    d.add(translate([0,5,boltoffset]).add(c))
+    d.add(translate([0,5.2,boltoffset]).add(c))
 
     c = cube([5.2,8,15], center=True)
     c = rotate([90, 0, 0]).add(c)
@@ -148,7 +148,7 @@ def create_socketclamp():
     v.add(d)
 
     # problem with printing, undersupport screwhole
-    c = cylinder(r=1.60, h=2.0, segments=20, center=True)
+    c = cylinder(r=1.40, h=2.0, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     v.add(translate([0,4.00,boltoffset]).add(c))
 
@@ -214,6 +214,11 @@ def create_socket():
     c = cylinder(r=1.60, h=2.0, segments=20, center=True)
     c = rotate([90, 0, 0]).add(c)
     v.add(translate([0,4.00,boltoffset]).add(c))
+
+    # bit more undersupport
+    c = cube([0.6, 2.5, 2*num_ridges-0.1])
+    v.add(translate([-1.2,2.5,boltoffset+9]).add(c))
+    v.add(translate([1.2-0.6,2.5,boltoffset+9]).add(c))
 
     v.add(translate([0,0,11.25]).add(add_column(1.25)))
     v.add(translate([0,0,11.5]).add(cube([2.0,3.5,2], center=True)))
@@ -282,6 +287,7 @@ def create_ball_joint(t, part):
     elif part == LONGROD:
 
         se = create_rod(0)
+
         se = rotate([90, 90, 90]).add(se)
         m = translate(v=[0,0,-8.7]).add(se)
         m = translate(v=[-3.2 - num_ridges*2, 0, 0]).add(m)
@@ -292,11 +298,11 @@ def create_ball_joint(t, part):
 def create_scad():
     u = union()
     for i in [
-                #BALL,
+                BALL,
                 #SOCKET,
                 #SOCKETCLAMP,
                 #JOINER,
-                JOINERBOTTOM,
+                #JOINERBOTTOM,
                 #ROD,
                 #LONGROD,
             ]:
